@@ -102,7 +102,10 @@ public class Program {
         // Creating systems
         MySystems.Create();
         MySystems.AddUpdateSystem<VelocitySystem>();
-        
+
+        // Initializing systems
+        MySystems.Initialize();
+
         // Creating entity
         var entity = MyEsc.Entity.New(
             new Velocity { Val = 1f },
