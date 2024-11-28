@@ -1,4 +1,5 @@
-﻿[RU](./README_RU.md)
+## LANGUAGE
+[RU](./README_RU.md)
 [EN](./README.md)
 
 # Static ECS - C# Entity component system framework
