@@ -1,4 +1,8 @@
-﻿# Static ECS - C# Entity component system framework
+### ЯЗЫК
+[RU](./README_RU.md)
+[EN](./README.md)
+ 
+# Static ECS - C# Entity component system framework
 - Легковесность
 - Производительность
 - Отсутсвие аллокаций
