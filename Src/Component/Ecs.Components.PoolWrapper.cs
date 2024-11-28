@@ -1,0 +1,148 @@
+﻿using System;
+using System.Runtime.CompilerServices;
+using static System.Runtime.CompilerServices.MethodImplOptions;
+#if ENABLE_IL2CPP
+using Unity.IL2CPP.CompilerServices;
+#endif
+
+namespace FFS.Libraries.StaticEcs {
+    #if ENABLE_IL2CPP
+    [Il2CppSetOption(Option.NullChecks, false)]
+    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+    #endif
+    public abstract partial class Ecs<WorldID> {
+        #if ENABLE_IL2CPP
+        [Il2CppSetOption(Option.NullChecks, false)]
+        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+        #endif
+        public abstract partial class Components {
+            public interface IPoolWrapper {
+                public ushort Id();
+
+                public bool Has(Entity entity);
+
+                public void Add(Entity entity);
+                
+                public void TryAdd(Entity entity);
+                
+                public void TryAdd(Entity entity, out bool added);
+
+                public bool Del(Entity entity);
+
+                internal bool DelFromWorld(Entity entity);
+
+                public void Copy(Entity srcEntity, Entity dstEntity);
+
+                public int Count();
+
+                public Entity[] EntitiesData();
+                
+                public string ToStringComponent(Entity entity);
+                
+                public bool Is<C>() where C : struct, IComponent;
+
+                public bool TryCast<C>(out PoolWrapper<C> wrapper) where C : struct, IComponent;
+                
+                internal void Resize(int cap);
+
+                internal void Destroy();
+
+                internal bool Has(Entity entity, out int internalId);
+
+                internal void SetDataIfCountLess(ref int count, ref Entity[] entities);
+                
+                #if DEBUG
+                internal void AddBlocker(int val);
+                #endif
+                internal void Clear();
+                
+                internal void EnsureSize(int size);
+            }
+
+            #if ENABLE_IL2CPP
+            [Il2CppSetOption(Option.NullChecks, false)]
+            [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+            #endif
+            public readonly struct PoolWrapper<T> : IPoolWrapper, Stateless
+                where T : struct, IComponent {
+                [MethodImpl(AggressiveInlining)]
+                public ushort Id() => Pool<T>.Id();
+
+                [MethodImpl(AggressiveInlining)]
+                internal ref T Get(Entity entity) => ref Pool<T>.RefMut(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public void Add(Entity entity) => Pool<T>.Add(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public void TryAdd(Entity entity) => Pool<T>.TryAdd(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public void TryAdd(Entity entity, out bool added) => Pool<T>.TryAdd(entity, out added);
+
+                [MethodImpl(AggressiveInlining)]
+                public ref T AddIfAbsent(Entity entity) => ref Pool<T>.TryAdd(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public bool Has(Entity entity) => Pool<T>.Has(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public bool Del(Entity entity) => Pool<T>.Del(entity);
+
+                bool IPoolWrapper.DelFromWorld(Entity entity) => Pool<T>.DelFromWorld(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public void Copy(Entity srcEntity, Entity dstEntity) => Pool<T>.Copy(srcEntity, dstEntity);
+
+                [MethodImpl(AggressiveInlining)]
+                public int Count() => Pool<T>.Count();
+
+                [MethodImpl(AggressiveInlining)]
+                public Entity[] EntitiesData() => Pool<T>.EntitiesData();
+                
+                [MethodImpl(AggressiveInlining)]
+                public string ToStringComponent(Entity entity) => Pool<T>.ToStringComponent(entity);
+
+                [MethodImpl(AggressiveInlining)]
+                public T[] Data() => Pool<T>.Data();
+                
+                [MethodImpl(AggressiveInlining)]
+                public bool Is<C>() where C : struct, IComponent {
+                    return Pool<C>.id == Pool<T>.id;
+                }
+
+                [MethodImpl(AggressiveInlining)]
+                public bool TryCast<C>(out PoolWrapper<C> wrapper) where C : struct, IComponent {
+                    return Pool<C>.id == Pool<T>.id;
+                }
+                
+                [MethodImpl(AggressiveInlining)]
+                bool IPoolWrapper.Has(Entity entity, out int internalId) => Pool<T>.Has(entity, out internalId);
+                
+                [MethodImpl(AggressiveInlining)]
+                void IPoolWrapper.SetDataIfCountLess(ref int count, ref Entity[] entities) {
+                    Pool<T>.SetDataIfCountLess(ref count, ref entities);
+                }
+
+                [MethodImpl(AggressiveInlining)]
+                void IPoolWrapper.Resize(int cap) => Pool<T>.Resize(cap);
+
+                [MethodImpl(AggressiveInlining)]
+                void IPoolWrapper.Destroy() => Pool<T>.Destroy();
+                
+                [MethodImpl(AggressiveInlining)]
+                void IPoolWrapper.EnsureSize(int size) => Pool<T>.EnsureSize(size);
+                
+                [MethodImpl(AggressiveInlining)]
+                void IPoolWrapper.Clear() => Pool<T>.Clear();
+                
+                #if DEBUG
+                [MethodImpl(AggressiveInlining)]
+                void IPoolWrapper.AddBlocker(int val) {
+                    Pool<T>.AddBlocker(val);
+                }
+                #endif
+            }
+        }
+    }
+}
