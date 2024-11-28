@@ -401,7 +401,7 @@ The first way is as is via full address (very inconvenient):
 ```c#
 public struct MainWorldId : IWorldId { }
 
-Ecs<MainWorldId>.Create(EcsConfig.Default());
+Ecs<MainWorldId>.CreateWorld(EcsConfig.Default());
 Ecs<MainWorldId>.World.GetEntitiesCount();
 
 var entity = Ecs<MainWorldId>.Entity.New<Position>();
@@ -413,7 +413,7 @@ using static FFS.Libraries.StaticEcs.Ecs<MainWorldId>;
 
 public struct MainWorldId : IWorldId { }
 
-Create(EcsConfig.Default());
+CreateWorld(EcsConfig.Default());
 World.GetEntitiesCount();
 
 var entity = Entity.New<Position>();
@@ -427,7 +427,7 @@ public struct MainWorldId : IWorldId { }
 public abstract class MyEsc : Ecs<MainWorldId> { }
 public abstract class MyWorld : Ecs<MainWorldId>.World { }
 
-MyEsc.Create(EcsConfig.Default());
+MyEsc.CreateWorld(EcsConfig.Default());
 MyWorld.GetEntitiesCount();
 
 var entity = MyEsc.Entity.New<Position>();
@@ -446,7 +446,7 @@ public abstract class MyWorld : Ecs<MainWorldId>.World { }
 // Creating a world with a default configuration
 MyEsc.CreateWorld(EcsConfig.Default());
 // Or a custom one
-MyEsc.Create(new() {
+MyEsc.CreateWorld(new() {
             BaseEntitiesCount = 256,        // Base size of the entity array when creating a world
             BaseDeletedEntitiesCount = 256, // Base size of the deleted entity array when creating a world
             BaseComponentTypesCount = 64    // Base size of all variants of component types (number of pools for each type)

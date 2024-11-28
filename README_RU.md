@@ -401,7 +401,7 @@ public struct MiniGameWorldId : IWorldId { }
 ```c#
 public struct MainWorldId : IWorldId { }
 
-Ecs<MainWorldId>.Create(EcsConfig.Default());
+Ecs<MainWorldId>.CreateWorld(EcsConfig.Default());
 Ecs<MainWorldId>.World.GetEntitiesCount();
 
 var entity = Ecs<MainWorldId>.Entity.New<Position>();
@@ -413,7 +413,7 @@ using static FFS.Libraries.StaticEcs.Ecs<MainWorldId>;
 
 public struct MainWorldId : IWorldId { }
 
-Create(EcsConfig.Default());
+CreateWorld(EcsConfig.Default());
 World.GetEntitiesCount();
 
 var entity = Entity.New<Position>();
@@ -427,7 +427,7 @@ public struct MainWorldId : IWorldId { }
 public abstract class MyEsc : Ecs<MainWorldId> { }
 public abstract class MyWorld : Ecs<MainWorldId>.World { }
 
-MyEsc.Create(EcsConfig.Default());
+MyEsc.CreateWorld(EcsConfig.Default());
 MyWorld.GetEntitiesCount();
 
 var entity = MyEsc.Entity.New<Position>();
@@ -446,7 +446,7 @@ public abstract class MyWorld : Ecs<MainWorldId>.World { }
 // Создание мира с дефолтной конфигурацие
 MyEsc.CreateWorld(EcsConfig.Default());
 // Или кастомной
-MyEsc.Create(new() {
+MyEsc.CreateWorld(new() {
             BaseEntitiesCount = 256,        // Базовый размер массива сущностей при создания мира
             BaseDeletedEntitiesCount = 256, // Базовый размер массива удаленных сущностей при создания мира
             BaseComponentTypesCount = 64    // Базовый размер всех разновидностей типов компонентов (количество пулов под каждый тип)
