@@ -102,7 +102,10 @@ public class Program {
         // Создаем системы
         MySystems.Create();
         MySystems.AddUpdateSystem<VelocitySystem>();
-        
+
+        // Инициализацируем системы
+        MySystems.Initialize();
+
         // Создание сущности
         var entity = MyEsc.Entity.New(
             new Velocity { Val = 1f },
