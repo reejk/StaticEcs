@@ -76,7 +76,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static TagDynId RegisterTag<C>() where C : struct, ITag {
-                Assert.Check(World.Status == WorldStatus.Created || World.Status == WorldStatus.Initialized, $"World<{typeof(WorldID)}>, Method: RegisterTag, World not created");
+                #if DEBUG
+                if (World.Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterTag, World not created");
+                #endif
                 if (TagInfo<C>.Has()) {
                     return GetDynamicId<C>();
                 }
@@ -107,50 +109,65 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static IPoolWrapper GetPool(TagDynId id) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
+                #endif
                 return _pools[id.Val];
             }
 
             [MethodImpl(AggressiveInlining)]
             public static PoolWrapper<T> GetPool<T>() where T : struct, ITag {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
-                Assert.Check(TagInfo<T>.Has(), $"World<{typeof(WorldID)}>, Method: GetTagPool, Component not registered");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
+                #endif
                 return default;
             }
 
             [MethodImpl(AggressiveInlining)]
             public static TagDynId GetDynamicId<T>() where T : struct, ITag {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetDynamicId, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagDynamicId, World not initialized");
+                #endif
                 return new TagDynId(Pool<T>.Id());
             }
 
             [MethodImpl(AggressiveInlining)]
             public static ushort TagsCount(Entity entity) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: TagsCount, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: TagsCount, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, ITag>.Len(entity._id);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAllTags(Entity entity, byte allBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAllTags, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllTags, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, ITag>.HasAll(entity._id, allBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAnyTags(Entity entity, byte anyBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAnyTags, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyTags, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, ITag>.HasAny(entity._id, anyBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool NotHasAnyTags(Entity entity, byte excBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: NotHasAnyTags, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyTags, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, ITag>.NotHasAny(entity._id, excBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAllAndExcTags(Entity entity, byte allBufId, byte excBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAllAndExcTags, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcTags, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, ITag>.HasAllAndExc(entity._id, allBufId, excBufId);
             }
 

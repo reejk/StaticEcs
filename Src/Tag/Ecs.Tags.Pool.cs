@@ -44,8 +44,10 @@ namespace FFS.Libraries.StaticEcs {
 
                 [MethodImpl(AggressiveInlining)]
                 public static void Add(Entity entity) {
-                    Assert.Check(!Has(entity), $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, can't add a ID - {entity._id}, it already exists");
-                    Assert.Check(IsNotBlocked(), $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
+                    #if DEBUG
+                    if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, cannot access ID - {id} from deleted entity");
+                    if (!Has(entity)) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, ID - {entity._id} is missing on an entity");
+                    #endif
 
                     if (_entities.Length == _tagCount) {
                         Array.Resize(ref _entities, _tagCount << 1);
@@ -76,22 +78,27 @@ namespace FFS.Libraries.StaticEcs {
 
                 [MethodImpl(AggressiveInlining)]
                 public static bool Has(Entity entity) {
-                    Assert.Check(World.EntityVersion(entity) >= 0, $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {entity._id} from deleted entity");
+                    #if DEBUG
+                    if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
+                    #endif
                     return _dataIdxByEntityId[entity._id] > 0;
                 }
 
                 [MethodImpl(AggressiveInlining)]
                 internal static bool Has(Entity entity, out int internalId) {
-                    Assert.Check(World.EntityVersion(entity) >= 0, $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {entity._id} from deleted entity");
+                    #if DEBUG
+                    if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
+                    #endif
                     internalId = _dataIdxByEntityId[entity._id] - 1;
                     return internalId >= 0;
                 }
 
                 [MethodImpl(AggressiveInlining)]
                 public static bool Del(Entity entity) {
-                    Assert.Check(World.EntityVersion(entity) >= 0, $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Del, cannot access ID - {entity._id} from deleted entity");
-                    Assert.Check(IsNotBlocked(), $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Del, component pool cannot be changed, it is in read-only mode due to multiple accesses");
-
+                    #if DEBUG
+                    if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: DelInternal, cannot access ID - {id} from deleted entity");
+                    if (!IsNotBlocked()) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: DelInternal,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
+                    #endif
 
                     ref var idxRef = ref _dataIdxByEntityId[entity._id];
                     var idx = idxRef - 1;
@@ -119,10 +126,12 @@ namespace FFS.Libraries.StaticEcs {
 
                 [MethodImpl(AggressiveInlining)]
                 public static void Copy(Entity src, Entity dst) {
-                    Assert.Check(World.EntityVersion(src) >= 0, $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {src._id} from deleted original entity");
-                    Assert.Check(World.EntityVersion(dst) >= 0, $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {dst._id} from deleted targeted entity");
-                    Assert.Check(IsNotBlocked(), $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, component pool cannot be changed, it is in read-only mode due to multiple accesses");
-
+                    #if DEBUG
+                    if (World.EntityVersion(src) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
+                    if (World.EntityVersion(dst) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
+                    if (!IsNotBlocked()) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
+                    #endif
+                    
                     if (Has(src) && !Has(dst)) {
                         Add(dst);
                     }
@@ -166,7 +175,9 @@ namespace FFS.Libraries.StaticEcs {
                 [MethodImpl(AggressiveInlining)]
                 internal static void AddBlocker(int amount) {
                     _blockers += amount;
-                    Assert.Check(_blockers >= 0, $"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: AddBlocker, incorrect pool user balance when attempting to release");
+                    #if DEBUG
+                    if (_blockers < 0) throw new Exception($"TagsPool<{typeof(WorldID)}, {typeof(T)}>, Method: AddBlocker, incorrect pool user balance when attempting to release");
+                    #endif
                 }
                 #endif
 

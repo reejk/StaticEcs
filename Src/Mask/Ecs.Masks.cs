@@ -68,7 +68,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static MaskDynId RegisterMask<T>() where T : struct, IMask {
-                Assert.Check(World.Status == WorldStatus.Created || World.Status == WorldStatus.Initialized, $"World<{typeof(WorldID)}>, Method: RegisterMask, World not created");
+                #if DEBUG
+                if (World.Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterMask, World not created");
+                #endif
                 if (MaskInfo<T>.Has()) {
                     return GetDynamicId<T>();
                 }
@@ -99,50 +101,65 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static MaskDynId GetDynamicId<T>() where T : struct, IMask {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetDynamicId, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMaskDynamicId, World not initialized");
+                #endif
                 return new MaskDynId(Pool<T>.Id());
             }
 
             [MethodImpl(AggressiveInlining)]
             public static ushort MasksCount(Entity entity) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: MaskCount, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: MasksCount, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IMask>.Len(entity._id);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAllMasks(Entity entity, byte allBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAllMasks, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllMasks, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IMask>.HasAll(entity._id, allBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAnyMasks(Entity entity, byte anyBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAnyMasks, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyMasks, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IMask>.HasAny(entity._id, anyBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAllAndExcMasks(Entity entity, byte allBufId, byte excBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAllAndExcMasks, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcMasks, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IMask>.HasAllAndExc(entity._id, allBufId, excBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool NotHasAnyMasks(Entity entity, byte excBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAnyMasks, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyMasks, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IMask>.NotHasAny(entity._id, excBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static IPoolWrapper GetPool(MaskDynId id) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetComponentPool, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
+                #endif
                 return _pools[id.Val];
             }
 
             [MethodImpl(AggressiveInlining)]
             public static PoolWrapper<T> GetPool<T>() where T : struct, IMask {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetComponentPool, World not initialized");
-                Assert.Check(MaskInfo<T>.Has(), $"World<{typeof(WorldID)}>, Method: GetComponentPool, Component not registered");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
+                #endif
                 return default;
             }
 

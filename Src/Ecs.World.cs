@@ -79,7 +79,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static Entity CreateEntityInternal() {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: NewEntity, World not initialized");
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CreateEntityInternal, World not initialized");
+                #endif
                 Entity entity;
                 if (_deletedEntitiesCount > 0) {
                     entity = _deletedEntities[--_deletedEntitiesCount];
@@ -141,8 +143,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void DestroyEntity(Entity entity) {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: DelEntity, World not initialized");
-
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: DestroyEntity, World not initialized");
+                #endif
                 ref var version = ref _entityVersions[entity._id];
                 if (version < 0) {
                     return;
@@ -165,8 +168,10 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void CopyEntityData(Entity srcEntity, Entity dstEntity) {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: CopyEntity, World not initialized");
-
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CopyEntityData, World not initialized");
+                #endif
+                
                 Components.CopyEntity(srcEntity, dstEntity);
                 #if !FFS_ECS_DISABLE_TAGS
                 Tags.CopyEntity(srcEntity, dstEntity);
@@ -178,8 +183,10 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static Entity CloneEntity(Entity srcEntity) {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: CopyEntity, World not initialized");
-
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CloneEntity, World not initialized");
+                #endif
+                
                 var dstEntity = CreateEntityInternal();
                 CopyEntityData(srcEntity, dstEntity);
 
@@ -201,19 +208,25 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCount() {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetEntitiesCount, World not initialized");
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntitiesCount, World not initialized");
+                #endif
                 return _entityVersionsCount - _deletedEntitiesCount;
             }
 
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCapacity() {
-                Assert.Check(Status is > WorldStatus.NotCreated, $"World<{typeof(WorldID)}>, Method: GetEntitiesCapacity, World not initialized");
+                #if DEBUG
+                if(Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: GetEntitiesCapacity, World not initialized");
+                #endif
                 return _entityVersions.Length;
             }
 
             [MethodImpl(AggressiveInlining)]
             public static short EntityVersion(Entity entity) {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: EntityVersion, World not initialized");
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntityVersion, World not initialized");
+                #endif
                 return _entityVersions[entity._id];
             }
 
@@ -229,7 +242,9 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal static void Clear() {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: Clear, World not initialized");
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Clear, World not initialized");
+                #endif
 
                 Components.Clear();
                 #if !FFS_ECS_DISABLE_TAGS
@@ -247,8 +262,10 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static void Destroy() {
-                Assert.Check(IsInitialized(), $"World<{typeof(WorldID)}>, Method: Destroy, World not initialized");
-
+                #if DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Destroy, World not initialized");
+                #endif
+                
                 for (var i = _entityVersionsCount - 1; i >= 0; i--) {
                     if (_entityVersions[i] > 0) {
                         DestroyEntity(Entity.FromIdx(i));

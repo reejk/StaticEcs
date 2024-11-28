@@ -66,7 +66,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static ComponentDynId RegisterComponent<C>() where C : struct, IComponent {
-                Assert.Check(World.Status == WorldStatus.Created || World.Status == WorldStatus.Initialized, $"World<{typeof(WorldID)}>, Method: RegisterMask, World not created");
+                #if DEBUG
+                if (World.Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterComponent, World not created");
+                #endif
                 if (ComponentInfo<C>.Has()) {
                     return GetDynamicId<C>();
                 }
@@ -98,50 +100,65 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static ComponentDynId GetDynamicId<T>() where T : struct, IComponent {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetDynamicId, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetDynamicId, World not initialized");
+                #endif
                 return new ComponentDynId(Pool<T>.Id());
             }
 
             [MethodImpl(AggressiveInlining)]
             public static IPoolWrapper GetPool(ComponentDynId id) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetComponentPool, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                #endif
                 return _pools[id.Val];
             }
 
             [MethodImpl(AggressiveInlining)]
             public static PoolWrapper<T> GetPool<T>() where T : struct, IComponent {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: GetComponentPool, World not initialized");
-                Assert.Check(ComponentInfo<T>.Has(), $"World<{typeof(WorldID)}>, Method: GetComponentPool, Component not registered");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                #endif
                 return default;
             }
 
             [MethodImpl(AggressiveInlining)]
             public static ushort ComponentsCount(Entity entity) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IComponent>.Len(entity._id);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAllComponents(Entity entity, byte allBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAllComponents, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllComponents, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IComponent>.HasAll(entity._id, allBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAnyComponents(Entity entity, byte allBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAnyComponents, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyComponents, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IComponent>.HasAny(entity._id, allBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool HasAllAndExcComponents(Entity entity, byte allBufId, byte excBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: HasAllAndExcComponents, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcComponents, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IComponent>.HasAllAndExc(entity._id, allBufId, excBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool NotHasAnyComponents(Entity entity, byte anyBufId) {
-                Assert.Check(World.IsInitialized(), $"World<{typeof(WorldID)}>, Method: NotHasAnyComponents, World not initialized");
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyComponents, World not initialized");
+                #endif
                 return BitMaskUtils<WorldID, IComponent>.NotHasAny(entity._id, anyBufId);
             }
 

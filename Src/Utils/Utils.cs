@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
@@ -39,20 +38,6 @@ namespace FFS.Libraries.StaticEcs {
             u++;
         
             return (int) u;
-        }
-    }
-
-    public static class Assert {
-        [Conditional("DEBUG")]
-        [MethodImpl(AggressiveInlining)]
-        public static void Check(bool condition, string assert) {
-            #if DEBUG
-            if (condition) {
-                return;
-            }
-
-            throw new System.Exception(assert);
-            #endif
         }
     }
 
