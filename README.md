@@ -1,4 +1,4 @@
-## LANGUAGE
+### LANGUAGE
 [RU](./README_RU.md)
 [EN](./README.md)
 
