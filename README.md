@@ -1,3 +1,5 @@
+![Version](https://img.shields.io/badge/version-0.9.0-blue.svg?style=for-the-badge)
+
 ### LANGUAGE
 [RU](./README_RU.md)
 [EN](./README.md)
