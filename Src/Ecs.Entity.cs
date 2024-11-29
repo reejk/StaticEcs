@@ -57,14 +57,65 @@ namespace FFS.Libraries.StaticEcs {
 
             #region NEW_BY_TYPE_SINGLE
             [MethodImpl(AggressiveInlining)]
-            public static Entity New<C1>(C1 component = default) where C1 : struct, IComponent {
+            public static Entity New<C1>() where C1 : struct, IComponent {
+                var entity = World.CreateEntityInternal();
+                entity.Add<C1>();
+                return entity;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New<C1, C2>()
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent {
+                var entity = World.CreateEntityInternal();
+                entity.Add<C1, C2>();
+                return entity;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New<C1, C2, C3>()
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent {
+                var entity = World.CreateEntityInternal();
+                entity.Add<C1, C2, C3>();
+                return entity;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New<C1, C2, C3, C4>()
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent
+                where C4 : struct, IComponent {
+                var entity = World.CreateEntityInternal();
+                entity.Add<C1, C2, C3, C4>();
+                return entity;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New<C1, C2, C3, C4, C5>()
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent
+                where C4 : struct, IComponent
+                where C5 : struct, IComponent {
+                var entity = World.CreateEntityInternal();
+                entity.Add<C1, C2, C3, C4, C5>();
+                return entity;
+            }
+            #endregion
+            
+            #region NEW_BY_VALUE_SINGLE
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New<C1>(C1 component) where C1 : struct, IComponent {
                 var entity = World.CreateEntityInternal();
                 entity.Put(component);
                 return entity;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity New<C1, C2>(C1 comp1 = default, C2 comp2 = default)
+            public static Entity New<C1, C2>(C1 comp1, C2 comp2)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
                 var entity = World.CreateEntityInternal();
@@ -73,7 +124,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity New<C1, C2, C3>(C1 comp1 = default, C2 comp2 = default, C3 comp3 = default)
+            public static Entity New<C1, C2, C3>(C1 comp1, C2 comp2, C3 comp3)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
@@ -83,7 +134,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity New<C1, C2, C3, C4>(C1 comp1 = default, C2 comp2 = default, C3 comp3 = default, C4 comp4 = default)
+            public static Entity New<C1, C2, C3, C4>(C1 comp1, C2 comp2, C3 comp3, C4 comp4)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -94,9 +145,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity New<C1, C2, C3, C4, C5>(
-                C1 comp1 = default, C2 comp2 = default, C3 comp3 = default, C4 comp4 = default, C5 comp5 = default
-            )
+            public static Entity New<C1, C2, C3, C4, C5>(C1 comp1, C2 comp2, C3 comp3, C4 comp4, C5 comp5)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
