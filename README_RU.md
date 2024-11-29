@@ -976,29 +976,29 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 
 **AutoInit** - заменяет поведение при создании компонента через метод Add
 ```csharp
-MyEcs.Create(EcsConfig.Default());
+MyEcs.CreateWorld(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.Initialize();
+MyEcs.InitializeWorld();
 ```
 
 **AutoReset** - заменяет поведение при удалении компонента через метод Delete
 ```csharp
-MyEcs.Create(EcsConfig.Default());
+MyEcs.CreateWorld(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.Initialize();
+MyEcs.InitializeWorld();
 ```
 
 **AutoCopy** - заменяет поведение при копировании компонента
 ```csharp
-MyEcs.Create(EcsConfig.Default());
+MyEcs.CreateWorld(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
 //...
-MyEcs.Initialize();
+MyEcs.InitializeWorld();
 ```
 
 > **Важно!** Стоит учитывать что создание сущности с установкой значения или добавления компонента через метод Put  

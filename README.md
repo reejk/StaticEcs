@@ -976,29 +976,29 @@ To set your own logic of default initialization and resetting of the component y
 
 **AutoInit** - replaces the behavior when creating a component via the Add method
 ```csharp
-MyEcs.Create(EcsConfig.Default());
+MyEcs.CreateWorld(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.Initialize();
+MyEcs.InitializeWorld();
 ```
 
 **AutoReset** - replaces the behavior when deleting a component via the Delete method
 ```csharp
-MyEcs.Create(EcsConfig.Default());
+MyEcs.CreateWorld(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.Initialize();
+MyEcs.InitializeWorld();
 ```
 
 **AutoCopy** - replaces the behavior when copying a component
 ```csharp
-MyEcs.Create(EcsConfig.Default());
+MyEcs.CreateWorld(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
 //...
-MyEcs.Initialize();
+MyEcs.InitializeWorld();
 ```
 
 > **Important!** Keep in mind that creating an entity with a value or adding a component via the Put method  
