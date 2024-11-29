@@ -138,7 +138,7 @@ public class Program {
 Entity - serves to identify an object in the game world and access attached components
  - Represented as a 4 byte structure
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Creation:
 ```csharp
@@ -209,7 +209,7 @@ Packed entity - stores meta information of the entity, serves for secure transfe
 > just by id it is impossible to determine whether this entity that is now in the world under this identifier or not, you can only together with the version, for this purpose packaged version
  - Represented as an 8 byte structure
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Creation:
 ```csharp
@@ -243,7 +243,7 @@ public struct Position : IComponent {
 }
 ```
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Creation:
 ```c#
@@ -319,7 +319,7 @@ Example:
 public struct Unit : ITag { }
 ```
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Creation:
 ```c#
@@ -359,7 +359,7 @@ Example:
 public struct Visible : IMask { }
 ```
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Creation:
 ```c#
@@ -435,7 +435,7 @@ MyWorld.GetEntitiesCount();
 var entity = MyEsc.Entity.New<Position>();
 ```
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 ```c#
 // Defining the world ID
@@ -478,7 +478,7 @@ MyEsc.DestroyWorld();
 World, contains meta information of entities, controls and manages creation and deletion of entities
 - Represented as a static class `Ecs<IWorldId>.World`
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Creation:
 ```c#
@@ -544,7 +544,7 @@ public struct LateSystemsId : ISystemsId { }
 Systems, controls and manages the creation and run of systems
 - Represented as a static class `Systems<ISystemsId>`
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 ```c#
 // The systems are of 3 types and can be used in all combinations together or separately
@@ -639,7 +639,7 @@ MySystems.Destroy();
 Context is an alternative to DI, a simple mechanism for storing and transferring user data and services to systems and other methods
 - Represented as a static class `Ecs<IWorldId>.Context<T>`
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 - Basic operations:
 ```c#
@@ -669,7 +669,7 @@ MyEcs.Context<UserService2>.Remove();
 ### Query
 Queries - a mechanism that allows you to search for entities and their components in the world
 
-<details><summary>Usage</summary>
+<details><summary><u><b>Usage 👇</b></u></summary>
 
 Let's look at the basic capabilities of searching for entities in the world:
 ```c#
