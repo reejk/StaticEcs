@@ -46,7 +46,7 @@ namespace FFS.Libraries.StaticEcs {
                 public static void Add(Entity entity) {
                     #if DEBUG
                     if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, cannot access ID - {id} from deleted entity");
-                    if (!Has(entity)) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, ID - {entity._id} is missing on an entity");
+                    if (Has(entity)) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, ID - {entity._id} is missing on an entity");
                     #endif
 
                     if (_entities.Length == _tagCount) {
