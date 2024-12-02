@@ -40,7 +40,18 @@ namespace FFS.Libraries.StaticEcs {
         public bool First(out Ecs<WorldID>.Entity entity) {
             var moveNext = MoveNext();
             entity = _current;
+            Dispose();
             return moveNext;
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public int EntitiesCount() {
+            var count = 0;
+            while (MoveNext()) {
+                count++;
+            }
+            Dispose();
+            return count;
         }
 
         [MethodImpl(AggressiveInlining)]
