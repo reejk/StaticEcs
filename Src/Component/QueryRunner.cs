@@ -209,7 +209,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2> {
             var all = default(Double<C1, C2>);
-            var count = QueryFunctionRunner.Init<WorldID, Double<C1, C2>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -228,7 +232,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2> runner, P with) {
             var all = default(Double<C1, C2>);
-            var count = QueryFunctionRunner.Init<WorldID, Double<C1, C2>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -258,7 +266,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3> {
             var all = default(All<Types<C1, C2, C3>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -278,7 +290,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3> runner, P with) {
             var all = default(All<Types<C1, C2, C3>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -310,7 +326,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4> {
             var all = default(All<Types<C1, C2, C3, C4>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -331,7 +351,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -365,7 +389,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5> {
             var all = default(All<Types<C1, C2, C3, C4, C5>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -387,7 +415,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -423,7 +455,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5, C6>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -446,7 +482,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5, C6>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -485,7 +525,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5, C6, C7>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -509,7 +553,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6, C7> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5, C6, C7>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -549,7 +597,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -574,7 +626,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
-            var count = QueryFunctionRunner.Init<WorldID, All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>, P, C1>(out var entities, ref all, ref with);
+            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
+            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            all.FillMinData(ref count, ref entities);
+            with.FillMinData(ref count, ref entities);
+            
             while (count > 0) {
                 count--;
                 var entity = entities[count];
@@ -601,19 +657,6 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    internal static class QueryFunctionRunner {
-        [MethodImpl(AggressiveInlining)]
-        internal static int Init<WorldID, QM, P, FC>(out Ecs<WorldID>.Entity[] entities, ref QM all, ref P with)
-            where QM : struct, IQueryMethod, IPrimaryQueryMethod
-            where P : struct, IQueryWith
-            where FC : struct, IComponent
-            where WorldID : struct, IWorldId {
-            var count = Ecs<WorldID>.Components.Pool<FC>.Count();
-            entities = Ecs<WorldID>.Components.Pool<FC>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
-            return count;
-        }
-    }
+    internal static class QueryFunctionRunner { }
     #endregion
 }

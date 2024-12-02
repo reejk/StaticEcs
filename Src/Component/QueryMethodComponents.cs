@@ -46,6 +46,9 @@ namespace FFS.Libraries.StaticEcs {
         where TComponent : struct, IComponent {
         [MethodImpl(AggressiveInlining)]
         public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+            #if DEBUG
+            Ecs<WorldID>.Components.Pool<TComponent>.AddBlocker(1);
+            #endif
             var val = default(Types<TComponent>);
             val.FillMinData(ref minCount, ref entities);
         }
@@ -56,7 +59,11 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void Dispose<WorldID>() where WorldID : struct, IWorldId { }
+        public void Dispose<WorldID>() where WorldID : struct, IWorldId {
+            #if DEBUG
+            Ecs<WorldID>.Components.Pool<TComponent>.AddBlocker(-1);
+            #endif
+        }
     }
 
     #if ENABLE_IL2CPP
@@ -68,6 +75,10 @@ namespace FFS.Libraries.StaticEcs {
         where TComponent2 : struct, IComponent {
         [MethodImpl(AggressiveInlining)]
         public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+            #if DEBUG
+            Ecs<WorldID>.Components.Pool<TComponent1>.AddBlocker(1);
+            Ecs<WorldID>.Components.Pool<TComponent2>.AddBlocker(1);
+            #endif
             var val = default(Types<TComponent1, TComponent2>);
             val.FillMinData(ref minCount, ref entities);
         }
@@ -78,7 +89,12 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void Dispose<WorldID>() where WorldID : struct, IWorldId { }
+        public void Dispose<WorldID>() where WorldID : struct, IWorldId {
+            #if DEBUG
+            Ecs<WorldID>.Components.Pool<TComponent1>.AddBlocker(-1);
+            Ecs<WorldID>.Components.Pool<TComponent2>.AddBlocker(-1);
+            #endif
+        }
     }
 
     #if ENABLE_IL2CPP
