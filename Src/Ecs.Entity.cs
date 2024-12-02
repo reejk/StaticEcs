@@ -56,6 +56,14 @@ namespace FFS.Libraries.StaticEcs {
             public readonly void Destroy() => World.DestroyEntity(this);
 
             #region NEW_BY_TYPE_SINGLE
+
+            #if DEBUG || FFS_ECS_EMPTY_ENTITY
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New() {
+                return World.CreateEntityInternal();
+            }
+            #endif
+            
             [MethodImpl(AggressiveInlining)]
             public static Entity New<C1>() where C1 : struct, IComponent {
                 var entity = World.CreateEntityInternal();
