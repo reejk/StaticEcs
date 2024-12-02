@@ -125,6 +125,56 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
+            public readonly void Add<C1>(C1 c1)
+                where C1 : struct, IComponent {
+                Components.Pool<C1>.Add(this) = c1;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void Add<C1, C2>(C1 c1, C2 c2)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent {
+                Components.Pool<C1>.Add(this) = c1;
+                Components.Pool<C2>.Add(this) = c2;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void Add<C1, C2, C3>(C1 c1, C2 c2, C3 c3)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent {
+                Components.Pool<C1>.Add(this) = c1;
+                Components.Pool<C2>.Add(this) = c2;
+                Components.Pool<C3>.Add(this) = c3;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void Add<C1, C2, C3, C4>(C1 c1, C2 c2, C3 c3, C4 c4)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent
+                where C4 : struct, IComponent {
+                Components.Pool<C1>.Add(this) = c1;
+                Components.Pool<C2>.Add(this) = c2;
+                Components.Pool<C3>.Add(this) = c3;
+                Components.Pool<C4>.Add(this) = c4;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void Add<C1, C2, C3, C4, C5>(C1 c1, C2 c2, C3 c3, C4 c4, C5 c5)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent
+                where C4 : struct, IComponent
+                where C5 : struct, IComponent {
+                Components.Pool<C1>.Add(this) = c1;
+                Components.Pool<C2>.Add(this) = c2;
+                Components.Pool<C3>.Add(this) = c3;
+                Components.Pool<C4>.Add(this) = c4;
+                Components.Pool<C5>.Add(this) = c5;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
             public readonly ref C TryAdd<C>()
                 where C : struct, IComponent {
                 return ref Components.Pool<C>.TryAdd(this);
