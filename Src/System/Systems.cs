@@ -85,6 +85,17 @@ namespace FFS.Libraries.StaticEcs {
             for (var i = 0; i < _destroyChainCount; i++) {
                 _destroyChain[i]();
             }
+            
+            _initChain = default;
+            _destroyChain = default;
+            _runSystems = default;
+            _otherSystems = default;
+            _otherSystemsCount = default;
+            _initChainCount = default;
+            _destroyChainCount = default;
+            _runSystemsCount = default;
+            CurrentSystemIndex = default;
+            _systemsCount = default;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
