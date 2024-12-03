@@ -3,6 +3,8 @@
 ### LANGUAGE
 [RU](./README_RU.md)
 [EN](./README.md)
+___
+### [BENCHMARKS](./Benchmark.md)
 
 # Static ECS - C# Entity component system framework
 - Lightweight

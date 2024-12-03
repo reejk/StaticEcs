@@ -93,6 +93,7 @@
         <Compile Include="Src\Utils\Utils.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Benchmark.md" />
       <Content Include="README.md" />
       <Content Include="README_RU.md" />
     </ItemGroup>
