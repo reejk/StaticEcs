@@ -1033,7 +1033,121 @@ MyEcs.InitializeWorld();
 
 
 # Perfomance
-**WIP**
+Current benchmarks : [BENCHMARKS](./Benchmark.md)
+
+When using il2Cpp in Unity, it's worth noting that direct calls to get components are a little bit faster:  
+For example:
+```csharp
+// Performance in il2Cpp (there is no difference in Mono) can be better in the second option by 10-40%
+// The same applies to tags and masks and all other methods HasAllOf<>, Delete<>, etc.
+ref var position = ref entity.RefMut<Position>(); // сахарный метод через сущность
+ref var position = ref Ecs.Components<Position>.RefMut(entity); // прямой вызов
+```
+```csharp
+// It is also possible to use extension methods that are practically close in performance to the direct call
+// To create them, you can use the live template for rider (read below) or codegenerate (WIP)
+public static class PositionExtension {
+    [MethodImpl(AggressiveInlining)]
+    public static ref Position RefMutPosition(this Ecs.Entity entity) {
+        return ref Ecs.Components<Position>.RefMut(entity);
+    }
+}
+ref var position = ref entity.RefMutPosition();
+```
+Component live template
+```csharp
+public static class $COMPONENT$Extension {
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static ref $COMPONENT$ RefMut$COMPONENT$(this $ECS$.Entity entity) {
+        return ref $ECS$.Components<$COMPONENT$>.RefMut(entity);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static ref readonly $COMPONENT$ Ref$COMPONENT$(this $ECS$.Entity entity) {
+        return ref $ECS$.Components<$COMPONENT$>.Ref(entity);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static ref $COMPONENT$ Add$COMPONENT$(this $ECS$.Entity entity) {
+        return ref $ECS$.Components<$COMPONENT$>.Add(entity);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void Add$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
+        $ECS$.Components<$COMPONENT$>.Add(entity) = $COMPONENT$;
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static ref $COMPONENT$ TryAdd$COMPONENT$(this $ECS$.Entity entity) {
+        return ref $ECS$.Components<$COMPONENT$>.TryAdd(entity);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void TryAdd$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
+        $ECS$.Components<$COMPONENT$>.TryAdd(entity) = $COMPONENT$;
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void Put$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
+        $ECS$.Components<$COMPONENT$>.Put(entity, $COMPONENT$);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool Has$COMPONENT$(this $ECS$.Entity entity) {
+        return $ECS$.Components<$COMPONENT$>.Has(entity);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool Delete$COMPONENT$(this $ECS$.Entity entity) {
+        return $ECS$.Components<$COMPONENT$>.Del(entity);
+    }
+}
+```
+
+Tag live template
+```csharp
+public static class $TAG$Extension {
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void Add$TAG$(this $Ecs$.Entity entity) {
+        $Ecs$.Tags<$TAG$>.Add(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void TryAdd$TAG$(this $Ecs$.Entity entity) {
+        $Ecs$.Tags<$TAG$>.TryAdd(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool Has$TAG$(this $Ecs$.Entity entity) {
+        return $Ecs$.Tags<$TAG$>.Has(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool Delete$TAG$(this $Ecs$.Entity entity) {
+        return $Ecs$.Tags<$TAG$>.Del(entity);
+    }
+}
+```
+
+Mask live template
+```csharp
+public static class $MASK$Extension {
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void Add$MASK$(this $Ecs$.Entity entity) {
+        $Ecs$.Masks<$MASK$>.Set(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool Has$MASK$(this $Ecs$.Entity entity) {
+        return $Ecs$.Masks<$MASK$>.Has(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void Delete$MASK$(this $Ecs$.Entity entity) {
+        $Ecs$.Masks<$MASK$>.Del(entity);
+    }
+}
+```
 
 # Engine integration
 ### Unity

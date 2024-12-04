@@ -151,7 +151,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool DelFromWorld(Entity entity) {
+            internal static bool DelFromWorld(Entity entity) {
                 return DelInternal(entity, true);
             }
 
