@@ -17,9 +17,9 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract partial class Masks {
+        public abstract partial class ModuleMasks {
             internal static ulong[] _bitMap;
-            private static IPoolWrapper[] _pools;
+            private static IMasksWrapper[] _pools;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
@@ -29,7 +29,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
-                _pools = new IPoolWrapper[baseComponentsCapacity];
+                _pools = new IMasksWrapper[baseComponentsCapacity];
                 _reInitActions ??= new Action[baseComponentsCapacity];
                 _resetActions ??= new Action[baseComponentsCapacity];
             }
@@ -76,12 +76,12 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 MaskInfo<T>.Register();
-                Pool<T>.Create(MaskInfo<T>.Id);
+                Masks<T>.Create(MaskInfo<T>.Id);
                 if (_poolsCount == _pools.Length) {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
 
-                _pools[_poolsCount++] = new PoolWrapper<T>();
+                _pools[_poolsCount++] = new MasksWrapper<T>();
 
                 if (_actionsCount == _reInitActions.Length) {
                     Array.Resize(ref _reInitActions, _actionsCount << 1);
@@ -104,7 +104,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMaskDynamicId, World not initialized");
                 #endif
-                return new MaskDynId(Pool<T>.Id());
+                return new MaskDynId(Masks<T>.Id());
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -148,7 +148,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static IPoolWrapper GetPool(MaskDynId id) {
+            public static IMasksWrapper GetPool(MaskDynId id) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
                 #endif
@@ -156,7 +156,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static PoolWrapper<T> GetPool<T>() where T : struct, IMask {
+            public static MasksWrapper<T> GetPool<T>() where T : struct, IMask {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
                 #endif

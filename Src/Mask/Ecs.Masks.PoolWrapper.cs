@@ -11,68 +11,66 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldID> {
-        public abstract partial class Masks {
-            public interface IPoolWrapper {
-                public ushort Id();
+        public interface IMasksWrapper {
+            public ushort Id();
 
-                public void Set(Entity entity);
+            public void Set(Entity entity);
 
-                public bool Has(Entity entity);
+            public bool Has(Entity entity);
 
-                public void Del(Entity entity);
+            public void Del(Entity entity);
 
-                public void Copy(Entity srcEntity, Entity dstEntity);
+            public void Copy(Entity srcEntity, Entity dstEntity);
 
-                public int Count();
-                
-                public string ToStringComponent(Entity entity);
+            public int Count();
 
-                public bool Is<C>() where C : struct, IMask;
+            public string ToStringComponent(Entity entity);
 
-                public bool TryCast<C>(out PoolWrapper<C> wrapper) where C : struct, IMask;
-                
-                internal void Clear();
+            public bool Is<C>() where C : struct, IMask;
+
+            public bool TryCast<C>(out MasksWrapper<C> wrapper) where C : struct, IMask;
+
+            internal void Clear();
+        }
+
+        #if ENABLE_IL2CPP
+        [Il2CppSetOption(Option.NullChecks, false)]
+        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+        #endif
+        public readonly struct MasksWrapper<T> : IMasksWrapper, Stateless where T : struct, IMask {
+            [MethodImpl(AggressiveInlining)]
+            public ushort Id() => Masks<T>.Id();
+
+            [MethodImpl(AggressiveInlining)]
+            public void Set(Entity entity) => Masks<T>.Set(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public bool Has(Entity entity) => Masks<T>.Has(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Del(Entity entity) => Masks<T>.Del(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Copy(Entity srcEntity, Entity dstEntity) => ModuleMasks.CopyEntity(srcEntity, dstEntity);
+
+            [MethodImpl(AggressiveInlining)]
+            public int Count() => Masks<T>.Count();
+
+            [MethodImpl(AggressiveInlining)]
+            public string ToStringComponent(Entity entity) => Masks<T>.ToStringComponent(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public bool Is<C>() where C : struct, IMask {
+                return Masks<C>.id == Masks<T>.id;
             }
 
-            #if ENABLE_IL2CPP
-            [Il2CppSetOption(Option.NullChecks, false)]
-            [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
-            #endif
-            public readonly struct PoolWrapper<T> : IPoolWrapper, Stateless where T : struct, IMask {
-                [MethodImpl(AggressiveInlining)]
-                public ushort Id() => Pool<T>.Id();
-
-                [MethodImpl(AggressiveInlining)]
-                public void Set(Entity entity) => Pool<T>.Set(entity);
-
-                [MethodImpl(AggressiveInlining)]
-                public bool Has(Entity entity) => Pool<T>.Has(entity);
-
-                [MethodImpl(AggressiveInlining)]
-                public void Del(Entity entity) => Pool<T>.Del(entity);
-
-                [MethodImpl(AggressiveInlining)]
-                public void Copy(Entity srcEntity, Entity dstEntity) => CopyEntity(srcEntity, dstEntity);
-
-                [MethodImpl(AggressiveInlining)]
-                public int Count() => Pool<T>.Count();
-                
-                [MethodImpl(AggressiveInlining)]
-                public string ToStringComponent(Entity entity) => Pool<T>.ToStringComponent(entity);
-
-                [MethodImpl(AggressiveInlining)]
-                public bool Is<C>() where C : struct, IMask {
-                    return Pool<C>.id == Pool<T>.id;
-                }
-
-                [MethodImpl(AggressiveInlining)]
-                public bool TryCast<C>(out PoolWrapper<C> wrapper) where C : struct, IMask {
-                    return Pool<C>.id == Pool<T>.id;
-                }
-
-                [MethodImpl(AggressiveInlining)]
-                void IPoolWrapper.Clear() => Pool<T>.Clear();
+            [MethodImpl(AggressiveInlining)]
+            public bool TryCast<C>(out MasksWrapper<C> wrapper) where C : struct, IMask {
+                return Masks<C>.id == Masks<T>.id;
             }
+
+            [MethodImpl(AggressiveInlining)]
+            void IMasksWrapper.Clear() => Masks<T>.Clear();
         }
     }
 }

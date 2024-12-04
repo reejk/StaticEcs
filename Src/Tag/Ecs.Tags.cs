@@ -17,9 +17,9 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract partial class Tags {
+        public abstract partial class ModuleTags {
             private static ulong[] _bitMap;
-            private static IPoolWrapper[] _pools;
+            private static ITagsWrapper[] _pools;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
@@ -29,7 +29,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
-                _pools = new IPoolWrapper[baseComponentsCapacity];
+                _pools = new ITagsWrapper[baseComponentsCapacity];
                 _reInitActions ??= new Action[baseComponentsCapacity];
                 _resetActions ??= new Action[baseComponentsCapacity];
             }
@@ -84,12 +84,12 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 TagInfo<C>.Register();
-                Pool<C>.Create(TagInfo<C>.Id, TagInfo<C>.BaseCapacity ?? TagInfo.BaseCapacity);
+                Tags<C>.Create(TagInfo<C>.Id, TagInfo<C>.BaseCapacity ?? TagInfo.BaseCapacity);
                 if (_poolsCount == _pools.Length) {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
 
-                _pools[_poolsCount++] = new PoolWrapper<C>();
+                _pools[_poolsCount++] = new TagsWrapper<C>();
 
                 if (_actionsCount == _reInitActions.Length) {
                     Array.Resize(ref _reInitActions, _actionsCount << 1);
@@ -108,7 +108,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static IPoolWrapper GetPool(TagDynId id) {
+            public static ITagsWrapper GetPool(TagDynId id) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
                 #endif
@@ -116,7 +116,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static PoolWrapper<T> GetPool<T>() where T : struct, ITag {
+            public static TagsWrapper<T> GetPool<T>() where T : struct, ITag {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
                 #endif
@@ -128,7 +128,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagDynamicId, World not initialized");
                 #endif
-                return new TagDynId(Pool<T>.Id());
+                return new TagDynId(Tags<T>.Id());
             }
 
             [MethodImpl(AggressiveInlining)]

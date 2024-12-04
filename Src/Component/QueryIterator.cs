@@ -15,10 +15,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public QueryComponentsIterator(byte cs9fake) {
-            _data = Ecs<WorldID>.Components.Pool<C>.Data();
-            _count = Ecs<WorldID>.Components.Pool<C>.Count();
+            _data = Ecs<WorldID>.Components<C>.Data();
+            _count = Ecs<WorldID>.Components<C>.Count();
             #if DEBUG
-                Ecs<WorldID>.Components.Pool<C>.AddBlocker(1);
+                Ecs<WorldID>.Components<C>.AddBlocker(1);
             #endif
         }
 
@@ -38,7 +38,7 @@ namespace FFS.Libraries.StaticEcs {
         #if DEBUG
             [MethodImpl(AggressiveInlining)]
             public void Dispose() {
-                Ecs<WorldID>.Components.Pool<C>.AddBlocker(-1);
+                Ecs<WorldID>.Components<C>.AddBlocker(-1);
             }
         #endif
     }
@@ -59,14 +59,14 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public QueryComponentsIterator(QW with) {
             _with = with;
-            _data = Ecs<WorldID>.Components.Pool<C>.Data();
-            _count = Ecs<WorldID>.Components.Pool<C>.Count();
-            _entities = Ecs<WorldID>.Components.Pool<C>.EntitiesData();
+            _data = Ecs<WorldID>.Components<C>.Data();
+            _count = Ecs<WorldID>.Components<C>.Count();
+            _entities = Ecs<WorldID>.Components<C>.EntitiesData();
             var count = int.MaxValue;
             Ecs<WorldID>.Entity[] entities = null;
             with.FillMinData(ref count, ref entities);
             #if DEBUG
-            Ecs<WorldID>.Components.Pool<C>.AddBlocker(1);
+            Ecs<WorldID>.Components<C>.AddBlocker(1);
             #endif
         }
 
@@ -95,7 +95,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void Dispose() {
             #if DEBUG
-            Ecs<WorldID>.Components.Pool<C>.AddBlocker(-1);
+            Ecs<WorldID>.Components<C>.AddBlocker(-1);
             #endif
             _with.Dispose<WorldID>();
         }

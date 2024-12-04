@@ -48,7 +48,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Tags.Pool<TTag>.AddBlocker(1);
+            Ecs<WorldID>.Tags<TTag>.AddBlocker(1);
             #endif
             var val = default(Tag<TTag>);
             val.FillMinData(ref minCount, ref entities);
@@ -56,13 +56,13 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return Ecs<WorldID>.Tags.Pool<TTag>.Has(entity);
+            return Ecs<WorldID>.Tags<TTag>.Has(entity);
         }
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Tags.Pool<TTag>.AddBlocker(-1);
+            Ecs<WorldID>.Tags<TTag>.AddBlocker(-1);
             #endif
         }
     }
@@ -77,8 +77,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Tags.Pool<TTag1>.AddBlocker(1);
-            Ecs<WorldID>.Tags.Pool<TTag2>.AddBlocker(1);
+            Ecs<WorldID>.Tags<TTag1>.AddBlocker(1);
+            Ecs<WorldID>.Tags<TTag2>.AddBlocker(1);
             #endif
             var val = default(Tag<TTag1, TTag2>);
             val.FillMinData(ref minCount, ref entities);
@@ -86,14 +86,14 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return Ecs<WorldID>.Tags.Pool<TTag1>.Has(entity) && Ecs<WorldID>.Tags.Pool<TTag2>.Has(entity);
+            return Ecs<WorldID>.Tags<TTag1>.Has(entity) && Ecs<WorldID>.Tags<TTag2>.Has(entity);
         }
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Tags.Pool<TTag1>.AddBlocker(-1);
-            Ecs<WorldID>.Tags.Pool<TTag2>.AddBlocker(-1);
+            Ecs<WorldID>.Tags<TTag1>.AddBlocker(-1);
+            Ecs<WorldID>.Tags<TTag2>.AddBlocker(-1);
             #endif
         }
     }

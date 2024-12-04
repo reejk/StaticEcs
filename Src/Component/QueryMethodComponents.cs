@@ -47,7 +47,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Components.Pool<TComponent>.AddBlocker(1);
+            Ecs<WorldID>.Components<TComponent>.AddBlocker(1);
             #endif
             var val = default(Types<TComponent>);
             val.FillMinData(ref minCount, ref entities);
@@ -55,13 +55,13 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return Ecs<WorldID>.Components.Pool<TComponent>.Has(entity);
+            return Ecs<WorldID>.Components<TComponent>.Has(entity);
         }
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Components.Pool<TComponent>.AddBlocker(-1);
+            Ecs<WorldID>.Components<TComponent>.AddBlocker(-1);
             #endif
         }
     }
@@ -76,8 +76,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Components.Pool<TComponent1>.AddBlocker(1);
-            Ecs<WorldID>.Components.Pool<TComponent2>.AddBlocker(1);
+            Ecs<WorldID>.Components<TComponent1>.AddBlocker(1);
+            Ecs<WorldID>.Components<TComponent2>.AddBlocker(1);
             #endif
             var val = default(Types<TComponent1, TComponent2>);
             val.FillMinData(ref minCount, ref entities);
@@ -85,14 +85,14 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return Ecs<WorldID>.Components.Pool<TComponent1>.Has(entity) && Ecs<WorldID>.Components.Pool<TComponent2>.Has(entity);
+            return Ecs<WorldID>.Components<TComponent1>.Has(entity) && Ecs<WorldID>.Components<TComponent2>.Has(entity);
         }
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             #if DEBUG
-            Ecs<WorldID>.Components.Pool<TComponent1>.AddBlocker(-1);
-            Ecs<WorldID>.Components.Pool<TComponent2>.AddBlocker(-1);
+            Ecs<WorldID>.Components<TComponent1>.AddBlocker(-1);
+            Ecs<WorldID>.Components<TComponent2>.AddBlocker(-1);
             #endif
         }
     }

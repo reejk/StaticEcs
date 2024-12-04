@@ -188,11 +188,11 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         private static int Init(out Ecs<WorldID>.Entity[] entities, ref P with, out C1[] dataC1) {
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             with.FillMinData(ref count, ref entities);
 
-            dataC1 = Ecs<WorldID>.Components.Pool<C1>.Data();
+            dataC1 = Ecs<WorldID>.Components<C1>.Data();
             return count;
         }
     }
@@ -209,8 +209,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2> {
             var all = default(Double<C1, C2>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -219,8 +219,8 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity)
                     );
                 }
             }
@@ -232,8 +232,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2> runner, P with) {
             var all = default(Double<C1, C2>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -242,8 +242,8 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity)
                     );
                 }
             }
@@ -266,8 +266,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3> {
             var all = default(All<Types<C1, C2, C3>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -276,9 +276,9 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C3>.RefMut(entity)
                     );
                 }
             }
@@ -290,8 +290,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3> runner, P with) {
             var all = default(All<Types<C1, C2, C3>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -300,9 +300,9 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C3>.RefMut(entity)
                     );
                 }
             }
@@ -326,8 +326,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4> {
             var all = default(All<Types<C1, C2, C3, C4>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -336,10 +336,10 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C4>.RefMut(entity)
                     );
                 }
             }
@@ -351,8 +351,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -361,10 +361,10 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C4>.RefMut(entity)
                     );
                 }
             }
@@ -389,8 +389,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5> {
             var all = default(All<Types<C1, C2, C3, C4, C5>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -399,11 +399,11 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C5>.RefMut(entity)
                     );
                 }
             }
@@ -415,8 +415,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -425,11 +425,11 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C5>.RefMut(entity)
                     );
                 }
             }
@@ -455,8 +455,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -465,12 +465,12 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C6>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C5>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C6>.RefMut(entity)
                     );
                 }
             }
@@ -482,8 +482,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -492,12 +492,12 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C6>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C5>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C6>.RefMut(entity)
                     );
                 }
             }
@@ -525,8 +525,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -535,13 +535,13 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C6>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C7>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C5>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C6>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C7>.RefMut(entity)
                     );
                 }
             }
@@ -553,8 +553,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6, C7> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -563,13 +563,13 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C6>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C7>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C5>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C6>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C7>.RefMut(entity)
                     );
                 }
             }
@@ -597,8 +597,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -607,14 +607,14 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(entity,
-                               ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C6>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C7>.RefMut(entity),
-                               ref Ecs<WorldID>.Components.Pool<C8>.RefMut(entity)
+                               ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C5>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C6>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C7>.RefMut(entity),
+                               ref Ecs<WorldID>.Components<C8>.RefMut(entity)
                     );
                 }
             }
@@ -626,8 +626,8 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with) {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
-            var count = Ecs<WorldID>.Components.Pool<C1>.Count();
-            var entities = Ecs<WorldID>.Components.Pool<C1>.EntitiesData();
+            var count = Ecs<WorldID>.Components<C1>.Count();
+            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
             all.FillMinData(ref count, ref entities);
             with.FillMinData(ref count, ref entities);
             
@@ -636,14 +636,14 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(entity,
-                           ref Ecs<WorldID>.Components.Pool<C1>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C2>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C3>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C4>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C5>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C6>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C7>.RefMut(entity),
-                           ref Ecs<WorldID>.Components.Pool<C8>.RefMut(entity)
+                           ref Ecs<WorldID>.Components<C1>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C2>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C3>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C4>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C5>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C6>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C7>.RefMut(entity),
+                           ref Ecs<WorldID>.Components<C8>.RefMut(entity)
                     );
                 }
             }

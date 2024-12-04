@@ -47,7 +47,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(0, Ecs<WorldID>.Masks.Pool<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(0, Ecs<WorldID>.Masks<C1>.id);
         }
     }
 
@@ -76,8 +76,8 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
         }
     }
 
@@ -104,9 +104,9 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C3>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C3>.id);
         }
     }
 
@@ -133,10 +133,10 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<Mask<C1, C2, C3, C4>> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C3>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C4>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C3>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C4>.id);
         }
     }
 
@@ -164,11 +164,11 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<Mask<C1, C2, C3, C4, C5>> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C3>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C4>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C5>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C3>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C4>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C5>.id);
         }
     }
 
@@ -197,12 +197,12 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<Mask<C1, C2, C3, C4, C5, C6>> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C3>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C4>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C5>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C6>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C3>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C4>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C5>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C6>.id);
         }
     }
 
@@ -232,13 +232,13 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<Mask<C1, C2, C3, C4, C5, C6, C7>> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C3>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C4>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C5>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C6>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C7>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C3>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C4>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C5>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C6>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C7>.id);
         }
     }
 
@@ -269,14 +269,14 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<Mask<C1, C2, C3, C4, C5, C6, C7, C8>> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C1>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C2>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C3>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C4>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C5>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C6>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C7>.id);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks.Pool<C8>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C1>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C2>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C3>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C4>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C5>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C6>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C7>.id);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, Ecs<WorldID>.Masks<C8>.id);
         }
     }
 }

@@ -30,47 +30,47 @@ namespace FFS.Libraries.StaticEcs {
             internal static void Create(EcsConfig cfg) {
                 _entityVersions = new short[cfg.BaseEntitiesCount];
                 _deletedEntities = new Entity[cfg.BaseDeletedEntitiesCount];
-                Components.SetBasePoolCapacity(cfg.BaseComponentPoolCount);
-                Components.Create(cfg.BaseComponentTypesCount);
+                ModuleComponents.SetBasePoolCapacity(cfg.BaseComponentPoolCount);
+                ModuleComponents.Create(cfg.BaseComponentTypesCount);
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.SetBasePoolCapacity(cfg.BaseTagPoolCount);
-                Tags.Create(cfg.BaseTagTypesCount);
+                ModuleTags.SetBasePoolCapacity(cfg.BaseTagPoolCount);
+                ModuleTags.Create(cfg.BaseTagTypesCount);
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.Create(cfg.BaseMaskTypesCount);
+                ModuleMasks.Create(cfg.BaseMaskTypesCount);
                 #endif
                 Status = WorldStatus.Created;
             }
 
             internal static void Initialize() {
-                Components.Initialize();
+                ModuleComponents.Initialize();
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.Initialize();
+                ModuleTags.Initialize();
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.Initialize();
+                ModuleMasks.Initialize();
                 #endif
                 Status = WorldStatus.Initialized;
             }
 
             [MethodImpl(AggressiveInlining)]
             public static ComponentDynId RegisterComponent<C>(uint basePoolCapacity = 128) where C : struct, IComponent {
-                Components.SetBasePoolCapacity<C>(basePoolCapacity);
-                return Components.RegisterComponent<C>();
+                ModuleComponents.SetBasePoolCapacity<C>(basePoolCapacity);
+                return ModuleComponents.RegisterComponent<C>();
             }
 
             #if !FFS_ECS_DISABLE_TAGS
             [MethodImpl(AggressiveInlining)]
             public static TagDynId RegisterTag<T>(uint basePoolCapacity = 128) where T : struct, ITag {
-                Tags.SetBasePoolCapacity<T>(basePoolCapacity);
-                return Tags.RegisterTag<T>();
+                ModuleTags.SetBasePoolCapacity<T>(basePoolCapacity);
+                return ModuleTags.RegisterTag<T>();
             }
             #endif
 
             #if !FFS_ECS_DISABLE_MASKS
             [MethodImpl(AggressiveInlining)]
             public static MaskDynId RegisterMask<M>() where M : struct, IMask {
-                return Masks.RegisterMask<M>();
+                return ModuleMasks.RegisterMask<M>();
             }
             #endif
 
@@ -91,12 +91,12 @@ namespace FFS.Libraries.StaticEcs {
                     
                     if (_entityVersionsCount == _entityVersions.Length) {
                         Array.Resize(ref _entityVersions, _entityVersionsCount << 1);
-                        Components.Resize(_entityVersionsCount << 1);
+                        ModuleComponents.Resize(_entityVersionsCount << 1);
                         #if !FFS_ECS_DISABLE_TAGS
-                        Tags.Resize(_entityVersionsCount << 1);
+                        ModuleTags.Resize(_entityVersionsCount << 1);
                         #endif
                         #if !FFS_ECS_DISABLE_MASKS
-                        Masks.Resize(_entityVersionsCount << 1);
+                        ModuleMasks.Resize(_entityVersionsCount << 1);
                         #endif
                     }
                     
@@ -132,12 +132,12 @@ namespace FFS.Libraries.StaticEcs {
             private static void ResizeFor(int count) {
                 var newSize = Utils.CalculateSize(_entityVersionsCount + count);
                 Array.Resize(ref _entityVersions, newSize);
-                Components.Resize(newSize);
+                ModuleComponents.Resize(newSize);
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.Resize(newSize);
+                ModuleTags.Resize(newSize);
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.Resize(newSize);
+                ModuleMasks.Resize(newSize);
                 #endif
             }
 
@@ -152,12 +152,12 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.DestroyEntity(entity);
+                ModuleTags.DestroyEntity(entity);
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.DestroyEntity(entity);
+                ModuleMasks.DestroyEntity(entity);
                 #endif
-                Components.DestroyEntity(entity);
+                ModuleComponents.DestroyEntity(entity);
                 version = version == short.MaxValue ? (short) -1 : (short) -(version + 1);
                 if (_deletedEntitiesCount == _deletedEntities.Length) {
                     Array.Resize(ref _deletedEntities, _deletedEntitiesCount << 1);
@@ -172,12 +172,12 @@ namespace FFS.Libraries.StaticEcs {
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CopyEntityData, World not initialized");
                 #endif
                 
-                Components.CopyEntity(srcEntity, dstEntity);
+                ModuleComponents.CopyEntity(srcEntity, dstEntity);
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.CopyEntity(srcEntity, dstEntity);
+                ModuleTags.CopyEntity(srcEntity, dstEntity);
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.CopyEntity(srcEntity, dstEntity);
+                ModuleMasks.CopyEntity(srcEntity, dstEntity);
                 #endif
             }
 
@@ -196,12 +196,12 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static string ToPrettyStringEntity(Entity entity) {
                 var result = $"Entity ID: {entity._id}, Version: {EntityVersion(entity)}\n";
-                result += Components.ToPrettyStringEntity(entity);
+                result += ModuleComponents.ToPrettyStringEntity(entity);
                 #if !FFS_ECS_DISABLE_TAGS
-                result += Tags.ToPrettyStringEntity(entity);
+                result += ModuleTags.ToPrettyStringEntity(entity);
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                result += Masks.ToPrettyStringEntity(entity);
+                result += ModuleMasks.ToPrettyStringEntity(entity);
                 #endif
                 return result;
             }
@@ -246,12 +246,12 @@ namespace FFS.Libraries.StaticEcs {
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Clear, World not initialized");
                 #endif
 
-                Components.Clear();
+                ModuleComponents.Clear();
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.Clear();
+                ModuleTags.Clear();
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.Clear();
+                ModuleMasks.Clear();
                 #endif
 
                 Array.Clear(_entityVersions, 0, _entityVersions.Length);
@@ -272,12 +272,12 @@ namespace FFS.Libraries.StaticEcs {
                     }
                 }
 
-                Components.Destroy();
+                ModuleComponents.Destroy();
                 #if !FFS_ECS_DISABLE_TAGS
-                Tags.Destroy();
+                ModuleTags.Destroy();
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
-                Masks.Destroy();
+                ModuleMasks.Destroy();
                 #endif
 
                 _entityVersions = null;

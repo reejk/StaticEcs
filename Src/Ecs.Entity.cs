@@ -205,7 +205,7 @@ namespace FFS.Libraries.StaticEcs {
             #region NEW_BY_TYPE_BATCH
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes<C1>(int count, Action<Entity> onCreate = null) where C1 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1>(),
@@ -217,8 +217,8 @@ namespace FFS.Libraries.StaticEcs {
             public static void NewOnes<C1, C2>(int count, Action<Entity> onCreate = null)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2>(),
@@ -231,9 +231,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
-                Components.Pool<C3>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
+                Components<C3>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2, C3>(),
@@ -247,10 +247,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
-                Components.Pool<C3>.EnsureSize(count);
-                Components.Pool<C4>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
+                Components<C3>.EnsureSize(count);
+                Components<C4>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2, C3, C4>(),
@@ -265,11 +265,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
-                Components.Pool<C3>.EnsureSize(count);
-                Components.Pool<C4>.EnsureSize(count);
-                Components.Pool<C5>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
+                Components<C3>.EnsureSize(count);
+                Components<C4>.EnsureSize(count);
+                Components<C5>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2, C3, C4, C5>(),
@@ -279,7 +279,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes<C1>(int count, C1 c1, Action<Entity> onCreate = null) where C1 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1>(c1),
@@ -291,8 +291,8 @@ namespace FFS.Libraries.StaticEcs {
             public static void NewOnes<C1, C2>(int count, C1 c1, C2 c2, Action<Entity> onCreate = null)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2>(c1, c2),
@@ -305,9 +305,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
-                Components.Pool<C3>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
+                Components<C3>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2, C3>(c1, c2, c3),
@@ -321,10 +321,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
-                Components.Pool<C3>.EnsureSize(count);
-                Components.Pool<C4>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
+                Components<C3>.EnsureSize(count);
+                Components<C4>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2, C3, C4>(c1, c2, c3, c4),
@@ -339,11 +339,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                Components.Pool<C1>.EnsureSize(count);
-                Components.Pool<C2>.EnsureSize(count);
-                Components.Pool<C3>.EnsureSize(count);
-                Components.Pool<C4>.EnsureSize(count);
-                Components.Pool<C5>.EnsureSize(count);
+                Components<C1>.EnsureSize(count);
+                Components<C2>.EnsureSize(count);
+                Components<C3>.EnsureSize(count);
+                Components<C4>.EnsureSize(count);
+                Components<C5>.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2, C3, C4, C5>(c1, c2, c3, c4, c5),
@@ -355,7 +355,7 @@ namespace FFS.Libraries.StaticEcs {
             #region NEW_BY_DYN_ID_BATCH
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes(int count, ComponentDynId component, Action<Entity> onCreate = null) {
-                Components.GetPool(component).EnsureSize(count);
+                ModuleComponents.GetPool(component).EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentOnCreateEntity1<WorldID>(component),
@@ -365,8 +365,8 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes(int count, ComponentDynId comp1, ComponentDynId comp2, Action<Entity> onCreate = null) {
-                Components.GetPool(comp1).EnsureSize(count);
-                Components.GetPool(comp2).EnsureSize(count);
+                ModuleComponents.GetPool(comp1).EnsureSize(count);
+                ModuleComponents.GetPool(comp2).EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentOnCreateEntity2<WorldID>(comp1, comp2),
@@ -376,9 +376,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes(int count, ComponentDynId comp1, ComponentDynId comp2, ComponentDynId comp3, Action<Entity> onCreate = null) {
-                Components.GetPool(comp1).EnsureSize(count);
-                Components.GetPool(comp2).EnsureSize(count);
-                Components.GetPool(comp3).EnsureSize(count);
+                ModuleComponents.GetPool(comp1).EnsureSize(count);
+                ModuleComponents.GetPool(comp2).EnsureSize(count);
+                ModuleComponents.GetPool(comp3).EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentOnCreateEntity3<WorldID>(comp1, comp2, comp3),
@@ -388,10 +388,10 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes(int count, ComponentDynId comp1, ComponentDynId comp2, ComponentDynId comp3, ComponentDynId comp4, Action<Entity> onCreate = null) {
-                Components.GetPool(comp1).EnsureSize(count);
-                Components.GetPool(comp2).EnsureSize(count);
-                Components.GetPool(comp3).EnsureSize(count);
-                Components.GetPool(comp4).EnsureSize(count);
+                ModuleComponents.GetPool(comp1).EnsureSize(count);
+                ModuleComponents.GetPool(comp2).EnsureSize(count);
+                ModuleComponents.GetPool(comp3).EnsureSize(count);
+                ModuleComponents.GetPool(comp4).EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentOnCreateEntity4<WorldID>(comp1, comp2, comp3, comp4),
@@ -401,11 +401,11 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes(int count, ComponentDynId comp1, ComponentDynId comp2, ComponentDynId comp3, ComponentDynId comp4, ComponentDynId comp5, Action<Entity> onCreate = null) {
-                Components.GetPool(comp1).EnsureSize(count);
-                Components.GetPool(comp2).EnsureSize(count);
-                Components.GetPool(comp3).EnsureSize(count);
-                Components.GetPool(comp4).EnsureSize(count);
-                Components.GetPool(comp5).EnsureSize(count);
+                ModuleComponents.GetPool(comp1).EnsureSize(count);
+                ModuleComponents.GetPool(comp2).EnsureSize(count);
+                ModuleComponents.GetPool(comp3).EnsureSize(count);
+                ModuleComponents.GetPool(comp4).EnsureSize(count);
+                ModuleComponents.GetPool(comp5).EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentOnCreateEntity5<WorldID>(comp1, comp2, comp3, comp4, comp5),

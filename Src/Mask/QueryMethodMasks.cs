@@ -48,7 +48,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return Ecs<WorldID>.Masks.Pool<TMask>.Has(entity);
+            return Ecs<WorldID>.Masks<TMask>.Has(entity);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -67,7 +67,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return Ecs<WorldID>.Masks.Pool<TMask1>.Has(entity) && Ecs<WorldID>.Masks.Pool<TMask2>.Has(entity);
+            return Ecs<WorldID>.Masks<TMask1>.Has(entity) && Ecs<WorldID>.Masks<TMask2>.Has(entity);
         }
 
         [MethodImpl(AggressiveInlining)]

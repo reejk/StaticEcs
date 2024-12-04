@@ -16,9 +16,9 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract partial class Components {
+        public abstract partial class ModuleComponents {
             private static ulong[] _bitMap;
-            private static IPoolWrapper[] _pools;
+            private static IComponentsWrapper[] _pools;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
@@ -27,7 +27,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
-                _pools = new IPoolWrapper[baseComponentsCapacity];
+                _pools = new IComponentsWrapper[baseComponentsCapacity];
                 _reInitActions ??= new Action[baseComponentsCapacity];
                 _resetActions ??= new Action[baseComponentsCapacity];
             }
@@ -77,10 +77,10 @@ namespace FFS.Libraries.StaticEcs {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
 
-                _pools[_poolsCount++] = new PoolWrapper<C>();
+                _pools[_poolsCount++] = new ComponentsWrapper<C>();
 
                 ComponentInfo<C>.Register();
-                Pool<C>.Create(ComponentInfo<C>.Id, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
+                Components<C>.Create(ComponentInfo<C>.Id, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
 
                 if (_actionsCount == _reInitActions.Length) {
                     Array.Resize(ref _reInitActions, _actionsCount << 1);
@@ -103,11 +103,11 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetDynamicId, World not initialized");
                 #endif
-                return new ComponentDynId(Pool<T>.Id());
+                return new ComponentDynId(Components<T>.Id());
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static IPoolWrapper GetPool(ComponentDynId id) {
+            public static IComponentsWrapper GetPool(ComponentDynId id) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
                 #endif
@@ -115,7 +115,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static PoolWrapper<T> GetPool<T>() where T : struct, IComponent {
+            public static ComponentsWrapper<T> GetPool<T>() where T : struct, IComponent {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
                 #endif
