@@ -1040,8 +1040,8 @@ For example:
 ```csharp
 // Performance in il2Cpp (there is no difference in Mono) can be better in the second option by 10-40%
 // The same applies to tags and masks and all other methods HasAllOf<>, Delete<>, etc.
-ref var position = ref entity.RefMut<Position>(); // сахарный метод через сущность
-ref var position = ref Ecs.Components<Position>.RefMut(entity); // прямой вызов
+ref var position = ref entity.RefMut<Position>(); // sugar method via the entity
+ref var position = ref Ecs.Components<Position>.RefMut(entity); // direct call
 ```
 ```csharp
 // It is also possible to use extension methods that are practically close in performance to the direct call
