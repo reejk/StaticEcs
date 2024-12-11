@@ -60,6 +60,18 @@ namespace FFS.Libraries.StaticEcs {
         public static TagSingle<C1> Single() => default;
         
         [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1>> Any() => default;
+        
+        [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
         }
@@ -96,6 +108,18 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public static TagDouble<C1, C2> Double() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2>> Any() => default;
         
        
         [MethodImpl(AggressiveInlining)]
@@ -138,6 +162,18 @@ namespace FFS.Libraries.StaticEcs {
         where C1 : struct, ITag
         where C2 : struct, ITag
         where C3 : struct, ITag {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2, C3>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2, C3>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2, C3>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2, C3>> Any() => default;
        
        [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -182,6 +218,18 @@ namespace FFS.Libraries.StaticEcs {
         where C2 : struct, ITag
         where C3 : struct, ITag
         where C4 : struct, ITag {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2, C3, C4>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2, C3, C4>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2, C3, C4>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2, C3, C4>> Any() => default;
         
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -230,6 +278,18 @@ namespace FFS.Libraries.StaticEcs {
         where C3 : struct, ITag
         where C4 : struct, ITag
         where C5 : struct, ITag {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2, C3, C4, C5>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2, C3, C4, C5>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2, C3, C4, C5>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2, C3, C4, C5>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -282,6 +342,18 @@ namespace FFS.Libraries.StaticEcs {
         where C4 : struct, ITag
         where C5 : struct, ITag
         where C6 : struct, ITag {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2, C3, C4, C5, C6>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2, C3, C4, C5, C6>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2, C3, C4, C5, C6>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2, C3, C4, C5, C6>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -338,6 +410,18 @@ namespace FFS.Libraries.StaticEcs {
         where C5 : struct, ITag
         where C6 : struct, ITag
         where C7 : struct, ITag {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2, C3, C4, C5, C6, C7>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2, C3, C4, C5, C6, C7>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2, C3, C4, C5, C6, C7>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2, C3, C4, C5, C6, C7>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -398,6 +482,19 @@ namespace FFS.Libraries.StaticEcs {
         where C6 : struct, ITag
         where C7 : struct, ITag
         where C8 : struct, ITag {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAll<Tag<C1, C2, C3, C4, C5, C6, C7, C8>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagNone<Tag<C1, C2, C3, C4, C5, C6, C7, C8>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAllAndNone<Tag<C1, C2, C3, C4, C5, C6, C7, C8>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTags => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static TagAny<Tag<C1, C2, C3, C4, C5, C6, C7, C8>> Any() => default;
+
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {

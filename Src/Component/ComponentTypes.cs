@@ -55,7 +55,19 @@ namespace FFS.Libraries.StaticEcs {
         where C1 : struct, IComponent {
         
         [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
         public static Single<C1> Single() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1>> Any() => default;
         
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -93,7 +105,19 @@ namespace FFS.Libraries.StaticEcs {
         where C2 : struct, IComponent {
         
         [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
         public static Double<C1, C2> Double() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2>> Any() => default;
         
        
         [MethodImpl(AggressiveInlining)]
@@ -133,6 +157,18 @@ namespace FFS.Libraries.StaticEcs {
         where C1 : struct, IComponent
         where C2 : struct, IComponent
         where C3 : struct, IComponent {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2, C3>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2, C3>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2, C3>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2, C3>> Any() => default;
        
        [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -177,6 +213,18 @@ namespace FFS.Libraries.StaticEcs {
         where C2 : struct, IComponent
         where C3 : struct, IComponent
         where C4 : struct, IComponent {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2, C3, C4>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2, C3, C4>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2, C3, C4>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2, C3, C4>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -225,6 +273,18 @@ namespace FFS.Libraries.StaticEcs {
         where C3 : struct, IComponent
         where C4 : struct, IComponent
         where C5 : struct, IComponent {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2, C3, C4, C5>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2, C3, C4, C5>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2, C3, C4, C5>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2, C3, C4, C5>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -277,6 +337,18 @@ namespace FFS.Libraries.StaticEcs {
         where C4 : struct, IComponent
         where C5 : struct, IComponent
         where C6 : struct, IComponent {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2, C3, C4, C5, C6>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2, C3, C4, C5, C6>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2, C3, C4, C5, C6>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2, C3, C4, C5, C6>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -333,6 +405,18 @@ namespace FFS.Libraries.StaticEcs {
         where C5 : struct, IComponent
         where C6 : struct, IComponent
         where C7 : struct, IComponent {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2, C3, C4, C5, C6, C7>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2, C3, C4, C5, C6, C7>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2, C3, C4, C5, C6, C7>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2, C3, C4, C5, C6, C7>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
@@ -393,6 +477,19 @@ namespace FFS.Libraries.StaticEcs {
         where C6 : struct, IComponent
         where C7 : struct, IComponent
         where C8 : struct, IComponent {
+        
+        [MethodImpl(AggressiveInlining)]
+        public static All<Types<C1, C2, C3, C4, C5, C6, C7, C8>> All() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static None<Types<C1, C2, C3, C4, C5, C6, C7, C8>> None() => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static AllAndNone<Types<C1, C2, C3, C4, C5, C6, C7, C8>, T> AllAndNone<T>(T without = default) where T : struct, IComponentTypes => default;
+        
+        [MethodImpl(AggressiveInlining)]
+        public static Any<Types<C1, C2, C3, C4, C5, C6, C7, C8>> Any() => default;
+
        
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
