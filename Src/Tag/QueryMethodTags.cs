@@ -34,7 +34,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
+            #if DEBUG
             _all.Dispose<WorldID>();
+            #endif
             BitMaskUtils<WorldID, ITag>.DropBuf(_incBufId);
         }
     }
@@ -50,8 +52,7 @@ namespace FFS.Libraries.StaticEcs {
             #if DEBUG
             Ecs<WorldID>.Tags<TTag>.AddBlocker(1);
             #endif
-            var val = default(Tag<TTag>);
-            val.SetData(ref minCount, ref entities);
+            Ecs<WorldID>.Tags<TTag>.SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -80,8 +81,8 @@ namespace FFS.Libraries.StaticEcs {
             Ecs<WorldID>.Tags<TTag1>.AddBlocker(1);
             Ecs<WorldID>.Tags<TTag2>.AddBlocker(1);
             #endif
-            var val = default(Tag<TTag1, TTag2>);
-            val.SetData(ref minCount, ref entities);
+            Ecs<WorldID>.Tags<TTag1>.SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.Tags<TTag2>.SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -134,8 +135,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
+            #if DEBUG
             _all.Dispose<WorldID>();
             _exc.Dispose<WorldID>();
+            #endif
             BitMaskUtils<WorldID, ITag>.DropBuf(_incBufId);
             BitMaskUtils<WorldID, ITag>.DropBuf(_excBufId);
         }
@@ -169,7 +172,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
+            #if DEBUG
             _exc.Dispose<WorldID>();
+            #endif
             BitMaskUtils<WorldID, ITag>.DropBuf(_excBufId);
         }
     }
@@ -201,7 +206,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
+            #if DEBUG
             _any.Dispose<WorldID>();
+            #endif
             BitMaskUtils<WorldID, ITag>.DropBuf(_anyBufId);
         }
     }
