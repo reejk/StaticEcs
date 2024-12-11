@@ -110,6 +110,76 @@ namespace FFS.Libraries.StaticEcs {
             var index = bufId * _len + div;
             _buffer[index] |= 1UL << rem;
         }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2, ushort bit3) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+            _buffer[offset + (ushort) (bit3 >> 6)] |= 1UL << (ushort) (bit3 & 63);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2, ushort bit3, ushort bit4) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+            _buffer[offset + (ushort) (bit3 >> 6)] |= 1UL << (ushort) (bit3 & 63);
+            _buffer[offset + (ushort) (bit4 >> 6)] |= 1UL << (ushort) (bit4 & 63);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2, ushort bit3, ushort bit4, ushort bit5) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+            _buffer[offset + (ushort) (bit3 >> 6)] |= 1UL << (ushort) (bit3 & 63);
+            _buffer[offset + (ushort) (bit4 >> 6)] |= 1UL << (ushort) (bit4 & 63);
+            _buffer[offset + (ushort) (bit5 >> 6)] |= 1UL << (ushort) (bit5 & 63);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2, ushort bit3, ushort bit4, ushort bit5, ushort bit6) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+            _buffer[offset + (ushort) (bit3 >> 6)] |= 1UL << (ushort) (bit3 & 63);
+            _buffer[offset + (ushort) (bit4 >> 6)] |= 1UL << (ushort) (bit4 & 63);
+            _buffer[offset + (ushort) (bit5 >> 6)] |= 1UL << (ushort) (bit5 & 63);
+            _buffer[offset + (ushort) (bit6 >> 6)] |= 1UL << (ushort) (bit6 & 63);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2, ushort bit3, ushort bit4, ushort bit5, ushort bit6, ushort bit7) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+            _buffer[offset + (ushort) (bit3 >> 6)] |= 1UL << (ushort) (bit3 & 63);
+            _buffer[offset + (ushort) (bit4 >> 6)] |= 1UL << (ushort) (bit4 & 63);
+            _buffer[offset + (ushort) (bit5 >> 6)] |= 1UL << (ushort) (bit5 & 63);
+            _buffer[offset + (ushort) (bit6 >> 6)] |= 1UL << (ushort) (bit6 & 63);
+            _buffer[offset + (ushort) (bit7 >> 6)] |= 1UL << (ushort) (bit7 & 63);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetInBuffer(byte bufId, ushort bit1, ushort bit2, ushort bit3, ushort bit4, ushort bit5, ushort bit6, ushort bit7, ushort bit8) {
+            var offset = bufId * _len;
+            _buffer[offset + (ushort) (bit1 >> 6)] |= 1UL << (ushort) (bit1 & 63);
+            _buffer[offset + (ushort) (bit2 >> 6)] |= 1UL << (ushort) (bit2 & 63);
+            _buffer[offset + (ushort) (bit3 >> 6)] |= 1UL << (ushort) (bit3 & 63);
+            _buffer[offset + (ushort) (bit4 >> 6)] |= 1UL << (ushort) (bit4 & 63);
+            _buffer[offset + (ushort) (bit5 >> 6)] |= 1UL << (ushort) (bit5 & 63);
+            _buffer[offset + (ushort) (bit6 >> 6)] |= 1UL << (ushort) (bit6 & 63);
+            _buffer[offset + (ushort) (bit7 >> 6)] |= 1UL << (ushort) (bit7 & 63);
+            _buffer[offset + (ushort) (bit8 >> 6)] |= 1UL << (ushort) (bit8 & 63);
+        }
 
         [MethodImpl(AggressiveInlining)]
         public static void Del(int bitMapIdx, ushort bitPos) {

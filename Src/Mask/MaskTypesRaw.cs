@@ -18,18 +18,6 @@ namespace FFS.Libraries.StaticEcs {
         public MaskBox(IComponentMasks mask) {
             Mask = mask;
         }
-
-        [MethodImpl(AggressiveInlining)]
-        public MaskAll<MaskBox> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<MaskBox> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<MaskBox, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<MaskBox> Any() => new(this);
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
@@ -50,18 +38,6 @@ namespace FFS.Libraries.StaticEcs {
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask1> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask1> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask1, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask1> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
             BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId,  C1.Val);
         }
@@ -77,26 +53,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask2(MaskDynId c1, MaskDynId c2) {
-            C1 = c1;
-            C2 = c2;
+            C1 = c1; C2 = c2;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask2> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask2> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask2, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask2> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val);
         }
     }
     
@@ -111,28 +73,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask3(MaskDynId c1, MaskDynId c2, MaskDynId c3) {
-            C1 = c1;
-            C2 = c2;
-            C3 = c3;
+            C1 = c1; C2 = c2; C3 = c3;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask3> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask3> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask3, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask3> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C3.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val);
         }
     }
     
@@ -148,30 +94,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask4(MaskDynId c1, MaskDynId c2, MaskDynId c3, MaskDynId c4) {
-            C1 = c1;
-            C2 = c2;
-            C3 = c3;
-            C4 = c4;
+            C1 = c1; C2 = c2; C3 = c3; C4 = c4;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask4> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask4> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask4, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask4> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C3.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C4.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val);
         }
     }
     
@@ -188,32 +116,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask5(MaskDynId c1, MaskDynId c2, MaskDynId c3, MaskDynId c4, MaskDynId c5) {
-            C1 = c1;
-            C2 = c2;
-            C3 = c3;
-            C4 = c4;
-            C5 = c5;
+            C1 = c1; C2 = c2; C3 = c3; C4 = c4; C5 = c5;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask5> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask5> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask5, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask5> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C3.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C4.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C5.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val);
         }
     }
 
@@ -232,34 +140,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask6(MaskDynId c1, MaskDynId c2, MaskDynId c3, MaskDynId c4, MaskDynId c5, MaskDynId c6) {
-            C1 = c1;
-            C2 = c2;
-            C3 = c3;
-            C4 = c4;
-            C5 = c5;
-            C6 = c6;
+            C1 = c1; C2 = c2; C3 = c3; C4 = c4; C5 = c5; C6 = c6;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask6> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask6> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask6, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask6> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C3.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C4.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C5.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C6.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val, C6.Val);
         }
     }
     
@@ -279,36 +165,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask7(MaskDynId c1, MaskDynId c2, MaskDynId c3, MaskDynId c4, MaskDynId c5, MaskDynId c6, MaskDynId c7) {
-            C1 = c1;
-            C2 = c2;
-            C3 = c3;
-            C4 = c4;
-            C5 = c5;
-            C6 = c6;
-            C7 = c7;
+            C1 = c1; C2 = c2; C3 = c3; C4 = c4; C5 = c5; C6 = c6; C7 = c7;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask7> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask7> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask7, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask7> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C3.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C4.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C5.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C6.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C7.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val, C6.Val, C7.Val);
         }
     }
 
@@ -328,38 +190,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Mask8(MaskDynId c1, MaskDynId c2, MaskDynId c3, MaskDynId c4, MaskDynId c5, MaskDynId c6, MaskDynId c7, MaskDynId c8) {
-            C1 = c1;
-            C2 = c2;
-            C3 = c3;
-            C4 = c4;
-            C5 = c5;
-            C6 = c6;
-            C7 = c7;
-            C8 = c8;
+            C1 = c1; C2 = c2; C3 = c3; C4 = c4; C5 = c5; C6 = c6; C7 = c7; C8 = c8;
         }
         
         [MethodImpl(AggressiveInlining)]
-        public MaskAll<Mask8> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<Mask8> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<Mask8, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<Mask8> Any() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C2.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C3.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C4.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C5.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C6.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C7.Val);
-            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C8.Val);
+            BitMaskUtils<WorldID, IMask>.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val, C6.Val, C7.Val, C8.Val);
         }
     }
     
@@ -374,18 +210,6 @@ namespace FFS.Libraries.StaticEcs {
         public MaskArray(params MaskDynId[] mask) {
             Mask = mask;
         }
-
-        [MethodImpl(AggressiveInlining)]
-        public MaskAll<MaskArray> All() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskNone<MaskArray> None() => new(this);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAllAndNone<MaskArray, T> AllAndNone<T>(T without = default) where T : struct, IComponentMasks => new(this, without);
-        
-        [MethodImpl(AggressiveInlining)]
-        public MaskAny<MaskArray> Any() => new(this);
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {

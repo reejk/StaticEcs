@@ -21,7 +21,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             _incBufId = BitMaskUtils<WorldID, IMask>.BorrowBuf();
             _all.SetMask<WorldID>(_incBufId);
         }
@@ -44,7 +44,7 @@ namespace FFS.Libraries.StaticEcs {
     public readonly struct MaskSingle<TMask> : IQueryMethod, Stateless
         where TMask : struct, IMask {
         [MethodImpl(AggressiveInlining)]
-        public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId { }
+        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId { }
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
@@ -63,7 +63,7 @@ namespace FFS.Libraries.StaticEcs {
         where TMask1 : struct, IMask
         where TMask2 : struct, IMask {
         [MethodImpl(AggressiveInlining)]
-        public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId { }
+        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId { }
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
@@ -95,7 +95,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             _incBufId = BitMaskUtils<WorldID, IMask>.BorrowBuf();
             _excBufId = BitMaskUtils<WorldID, IMask>.BorrowBuf();
 
@@ -131,7 +131,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             _excBufId = BitMaskUtils<WorldID, IMask>.BorrowBuf();
             _exc.SetMask<WorldID>(_excBufId);
         }
@@ -162,7 +162,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void FillMinData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
             _anyBufId = BitMaskUtils<WorldID, IMask>.BorrowBuf();
             _any.SetMask<WorldID>(_anyBufId);
         }

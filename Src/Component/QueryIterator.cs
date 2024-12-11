@@ -64,7 +64,7 @@ namespace FFS.Libraries.StaticEcs {
             _entities = Ecs<WorldID>.Components<C>.EntitiesData();
             var count = int.MaxValue;
             Ecs<WorldID>.Entity[] entities = null;
-            with.FillMinData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             #if DEBUG
             Ecs<WorldID>.Components<C>.AddBlocker(1);
             #endif

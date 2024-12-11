@@ -190,7 +190,7 @@ namespace FFS.Libraries.StaticEcs {
         private static int Init(out Ecs<WorldID>.Entity[] entities, ref P with, out C1[] dataC1) {
             var count = Ecs<WorldID>.Components<C1>.Count();
             entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            with.FillMinData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
 
             dataC1 = Ecs<WorldID>.Components<C1>.Data();
             return count;
@@ -211,8 +211,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(Double<C1, C2>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -234,8 +234,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(Double<C1, C2>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -268,8 +268,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -292,8 +292,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -328,8 +328,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -353,8 +353,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -391,8 +391,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -417,8 +417,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -457,8 +457,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -484,8 +484,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -527,8 +527,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -555,8 +555,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -599,8 +599,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;
@@ -628,8 +628,8 @@ namespace FFS.Libraries.StaticEcs {
             var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
             var count = Ecs<WorldID>.Components<C1>.Count();
             var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.FillMinData(ref count, ref entities);
-            with.FillMinData(ref count, ref entities);
+            all.SetData(ref count, ref entities);
+            with.SetData(ref count, ref entities);
             
             while (count > 0) {
                 count--;

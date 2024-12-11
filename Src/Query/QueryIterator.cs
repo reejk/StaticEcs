@@ -21,7 +21,7 @@ namespace FFS.Libraries.StaticEcs {
             _current = default;
             _entities = default;
             _count = int.MaxValue;
-            _with.FillMinData(ref _count, ref _entities);
+            _with.SetData(ref _count, ref _entities);
         }
 
         public readonly Ecs<WorldID>.Entity Current {
