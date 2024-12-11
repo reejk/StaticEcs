@@ -55,6 +55,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static ComponentDynId RegisterComponent<C>(uint basePoolCapacity = 128) where C : struct, IComponent {
+                #if DEBUG
+                if (Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterComponent, World not created");
+                #endif
                 ModuleComponents.SetBasePoolCapacity<C>(basePoolCapacity);
                 return ModuleComponents.RegisterComponent<C>();
             }

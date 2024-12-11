@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
@@ -12,8 +11,6 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public abstract partial class Ecs<WorldID> {
         public interface IComponentsWrapper {
-            public ushort Id();
-
             public bool Has(Entity entity);
 
             public void Add(Entity entity);
@@ -22,9 +19,7 @@ namespace FFS.Libraries.StaticEcs {
 
             public void TryAdd(Entity entity, out bool added);
 
-            public bool Del(Entity entity);
-
-            internal bool DelFromWorld(Entity entity);
+            public bool Delete(Entity entity);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
 
@@ -32,39 +27,40 @@ namespace FFS.Libraries.StaticEcs {
 
             public Entity[] EntitiesData();
 
-            public string ToStringComponent(Entity entity);
-
             public bool Is<C>() where C : struct, IComponent;
 
             public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent;
 
             internal void Resize(int cap);
+            
+            internal bool DeleteFromWorld(Entity entity);
 
             internal void Destroy();
 
-            internal bool Has(Entity entity, out int internalId);
-
             internal void SetDataIfCountLess(ref int count, ref Entity[] entities);
+
+            internal string ToStringComponent(Entity entity);
+
+            internal void Clear();
+
+            internal void EnsureSize(int size);
 
             #if DEBUG
             internal void AddBlocker(int val);
             #endif
-            internal void Clear();
-
-            internal void EnsureSize(int size);
         }
 
         #if ENABLE_IL2CPP
-            [Il2CppSetOption(Option.NullChecks, false)]
-            [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public readonly struct ComponentsWrapper<T> : IComponentsWrapper, Stateless
             where T : struct, IComponent {
             [MethodImpl(AggressiveInlining)]
-            public ushort Id() => Components<T>.Id();
+            internal ref T RefMut(Entity entity) => ref Components<T>.RefMut(entity);
 
             [MethodImpl(AggressiveInlining)]
-            internal ref T Get(Entity entity) => ref Components<T>.RefMut(entity);
+            internal ref readonly T Ref(Entity entity) => ref Components<T>.Ref(entity);
 
             [MethodImpl(AggressiveInlining)]
             public void Add(Entity entity) => Components<T>.Add(entity);
@@ -76,15 +72,13 @@ namespace FFS.Libraries.StaticEcs {
             public void TryAdd(Entity entity, out bool added) => Components<T>.TryAdd(entity, out added);
 
             [MethodImpl(AggressiveInlining)]
-            public ref T AddIfAbsent(Entity entity) => ref Components<T>.TryAdd(entity);
-
-            [MethodImpl(AggressiveInlining)]
             public bool Has(Entity entity) => Components<T>.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Del(Entity entity) => Components<T>.Del(entity);
+            public bool Delete(Entity entity) => Components<T>.Delete(entity);
 
-            bool IComponentsWrapper.DelFromWorld(Entity entity) => Components<T>.DelFromWorld(entity);
+            [MethodImpl(AggressiveInlining)]
+            public T[] Data() => Components<T>.Data();
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => Components<T>.Copy(srcEntity, dstEntity);
@@ -96,31 +90,22 @@ namespace FFS.Libraries.StaticEcs {
             public Entity[] EntitiesData() => Components<T>.EntitiesData();
 
             [MethodImpl(AggressiveInlining)]
-            public string ToStringComponent(Entity entity) => Components<T>.ToStringComponent(entity);
+            public bool Is<C>() where C : struct, IComponent => Components<C>.id == Components<T>.id;
 
             [MethodImpl(AggressiveInlining)]
-            public T[] Data() => Components<T>.Data();
+            public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent => Components<C>.id == Components<T>.id;
 
             [MethodImpl(AggressiveInlining)]
-            public bool Is<C>() where C : struct, IComponent {
-                return Components<C>.id == Components<T>.id;
-            }
+            string IComponentsWrapper.ToStringComponent(Entity entity) => Components<T>.ToStringComponent(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent {
-                return Components<C>.id == Components<T>.id;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            bool IComponentsWrapper.Has(Entity entity, out int internalId) => Components<T>.Has(entity, out internalId);
-
-            [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.SetDataIfCountLess(ref int count, ref Entity[] entities) {
-                Components<T>.SetDataIfCountLess(ref count, ref entities);
-            }
+            void IComponentsWrapper.SetDataIfCountLess(ref int count, ref Entity[] entities) => Components<T>.SetDataIfCountLess(ref count, ref entities);
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Resize(int cap) => Components<T>.Resize(cap);
+
+            [MethodImpl(AggressiveInlining)]
+            bool IComponentsWrapper.DeleteFromWorld(Entity entity) => Components<T>.DeleteFromWorld(entity);
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Destroy() => Components<T>.Destroy();
@@ -133,9 +118,7 @@ namespace FFS.Libraries.StaticEcs {
 
             #if DEBUG
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.AddBlocker(int val) {
-                Components<T>.AddBlocker(val);
-            }
+            void IComponentsWrapper.AddBlocker(int val) => Components<T>.AddBlocker(val);
             #endif
         }
     }

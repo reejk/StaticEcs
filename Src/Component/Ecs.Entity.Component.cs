@@ -334,15 +334,15 @@ namespace FFS.Libraries.StaticEcs {
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete<C>() where C : struct, IComponent {
-                return Components<C>.Del(this);
+                return Components<C>.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete<C1, C2>()
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                var delC1 = Components<C1>.Del(this);
-                var delC2 = Components<C2>.Del(this);
+                var delC1 = Components<C1>.Delete(this);
+                var delC2 = Components<C2>.Delete(this);
                 return delC1 && delC2;
             }
 
@@ -351,9 +351,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                var delC1 = Components<C1>.Del(this);
-                var delC2 = Components<C2>.Del(this);
-                var delC3 = Components<C3>.Del(this);
+                var delC1 = Components<C1>.Delete(this);
+                var delC2 = Components<C2>.Delete(this);
+                var delC3 = Components<C3>.Delete(this);
 
                 return delC1 && delC2 && delC3;
             }
@@ -364,10 +364,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                var delC1 = Components<C1>.Del(this);
-                var delC2 = Components<C2>.Del(this);
-                var delC3 = Components<C3>.Del(this);
-                var delC4 = Components<C4>.Del(this);
+                var delC1 = Components<C1>.Delete(this);
+                var delC2 = Components<C2>.Delete(this);
+                var delC3 = Components<C3>.Delete(this);
+                var delC4 = Components<C4>.Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4;
             }
@@ -379,11 +379,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                var delC1 = Components<C1>.Del(this);
-                var delC2 = Components<C2>.Del(this);
-                var delC3 = Components<C3>.Del(this);
-                var delC4 = Components<C4>.Del(this);
-                var delC5 = Components<C5>.Del(this);
+                var delC1 = Components<C1>.Delete(this);
+                var delC2 = Components<C2>.Delete(this);
+                var delC3 = Components<C3>.Delete(this);
+                var delC4 = Components<C4>.Delete(this);
+                var delC5 = Components<C5>.Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4 && delC5;
             }
@@ -584,43 +584,43 @@ namespace FFS.Libraries.StaticEcs {
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete(ComponentDynId c) {
-                return ModuleComponents.GetPool(c).Del(this);
+                return ModuleComponents.GetPool(c).Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete(ComponentDynId c1, ComponentDynId c2) {
-                var delC1 = ModuleComponents.GetPool(c1).Del(this);
-                var delC2 = ModuleComponents.GetPool(c2).Del(this);
+                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
 
                 return delC1 && delC2;
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3) {
-                var delC1 = ModuleComponents.GetPool(c1).Del(this);
-                var delC2 = ModuleComponents.GetPool(c2).Del(this);
-                var delC3 = ModuleComponents.GetPool(c3).Del(this);
+                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
+                var delC3 = ModuleComponents.GetPool(c3).Delete(this);
 
                 return delC1 && delC2 && delC3;
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4) {
-                var delC1 = ModuleComponents.GetPool(c1).Del(this);
-                var delC2 = ModuleComponents.GetPool(c2).Del(this);
-                var delC3 = ModuleComponents.GetPool(c3).Del(this);
-                var delC4 = ModuleComponents.GetPool(c4).Del(this);
+                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
+                var delC3 = ModuleComponents.GetPool(c3).Delete(this);
+                var delC4 = ModuleComponents.GetPool(c4).Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4;
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool Delete(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5) {
-                var delC1 = ModuleComponents.GetPool(c1).Del(this);
-                var delC2 = ModuleComponents.GetPool(c2).Del(this);
-                var delC3 = ModuleComponents.GetPool(c3).Del(this);
-                var delC4 = ModuleComponents.GetPool(c4).Del(this);
-                var delC5 = ModuleComponents.GetPool(c5).Del(this);
+                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
+                var delC3 = ModuleComponents.GetPool(c3).Delete(this);
+                var delC4 = ModuleComponents.GetPool(c4).Delete(this);
+                var delC5 = ModuleComponents.GetPool(c5).Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4 && delC5;
             }
