@@ -90,7 +90,7 @@ public abstract class MySystems : Systems<MySystemsID> { }
 // Define systems
 public readonly struct VelocitySystem : IUpdateSystem {
     public void Update() {
-        foreach (var entity in World.QueryEntities.For<All<Types<Position, Velocity>>>()) {
+        foreach (var entity in MyWorld.QueryEntities.For<All<Types<Position, Velocity>>>()) {
             entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
         }
     }
@@ -99,9 +99,9 @@ public readonly struct VelocitySystem : IUpdateSystem {
 public class Program {
     public static void Main() {
         // Creating world data
-        MyEsc.CreateWorld(EcsConfig.Default());
+        MyEsc.Create(EcsConfig.Default());
         // Initializing the world
-        MyEsc.InitializeWorld();
+        MyEsc.Initialize();
         
         // Creating systems
         MySystems.Create();
@@ -120,7 +120,7 @@ public class Program {
         // Destroying systems
         MySystems.Destroy();
         // Destroying the world and deleting all data
-        MyEsc.DestroyWorld();
+        MyEsc.Destroy();
     }
 }
 ```
@@ -199,7 +199,7 @@ clone.CopyTo(entity2);                   // Copy all components, tags, masks to 
 var entity3 = MyEsc.Entity.New<Name>();
 entity2.MoveTo(entity3);                 // Move all components to the specified entity and delete the current entity
 
-PackedEntity packed = newEntity.Pack();  // Pack an entity with meta information about the version to be transmitted
+PackedEntity packed = entity3.Pack();  // Pack an entity with meta information about the version to be transmitted
 
 var str = entity3.ToPrettyString();      // Get a string with all information about the entity
 ```
@@ -222,7 +222,7 @@ PackedEntity packedEntity = entity.Pack();
 ```csharp
 PackedEntity packedEntity = entity.Pack();
 // Attempt to unpack an entity in the world whose identifier is specified via the type parameter, returns true if the entity is successfully unpacked, in out unpacked entity
-if (packedEntity.TryUnpack<WorldID>(out var entity)) {
+if (packedEntity.TryUnpack<WorldID>(out var unpackedEntity)) {
     // ...
 }
 
@@ -405,7 +405,7 @@ The first way is as is via full address (very inconvenient):
 ```c#
 public struct MainWorldId : IWorldId { }
 
-Ecs<MainWorldId>.CreateWorld(EcsConfig.Default());
+Ecs<MainWorldId>.Create(EcsConfig.Default());
 Ecs<MainWorldId>.World.GetEntitiesCount();
 
 var entity = Ecs<MainWorldId>.Entity.New<Position>();
@@ -417,7 +417,7 @@ using static FFS.Libraries.StaticEcs.Ecs<MainWorldId>;
 
 public struct MainWorldId : IWorldId { }
 
-CreateWorld(EcsConfig.Default());
+Create(EcsConfig.Default());
 World.GetEntitiesCount();
 
 var entity = Entity.New<Position>();
@@ -431,7 +431,7 @@ public struct MainWorldId : IWorldId { }
 public abstract class MyEsc : Ecs<MainWorldId> { }
 public abstract class MyWorld : Ecs<MainWorldId>.World { }
 
-MyEsc.CreateWorld(EcsConfig.Default());
+MyEsc.Create(EcsConfig.Default());
 MyWorld.GetEntitiesCount();
 
 var entity = MyEsc.Entity.New<Position>();
@@ -448,9 +448,9 @@ public abstract class MyEsc : Ecs<MainWorldId> { }
 public abstract class MyWorld : Ecs<MainWorldId>.World { }
 
 // Creating a world with a default configuration
-MyEsc.CreateWorld(EcsConfig.Default());
+MyEsc.Create(EcsConfig.Default());
 // Or a custom one
-MyEsc.CreateWorld(new() {
+MyEsc.Create(new() {
             BaseEntitiesCount = 256,        // Base size of the entity array when creating a world
             BaseDeletedEntitiesCount = 256, // Base size of the deleted entity array when creating a world
             BaseComponentTypesCount = 64    // Base size of all variants of component types (number of pools for each type)
@@ -468,10 +468,10 @@ MyEsc.Tags.      // Access to tags for MainWorldId (world ID)
 MyEsc.Masks.     // Access to masks for MainWorldId (world ID)
 
 // Initialization of the world
-MyEsc.InitializeWorld();
+MyEsc.Initialize();
 
 // Destroying and deleting the world's data
-MyEsc.DestroyWorld();
+MyEsc.Destroy();
 
 ```
 </details>
@@ -485,10 +485,10 @@ World, contains meta information of entities, controls and manages creation and 
 - Creation:
 ```c#
 // It is created only when called
-MyEsc.CreateWorld(config);
+MyEsc.Create(config);
 
 // Initialized only when called
-MyEsc.InitializeWorld();
+MyEsc.Initialize();
 ```
 - Basic operations:
 ```c#
@@ -927,7 +927,7 @@ Things like - typed Query, and sugar methods of entity handling, can increase th
 To avoid this, a dynamic identifier mechanism for components, tags, and masks is implemented - which allow you to use them instead of type parameters  
 How it works:
 ```csharp
-// After calling Ecs.CreateWorld(EcsConfig.Default());
+// After calling Ecs.Create(EcsConfig.Default());
 // You can explicitly register component types and get a structure containing the type identifier
 ComponentDynId positionId = MyWorld.RegisterComponent<Position>();
 TagDynId unitTagId = MyWorld.RegisterTag<Unit>();
@@ -978,36 +978,95 @@ To set your own logic of default initialization and resetting of the component y
 
 **AutoInit** - replaces the behavior when creating a component via the Add method
 ```csharp
-MyEcs.CreateWorld(EcsConfig.Default());
+MyEcs.Create(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.InitializeWorld();
+MyEcs.Initialize();
 ```
 
 **AutoReset** - replaces the behavior when deleting a component via the Delete method
 ```csharp
-MyEcs.CreateWorld(EcsConfig.Default());
+MyEcs.Create(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.InitializeWorld();
+MyEcs.Initialize();
 ```
 
 **AutoCopy** - replaces the behavior when copying a component
 ```csharp
-MyEcs.CreateWorld(EcsConfig.Default());
+MyEcs.Create(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
 //...
-MyEcs.InitializeWorld();
+MyEcs.Initialize();
 ```
 
 > **Important!** Keep in mind that creating an entity with a value or adding a component via the Put method  
 > completely replace the data in the component, bypassing the auto handlers installed
 
 ### Events
-**WIP**
+Event - used to exchange information between systems or user services
+- Presented as a custom structure with data
+
+Example:
+```c#
+public struct WeatherChanged : IEvent { 
+    public WeatherType WeatherType;
+}
+```
+
+<details><summary><u><b>Usage 👇</b></u></summary>
+
+- Creation and basic operations:
+```c#
+// The event system will be created when MyEcs.Create is called and destroyed when MyEcs.Destroy is called
+MyEcs.Create(EcsConfig.Default());
+MyEcs.Initialize();
+//...
+
+// Before sending an event, the receiver of the event must be registered, otherwise the event will not be sent.
+// Receiver can be registered after calling Ecs.Create (e.g. in the Init method of the system).
+var weatherChangedEventReceiver = MyEcs.Events.RegisterEventReceiver<WeatherChanged>();
+
+// Deleting an event receiver
+MyEcs.Events.DeleteEventReceiver(ref weatherChangedEventReceiver);
+
+// Important! The lifecycle of an event: the event will be deleted in two cases:
+// 1) when it's been read by all registered receivers.
+// 2) when it will be suppressed on reading (by calling Suppress or SuppressAll method (information below) ) )
+// So it is important that all registered listeners read the events or the event is suppressed by any listener so that there is no accumulation of them
+
+// Sending an event
+MyEcs.Events.Send(new WeatherChanged { WeatherType = WeatherType.Sunny });
+
+// Sending default event value
+MyEcs.Events.Send<WeatherChanged>();
+
+// Get a dynamic identifier of event type (see “Component Identifiers”)
+var weatherChangedDynId = MyEcs.Events.DynamicId<WeatherChanged>();
+// Send default event value (Suitable for marker events without data)
+MyEcs.Events.SendDefault(weatherChangedDynId);
+
+// Receiving events
+foreach (var weatherEvent in weatherChangedEventReceiver) {
+    Console.WriteLine("Weather is " + weatherEvent.Value.WeatherType);
+}
+
+foreach (var weatherEvent in weatherChangedEventReceiver) {
+    // Event suppression - the event will be deleted and other receivers will no longer be able to read it
+    weatherEvent.Suppress();
+}
+
+// Suppress all events for a given receiver
+weatherChangedEventReceiver.SuppressAll();
+
+// Marks the reading of all events for this receiver
+weatherChangedEventReceiver.MarkAsReadAll();
+
+```
+</details>
 
 ### Relations
 **WIP**
@@ -1208,8 +1267,8 @@ public class Main : MonoBehaviour {
     public SceneData sceneData;
     
     void Start() {
-        MyEcs.CreateWorld(EcsConfig.Default());
-        MyEcs.InitializeWorld();
+        MyEcs.Create(EcsConfig.Default());
+        MyEcs.Initialize();
         
         MyEcs.Context<SceneData>.Set(sceneData);
         
@@ -1227,7 +1286,7 @@ public class Main : MonoBehaviour {
 
     private void OnDestroy() {
         MySystems.Destroy();
-        MyEcs.DestroyWorld();
+        MyEcs.Destroy();
     }
 }
 ```

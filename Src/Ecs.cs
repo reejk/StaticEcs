@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
+using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
 #endif
@@ -9,19 +11,57 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldID> where WorldID : struct, IWorldId {
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateWorld(EcsConfig cfg) {
-            World.Create(cfg);
+        internal static EcsConfig cfg;
+
+        [MethodImpl(AggressiveInlining)]
+        public static void Create(EcsConfig config) {
+            cfg = config;
+            World.Create();
+            #if !FFS_ECS_DISABLE_EVENTS
+            Events.Create();
+            #endif
         }
         
-        public static void InitializeWorld() {
+        public static void Initialize() {
             World.Initialize();
         }
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void DestroyWorld() {
+        [MethodImpl(AggressiveInlining)]
+        public static void Destroy() {
+            #if !FFS_ECS_DISABLE_EVENTS
+            Events.Destroy();
+            #endif
             World.Destroy();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void SetLoggerMethods(Action<string> InfoMethod, Action<string> WarnMethod) {
+            DebugLogger.InfoMethod = InfoMethod;
+            DebugLogger.WarnMethod = WarnMethod;
+        }
+        
+        internal static class DebugLogger {
+            private const string InfoText = "[INFO] ";
+            private const string WarnText = "[WARN] ";
+            
+            internal static Action<string> InfoMethod = static s => {
+                Console.Write(InfoText);
+                Console.WriteLine(s);
+            };
+            internal static Action<string> WarnMethod = static s => {
+                Console.Write(WarnText);
+                Console.WriteLine(s);
+            };
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static void Info(string msg) {
+                InfoMethod(msg);
+            }
+        
+            [MethodImpl(AggressiveInlining)]
+            internal static void Warn(string msg) {
+                WarnMethod(msg);
+            }
         }
     }
     
@@ -33,6 +73,7 @@ namespace FFS.Libraries.StaticEcs {
         public uint BaseTagTypesCount;
         public uint BaseComponentPoolCount;
         public uint BaseTagPoolCount;
+        public uint BaseEventPoolCount;
 
         public static EcsConfig Default() => new() {
             BaseEntitiesCount = 256,
@@ -42,6 +83,7 @@ namespace FFS.Libraries.StaticEcs {
             BaseTagTypesCount = 64,
             BaseComponentPoolCount = 128,
             BaseTagPoolCount = 128,
+            BaseEventPoolCount = 32,
         };
     }
 }

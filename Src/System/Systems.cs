@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
 #endif
@@ -23,10 +24,10 @@ namespace FFS.Libraries.StaticEcs {
         private static int _destroyChainCount;
         private static int _runSystemsCount;
 
-        private static uint CurrentSystemIndex;
+        private static uint _currentSystemIndex;
         private static uint _systemsCount;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void Create(uint baseSize = 64) {
             _runSystems = new ISystemsBatch[baseSize];
             _initChain = new Action[baseSize];
@@ -34,7 +35,7 @@ namespace FFS.Libraries.StaticEcs {
             _otherSystems = new ISystem[baseSize];
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void AddCallOnceSystem<S>() where S : ICallOnceSystem, new() {
             CheckResize();
             var idx = _otherSystemsCount;
@@ -50,12 +51,12 @@ namespace FFS.Libraries.StaticEcs {
             _otherSystems[_otherSystemsCount++] = new S();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void AddUpdateSystem<S>() where S : IUpdateSystem, new() {
             AddBatchUpdateSystem<SystemsBatch<S>>();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void AddBatchUpdateSystem<S>() where S : struct, ISystemsBatch {
             CheckResize();
             var idx = _runSystemsCount;
@@ -66,21 +67,21 @@ namespace FFS.Libraries.StaticEcs {
             _systemsCount += _runSystems[_runSystemsCount++].Count();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void Initialize() {
             for (var i = 0; i < _initChainCount; i++) {
                 _initChain[i]();
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void Update() {
             for (var i = 0; i < _runSystemsCount; i++) {
                 _runSystems[i].Run();
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static void Destroy() {
             for (var i = 0; i < _destroyChainCount; i++) {
                 _destroyChain[i]();
@@ -94,21 +95,26 @@ namespace FFS.Libraries.StaticEcs {
             _initChainCount = default;
             _destroyChainCount = default;
             _runSystemsCount = default;
-            CurrentSystemIndex = default;
+            _currentSystemIndex = default;
             _systemsCount = default;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public static int GetCurrentSystemIndex() {
-            return (int) (CurrentSystemIndex % _systemsCount);
+            return (int) (_currentSystemIndex % _systemsCount);
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static uint GetSystemsCount() {
+            return _systemsCount;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint IncrementSystemIndex() {
-            return CurrentSystemIndex++;
+        [MethodImpl(AggressiveInlining)]
+        internal static void IncrementSystemIndex() {
+            _currentSystemIndex++;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         private static void CheckResize() {
             if (_runSystemsCount == _runSystems.Length) {
                 Array.Resize(ref _runSystems, _runSystemsCount << 1);

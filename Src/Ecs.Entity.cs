@@ -430,7 +430,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public string ToPrettyStringEntity() => World.ToPrettyStringEntity(this);
+            public string ToPrettyString() => World.ToPrettyStringEntity(this);
             
             #if DEBUG
             [MethodImpl(AggressiveInlining)]

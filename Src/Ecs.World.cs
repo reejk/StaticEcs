@@ -27,7 +27,7 @@ namespace FFS.Libraries.StaticEcs {
             internal static int _deletedEntitiesCount;
             public static WorldStatus Status { get; private set; }
 
-            internal static void Create(EcsConfig cfg) {
+            internal static void Create() {
                 _entityVersions = new short[cfg.BaseEntitiesCount];
                 _deletedEntities = new Entity[cfg.BaseDeletedEntitiesCount];
                 ModuleComponents.SetBasePoolCapacity(cfg.BaseComponentPoolCount);

@@ -90,7 +90,7 @@ public abstract class MySystems : Systems<MySystemsID> { }
 // Определояем системы
 public readonly struct VelocitySystem : IUpdateSystem {
     public void Update() {
-        foreach (var entity in World.QueryEntities.For<All<Types<Position, Velocity>>>()) {
+        foreach (var entity in MyWorld.QueryEntities.For<All<Types<Position, Velocity>>>()) {
             entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
         }
     }
@@ -99,9 +99,9 @@ public readonly struct VelocitySystem : IUpdateSystem {
 public class Program {
     public static void Main() {
         // Создаем данные мира
-        MyEsc.CreateWorld(EcsConfig.Default());
+        MyEsc.Create(EcsConfig.Default());
         // Инициализацируем мир
-        MyEsc.InitializeWorld();
+        MyEsc.Initialize();
         
         // Создаем системы
         MySystems.Create();
@@ -120,7 +120,7 @@ public class Program {
         // Уничтожение систем
         MySystems.Destroy();
         // Уничтожение мира и очистка всех данных
-        MyEsc.DestroyWorld();
+        MyEsc.Destroy();
     }
 }
 ```
@@ -165,7 +165,7 @@ MyEsc.Entity.NewOnes<Position>(count);
 
 // Способ 2 - с указанием типа компонента (методы перегрузки от 1-5 компонентов) + делегата инициализации каждой сущности
 int count = 100;
-Ecs.Entity.NewOnes<Position>(count, static entity => {
+MyEsc.Entity.NewOnes<Position>(count, static entity => {
     // some init logic for each entity
 });
 
@@ -199,7 +199,7 @@ clone.CopyTo(entity2);                   // Копировать все комп
 var entity3 = MyEsc.Entity.New<Name>();
 entity2.MoveTo(entity3);                 // Перенести все компоненты в указанную сущность и удалить текущую
 
-PackedEntity packed = newEntity.Pack();  // Упаковать сущность с мета информацией о версии для передачи
+PackedEntity packed = entity3.Pack();  // Упаковать сущность с мета информацией о версии для передачи
 
 var str = entity3.ToPrettyString();      // Получить строку со всей информацией о сущности
 ```
@@ -222,7 +222,7 @@ PackedEntity packedEntity = entity.Pack();
 ```csharp
 PackedEntity packedEntity = entity.Pack();
 // Попытаться распаковать сущность в мире идентификатор которого указан через параметр типа, возвращает true если сущность успешно распакована, в out распакованя сущность
-if (packedEntity.TryUnpack<WorldID>(out var entity)) {
+if (packedEntity.TryUnpack<WorldID>(out var unpackedEntity)) {
     // ...
 }
 
@@ -405,7 +405,7 @@ public struct MiniGameWorldId : IWorldId { }
 ```c#
 public struct MainWorldId : IWorldId { }
 
-Ecs<MainWorldId>.CreateWorld(EcsConfig.Default());
+Ecs<MainWorldId>.Create(EcsConfig.Default());
 Ecs<MainWorldId>.World.GetEntitiesCount();
 
 var entity = Ecs<MainWorldId>.Entity.New<Position>();
@@ -417,7 +417,7 @@ using static FFS.Libraries.StaticEcs.Ecs<MainWorldId>;
 
 public struct MainWorldId : IWorldId { }
 
-CreateWorld(EcsConfig.Default());
+Create(EcsConfig.Default());
 World.GetEntitiesCount();
 
 var entity = Entity.New<Position>();
@@ -431,7 +431,7 @@ public struct MainWorldId : IWorldId { }
 public abstract class MyEsc : Ecs<MainWorldId> { }
 public abstract class MyWorld : Ecs<MainWorldId>.World { }
 
-MyEsc.CreateWorld(EcsConfig.Default());
+MyEsc.Create(EcsConfig.Default());
 MyWorld.GetEntitiesCount();
 
 var entity = MyEsc.Entity.New<Position>();
@@ -448,9 +448,9 @@ public abstract class MyEsc : Ecs<MainWorldId> { }
 public abstract class MyWorld : Ecs<MainWorldId>.World { }
 
 // Создание мира с дефолтной конфигурацие
-MyEsc.CreateWorld(EcsConfig.Default());
+MyEsc.Create(EcsConfig.Default());
 // Или кастомной
-MyEsc.CreateWorld(new() {
+MyEsc.Create(new() {
             BaseEntitiesCount = 256,        // Базовый размер массива сущностей при создания мира
             BaseDeletedEntitiesCount = 256, // Базовый размер массива удаленных сущностей при создания мира
             BaseComponentTypesCount = 64    // Базовый размер всех разновидностей типов компонентов (количество пулов под каждый тип)
@@ -468,10 +468,10 @@ MyEsc.Tags.      // Доступ к тегам для MainWorldId (ID мира)
 MyEsc.Masks.     // Доступ к маскам для MainWorldId (ID мира)
 
 // Инициализация мира
-MyEsc.InitializeWorld();
+MyEsc.Initialize();
 
 // Уничтожение и очистка данных мира
-MyEsc.DestroyWorld();
+MyEsc.Destroy();
 
 ```
 </details>
@@ -485,10 +485,10 @@ MyEsc.DestroyWorld();
 - Создание:
 ```c#
 // Создается только при вызове
-MyEsc.CreateWorld(config);
+MyEsc.Create(config);
 
 // Инициализируется только при вызове
-MyEsc.InitializeWorld();
+MyEsc.Initialize();
 ```
 - Основные операции:
 ```c#
@@ -927,7 +927,7 @@ public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, Ecs.IQueryFunctio
 Чтобы этого избежать, реализован механиз динамических идентификаторов для компонентов, тегов и масок - которые позволяют использовать их вместо параметров типов  
 Как это работает:
 ```csharp
-// После вызова Ecs.CreateWorld(EcsConfig.Default());
+// После вызова Ecs.Create(EcsConfig.Default());
 // Можно явно зарегистрировать типы компонентов и получить структуру содержащую идентифкатор типа
 ComponentDynId positionId = MyWorld.RegisterComponent<Position>();
 TagDynId unitTagId = MyWorld.RegisterTag<Unit>();
@@ -978,36 +978,95 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 
 **AutoInit** - заменяет поведение при создании компонента через метод Add
 ```csharp
-MyEcs.CreateWorld(EcsConfig.Default());
+MyEcs.Create(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.InitializeWorld();
+MyEcs.Initialize();
 ```
 
 **AutoReset** - заменяет поведение при удалении компонента через метод Delete
 ```csharp
-MyEcs.CreateWorld(EcsConfig.Default());
+MyEcs.Create(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
-MyEcs.InitializeWorld();
+MyEcs.Initialize();
 ```
 
 **AutoCopy** - заменяет поведение при копировании компонента
 ```csharp
-MyEcs.CreateWorld(EcsConfig.Default());
+MyEcs.Create(EcsConfig.Default());
 //...
 MyEcs.Components.AutoHandlers<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
 //...
-MyEcs.InitializeWorld();
+MyEcs.Initialize();
 ```
 
 > **Важно!** Стоит учитывать что создание сущности с установкой значения или добавления компонента через метод Put  
 > полностью заменяют данные в компоненте, в обход установленных авто обработчиков
 
 ### События
-**WIP**
+Событие - cлужит для обмена информацией между системами или пользовательскими сервисами
+- Представлено в виде пользовательской структуры с данными
+
+Пример:
+```c#
+public struct WeatherChanged : IEvent { 
+    public WeatherType WeatherType;
+}
+```
+
+<details><summary><u><b>Использование 👇</b></u></summary>
+
+- Создание и базовые операции:
+```c#
+// Система событий будет создана при вызове MyEcs.Create и уничтожена при MyEcs.Destroy
+MyEcs.Create(EcsConfig.Default());
+MyEcs.Initialize();
+//...
+
+// Прежде чем отправлять событие следует зарегестрировать слушателя данного события, иначе событие не будет отправлено
+// Слушатель может быть зарегестрирован после выозова Ecs.Create (например в Init методе системы)
+var weatherChangedEventReceiver = MyEcs.Events.RegisterEventReceiver<WeatherChanged>();
+
+// Удаление слушателя событий
+MyEcs.Events.DeleteEventReceiver(ref weatherChangedEventReceiver);
+
+// Важно! Жизненый цикл события: событие будет удалено в двух случаях:
+// 1) когда оно будет прочитано всеми зарегестрированными слушателями
+// 2) когда оно будет подавленно при прочтении (при вызове Suppress или SuppressAll метода (информация ниже) )
+// Таким образом важно чтобы все зарегестрированные слушатели читали события или событие подавлялось каким либо слушателем, чтобы не было их накопления
+
+// Отправка события
+MyEcs.Events.Send(new WeatherChanged { WeatherType = WeatherType.Sunny });
+
+// Отправка дефолтного значения события
+MyEcs.Events.Send<WeatherChanged>();
+
+// Получение динамического идентификатора типа события (смотри "Идентификаторы компонентов")
+var weatherChangedDynId = MyEcs.Events.DynamicId<WeatherChanged>();
+// Отправка дефолтного значения события (Подходит для маркерных событий без данных)
+MyEcs.Events.SendDefault(weatherChangedDynId);
+
+// Получение событий
+foreach (var weatherEvent in weatherChangedEventReceiver) {
+    Console.WriteLine("Weather is " + weatherEvent.Value.WeatherType);
+}
+
+foreach (var weatherEvent in weatherChangedEventReceiver) {
+    // Подвление события - событие будет удалено и другие слушатели больше не смогут его прочитать
+    weatherEvent.Suppress();
+}
+
+// Подавление всех событий для данного слушателя
+weatherChangedEventReceiver.SuppressAll();
+
+// Пометка о прочтении всех событий для данного слушателя
+weatherChangedEventReceiver.MarkAsReadAll();
+
+```
+</details>
 
 ### Отношения
 **WIP**
@@ -1208,8 +1267,8 @@ public class Main : MonoBehaviour {
     public SceneData sceneData;
     
     void Start() {
-        MyEcs.CreateWorld(EcsConfig.Default());
-        MyEcs.InitializeWorld();
+        MyEcs.Create(EcsConfig.Default());
+        MyEcs.Initialize();
         
         MyEcs.Context<SceneData>.Set(sceneData);
         
@@ -1227,7 +1286,7 @@ public class Main : MonoBehaviour {
 
     private void OnDestroy() {
         MySystems.Destroy();
-        MyEcs.DestroyWorld();
+        MyEcs.Destroy();
     }
 }
 ```

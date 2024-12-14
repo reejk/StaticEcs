@@ -64,6 +64,10 @@
         <Compile Include="Src\Ecs.cs" />
         <Compile Include="Src\Ecs.Entity.cs" />
         <Compile Include="Src\Ecs.World.cs" />
+        <Compile Include="Src\Events\Ecs.Event.cs" />
+        <Compile Include="Src\Events\Ecs.EventReceiver.cs" />
+        <Compile Include="Src\Events\Ecs.Events.cs" />
+        <Compile Include="Src\Events\Ecs.Events.Pool.cs" />
         <Compile Include="Src\Mask\Ecs.Entity.Mask.cs" />
         <Compile Include="Src\Mask\Ecs.Masks.cs" />
         <Compile Include="Src\Mask\Ecs.Masks.Pool.cs" />
