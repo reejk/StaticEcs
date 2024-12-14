@@ -44,13 +44,6 @@ ___
     * [Auto handlers](#auto-handlers)
     * [Events](#events)
     * [Relations](#relation)
-* [Special types](#special-types)
-    * [Components](#components)
-    * [ComponentsPool](#componentsPool)
-    * [Tags](#tags)
-    * [TagsPool](#tagsPool)
-    * [Masks](#masks)
-    * [MasksPool](#masksPool)
 * [Performance](#perfomance)
 * [Engine integration](#engine-integration)
     * [Unity](#unity)
@@ -1070,26 +1063,6 @@ weatherChangedEventReceiver.MarkAsReadAll();
 
 ### Relations
 **WIP**
-
-# Special types
-### Components
-**WIP**
-
-### ComponentsPool
-**WIP**
-
-### Tags
-**WIP**
-
-### TagsPool
-**WIP**
-
-### Masks
-**WIP**
-
-### MasksPool
-**WIP**
-
 
 # Perfomance
 Current benchmarks : [BENCHMARKS](./Benchmark.md)

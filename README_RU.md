@@ -44,13 +44,6 @@ ___
     * [Авто обработчики](#авто-обработчики)
     * [События](#события)
     * [Отношения](отношения)
-* [Специальные типы](#специальные-типы)
-    * [Components](#components)
-    * [ComponentsPool](#componentsPool)
-    * [Tags](#tags)
-    * [TagsPool](#tagsPool)
-    * [Masks](#masks)
-    * [MasksPool](#masksPool)
 * [Производительность](#производительность)
 * [Интеграция в движки](#интеграция-в-движки)
     * [Unity](#unity)
@@ -1070,26 +1063,6 @@ weatherChangedEventReceiver.MarkAsReadAll();
 
 ### Отношения
 **WIP**
-
-# Специальные типы
-### Components
-**WIP**
-
-### ComponentsPool
-**WIP**
-
-### Tags
-**WIP**
-
-### TagsPool
-**WIP**
-
-### Masks
-**WIP**
-
-### MasksPool
-**WIP**
-
 
 # Производительность
 Актуальные бенчмарки : [BENCHMARKS](./Benchmark.md)
