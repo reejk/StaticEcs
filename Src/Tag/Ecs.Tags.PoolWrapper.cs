@@ -25,6 +25,8 @@ namespace FFS.Libraries.StaticEcs {
             public bool Del(Entity entity);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
+            
+            public void Move(Entity entity, Entity target);
 
             public int Count();
 
@@ -52,8 +54,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         #if ENABLE_IL2CPP
-            [Il2CppSetOption(Option.NullChecks, false)]
-            [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public readonly struct TagsWrapper<T> : ITagsWrapper, Stateless where T : struct, ITag {
             [MethodImpl(AggressiveInlining)]
@@ -72,10 +74,13 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) => Tags<T>.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Del(Entity entity) => Tags<T>.Del(entity);
+            public bool Del(Entity entity) => Tags<T>.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => Tags<T>.Copy(srcEntity, dstEntity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Move(Entity srcEntity, Entity dstEntity) => Tags<T>.Move(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
             public int Count() => Tags<T>.Count();

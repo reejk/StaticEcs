@@ -113,15 +113,15 @@ namespace FFS.Libraries.StaticEcs {
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public readonly void DeleteMask<C>() where C : struct, IMask {
-                Masks<C>.Del(this);
+                Masks<C>.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly void DeleteMask<C1, C2>()
                 where C1 : struct, IMask
                 where C2 : struct, IMask {
-                Masks<C1>.Del(this);
-                Masks<C2>.Del(this);
+                Masks<C1>.Delete(this);
+                Masks<C2>.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -129,9 +129,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IMask
                 where C2 : struct, IMask
                 where C3 : struct, IMask {
-                Masks<C1>.Del(this);
-                Masks<C2>.Del(this);
-                Masks<C3>.Del(this);
+                Masks<C1>.Delete(this);
+                Masks<C2>.Delete(this);
+                Masks<C3>.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -140,10 +140,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IMask
                 where C3 : struct, IMask
                 where C4 : struct, IMask {
-                Masks<C1>.Del(this);
-                Masks<C2>.Del(this);
-                Masks<C3>.Del(this);
-                Masks<C4>.Del(this);
+                Masks<C1>.Delete(this);
+                Masks<C2>.Delete(this);
+                Masks<C3>.Delete(this);
+                Masks<C4>.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -153,11 +153,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IMask
                 where C4 : struct, IMask
                 where C5 : struct, IMask {
-                Masks<C1>.Del(this);
-                Masks<C2>.Del(this);
-                Masks<C3>.Del(this);
-                Masks<C4>.Del(this);
-                Masks<C5>.Del(this);
+                Masks<C1>.Delete(this);
+                Masks<C2>.Delete(this);
+                Masks<C3>.Delete(this);
+                Masks<C4>.Delete(this);
+                Masks<C5>.Delete(this);
             }
             #endregion
             #endregion

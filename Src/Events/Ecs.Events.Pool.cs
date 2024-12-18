@@ -46,7 +46,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                internal static EventReceiver<T> CreateReceiver() {
+                internal static EventReceiver<WorldID, T> CreateReceiver() {
                     #if DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.CreateReceiver ] event pool cannot be changed, it is in read-only mode");
                     #endif
@@ -57,7 +57,7 @@ namespace FFS.Libraries.StaticEcs {
                     if (_deletedReceiversCount > 0) {
                         var receiver = _deletedReceivers[--_deletedReceiversCount];
                         _dataReceiverOffsets[receiver] = _dataFirstIdx;
-                        return new EventReceiver<T>(receiver);
+                        return new EventReceiver<WorldID, T>(receiver);
                     }
                     
                     if (_receiversCount == _dataReceiverOffsets.Length) {
@@ -67,11 +67,11 @@ namespace FFS.Libraries.StaticEcs {
                         }
                     }
                     
-                    return new EventReceiver<T>(_receiversCount++);
+                    return new EventReceiver<WorldID, T>(_receiversCount++);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static void DeleteReceiver(ref EventReceiver<T> receiver) {
+                internal static void DeleteReceiver(ref EventReceiver<WorldID, T> receiver) {
                     #if DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.DeleteReceiver ] event pool cannot be changed, it is in read-only mode");
                     #endif

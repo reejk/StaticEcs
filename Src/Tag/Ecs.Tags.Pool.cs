@@ -93,7 +93,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool Del(Entity entity) {
+            public static bool Delete(Entity entity) {
                 #if DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: DelInternal, cannot access ID - {id} from deleted entity");
                 if (!IsNotBlocked())
@@ -135,6 +135,12 @@ namespace FFS.Libraries.StaticEcs {
                 if (Has(src) && !Has(dst)) {
                     Add(dst);
                 }
+            }
+                        
+            [MethodImpl(AggressiveInlining)]
+            public static void Move(Entity src, Entity dst) {
+                Copy(src, dst);
+                Delete(src);
             }
 
             [MethodImpl(AggressiveInlining)]

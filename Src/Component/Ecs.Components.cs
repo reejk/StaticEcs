@@ -272,4 +272,13 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
     }
+    
+    public struct DeleteComponentsSystem<WorldId, T> : IUpdateSystem where T : struct, IComponent where WorldId : struct, IWorldId {
+        [MethodImpl(AggressiveInlining)]
+        public void Update() {
+            foreach (var entity in Ecs<WorldId>.World.QueryEntities.All<T>()) {
+                entity.Delete<T>();
+            }
+        }
+    }
 }

@@ -440,6 +440,58 @@ namespace FFS.Libraries.StaticEcs {
                 Components<C5>.Copy(this, target);
             }
             #endregion
+            
+            #region MOVE
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo<C1>(Entity target)
+                where C1 : struct, IComponent {
+                Components<C1>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo<C1, C2>(Entity target)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent {
+                Components<C1>.Move(this, target);
+                Components<C2>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo<C1, C2, C3>(Entity target)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent {
+                Components<C1>.Move(this, target);
+                Components<C2>.Move(this, target);
+                Components<C3>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo<C1, C2, C3, C4>(Entity target)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent
+                where C4 : struct, IComponent {
+                Components<C1>.Move(this, target);
+                Components<C2>.Move(this, target);
+                Components<C3>.Move(this, target);
+                Components<C4>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo<C1, C2, C3, C4, C5>(Entity target)
+                where C1 : struct, IComponent
+                where C2 : struct, IComponent
+                where C3 : struct, IComponent
+                where C4 : struct, IComponent
+                where C5 : struct, IComponent {
+                Components<C1>.Move(this, target);
+                Components<C2>.Move(this, target);
+                Components<C3>.Move(this, target);
+                Components<C4>.Move(this, target);
+                Components<C5>.Move(this, target);
+            }
+            #endregion
             #endregion
 
             #region BY_ID
@@ -660,6 +712,43 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleComponents.GetPool(c3).Copy(this, target);
                 ModuleComponents.GetPool(c4).Copy(this, target);
                 ModuleComponents.GetPool(c5).Copy(this, target);
+            }
+            #endregion
+            
+            #region MOVE
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo(ComponentDynId c, Entity target) {
+                ModuleComponents.GetPool(c).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, Entity target) {
+                ModuleComponents.GetPool(c1).Move(this, target);
+                ModuleComponents.GetPool(c2).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, Entity target) {
+                ModuleComponents.GetPool(c1).Move(this, target);
+                ModuleComponents.GetPool(c2).Move(this, target);
+                ModuleComponents.GetPool(c3).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, Entity target) {
+                ModuleComponents.GetPool(c1).Move(this, target);
+                ModuleComponents.GetPool(c2).Move(this, target);
+                ModuleComponents.GetPool(c3).Move(this, target);
+                ModuleComponents.GetPool(c4).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5, Entity target) {
+                ModuleComponents.GetPool(c1).Move(this, target);
+                ModuleComponents.GetPool(c2).Move(this, target);
+                ModuleComponents.GetPool(c3).Move(this, target);
+                ModuleComponents.GetPool(c4).Move(this, target);
+                ModuleComponents.GetPool(c5).Move(this, target);
             }
             #endregion
             #endregion

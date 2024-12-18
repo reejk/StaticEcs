@@ -287,5 +287,14 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
     }
+    
+    public struct DeleteTagsSystem<WorldId, T> : IUpdateSystem where T : struct, ITag where WorldId : struct, IWorldId {
+        [MethodImpl(AggressiveInlining)]
+        public void Update() {
+            foreach (var entity in Ecs<WorldId>.World.QueryEntities.For<TagSingle<T>>()) {
+                entity.DeleteTag<T>();
+            }
+        }
+    }
 }
 #endif

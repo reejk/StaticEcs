@@ -217,15 +217,15 @@ namespace FFS.Libraries.StaticEcs {
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public readonly bool DeleteTag<C>() where C : struct, ITag {
-                return Tags<C>.Del(this);
+                return Tags<C>.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool DeleteTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                var delC1 = Tags<C1>.Del(this);
-                var delC2 = Tags<C2>.Del(this);
+                var delC1 = Tags<C1>.Delete(this);
+                var delC2 = Tags<C2>.Delete(this);
                 return delC1 && delC2;
             }
 
@@ -234,9 +234,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                var delC1 = Tags<C1>.Del(this);
-                var delC2 = Tags<C2>.Del(this);
-                var delC3 = Tags<C3>.Del(this);
+                var delC1 = Tags<C1>.Delete(this);
+                var delC2 = Tags<C2>.Delete(this);
+                var delC3 = Tags<C3>.Delete(this);
 
                 return delC1 && delC2 && delC3;
             }
@@ -247,10 +247,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, ITag
                 where C3 : struct, ITag
                 where C4 : struct, ITag {
-                var delC1 = Tags<C1>.Del(this);
-                var delC2 = Tags<C2>.Del(this);
-                var delC3 = Tags<C3>.Del(this);
-                var delC4 = Tags<C4>.Del(this);
+                var delC1 = Tags<C1>.Delete(this);
+                var delC2 = Tags<C2>.Delete(this);
+                var delC3 = Tags<C3>.Delete(this);
+                var delC4 = Tags<C4>.Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4;
             }
@@ -262,13 +262,65 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, ITag
                 where C4 : struct, ITag
                 where C5 : struct, ITag {
-                var delC1 = Tags<C1>.Del(this);
-                var delC2 = Tags<C2>.Del(this);
-                var delC3 = Tags<C3>.Del(this);
-                var delC4 = Tags<C4>.Del(this);
-                var delC5 = Tags<C5>.Del(this);
+                var delC1 = Tags<C1>.Delete(this);
+                var delC2 = Tags<C2>.Delete(this);
+                var delC3 = Tags<C3>.Delete(this);
+                var delC4 = Tags<C4>.Delete(this);
+                var delC5 = Tags<C5>.Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4 && delC5;
+            }
+            #endregion
+            
+            #region MOVE
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo<C1>(Entity target)
+                where C1 : struct, ITag {
+                Tags<C1>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo<C1, C2>(Entity target)
+                where C1 : struct, ITag
+                where C2 : struct, ITag {
+                Tags<C1>.Move(this, target);
+                Tags<C2>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo<C1, C2, C3>(Entity target)
+                where C1 : struct, ITag
+                where C2 : struct, ITag
+                where C3 : struct, ITag {
+                Tags<C1>.Move(this, target);
+                Tags<C2>.Move(this, target);
+                Tags<C3>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo<C1, C2, C3, C4>(Entity target)
+                where C1 : struct, ITag
+                where C2 : struct, ITag
+                where C3 : struct, ITag
+                where C4 : struct, ITag {
+                Tags<C1>.Move(this, target);
+                Tags<C2>.Move(this, target);
+                Tags<C3>.Move(this, target);
+                Tags<C4>.Move(this, target);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo<C1, C2, C3, C4, C5>(Entity target)
+                where C1 : struct, ITag
+                where C2 : struct, ITag
+                where C3 : struct, ITag
+                where C4 : struct, ITag
+                where C5 : struct, ITag {
+                Tags<C1>.Move(this, target);
+                Tags<C2>.Move(this, target);
+                Tags<C3>.Move(this, target);
+                Tags<C4>.Move(this, target);
+                Tags<C5>.Move(this, target);
             }
             #endregion
             #endregion
@@ -454,6 +506,43 @@ namespace FFS.Libraries.StaticEcs {
                 var delC5 = ModuleTags.GetPool(c5).Del(this);
 
                 return delC1 && delC2 && delC3 && delC4 && delC5;
+            }
+            #endregion
+            
+            #region MOVE
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo(TagDynId c, Entity target) {
+                ModuleTags.GetPool(c).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, Entity target) {
+                ModuleTags.GetPool(c1).Move(this, target);
+                ModuleTags.GetPool(c2).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, Entity target) {
+                ModuleTags.GetPool(c1).Move(this, target);
+                ModuleTags.GetPool(c2).Move(this, target);
+                ModuleTags.GetPool(c3).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, Entity target) {
+                ModuleTags.GetPool(c1).Move(this, target);
+                ModuleTags.GetPool(c2).Move(this, target);
+                ModuleTags.GetPool(c3).Move(this, target);
+                ModuleTags.GetPool(c4).Move(this, target);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5, Entity target) {
+                ModuleTags.GetPool(c1).Move(this, target);
+                ModuleTags.GetPool(c2).Move(this, target);
+                ModuleTags.GetPool(c3).Move(this, target);
+                ModuleTags.GetPool(c4).Move(this, target);
+                ModuleTags.GetPool(c5).Move(this, target);
             }
             #endregion
             #endregion

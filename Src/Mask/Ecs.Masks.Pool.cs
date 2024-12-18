@@ -45,7 +45,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void Del(Entity entity) {
+            public static void Delete(Entity entity) {
                 BitMaskUtils<WorldID, IMask>.Del(entity._id, id);
                 count--;
             }

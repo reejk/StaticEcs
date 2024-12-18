@@ -49,7 +49,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static EventReceiver<E> RegisterEventReceiver<E>() where E : struct, IEvent {
+            public static EventReceiver<WorldID, E> RegisterEventReceiver<E>() where E : struct, IEvent {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.RegisterEventReceiver<{typeof(E)}> ] Ecs not initialized");
                 #endif
@@ -60,7 +60,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static void DeleteEventReceiver<E>(ref EventReceiver<E> receiver) where E : struct, IEvent {
+            public static void DeleteEventReceiver<E>(ref EventReceiver<WorldID, E> receiver) where E : struct, IEvent {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.DeleteEventReceiver<{typeof(E)}> ] Ecs not initialized");
                 #endif

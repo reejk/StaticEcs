@@ -110,7 +110,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct WithAdds<QM1> : IQueryWith
+    public struct WithAdds<QM1> : IQueryWithAdds
         where QM1 : struct, IQueryMethod {
         private QM1 _qm1;
 

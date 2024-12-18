@@ -22,6 +22,8 @@ namespace FFS.Libraries.StaticEcs {
             public bool Delete(Entity entity);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
+            
+            public void Move(Entity entity, Entity target);
 
             public int Count();
 
@@ -82,6 +84,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => Components<T>.Copy(srcEntity, dstEntity);
+            
+            [MethodImpl(AggressiveInlining)]
+            public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Move(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
             public int Count() => Components<T>.Count();

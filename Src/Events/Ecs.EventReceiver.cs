@@ -4,49 +4,50 @@ using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 
 namespace FFS.Libraries.StaticEcs {
+    
+    #if ENABLE_IL2CPP
+    [Il2CppSetOption(Option.NullChecks, false)]
+    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+    #endif
+    public struct EventReceiver<WorldID, T> where T : struct where WorldID : struct, IWorldId {
+        internal int _id;
+
+        [MethodImpl(AggressiveInlining)]
+        internal EventReceiver(int id) {
+            _id = id;
+        }
+            
+        [MethodImpl(AggressiveInlining)]
+        public void MarkAsReadAll() {
+            #if DEBUG
+            if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.MarkAsReadAll ] receiver is deleted");
+            #endif
+            Ecs<WorldID>.Events.Pool<T>.MarkAsReadAll(_id);
+        }
+            
+        [MethodImpl(AggressiveInlining)]
+        public void SuppressAll() {
+            #if DEBUG
+            if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.SuppressAll ] receiver is deleted");
+            #endif
+            Ecs<WorldID>.Events.Pool<T>.ClearEvents(_id);
+        }
+
+        [MethodImpl(AggressiveInlining)]
+        public Ecs<WorldID>.EventIterator<T> GetEnumerator() {
+            #if DEBUG
+            if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] receiver is deleted");
+            if (Ecs<WorldID>.Events.Pool<T>.IsBlocked()) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] event pool is blocked");
+            #endif
+            return new Ecs<WorldID>.EventIterator<T>(_id);
+        }
+    }
+    
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldID> {
-        #if ENABLE_IL2CPP
-        [Il2CppSetOption(Option.NullChecks, false)]
-        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
-        #endif
-        public struct EventReceiver<T> where T : struct {
-            internal int _id;
-
-            [MethodImpl(AggressiveInlining)]
-            internal EventReceiver(int id) {
-                _id = id;
-            }
-            
-            [MethodImpl(AggressiveInlining)]
-            public void MarkAsReadAll() {
-                #if DEBUG
-                if (_id < 0) throw new Exception($"[ Ecs<{typeof(World)}>.EventReceiver<{typeof(T)}>.MarkAsReadAll ] receiver is deleted");
-                #endif
-                Events.Pool<T>.MarkAsReadAll(_id);
-            }
-            
-            [MethodImpl(AggressiveInlining)]
-            public void SuppressAll() {
-                #if DEBUG
-                if (_id < 0) throw new Exception($"[ Ecs<{typeof(World)}>.EventReceiver<{typeof(T)}>.SuppressAll ] receiver is deleted");
-                #endif
-                Events.Pool<T>.ClearEvents(_id);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public EventIterator<T> GetEnumerator() {
-                #if DEBUG
-                if (_id < 0) throw new Exception($"[ Ecs<{typeof(World)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] receiver is deleted");
-                if (Events.Pool<T>.IsBlocked()) throw new Exception($"[ Ecs<{typeof(World)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] event pool is blocked");
-                #endif
-                return new EventIterator<T>(_id);
-            }
-        }
-        
         #if ENABLE_IL2CPP
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]

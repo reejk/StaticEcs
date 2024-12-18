@@ -181,6 +181,12 @@ namespace FFS.Libraries.StaticEcs {
                     }
                 }
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static void Move(Entity src, Entity dst) {
+                Copy(src, dst);
+                Delete(src);
+            }
 
             [MethodImpl(AggressiveInlining)]
             public static int Count() {

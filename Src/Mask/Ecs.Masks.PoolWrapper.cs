@@ -48,7 +48,7 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) => Masks<T>.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void Del(Entity entity) => Masks<T>.Del(entity);
+            public void Del(Entity entity) => Masks<T>.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => ModuleMasks.CopyEntity(srcEntity, dstEntity);
