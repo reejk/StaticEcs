@@ -2,6 +2,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
+#if ENABLE_IL2CPP
+using Unity.IL2CPP.CompilerServices;
+#endif
+
 
 namespace FFS.Libraries.StaticEcs {
     
@@ -60,7 +64,9 @@ namespace FFS.Libraries.StaticEcs {
             internal EventIterator(int id) {
                 _id = id;
                 _current = new Event<T>(-1);
+                #if DEBUG
                 Events.Pool<T>.AddBlocker(1);
+                #endif
             }
 
             public Event<T> Current {

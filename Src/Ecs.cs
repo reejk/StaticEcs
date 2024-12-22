@@ -33,35 +33,35 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             World.Destroy();
         }
+    }
+    
+    public static class EcsDebugLogger {
+        private const string InfoText = "[INFO] ";
+        private const string WarnText = "[WARN] ";
         
         [MethodImpl(AggressiveInlining)]
-        public static void SetLoggerMethods(Action<string> InfoMethod, Action<string> WarnMethod) {
-            DebugLogger.InfoMethod = InfoMethod;
-            DebugLogger.WarnMethod = WarnMethod;
+        public static void SetMethods(Action<string> info, Action<string> warn) {
+            InfoMethod = info;
+            WarnMethod = warn;
+        }
+            
+        internal static Action<string> InfoMethod = static s => {
+            Console.Write(InfoText);
+            Console.WriteLine(s);
+        };
+        internal static Action<string> WarnMethod = static s => {
+            Console.Write(WarnText);
+            Console.WriteLine(s);
+        };
+            
+        [MethodImpl(AggressiveInlining)]
+        internal static void Info(string msg) {
+            InfoMethod(msg);
         }
         
-        internal static class DebugLogger {
-            private const string InfoText = "[INFO] ";
-            private const string WarnText = "[WARN] ";
-            
-            internal static Action<string> InfoMethod = static s => {
-                Console.Write(InfoText);
-                Console.WriteLine(s);
-            };
-            internal static Action<string> WarnMethod = static s => {
-                Console.Write(WarnText);
-                Console.WriteLine(s);
-            };
-            
-            [MethodImpl(AggressiveInlining)]
-            internal static void Info(string msg) {
-                InfoMethod(msg);
-            }
-        
-            [MethodImpl(AggressiveInlining)]
-            internal static void Warn(string msg) {
-                WarnMethod(msg);
-            }
+        [MethodImpl(AggressiveInlining)]
+        internal static void Warn(string msg) {
+            WarnMethod(msg);
         }
     }
     

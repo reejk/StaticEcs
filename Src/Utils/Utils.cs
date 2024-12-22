@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
@@ -38,6 +39,18 @@ namespace FFS.Libraries.StaticEcs {
             u++;
         
             return (int) u;
+        }
+
+        internal static string GetGenericName(this Type type) {
+            if (!type.IsGenericType) {
+                return type.Name;
+            }
+
+            var genericArguments = type.GetGenericArguments();
+            var typeName = type.FullName.Substring(0, type.FullName.IndexOf('`')); // Убираем суффикс `1, `2 и т.д.
+            var genericArgs = string.Join(", ", Array.ConvertAll(genericArguments, GetGenericName));
+
+            return $"{typeName}<{genericArgs}>";
         }
     }
 

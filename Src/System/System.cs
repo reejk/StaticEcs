@@ -21,7 +21,7 @@ namespace FFS.Libraries.StaticEcs {
         public void Destroy();
     }
     
-    public interface ISystemsBatch {
+    public interface ISystemsBatch : ISystem {
         public void Run();
         internal void Init();
         internal void Destroy();

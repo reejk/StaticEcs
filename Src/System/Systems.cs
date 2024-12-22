@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -15,122 +16,109 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Systems<SysID> where SysID : struct, ISystemsId {
-        private static Action[] _initChain;
-        private static Action[] _destroyChain;
-        private static ISystemsBatch[] _runSystems;
-        private static ISystem[] _otherSystems;
-        private static int _otherSystemsCount;
-        private static int _initChainCount;
-        private static int _destroyChainCount;
-        private static int _runSystemsCount;
+        private static ISystemsBatch[] _batchSystems;
+        private static (ISystem system, short order)[] _allSystems;
+        private static int _allSystemsCount;
+        private static int _batchSystemsCount;
 
         private static uint _currentSystemIndex;
-        private static uint _systemsCount;
+        private static uint _updateSystemsCount;
 
         [MethodImpl(AggressiveInlining)]
         public static void Create(uint baseSize = 64) {
-            _runSystems = new ISystemsBatch[baseSize];
-            _initChain = new Action[baseSize];
-            _destroyChain = new Action[baseSize];
-            _otherSystems = new ISystem[baseSize];
+            _batchSystems = new ISystemsBatch[baseSize];
+            _allSystems = new (ISystem, short)[baseSize];
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void AddCallOnceSystem<S>() where S : ICallOnceSystem, new() {
-            CheckResize();
-            var idx = _otherSystemsCount;
-
-            if (typeof(IInitSystem).IsAssignableFrom(typeof(S))) {
-                _initChain[_initChainCount++] = () => ((IInitSystem) _otherSystems[idx]).Init();
+        public static void AddCallOnceSystem<S>(short order = 0) where S : ICallOnceSystem, new() {
+            if (_allSystemsCount == _allSystems.Length) {
+                Array.Resize(ref _allSystems, _allSystemsCount << 1);
             }
+            _allSystems[_allSystemsCount++] = (new S(), order);
+        }
 
-            if (typeof(IDestroySystem).IsAssignableFrom(typeof(S))) {
-                _destroyChain[_destroyChainCount++] = () => ((IDestroySystem) _otherSystems[idx]).Destroy();
+        [MethodImpl(AggressiveInlining)]
+        public static void AddUpdateSystem<S>(short order = 0) where S : IUpdateSystem, new() {
+            AddBatchUpdateSystem<SystemsBatch<S>>(order);
+        }
+
+        [MethodImpl(AggressiveInlining)]
+        public static void AddBatchUpdateSystem<S>(short order = 0) where S : struct, ISystemsBatch {
+            if (_allSystemsCount == _allSystems.Length) {
+                Array.Resize(ref _allSystems, _allSystemsCount << 1);
             }
-
-            _otherSystems[_otherSystemsCount++] = new S();
-        }
-
-        [MethodImpl(AggressiveInlining)]
-        public static void AddUpdateSystem<S>() where S : IUpdateSystem, new() {
-            AddBatchUpdateSystem<SystemsBatch<S>>();
-        }
-
-        [MethodImpl(AggressiveInlining)]
-        public static void AddBatchUpdateSystem<S>() where S : struct, ISystemsBatch {
-            CheckResize();
-            var idx = _runSystemsCount;
-
-            _initChain[_initChainCount++] = () => _runSystems[idx].Init();
-            _destroyChain[_destroyChainCount++] = () => _runSystems[idx].Destroy();
-            _runSystems[_runSystemsCount] = default(S);
-            _systemsCount += _runSystems[_runSystemsCount++].Count();
+            _allSystems[_allSystemsCount++] = (new S(), order);
         }
 
         [MethodImpl(AggressiveInlining)]
         public static void Initialize() {
-            for (var i = 0; i < _initChainCount; i++) {
-                _initChain[i]();
+            Array.Sort(_allSystems, 0, _allSystemsCount, Comparer<(ISystem, short order)>.Create((a, b) => a.order.CompareTo(b.order)));
+            
+            for (var i = 0; i < _allSystemsCount; i++) {
+                var system = _allSystems[i].system;
+                if (system is IInitSystem initSystem) {
+                    #if DEBUG
+                    EcsDebugLogger.Info($"Init: {initSystem.GetType().GetGenericName()}");
+                    #endif
+                    initSystem.Init();
+                }
+                if (system is ISystemsBatch batch) {
+                    #if DEBUG
+                    EcsDebugLogger.Info($"Init: {batch.GetType().GetGenericName()}");
+                    #endif
+                    batch.Init();
+                    
+                    if (_batchSystemsCount == _batchSystems.Length) {
+                        Array.Resize(ref _batchSystems, _batchSystemsCount << 1);
+                    }
+
+                    _batchSystems[_batchSystemsCount++] = batch;
+                    _updateSystemsCount += batch.Count();
+                }
             }
         }
 
         [MethodImpl(AggressiveInlining)]
         public static void Update() {
-            for (var i = 0; i < _runSystemsCount; i++) {
-                _runSystems[i].Run();
+            for (var i = 0; i < _batchSystemsCount; i++) {
+                _batchSystems[i].Run();
             }
         }
 
         [MethodImpl(AggressiveInlining)]
         public static void Destroy() {
-            for (var i = 0; i < _destroyChainCount; i++) {
-                _destroyChain[i]();
+            for (var i = 0; i < _allSystemsCount; i++) {
+                var system = _allSystems[i].system;
+                if (system is IDestroySystem destroySystem) {
+                    destroySystem.Destroy();
+                }
+                if (system is ISystemsBatch batch) {
+                    batch.Destroy();
+                }
             }
             
-            _initChain = default;
-            _destroyChain = default;
-            _runSystems = default;
-            _otherSystems = default;
-            _otherSystemsCount = default;
-            _initChainCount = default;
-            _destroyChainCount = default;
-            _runSystemsCount = default;
+            _batchSystems = default;
+            _allSystems = default;
+            _allSystemsCount = default;
+            _batchSystemsCount = default;
             _currentSystemIndex = default;
-            _systemsCount = default;
+            _updateSystemsCount = default;
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static int GetCurrentSystemIndex() {
-            return (int) (_currentSystemIndex % _systemsCount);
+        public static int GetCurrentUpdateSystemIndex() {
+            return (int) (_currentSystemIndex % _updateSystemsCount);
         }
         
         [MethodImpl(AggressiveInlining)]
-        public static uint GetSystemsCount() {
-            return _systemsCount;
+        public static uint GetUpdateSystemsCount() {
+            return _updateSystemsCount;
         }
 
         [MethodImpl(AggressiveInlining)]
         internal static void IncrementSystemIndex() {
             _currentSystemIndex++;
-        }
-
-        [MethodImpl(AggressiveInlining)]
-        private static void CheckResize() {
-            if (_runSystemsCount == _runSystems.Length) {
-                Array.Resize(ref _runSystems, _runSystemsCount << 1);
-            }
-
-            if (_initChainCount == _initChain.Length) {
-                Array.Resize(ref _initChain, _initChainCount << 1);
-            }
-
-            if (_destroyChainCount == _destroyChain.Length) {
-                Array.Resize(ref _destroyChain, _destroyChainCount << 1);
-            }
-
-            if (_otherSystemsCount == _otherSystems.Length) {
-                Array.Resize(ref _otherSystems, _otherSystemsCount << 1);
-            }
         }
     }
 }

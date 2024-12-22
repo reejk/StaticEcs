@@ -2,6 +2,9 @@
 using System;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
+#if ENABLE_IL2CPP
+using Unity.IL2CPP.CompilerServices;
+#endif
 
 namespace FFS.Libraries.StaticEcs {
     
@@ -31,7 +34,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 #if DEBUG
                 else {
-                    DebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] The event will not be sent. No receiver is registered.");
+                    EcsDebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] The event will not be sent. No receiver is registered.");
                 }
                 #endif
             }
@@ -43,7 +46,7 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 if (!_poolTryAddMethods[value.Val]()) {
                     #if DEBUG
-                    DebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send ] The event will not be sent. No receiver is registered.");
+                    EcsDebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send ] The event will not be sent. No receiver is registered.");
                     #endif
                 }
             }
