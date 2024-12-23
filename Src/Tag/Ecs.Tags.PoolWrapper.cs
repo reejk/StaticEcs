@@ -30,15 +30,17 @@ namespace FFS.Libraries.StaticEcs {
 
             public int Count();
 
-            public int[] EntitiesData();
-
             public string ToStringComponent(Entity entity);
 
             public bool Is<C>() where C : struct, ITag;
 
             public bool TryCast<C>(out TagsWrapper<C> wrapper) where C : struct, ITag;
 
+            internal int[] EntitiesData();
+
             internal void SetDataIfCountLess(ref int count, ref int[] entities);
+
+            internal void SetDataIfCountMore(ref int count, ref int[] entities);
 
             internal void Resize(int cap);
 
@@ -57,67 +59,72 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public readonly struct TagsWrapper<T> : ITagsWrapper, Stateless where T : struct, ITag {
             [MethodImpl(AggressiveInlining)]
-            public ushort Id() => Tags<T>.Id();
+            public ushort Id() => Tags<T>.Value.Id();
 
             [MethodImpl(AggressiveInlining)]
-            public void Add(Entity entity) => Tags<T>.Add(entity);
+            public void Add(Entity entity) => Tags<T>.Value.Add(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void TryAdd(Entity entity) => Tags<T>.TryAdd(entity);
+            public void TryAdd(Entity entity) => Tags<T>.Value.TryAdd(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void TryAdd(Entity entity, out bool added) => Tags<T>.TryAdd(entity, out added);
+            public void TryAdd(Entity entity, out bool added) => Tags<T>.Value.TryAdd(entity, out added);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Has(Entity entity) => Tags<T>.Has(entity);
+            public bool Has(Entity entity) => Tags<T>.Value.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Del(Entity entity) => Tags<T>.Delete(entity);
+            public bool Del(Entity entity) => Tags<T>.Value.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void Copy(Entity srcEntity, Entity dstEntity) => Tags<T>.Copy(srcEntity, dstEntity);
+            public void Copy(Entity srcEntity, Entity dstEntity) => Tags<T>.Value.Copy(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            public void Move(Entity srcEntity, Entity dstEntity) => Tags<T>.Move(srcEntity, dstEntity);
+            public void Move(Entity srcEntity, Entity dstEntity) => Tags<T>.Value.Move(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => Tags<T>.Count();
+            public int Count() => Tags<T>.Value.Count();
 
             [MethodImpl(AggressiveInlining)]
-            public int[] EntitiesData() => Tags<T>.EntitiesData();
-
-            [MethodImpl(AggressiveInlining)]
-            public string ToStringComponent(Entity entity) => Tags<T>.ToStringComponent(entity);
+            public string ToStringComponent(Entity entity) => Tags<T>.Value.ToStringComponent(entity);
 
             [MethodImpl(AggressiveInlining)]
             public bool Is<C>() where C : struct, ITag {
-                return Tags<C>.id == Tags<T>.id;
+                return Tags<C>.Value.id == Tags<T>.Value.id;
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool TryCast<C>(out TagsWrapper<C> wrapper) where C : struct, ITag {
-                return Tags<C>.id == Tags<T>.id;
+                return Tags<C>.Value.id == Tags<T>.Value.id;
             }
+
+            [MethodImpl(AggressiveInlining)]
+            int[] ITagsWrapper.EntitiesData() => Tags<T>.Value.EntitiesData();
 
             [MethodImpl(AggressiveInlining)]
             void ITagsWrapper.SetDataIfCountLess(ref int count, ref int[] entities) {
-                Tags<T>.SetDataIfCountLess(ref count, ref entities);
+                Tags<T>.Value.SetDataIfCountLess(ref count, ref entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            void ITagsWrapper.Resize(int cap) => Tags<T>.Resize(cap);
+            void ITagsWrapper.SetDataIfCountMore(ref int count, ref int[] entities) {
+                Tags<T>.Value.SetDataIfCountMore(ref count, ref entities);
+            }
 
             [MethodImpl(AggressiveInlining)]
-            void ITagsWrapper.Destroy() => Tags<T>.Destroy();
+            void ITagsWrapper.Resize(int cap) => Tags<T>.Value.Resize(cap);
+
+            [MethodImpl(AggressiveInlining)]
+            void ITagsWrapper.Destroy() => Tags<T>.Value.Destroy();
 
             #if DEBUG
             void ITagsWrapper.AddBlocker(int val) {
-                Tags<T>.AddBlocker(val);
+                Tags<T>.Value.AddBlocker(val);
             }
             #endif
 
             [MethodImpl(AggressiveInlining)]
-            void ITagsWrapper.Clear() => Tags<T>.Clear();
+            void ITagsWrapper.Clear() => Tags<T>.Value.Clear();
         }
     }
 }

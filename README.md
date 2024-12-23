@@ -673,76 +673,88 @@ Let's look at the basic capabilities of searching for entities in the world:
 // The following types are available for applying component filtering conditions:
 
 // All - filters entities for the presence of all specified components (overload from 1 to 8)
-All<Types<Position, Direction, Velocity>> _all = default;
-Single<Position> _single = default; // a slightly more efficient method than All<Types<Position>>>
-Double<Position, Velocity> _double = default; // slightly more efficient method than All<Types<Position, Velocity>>>
+AllTypes<Types<Position, Direction, Velocity>> _all = default;
+// or
+All<Position, Direction, Velocity> _all2 = default;
 
 // AllAndNone - filters entities for the presence of all specified components in the first group and the absence of all components in the second group (overload from 1 to 8).
-AllAndNone<Types<Position, Direction, Velocity>, Types<Name>> _allAndNone = default;
+AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>> _allAndNone = default;
 
 // None - filters entities for the absence of all specified components (can be used only as part of other methods) (overloading from 1 to 8)
-None<Types<Name>> _none = default;
+NoneTypes<Types<Name>> _none = default;
+// or
+None<Name> _none2 = default;
 
 // Any - filters entities for the presence of any of the specified components (can only be used as part of other methods) (overloading from 1 to 8)
-Any<Types<Position, Direction, Velocity>> _any = default;
+AnyTypes<Types<Position, Direction, Velocity>> _any = default;
+// or
+Any<Position, Direction, Velocity> _any2 = default;
 
 // Analogs for tags
 // TagAll - filters entities for the presence of all specified tags (overload from 1 to 8)
-TagAll<Tag<Unit, Player>> _all = default;
-TagSingle<Unit> _single = default; // slightly more efficient method than TagAll<Tag<Unit>>>.
-TagDouble<Unit, Player> _double = default; // a slightly more efficient method than TagAll<Tag<Unit, Player>>>
+TagAllTypes<Tag<Unit, Player>> _all = default;
+// or
+TagAll<Unit, Player> _all2 = default;
 
 // AllAndNone - filters entities for the presence of all specified tags in the first group and the absence of all tags in the second group (overloading from 1 to 8).
-TagAllAndNone<Tag<Unit>, Tag<Player>> _allAndNone = default;
+TagAllAndNoneTypes<Tag<Unit>, Tag<Player>> _allAndNone = default;
 
 // None - filters entities for the absence of all specified tags (can only be used as part of other methods) (overloading from 1 to 8).
-TagNone<Tag<Unit>> _none = default;
+TagNoneTypes<Tag<Unit>> _none = default;
+// or
+TagNone<Unit> _none2 = default;
 
 // Any - filters entities for the presence of any of the specified tags (can only be used as part of other methods) (overloading from 1 to 8)
-TagAny<Tag<Unit, Player>> _any = default;
+TagAnyTypes<Tag<Unit, Player>> _any = default;
+// or
+TagAny<Unit, Player> _any2 = default;
 
 // Mask analogs
 // MaskAll - filters entities for the presence of all specified tags (can only be used as part of other methods) (overloading from 1 to 8)
-MaskAll<Mask<Flammable, Frozen, Visible>> _all = default;
-MaskSingle<Flammable> _single = default; // slightly more efficient method than MaskAll<Mask<Flammable>>>
-MaskDouble<Flammable, Frozen> _double = default; // slightly more efficient method than MaskAll<Mask<Flammable, Frozen>>>
+MaskAllTypes<Mask<Flammable, Frozen, Visible>> _all = default;
+// or
+MaskAll<Flammable, Frozen, Visible> _all2 = default;
 
 // AllAndNone - filters entities for the presence of all specified tags in the first group and the absence of all tags in the second group (can only be used as part of other methods).
-MaskAllAndNone<Mask<Flammable, Frozen>, Mask<Visible>> _allAndNone = default;
+MaskAllAndNoneTypes<Mask<Flammable, Frozen>, Mask<Visible>> _allAndNone = default;
 
 // None - filters entities for the absence of all specified tags (can only be used as part of other methods) (overloading from 1 to 8).
-MaskNone<Mask<Frozen>> _none = default;
+MaskNoneTypes<Mask<Frozen>> _none = default;
+// or
+MaskNone<Frozen> _none2 = default;
 
 // Any - filters entities for the presence of any of the specified tags (can only be used as part of other methods) (overloading from 1 to 8)
-MaskAny<Mask<Flammable, Frozen, Visible>> _any = default;
+MaskAnyTypes<Mask<Flammable, Frozen, Visible>> _any = default;
+// or
+MaskAny<Flammable, Frozen, Visible> _any2 = default;
 
 // All types above do not require explicit initialization, do not require caching, each of them takes no more than 1-2 bytes and can be used on the fly
 
 
 // Different sets of filtering methods can be applied to the World.QueryEntities.For() method for example:
 // Option 1 method through generic
-foreach (var entity in MyWorld.QueryEntities.For<All<Types<Position, Direction, Velocity>>>()) {
+foreach (var entity in MyWorld.QueryEntities.For<All<Position, Direction, Velocity>>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Variant with 1 method via value
-var all = default(All<Types<Position, Direction, Velocity>>);
+var all = default(All<Position, Direction, Velocity>);
 foreach (var entity in MyWorld.QueryEntities.For(all)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Option with 3 methods via generic
 foreach (var entity in MyWorld.QueryEntities.For<
-             All<Types<Position, Velocity, Name>>,
-             AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>,
-             None<Types<Name>>>()) {
+             All<Position, Velocity, Name>,
+             AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
+             None<Name>>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Variant with 3 methods via value
-All<Types<Position, Direction, Velocity>> all2 = default;
-AllAndNone<Types<Position, Direction, Velocity>, Types<Name>> allAndNone2 = default;
-None<Types<Name>> none2 = default;
+All<Position, Direction, Velocity> all2 = default;
+AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>> allAndNone2 = default;
+None<Name> none2 = default;
 foreach (var entity in MyWorld.QueryEntities.For(all2, allAndNone2, none2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
@@ -761,20 +773,20 @@ foreach (var entity in MyWorld.QueryEntities.For(all3, allAndNone3, none3)) {
 
 // Method 1 via generic
 foreach (var entity in MyWorld.QueryEntities.With<With<
-             All<Types<Position, Velocity, Name>>,
-             AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>,
-             None<Types<Name>>,
-             Any<Types<Position, Direction, Velocity>>
+             All<Position, Velocity, Name>,
+             AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
+             None<Name>,
+             Any<Position, Direction, Velocity>
          >>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Method 2 through values
 With<
-    All<Types<Position, Velocity, Name>>,
-    AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>,
-    None<Types<Name>>,
-    Any<Types<Position, Direction, Velocity>>
+    All<Position, Velocity, Name>,
+    AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
+    None<Name>,
+    Any<Position, Direction, Velocity>
 > with = default;
 foreach (var entity in MyWorld.QueryEntities.With(with)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
@@ -782,10 +794,10 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 
 // Method 3 through values alternative
 var with2 = With.Create(
-    default(All<Types<Position, Velocity, Name>>),
-    default(AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>),
-    default(None<Types<Name>>),
-    default(Any<Types<Position, Direction, Velocity>>)
+    default(All<Position, Velocity, Name>),
+    default(AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>),
+    default(None<Name>),
+    default(Any<Position, Direction, Velocity>)
 );
 foreach (var entity in MyWorld.QueryEntities.With(with2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
@@ -835,8 +847,8 @@ MyWorld.QueryComponents.For(static (Ecs.Entity entity, ref Position position, re
 // i.e. WithAdds is just an addition to filtering and does not require specifying the components used.
 
 WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 > with = default;
 
 MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
@@ -845,8 +857,8 @@ MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position p
 
 // или так
 MyWorld.QueryComponents.With<WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 >>().For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
@@ -873,14 +885,14 @@ MyWorld.QueryComponents.For<Position, Velocity, Name, StructFunction>(new Struct
 
 // Option 2 with With through generic
 MyWorld.QueryComponents.With<WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 >>().For<Position, Velocity, Name, StructFunction>();
 
 // Variant 2 with With through value
 WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 > with = default;
 MyWorld.QueryComponents.With(with).For<Position, Velocity, Name, StructFunction>();
 
@@ -973,7 +985,7 @@ To set your own logic of default initialization and resetting of the component y
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
+MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
 MyEcs.Initialize();
 ```
@@ -982,7 +994,7 @@ MyEcs.Initialize();
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
+MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
 MyEcs.Initialize();
 ```
@@ -991,7 +1003,7 @@ MyEcs.Initialize();
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components.AutoHandlers<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
+MyEcs.Components<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
 //...
 MyEcs.Initialize();
 ```
@@ -1081,7 +1093,7 @@ ref var position = ref Ecs.Components<Position>.RefMut(entity); // direct call
 public static class PositionExtension {
     [MethodImpl(AggressiveInlining)]
     public static ref Position RefMutPosition(this Ecs.Entity entity) {
-        return ref Ecs.Components<Position>.RefMut(entity);
+        return ref Ecs.Components<Position>.Value.RefMut(entity);
     }
 }
 ref var position = ref entity.RefMutPosition();
@@ -1091,47 +1103,47 @@ Component live template
 public static class $COMPONENT$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref $COMPONENT$ RefMut$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.RefMut(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.RefMut(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref readonly $COMPONENT$ Ref$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.Ref(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.Ref(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref $COMPONENT$ Add$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.Add(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.Add(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Add$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Add(entity) = $COMPONENT$;
+        $ECS$.Components<$COMPONENT$>.Value.Add(entity) = $COMPONENT$;
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref $COMPONENT$ TryAdd$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.TryAdd(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.TryAdd(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void TryAdd$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.TryAdd(entity) = $COMPONENT$;
+        $ECS$.Components<$COMPONENT$>.Value.TryAdd(entity) = $COMPONENT$;
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Put$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Put(entity, $COMPONENT$);
+        $ECS$.Components<$COMPONENT$>.Value.Put(entity, $COMPONENT$);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Has$COMPONENT$(this $ECS$.Entity entity) {
-        return $ECS$.Components<$COMPONENT$>.Has(entity);
+        return $ECS$.Components<$COMPONENT$>.Value.Has(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Delete$COMPONENT$(this $ECS$.Entity entity) {
-        return $ECS$.Components<$COMPONENT$>.Del(entity);
+        return $ECS$.Components<$COMPONENT$>.Value.Del(entity);
     }
 }
 ```
@@ -1141,22 +1153,22 @@ Tag live template
 public static class $TAG$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Add$TAG$(this $Ecs$.Entity entity) {
-        $Ecs$.Tags<$TAG$>.Add(entity);
+        $Ecs$.Tags<$TAG$>.Value.Add(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void TryAdd$TAG$(this $Ecs$.Entity entity) {
-        $Ecs$.Tags<$TAG$>.TryAdd(entity);
+        $Ecs$.Tags<$TAG$>.Value.TryAdd(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Has$TAG$(this $Ecs$.Entity entity) {
-        return $Ecs$.Tags<$TAG$>.Has(entity);
+        return $Ecs$.Tags<$TAG$>.Value.Has(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Delete$TAG$(this $Ecs$.Entity entity) {
-        return $Ecs$.Tags<$TAG$>.Del(entity);
+        return $Ecs$.Tags<$TAG$>.Value.Del(entity);
     }
 }
 ```
@@ -1166,17 +1178,17 @@ Mask live template
 public static class $MASK$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Add$MASK$(this $Ecs$.Entity entity) {
-        $Ecs$.Masks<$MASK$>.Set(entity);
+        $Ecs$.Masks<$MASK$>.Value.Set(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Has$MASK$(this $Ecs$.Entity entity) {
-        return $Ecs$.Masks<$MASK$>.Has(entity);
+        return $Ecs$.Masks<$MASK$>.Value.Has(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Delete$MASK$(this $Ecs$.Entity entity) {
-        $Ecs$.Masks<$MASK$>.Del(entity);
+        $Ecs$.Masks<$MASK$>.Value.Del(entity);
     }
 }
 ```

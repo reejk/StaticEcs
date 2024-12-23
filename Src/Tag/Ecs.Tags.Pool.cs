@@ -16,23 +16,24 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.NullChecks, false)]
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract partial class Tags<T> where T : struct, ITag {
+        public struct Tags<T> where T : struct, ITag {
+            public static Tags<T> Value;
             private const int Empty = -1;
-            private static BitMask _bitMask;
-            private static int[] _entities;
-            private static int[] _dataIdxByEntityId;
-            private static int _tagCount;
-            internal static ushort id;
+            private BitMask _bitMask;
+            private int[] _entities;
+            private int[] _dataIdxByEntityId;
+            private int _tagCount;
+            internal ushort id;
 
             #if DEBUG
-            private static int _blockers;
+            private int _blockers;
             #endif
 
             static Tags() {
                 ModuleTags.RegisterTag<T>();
             }
 
-            internal static void Create(ushort tagId, BitMask bitMask, uint baseCapacity = 128) {
+            internal void Create(ushort tagId, BitMask bitMask, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = tagId;
                 _entities = new int[baseCapacity];
@@ -44,10 +45,10 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static ushort Id() => id;
+            public ushort Id() => id;
 
             [MethodImpl(AggressiveInlining)]
-            public static void Add(Entity entity) {
+            public void Add(Entity entity) {
                 #if DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, cannot access ID - {id} from deleted entity");
                 if (Has(entity)) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, ID - {entity._id} is missing on an entity");
@@ -65,14 +66,14 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void TryAdd(Entity entity) {
+            public void TryAdd(Entity entity) {
                 if (!Has(entity)) {
                     Add(entity);
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void TryAdd(Entity entity, out bool added) {
+            public void TryAdd(Entity entity, out bool added) {
                 added = !Has(entity);
                 if (!added) {
                     Add(entity);
@@ -80,7 +81,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool Has(Entity entity) {
+            public bool Has(Entity entity) {
                 #if DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
@@ -88,7 +89,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool Delete(Entity entity) {
+            public bool Delete(Entity entity) {
                 #if DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: DelInternal, cannot access ID - {id} from deleted entity");
                 if (!IsNotBlocked())
@@ -114,7 +115,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void Resize(int cap) {
+            internal void Resize(int cap) {
                 var lastLength = _dataIdxByEntityId.Length;
                 Array.Resize(ref _dataIdxByEntityId, cap);
                 for (var i = lastLength; i < cap; i++) {
@@ -123,7 +124,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void Copy(Entity src, Entity dst) {
+            public void Copy(Entity src, Entity dst) {
                 #if DEBUG
                 if (World.EntityVersion(src) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (World.EntityVersion(dst) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
@@ -136,37 +137,45 @@ namespace FFS.Libraries.StaticEcs {
             }
                         
             [MethodImpl(AggressiveInlining)]
-            public static void Move(Entity src, Entity dst) {
+            public void Move(Entity src, Entity dst) {
                 Copy(src, dst);
                 Delete(src);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static int Count() => _tagCount;
+            public int Count() => _tagCount;
 
             [MethodImpl(AggressiveInlining)]
-            public static int[] EntitiesData() => _entities;
+            public int[] EntitiesData() => _entities;
 
             [MethodImpl(AggressiveInlining)]
-            public static string ToStringComponent(Entity entity) {
+            public string ToStringComponent(Entity entity) {
                 return $" - [{id}] {typeof(T).Name}\n";
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void SetDataIfCountLess(ref int count, ref int[] entities) {
+            internal void SetDataIfCountLess(ref int count, ref int[] entities) {
                 if (_tagCount < count || count == 0) {
+                    count = _tagCount;
+                    entities = _entities;
+                }
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal void SetDataIfCountMore(ref int count, ref int[] entities) {
+                if (_tagCount > count || count == 0) {
                     count = _tagCount;
                     entities = _entities;
                 }
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static int[] GetDataIdxByEntityId() {
+            internal int[] GetDataIdxByEntityId() {
                 return _dataIdxByEntityId;
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void Destroy() {
+            internal void Destroy() {
                 _entities = null;
                 _dataIdxByEntityId = null;
                 _tagCount = 0;
@@ -174,7 +183,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void Clear() {
+            public void Clear() {
                 Array.Clear(_entities, 0, _entities.Length);
                 for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
                     _dataIdxByEntityId[i] = Empty;
@@ -184,7 +193,7 @@ namespace FFS.Libraries.StaticEcs {
 
             #if DEBUG
             [MethodImpl(AggressiveInlining)]
-            internal static void AddBlocker(int amount) {
+            internal void AddBlocker(int amount) {
                 _blockers += amount;
                 #if DEBUG
                 if (_blockers < 0) throw new Exception($"TagsPool<{typeof(WorldID)}, {typeof(T)}>, Method: AddBlocker, incorrect pool user balance when attempting to release");
@@ -193,7 +202,7 @@ namespace FFS.Libraries.StaticEcs {
             #endif
 
             [MethodImpl(AggressiveInlining)]
-            internal static bool IsNotBlocked() {
+            internal bool IsNotBlocked() {
                 #if DEBUG
                 return _blockers <= 1;
                 #endif

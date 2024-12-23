@@ -86,7 +86,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 TagInfo<C>.Register();
-                Tags<C>.Create(TagInfo<C>.Id, BitMask, TagInfo<C>.BaseCapacity ?? TagInfo.BaseCapacity);
+                Tags<C>.Value.Create(TagInfo<C>.Id, BitMask, TagInfo<C>.BaseCapacity ?? TagInfo.BaseCapacity);
                 if (_poolsCount == _pools.Length) {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
@@ -130,7 +130,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagDynamicId, World not initialized");
                 #endif
-                return new TagDynId(Tags<T>.Id());
+                return new TagDynId(Tags<T>.Value.Id());
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -139,38 +139,6 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: TagsCount, World not initialized");
                 #endif
                 return BitMask.Len(entity._id);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAllTags(Entity entity, byte allBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllTags, World not initialized");
-                #endif
-                return BitMask.HasAll(entity._id, allBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAnyTags(Entity entity, byte anyBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyTags, World not initialized");
-                #endif
-                return BitMask.HasAny(entity._id, anyBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool NotHasAnyTags(Entity entity, byte excBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyTags, World not initialized");
-                #endif
-                return BitMask.NotHasAny(entity._id, excBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAllAndExcTags(Entity entity, byte allBufId, byte excBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcTags, World not initialized");
-                #endif
-                return BitMask.HasAllAndExc(entity._id, allBufId, excBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -294,7 +262,7 @@ namespace FFS.Libraries.StaticEcs {
     public struct DeleteTagsSystem<WorldId, T> : IUpdateSystem where T : struct, ITag where WorldId : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public void Update() {
-            foreach (var entity in Ecs<WorldId>.World.QueryEntities.For<TagSingle<T>>()) {
+            foreach (var entity in Ecs<WorldId>.World.QueryEntities.For<TagAll<T>>()) {
                 entity.DeleteTag<T>();
             }
         }

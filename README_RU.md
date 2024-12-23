@@ -973,7 +973,7 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
+MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
 MyEcs.Initialize();
 ```
@@ -982,7 +982,7 @@ MyEcs.Initialize();
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components.AutoHandlers<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
+MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
 //...
 MyEcs.Initialize();
 ```
@@ -991,7 +991,7 @@ MyEcs.Initialize();
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components.AutoHandlers<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
+MyEcs.Components<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
 //...
 MyEcs.Initialize();
 ```
@@ -1081,7 +1081,7 @@ ref var position = ref Ecs.Components<Position>.RefMut(entity); // прямой 
 public static class PositionExtension {
     [MethodImpl(AggressiveInlining)]
     public static ref Position RefMutPosition(this Ecs.Entity entity) {
-        return ref Ecs.Components<Position>.RefMut(entity);
+        return ref Ecs.Components<Position>.Value.RefMut(entity);
     }
 }
 ref var position = ref entity.RefMutPosition();
@@ -1091,47 +1091,47 @@ Component live template
 public static class $COMPONENT$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref $COMPONENT$ RefMut$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.RefMut(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.RefMut(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref readonly $COMPONENT$ Ref$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.Ref(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.Ref(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref $COMPONENT$ Add$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.Add(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.Add(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Add$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Add(entity) = $COMPONENT$;
+        $ECS$.Components<$COMPONENT$>.Value.Add(entity) = $COMPONENT$;
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static ref $COMPONENT$ TryAdd$COMPONENT$(this $ECS$.Entity entity) {
-        return ref $ECS$.Components<$COMPONENT$>.TryAdd(entity);
+        return ref $ECS$.Components<$COMPONENT$>.Value.TryAdd(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void TryAdd$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.TryAdd(entity) = $COMPONENT$;
+        $ECS$.Components<$COMPONENT$>.Value.TryAdd(entity) = $COMPONENT$;
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Put$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Put(entity, $COMPONENT$);
+        $ECS$.Components<$COMPONENT$>.Value.Put(entity, $COMPONENT$);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Has$COMPONENT$(this $ECS$.Entity entity) {
-        return $ECS$.Components<$COMPONENT$>.Has(entity);
+        return $ECS$.Components<$COMPONENT$>.Value.Has(entity);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Delete$COMPONENT$(this $ECS$.Entity entity) {
-        return $ECS$.Components<$COMPONENT$>.Del(entity);
+        return $ECS$.Components<$COMPONENT$>.Value.Del(entity);
     }
 }
 ```
@@ -1141,22 +1141,22 @@ Tag live template
 public static class $TAG$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Add$TAG$(this $Ecs$.Entity entity) {
-        $Ecs$.Tags<$TAG$>.Add(entity);
+        $Ecs$.Tags<$TAG$>.Value.Add(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void TryAdd$TAG$(this $Ecs$.Entity entity) {
-        $Ecs$.Tags<$TAG$>.TryAdd(entity);
+        $Ecs$.Tags<$TAG$>.Value.TryAdd(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Has$TAG$(this $Ecs$.Entity entity) {
-        return $Ecs$.Tags<$TAG$>.Has(entity);
+        return $Ecs$.Tags<$TAG$>.Value.Has(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Delete$TAG$(this $Ecs$.Entity entity) {
-        return $Ecs$.Tags<$TAG$>.Del(entity);
+        return $Ecs$.Tags<$TAG$>.Value.Del(entity);
     }
 }
 ```
@@ -1166,17 +1166,17 @@ Mask live template
 public static class $MASK$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Add$MASK$(this $Ecs$.Entity entity) {
-        $Ecs$.Masks<$MASK$>.Set(entity);
+        $Ecs$.Masks<$MASK$>.Value.Set(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Has$MASK$(this $Ecs$.Entity entity) {
-        return $Ecs$.Masks<$MASK$>.Has(entity);
+        return $Ecs$.Masks<$MASK$>.Value.Has(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Delete$MASK$(this $Ecs$.Entity entity) {
-        $Ecs$.Masks<$MASK$>.Del(entity);
+        $Ecs$.Masks<$MASK$>.Value.Del(entity);
     }
 }
 ```

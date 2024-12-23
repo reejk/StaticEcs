@@ -24,14 +24,14 @@ namespace FFS.Libraries.StaticEcs {
             #region HAS
             [MethodImpl(AggressiveInlining)]
             public readonly bool HasAllOfTags<C>() where C : struct, ITag {
-                return Tags<C>.Has(this);
+                return Tags<C>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool HasAllOfTags<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                return Tags<C1>.Has(this) && Tags<C2>.Has(this);
+                return Tags<C1>.Value.Has(this) && Tags<C2>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -39,14 +39,14 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                return Tags<C1>.Has(this) && Tags<C2>.Has(this) && Tags<C3>.Has(this);
+                return Tags<C1>.Value.Has(this) && Tags<C2>.Value.Has(this) && Tags<C3>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool HasAnyOfTags<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                return Tags<C1>.Has(this) || Tags<C2>.Has(this);
+                return Tags<C1>.Value.Has(this) || Tags<C2>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -54,7 +54,7 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                return Tags<C1>.Has(this) || Tags<C2>.Has(this) || Tags<C3>.Has(this);
+                return Tags<C1>.Value.Has(this) || Tags<C2>.Value.Has(this) || Tags<C3>.Value.Has(this);
             }
             #endregion
 
@@ -62,15 +62,15 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public readonly void AddTag<C>()
                 where C : struct, ITag {
-                Tags<C>.Add(this);
+                Tags<C>.Value.Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly void AddTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                Tags<C1>.Add(this);
-                Tags<C2>.Add(this);
+                Tags<C1>.Value.Add(this);
+                Tags<C2>.Value.Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -78,9 +78,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                Tags<C1>.Add(this);
-                Tags<C2>.Add(this);
-                Tags<C3>.Add(this);
+                Tags<C1>.Value.Add(this);
+                Tags<C2>.Value.Add(this);
+                Tags<C3>.Value.Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -89,10 +89,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, ITag
                 where C3 : struct, ITag
                 where C4 : struct, ITag {
-                Tags<C1>.Add(this);
-                Tags<C2>.Add(this);
-                Tags<C3>.Add(this);
-                Tags<C4>.Add(this);
+                Tags<C1>.Value.Add(this);
+                Tags<C2>.Value.Add(this);
+                Tags<C3>.Value.Add(this);
+                Tags<C4>.Value.Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -102,25 +102,25 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, ITag
                 where C4 : struct, ITag
                 where C5 : struct, ITag {
-                Tags<C1>.Add(this);
-                Tags<C2>.Add(this);
-                Tags<C3>.Add(this);
-                Tags<C4>.Add(this);
-                Tags<C5>.Add(this);
+                Tags<C1>.Value.Add(this);
+                Tags<C2>.Value.Add(this);
+                Tags<C3>.Value.Add(this);
+                Tags<C4>.Value.Add(this);
+                Tags<C5>.Value.Add(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public readonly void TryAddTag<C>()
                 where C : struct, ITag {
-                Tags<C>.TryAdd(this);
+                Tags<C>.Value.TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly void TryAddTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                Tags<C1>.TryAdd(this);
-                Tags<C2>.TryAdd(this);
+                Tags<C1>.Value.TryAdd(this);
+                Tags<C2>.Value.TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -128,9 +128,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                Tags<C1>.TryAdd(this);
-                Tags<C2>.TryAdd(this);
-                Tags<C3>.TryAdd(this);
+                Tags<C1>.Value.TryAdd(this);
+                Tags<C2>.Value.TryAdd(this);
+                Tags<C3>.Value.TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -139,10 +139,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, ITag
                 where C3 : struct, ITag
                 where C4 : struct, ITag {
-                Tags<C1>.TryAdd(this);
-                Tags<C2>.TryAdd(this);
-                Tags<C3>.TryAdd(this);
-                Tags<C4>.TryAdd(this);
+                Tags<C1>.Value.TryAdd(this);
+                Tags<C2>.Value.TryAdd(this);
+                Tags<C3>.Value.TryAdd(this);
+                Tags<C4>.Value.TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -152,25 +152,25 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, ITag
                 where C4 : struct, ITag
                 where C5 : struct, ITag {
-                Tags<C1>.TryAdd(this);
-                Tags<C2>.TryAdd(this);
-                Tags<C3>.TryAdd(this);
-                Tags<C4>.TryAdd(this);
-                Tags<C5>.TryAdd(this);
+                Tags<C1>.Value.TryAdd(this);
+                Tags<C2>.Value.TryAdd(this);
+                Tags<C3>.Value.TryAdd(this);
+                Tags<C4>.Value.TryAdd(this);
+                Tags<C5>.Value.TryAdd(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public readonly void TryAddTag<C>(out bool added)
                 where C : struct, ITag {
-                Tags<C>.TryAdd(this, out added);
+                Tags<C>.Value.TryAdd(this, out added);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly void TryAddTag<C1, C2>(out bool added)
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                Tags<C1>.TryAdd(this, out var added1);
-                Tags<C2>.TryAdd(this, out var added2);
+                Tags<C1>.Value.TryAdd(this, out var added1);
+                Tags<C2>.Value.TryAdd(this, out var added2);
                 added = added1 || added2;
             }
 
@@ -179,9 +179,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                Tags<C1>.TryAdd(this, out var added1);
-                Tags<C2>.TryAdd(this, out var added2);
-                Tags<C3>.TryAdd(this, out var added3);
+                Tags<C1>.Value.TryAdd(this, out var added1);
+                Tags<C2>.Value.TryAdd(this, out var added2);
+                Tags<C3>.Value.TryAdd(this, out var added3);
                 added = added1 || added2 || added3;
             }
 
@@ -191,10 +191,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, ITag
                 where C3 : struct, ITag
                 where C4 : struct, ITag {
-                Tags<C1>.TryAdd(this, out var added1);
-                Tags<C2>.TryAdd(this, out var added2);
-                Tags<C3>.TryAdd(this, out var added3);
-                Tags<C4>.TryAdd(this, out var added4);
+                Tags<C1>.Value.TryAdd(this, out var added1);
+                Tags<C2>.Value.TryAdd(this, out var added2);
+                Tags<C3>.Value.TryAdd(this, out var added3);
+                Tags<C4>.Value.TryAdd(this, out var added4);
                 added = added1 || added2 || added3 || added4;
             }
             
@@ -205,11 +205,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, ITag
                 where C4 : struct, ITag
                 where C5 : struct, ITag {
-                Tags<C1>.TryAdd(this, out var added1);
-                Tags<C2>.TryAdd(this, out var added2);
-                Tags<C3>.TryAdd(this, out var added3);
-                Tags<C4>.TryAdd(this, out var added4);
-                Tags<C5>.TryAdd(this, out var added5);
+                Tags<C1>.Value.TryAdd(this, out var added1);
+                Tags<C2>.Value.TryAdd(this, out var added2);
+                Tags<C3>.Value.TryAdd(this, out var added3);
+                Tags<C4>.Value.TryAdd(this, out var added4);
+                Tags<C5>.Value.TryAdd(this, out var added5);
                 added = added1 || added2 || added3 || added4 || added5;
             }
             #endregion
@@ -217,15 +217,15 @@ namespace FFS.Libraries.StaticEcs {
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public readonly bool DeleteTag<C>() where C : struct, ITag {
-                return Tags<C>.Delete(this);
+                return Tags<C>.Value.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool DeleteTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                var delC1 = Tags<C1>.Delete(this);
-                var delC2 = Tags<C2>.Delete(this);
+                var delC1 = Tags<C1>.Value.Delete(this);
+                var delC2 = Tags<C2>.Value.Delete(this);
                 return delC1 && delC2;
             }
 
@@ -234,9 +234,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                var delC1 = Tags<C1>.Delete(this);
-                var delC2 = Tags<C2>.Delete(this);
-                var delC3 = Tags<C3>.Delete(this);
+                var delC1 = Tags<C1>.Value.Delete(this);
+                var delC2 = Tags<C2>.Value.Delete(this);
+                var delC3 = Tags<C3>.Value.Delete(this);
 
                 return delC1 && delC2 && delC3;
             }
@@ -247,10 +247,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, ITag
                 where C3 : struct, ITag
                 where C4 : struct, ITag {
-                var delC1 = Tags<C1>.Delete(this);
-                var delC2 = Tags<C2>.Delete(this);
-                var delC3 = Tags<C3>.Delete(this);
-                var delC4 = Tags<C4>.Delete(this);
+                var delC1 = Tags<C1>.Value.Delete(this);
+                var delC2 = Tags<C2>.Value.Delete(this);
+                var delC3 = Tags<C3>.Value.Delete(this);
+                var delC4 = Tags<C4>.Value.Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4;
             }
@@ -262,11 +262,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, ITag
                 where C4 : struct, ITag
                 where C5 : struct, ITag {
-                var delC1 = Tags<C1>.Delete(this);
-                var delC2 = Tags<C2>.Delete(this);
-                var delC3 = Tags<C3>.Delete(this);
-                var delC4 = Tags<C4>.Delete(this);
-                var delC5 = Tags<C5>.Delete(this);
+                var delC1 = Tags<C1>.Value.Delete(this);
+                var delC2 = Tags<C2>.Value.Delete(this);
+                var delC3 = Tags<C3>.Value.Delete(this);
+                var delC4 = Tags<C4>.Value.Delete(this);
+                var delC5 = Tags<C5>.Value.Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4 && delC5;
             }
@@ -276,15 +276,15 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public readonly void MoveTagsTo<C1>(Entity target)
                 where C1 : struct, ITag {
-                Tags<C1>.Move(this, target);
+                Tags<C1>.Value.Move(this, target);
             }
             
             [MethodImpl(AggressiveInlining)]
             public readonly void MoveTagsTo<C1, C2>(Entity target)
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
-                Tags<C1>.Move(this, target);
-                Tags<C2>.Move(this, target);
+                Tags<C1>.Value.Move(this, target);
+                Tags<C2>.Value.Move(this, target);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -292,9 +292,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
-                Tags<C1>.Move(this, target);
-                Tags<C2>.Move(this, target);
-                Tags<C3>.Move(this, target);
+                Tags<C1>.Value.Move(this, target);
+                Tags<C2>.Value.Move(this, target);
+                Tags<C3>.Value.Move(this, target);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -303,10 +303,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, ITag
                 where C3 : struct, ITag
                 where C4 : struct, ITag {
-                Tags<C1>.Move(this, target);
-                Tags<C2>.Move(this, target);
-                Tags<C3>.Move(this, target);
-                Tags<C4>.Move(this, target);
+                Tags<C1>.Value.Move(this, target);
+                Tags<C2>.Value.Move(this, target);
+                Tags<C3>.Value.Move(this, target);
+                Tags<C4>.Value.Move(this, target);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -316,11 +316,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, ITag
                 where C4 : struct, ITag
                 where C5 : struct, ITag {
-                Tags<C1>.Move(this, target);
-                Tags<C2>.Move(this, target);
-                Tags<C3>.Move(this, target);
-                Tags<C4>.Move(this, target);
-                Tags<C5>.Move(this, target);
+                Tags<C1>.Value.Move(this, target);
+                Tags<C2>.Value.Move(this, target);
+                Tags<C3>.Value.Move(this, target);
+                Tags<C4>.Value.Move(this, target);
+                Tags<C5>.Value.Move(this, target);
             }
             #endregion
             #endregion
