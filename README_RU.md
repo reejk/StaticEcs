@@ -673,76 +673,88 @@ MyEcs.Context<UserService2>.Remove();
 // Для применение условий фильтрации компонентов доступны следующие типы:
 
 // All - фильтрует сущности на наличие всех указанных компонентов (перегрузка от 1 до 8)
-All<Types<Position, Direction, Velocity>> _all = default;
-Single<Position> _single = default; // чуть более эффективный метод чем All<Types<Position>>
-Double<Position, Velocity> _double = default; // чуть более эффективный метод чем All<Types<Position, Velocity>>
+AllTypes<Types<Position, Direction, Velocity>> _all = default;
+// или так
+All<Position, Direction, Velocity> _all2 = default;
 
 // AllAndNone - фильтрует сущности на наличие всех указанных компонентов первой группы и отсутсвие всех во второй (перегрузка от 1 до 8)
-AllAndNone<Types<Position, Direction, Velocity>, Types<Name>> _allAndNone = default;
+AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>> _allAndNone = default;
 
 // None - фильтрует сущности на отсутсвие всех указанных компонентов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-None<Types<Name>> _none = default;
+NoneTypes<Types<Name>> _none = default;
+// или так
+None<Name> _none2 = default;
 
 // Any - фильтрует сущности на наличие любого из указанных компонентов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-Any<Types<Position, Direction, Velocity>> _any = default;
+AnyTypes<Types<Position, Direction, Velocity>> _any = default;
+// или так
+Any<Position, Direction, Velocity> _any2 = default;
 
 // Аналоги для тегов
 // TagAll - фильтрует сущности на наличие всех указанных тегов (перегрузка от 1 до 8)
-TagAll<Tag<Unit, Player>> _all = default;
-TagSingle<Unit> _single = default; // чуть более эффективный метод чем TagAll<Tag<Unit>>
-TagDouble<Unit, Player> _double = default; // чуть более эффективный метод чем TagAll<Tag<Unit, Player>>
+TagAllTypes<Tag<Unit, Player>> _all = default;
+// или так
+TagAll<Unit, Player> _all2 = default;
 
 // AllAndNone - фильтрует сущности на наличие всех указанных тегов первой группы и отсутсвие всех во второй (перегрузка от 1 до 8)
-TagAllAndNone<Tag<Unit>, Tag<Player>> _allAndNone = default;
+TagAllAndNoneTypes<Tag<Unit>, Tag<Player>> _allAndNone = default;
 
 // None - фильтрует сущности на отсутсвие всех указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-TagNone<Tag<Unit>> _none = default;
+TagNoneTypes<Tag<Unit>> _none = default;
+// или так
+TagNone<Unit> _none2 = default;
 
 // Any - фильтрует сущности на наличие любого из указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-TagAny<Tag<Unit, Player>> _any = default;
+TagAnyTypes<Tag<Unit, Player>> _any = default;
+// или так
+TagAny<Unit, Player> _any2 = default;
 
 // Аналоги для масок
-// MaskAll - фильтрует сущности на наличие всех указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-MaskAll<Mask<Flammable, Frozen, Visible>> _all = default;
-MaskSingle<Flammable> _single = default; // чуть более эффективный метод чем MaskAll<Mask<Flammable>>
-MaskDouble<Flammable, Frozen> _double = default; // чуть более эффективный метод чем MaskAll<Mask<Flammable, Frozen>>
+// MaskAll - фильтрует сущности на наличие всех указанных масок (может использоваться только в составе других методов) (перегрузка от 1 до 8)
+MaskAllTypes<Mask<Flammable, Frozen, Visible>> _all = default;
+// или так
+MaskAll<Flammable, Frozen, Visible> _all2 = default;
 
-// AllAndNone - фильтрует сущности на наличие всех указанных тегов первой группы и отсутсвие всех во второй (может использоваться только в составе других методов)
-MaskAllAndNone<Mask<Flammable, Frozen>, Mask<Visible>> _allAndNone = default;
+// AllAndNone - фильтрует сущности на наличие всех указанных масок первой группы и отсутсвие всех во второй (перегрузка от 1 до 8)
+MaskAllAndNoneTypes<Mask<Flammable, Frozen>, Mask<Visible>> _allAndNone = default;
 
-// None - фильтрует сущности на отсутсвие всех указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-MaskNone<Mask<Frozen>> _none = default;
+// None - фильтрует сущности на отсутсвие всех указанных масок (может использоваться только в составе других методов) (перегрузка от 1 до 8)
+MaskNoneTypes<Mask<Frozen>> _none = default;
+// или так
+MaskNone<Frozen> _none2 = default;
 
-// Any - фильтрует сущности на наличие любого из указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
-MaskAny<Mask<Flammable, Frozen, Visible>> _any = default;
+// Any - фильтрует сущности на наличие любой из указанных масок (может использоваться только в составе других методов) (перегрузка от 1 до 8)
+MaskAnyTypes<Mask<Flammable, Frozen, Visible>> _any = default;
+// или так
+MaskAny<Flammable, Frozen, Visible> _any2 = default;
 
 // Все типы выше не требуют явной инициализации, не требуют кеширования, каждый из них занимает не больше 1-2 байт и может использоваться "на лету"
 
 
 // Различные наборы методов фильтрации могут быть применины к методу World.QueryEntities.For() например:
 // Вариант с 1 методом через дженерик
-foreach (var entity in MyWorld.QueryEntities.For<All<Types<Position, Direction, Velocity>>>()) {
+foreach (var entity in MyWorld.QueryEntities.For<All<Position, Direction, Velocity>>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Вариант с 1 методом через значение
-var all = default(All<Types<Position, Direction, Velocity>>);
+var all = default(All<Position, Direction, Velocity>);
 foreach (var entity in MyWorld.QueryEntities.For(all)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Вариант с 3 методами  через дженерик
 foreach (var entity in MyWorld.QueryEntities.For<
-             All<Types<Position, Velocity, Name>>,
-             AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>,
-             None<Types<Name>>>()) {
+             All<Position, Velocity, Name>,
+             AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
+             None<Name>>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Вариант с 3 методами  через значение
-All<Types<Position, Direction, Velocity>> all2 = default;
-AllAndNone<Types<Position, Direction, Velocity>, Types<Name>> allAndNone2 = default;
-None<Types<Name>> none2 = default;
+All<Position, Direction, Velocity> all2 = default;
+AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>> allAndNone2 = default;
+None<Name> none2 = default;
 foreach (var entity in MyWorld.QueryEntities.For(all2, allAndNone2, none2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
@@ -759,22 +771,22 @@ foreach (var entity in MyWorld.QueryEntities.For(all3, allAndNone3, none3)) {
 // Также все методы фильтрации могут быть сгруппированны в тип With
 // который может применяться к методу World.QueryEntities.With() например:
 
-// Способ 1 через дженерик
+// Method 1 via generic
 foreach (var entity in MyWorld.QueryEntities.With<With<
-             All<Types<Position, Velocity, Name>>,
-             AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>,
-             None<Types<Name>>,
-             Any<Types<Position, Direction, Velocity>>
+             All<Position, Velocity, Name>,
+             AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
+             None<Name>,
+             Any<Position, Direction, Velocity>
          >>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Способ 2 через значения
 With<
-    All<Types<Position, Velocity, Name>>,
-    AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>,
-    None<Types<Name>>,
-    Any<Types<Position, Direction, Velocity>>
+    All<Position, Velocity, Name>,
+    AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
+    None<Name>,
+    Any<Position, Direction, Velocity>
 > with = default;
 foreach (var entity in MyWorld.QueryEntities.With(with)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
@@ -782,10 +794,10 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 
 // Способ 3 через значения альтернативный
 var with2 = With.Create(
-    default(All<Types<Position, Velocity, Name>>),
-    default(AllAndNone<Types<Position, Direction, Velocity>, Types<Name>>),
-    default(None<Types<Name>>),
-    default(Any<Types<Position, Direction, Velocity>>)
+    default(All<Position, Velocity, Name>),
+    default(AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>),
+    default(None<Name>),
+    default(Any<Position, Direction, Velocity>)
 );
 foreach (var entity in MyWorld.QueryEntities.With(with2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
@@ -803,7 +815,7 @@ foreach (var entity in MyWorld.QueryEntities.With(with3)) {
 }
 ```
 
-Рассмотрим дополнительные возможности поиска сущностей в мире:
+Look at additional ways to search for entities in the world:
 ```c#
 // World.QueryComponents.For()\With() возвращает итератор сущностей подходящих под условие cразу с компонентами 
 
@@ -835,8 +847,8 @@ MyWorld.QueryComponents.For(static (Ecs.Entity entity, ref Position position, re
 // то есть WithAdds лишь дополнят фильтрации и не требует указания используемых компонентов
 
 WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 > with = default;
 
 MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
@@ -845,14 +857,14 @@ MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position p
 
 // или так
 MyWorld.QueryComponents.With<WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 >>().For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 ```
 
-Рассмотрим особые возможности поиска сущностей в мире:
+Look at the special possibilities for finding entities in the world:
 ```c#
 // Запросы с передачей структуры-функции 
 // может использоваться для оптимизации или передачи состояния в стракт или для вынесения логики
@@ -873,14 +885,14 @@ MyWorld.QueryComponents.For<Position, Velocity, Name, StructFunction>(new Struct
 
 // Вариант 2 с With через дженерик
 MyWorld.QueryComponents.With<WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 >>().For<Position, Velocity, Name, StructFunction>();
 
 // Вариант 2 с With через значение
 WithAdds<
-    None<Types<Direction>>,
-    Any<Types<Position, Direction, Velocity>>
+    None<Direction>,
+    Any<Position, Direction, Velocity>
 > with = default;
 MyWorld.QueryComponents.With(with).For<Position, Velocity, Name, StructFunction>();
 

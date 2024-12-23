@@ -855,7 +855,7 @@ MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position p
     position.Val *= velocity.Val;
 });
 
-// или так
+// or
 MyWorld.QueryComponents.With<WithAdds<
     None<Direction>,
     Any<Position, Direction, Velocity>
