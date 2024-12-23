@@ -19,6 +19,7 @@ namespace FFS.Libraries.StaticEcs {
             private static Entity[] _entities;
             private static T[] _data;
             private static int[] _dataIdxByEntityId;
+            private static BitMask _bitMask;
             private static int _componentsCount;
             internal static ushort id;
 
@@ -88,7 +89,7 @@ namespace FFS.Libraries.StaticEcs {
                 _entities[idx] = entity;
                 _dataIdxByEntityId[entity._id] = _componentsCount;
 
-                BitMaskUtils<WorldID, IComponent>.Set(entity._id, id);
+                _bitMask.Set(entity._id, id);
                 
                 ref var data = ref _data[idx];
                 if (AutoHandlers<T>.Init != null) {
@@ -120,7 +121,7 @@ namespace FFS.Libraries.StaticEcs {
                 _entities[idx] = entity;
                 dataId = _componentsCount;
 
-                BitMaskUtils<WorldID, IComponent>.Set(entity._id, id);
+                _bitMask.Set(entity._id, id);
 
                 _data[idx] = component;
             }
@@ -214,7 +215,8 @@ namespace FFS.Libraries.StaticEcs {
             #endregion
 
             #region INTERNAL
-            internal static void Create(ushort componentId, uint baseCapacity = 128) {
+            internal static void Create(ushort componentId, BitMask bitMask, uint baseCapacity = 128) {
+                _bitMask = bitMask;
                 id = componentId;
                 _entities = new Entity[baseCapacity];
                 _data = new T[baseCapacity];
@@ -225,6 +227,11 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static bool DeleteFromWorld(Entity entity) {
                 return DelInternal(entity, true);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static int[] GetDataIdxByEntityId() {
+                return _dataIdxByEntityId;
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -249,8 +256,8 @@ namespace FFS.Libraries.StaticEcs {
                         (_data[idx], _data[_componentsCount]) = (_data[_componentsCount], _data[idx]);
                     }
 
-                    BitMaskUtils<WorldID, IComponent>.Del(entity._id, id);
-                    if (!fromWorld && BitMaskUtils<WorldID, IComponent>.IsEmpty(entity._id)) {
+                    _bitMask.Del(entity._id, id);
+                    if (!fromWorld && _bitMask.IsEmpty(entity._id)) {
                         World.DestroyEntity(entity);
                     }
                     return true;
@@ -286,6 +293,7 @@ namespace FFS.Libraries.StaticEcs {
                 _entities = null;
                 _data = null;
                 _dataIdxByEntityId = null;
+                _bitMask = null;
                 _componentsCount = 0;
                 id = 0;
             }

@@ -82,7 +82,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, Ecs<WorldID>.Tags<C1>.id);
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, Ecs<WorldID>.Tags<C1>.id);
         }
 
         #if DEBUG
@@ -134,7 +134,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id);
         }
@@ -188,7 +188,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id,
                                                     Ecs<WorldID>.Tags<C3>.id);
@@ -245,7 +245,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id,
                                                     Ecs<WorldID>.Tags<C3>.id,
@@ -306,7 +306,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id,
                                                     Ecs<WorldID>.Tags<C3>.id,
@@ -371,7 +371,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id,
                                                     Ecs<WorldID>.Tags<C3>.id,
@@ -440,7 +440,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id,
                                                     Ecs<WorldID>.Tags<C3>.id,
@@ -514,7 +514,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockTags<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, ITag>.SetInBuffer(bufId, 
+            Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, 
                                                     Ecs<WorldID>.Tags<C1>.id,
                                                     Ecs<WorldID>.Tags<C2>.id,
                                                     Ecs<WorldID>.Tags<C3>.id,

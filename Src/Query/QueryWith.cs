@@ -5,14 +5,6 @@ using Unity.IL2CPP.CompilerServices;
 #endif
 
 namespace FFS.Libraries.StaticEcs {
-    
-    public interface IQueryWith {
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId;
-
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId;
-
-        public void Dispose<WorldID>() where WorldID : struct, IWorldId;
-    }
 
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
@@ -20,52 +12,52 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public static class With {
         [MethodImpl(AggressiveInlining)]
-        public static With<QM1> Create<QM1>(QM1 qm1) where QM1 : struct, IQueryMethod, IPrimaryQueryMethod {
+        public static With<QM1> Create<QM1>(QM1 qm1) where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod {
             return new With<QM1>(qm1);
         }
 
         [MethodImpl(AggressiveInlining)]
         public static With<QM1, QM2> Create<QM1, QM2>(QM1 qm1, QM2 qm2)
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod {
             return new With<QM1, QM2>(qm1, qm2);
         }
 
         [MethodImpl(AggressiveInlining)]
         public static With<QM1, QM2, QM3> Create<QM1, QM2, QM3>(QM1 qm1, QM2 qm2, QM3 qm3)
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod
-            where QM3 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod
+            where QM3 : struct, ISealedQueryMethod {
             return new With<QM1, QM2, QM3>(qm1, qm2, qm3);
         }
 
         [MethodImpl(AggressiveInlining)]
         public static With<QM1, QM2, QM3, QM4> Create<QM1, QM2, QM3, QM4>(QM1 qm1, QM2 qm2, QM3 qm3, QM4 qm4)
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod
-            where QM3 : struct, IQueryMethod
-            where QM4 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod
+            where QM3 : struct, ISealedQueryMethod
+            where QM4 : struct, ISealedQueryMethod {
             return new With<QM1, QM2, QM3, QM4>(qm1, qm2, qm3, qm4);
         }
 
         [MethodImpl(AggressiveInlining)]
         public static With<QM1, QM2, QM3, QM4, QM5> Create<QM1, QM2, QM3, QM4, QM5>(QM1 qm1, QM2 qm2, QM3 qm3, QM4 qm4, QM5 qm5)
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod
-            where QM3 : struct, IQueryMethod
-            where QM4 : struct, IQueryMethod
-            where QM5 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod
+            where QM3 : struct, ISealedQueryMethod
+            where QM4 : struct, ISealedQueryMethod
+            where QM5 : struct, ISealedQueryMethod {
             return new With<QM1, QM2, QM3, QM4, QM5>(qm1, qm2, qm3, qm4, qm5);
         }
 
         [MethodImpl(AggressiveInlining)]
         public static With<QM1, QM2, QM3, QM4, QM5, QM6> Create<QM1, QM2, QM3, QM4, QM5, QM6>(QM1 qm1, QM2 qm2, QM3 qm3, QM4 qm4, QM5 qm5, QM6 qm6)
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod
-            where QM3 : struct, IQueryMethod
-            where QM4 : struct, IQueryMethod
-            where QM5 : struct, IQueryMethod
-            where QM6 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod
+            where QM3 : struct, ISealedQueryMethod
+            where QM4 : struct, ISealedQueryMethod
+            where QM5 : struct, ISealedQueryMethod
+            where QM6 : struct, ISealedQueryMethod {
             return new With<QM1, QM2, QM3, QM4, QM5, QM6>(qm1, qm2, qm3, qm4, qm5, qm6);
         }
 
@@ -73,13 +65,13 @@ namespace FFS.Libraries.StaticEcs {
         public static With<QM1, QM2, QM3, QM4, QM5, QM6, QM7> Create<QM1, QM2, QM3, QM4, QM5, QM6, QM7>(
             QM1 qm1, QM2 qm2, QM3 qm3, QM4 qm4, QM5 qm5, QM6 qm6, QM7 qm7
         )
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod
-            where QM3 : struct, IQueryMethod
-            where QM4 : struct, IQueryMethod
-            where QM5 : struct, IQueryMethod
-            where QM6 : struct, IQueryMethod
-            where QM7 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod
+            where QM3 : struct, ISealedQueryMethod
+            where QM4 : struct, ISealedQueryMethod
+            where QM5 : struct, ISealedQueryMethod
+            where QM6 : struct, ISealedQueryMethod
+            where QM7 : struct, ISealedQueryMethod {
             return new With<QM1, QM2, QM3, QM4, QM5, QM6, QM7>(qm1, qm2, qm3, qm4, qm5, qm6, qm7);
         }
 
@@ -87,14 +79,14 @@ namespace FFS.Libraries.StaticEcs {
         public static With<QM1, QM2, QM3, QM4, QM5, QM6, QM7, QM8> Create<QM1, QM2, QM3, QM4, QM5, QM6, QM7, QM8>(
             QM1 qm1, QM2 qm2, QM3 qm3, QM4 qm4, QM5 qm5, QM6 qm6, QM7 qm7, QM8 qm8
         )
-            where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-            where QM2 : struct, IQueryMethod
-            where QM3 : struct, IQueryMethod
-            where QM4 : struct, IQueryMethod
-            where QM5 : struct, IQueryMethod
-            where QM6 : struct, IQueryMethod
-            where QM7 : struct, IQueryMethod
-            where QM8 : struct, IQueryMethod {
+            where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+            where QM2 : struct, ISealedQueryMethod
+            where QM3 : struct, ISealedQueryMethod
+            where QM4 : struct, ISealedQueryMethod
+            where QM5 : struct, ISealedQueryMethod
+            where QM6 : struct, ISealedQueryMethod
+            where QM7 : struct, ISealedQueryMethod
+            where QM8 : struct, ISealedQueryMethod {
             return new With<QM1, QM2, QM3, QM4, QM5, QM6, QM7, QM8>(qm1, qm2, qm3, qm4, qm5, qm6, qm7, qm8);
         }
     }
@@ -103,12 +95,12 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public readonly struct WithNothing : IQueryWith {
+    public readonly struct WithNothing : IPrimaryQueryMethod {
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId { }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
+        public bool CheckEntity(int entityId) {
             return true;
         }
 
@@ -120,8 +112,8 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod {
+    public struct With<QM1> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod {
         private QM1 _qm1;
 
         public With(QM1 qm1) {
@@ -134,8 +126,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return _qm1.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return _qm1.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -148,9 +140,9 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod {
+    public struct With<QM1, QM2> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
 
@@ -166,8 +158,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -181,10 +173,10 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2, QM3> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod
-        where QM3 : struct, IQueryMethod {
+    public struct With<QM1, QM2, QM3> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod
+        where QM3 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
         private QM3 qm3;
@@ -203,8 +195,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity) && qm3.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId) && qm3.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -219,11 +211,11 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2, QM3, QM4> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod
-        where QM3 : struct, IQueryMethod
-        where QM4 : struct, IQueryMethod {
+    public struct With<QM1, QM2, QM3, QM4> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod
+        where QM3 : struct, ISealedQueryMethod
+        where QM4 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
         private QM3 qm3;
@@ -245,8 +237,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity) && qm3.CheckEntity(entity) && qm4.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId) && qm3.CheckEntity(entityId) && qm4.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -262,12 +254,12 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2, QM3, QM4, QM5> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod
-        where QM3 : struct, IQueryMethod
-        where QM4 : struct, IQueryMethod
-        where QM5 : struct, IQueryMethod {
+    public struct With<QM1, QM2, QM3, QM4, QM5> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod
+        where QM3 : struct, ISealedQueryMethod
+        where QM4 : struct, ISealedQueryMethod
+        where QM5 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
         private QM3 qm3;
@@ -292,8 +284,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity) && qm3.CheckEntity(entity) && qm4.CheckEntity(entity) && qm5.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId) && qm3.CheckEntity(entityId) && qm4.CheckEntity(entityId) && qm5.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -310,13 +302,13 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2, QM3, QM4, QM5, QM6> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod
-        where QM3 : struct, IQueryMethod
-        where QM4 : struct, IQueryMethod
-        where QM5 : struct, IQueryMethod
-        where QM6 : struct, IQueryMethod {
+    public struct With<QM1, QM2, QM3, QM4, QM5, QM6> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod
+        where QM3 : struct, ISealedQueryMethod
+        where QM4 : struct, ISealedQueryMethod
+        where QM5 : struct, ISealedQueryMethod
+        where QM6 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
         private QM3 qm3;
@@ -344,8 +336,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity) && qm3.CheckEntity(entity) && qm4.CheckEntity(entity) && qm5.CheckEntity(entity) && qm6.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId) && qm3.CheckEntity(entityId) && qm4.CheckEntity(entityId) && qm5.CheckEntity(entityId) && qm6.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -363,14 +355,14 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2, QM3, QM4, QM5, QM6, QM7> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod
-        where QM3 : struct, IQueryMethod
-        where QM4 : struct, IQueryMethod
-        where QM5 : struct, IQueryMethod
-        where QM6 : struct, IQueryMethod
-        where QM7 : struct, IQueryMethod {
+    public struct With<QM1, QM2, QM3, QM4, QM5, QM6, QM7> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod
+        where QM3 : struct, ISealedQueryMethod
+        where QM4 : struct, ISealedQueryMethod
+        where QM5 : struct, ISealedQueryMethod
+        where QM6 : struct, ISealedQueryMethod
+        where QM7 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
         private QM3 qm3;
@@ -401,8 +393,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity) && qm3.CheckEntity(entity) && qm4.CheckEntity(entity) && qm5.CheckEntity(entity) && qm6.CheckEntity(entity) && qm7.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId) && qm3.CheckEntity(entityId) && qm4.CheckEntity(entityId) && qm5.CheckEntity(entityId) && qm6.CheckEntity(entityId) && qm7.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -421,15 +413,15 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct With<QM1, QM2, QM3, QM4, QM5, QM6, QM7, QM8> : IQueryWith
-        where QM1 : struct, IQueryMethod, IPrimaryQueryMethod
-        where QM2 : struct, IQueryMethod
-        where QM3 : struct, IQueryMethod
-        where QM4 : struct, IQueryMethod
-        where QM5 : struct, IQueryMethod
-        where QM6 : struct, IQueryMethod
-        where QM7 : struct, IQueryMethod
-        where QM8 : struct, IQueryMethod {
+    public struct With<QM1, QM2, QM3, QM4, QM5, QM6, QM7, QM8> : IPrimaryQueryMethod
+        where QM1 : struct, ISealedQueryMethod, IPrimaryQueryMethod
+        where QM2 : struct, ISealedQueryMethod
+        where QM3 : struct, ISealedQueryMethod
+        where QM4 : struct, ISealedQueryMethod
+        where QM5 : struct, ISealedQueryMethod
+        where QM6 : struct, ISealedQueryMethod
+        where QM7 : struct, ISealedQueryMethod
+        where QM8 : struct, ISealedQueryMethod {
         private QM1 qm1;
         private QM2 qm2;
         private QM3 qm3;
@@ -464,8 +456,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool CheckEntity<WorldID>(Ecs<WorldID>.Entity entity) where WorldID : struct, IWorldId {
-            return qm1.CheckEntity(entity) && qm2.CheckEntity(entity) && qm3.CheckEntity(entity) && qm4.CheckEntity(entity) && qm5.CheckEntity(entity) && qm6.CheckEntity(entity) && qm7.CheckEntity(entity) && qm8.CheckEntity(entity);
+        public bool CheckEntity(int entityId) {
+            return qm1.CheckEntity(entityId) && qm2.CheckEntity(entityId) && qm3.CheckEntity(entityId) && qm4.CheckEntity(entityId) && qm5.CheckEntity(entityId) && qm6.CheckEntity(entityId) && qm7.CheckEntity(entityId) && qm8.CheckEntity(entityId);
         }
 
         [MethodImpl(AggressiveInlining)]

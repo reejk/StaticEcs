@@ -16,6 +16,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public abstract partial class Masks<T> where T : struct, IMask {
+            private static BitMask _bitMask;
             internal static ushort id;
             internal static int count;
 
@@ -23,7 +24,8 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleMasks.RegisterMask<T>();
             }
 
-            internal static void Create(ushort componentId) {
+            internal static void Create(ushort componentId, BitMask bitMask) {
+                _bitMask = bitMask;
                 id = componentId;
             }
 
@@ -35,18 +37,18 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void Set(Entity entity) {
-                BitMaskUtils<WorldID, IMask>.Set(entity._id, id);
+                _bitMask.Set(entity._id, id);
                 count++;
             }
 
             [MethodImpl(AggressiveInlining)]
             public static bool Has(Entity entity) {
-                return BitMaskUtils<WorldID, IMask>.Has(entity._id, id);
+                return _bitMask.Has(entity._id, id);
             }
 
             [MethodImpl(AggressiveInlining)]
             public static void Delete(Entity entity) {
-                BitMaskUtils<WorldID, IMask>.Del(entity._id, id);
+                _bitMask.Del(entity._id, id);
                 count--;
             }
 

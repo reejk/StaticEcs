@@ -80,7 +80,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,  Ecs<WorldID>.Components<C1>.id);
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,  Ecs<WorldID>.Components<C1>.id);
         }
        
         #if DEBUG
@@ -132,7 +132,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId, Ecs<WorldID>.Components<C1>.id, Ecs<WorldID>.Components<C2>.id);
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, Ecs<WorldID>.Components<C1>.id, Ecs<WorldID>.Components<C2>.id);
         }
        
         #if DEBUG
@@ -183,7 +183,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.id,
                                                           Ecs<WorldID>.Components<C2>.id,
                                                           Ecs<WorldID>.Components<C3>.id);
@@ -240,7 +240,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.id,
                                                           Ecs<WorldID>.Components<C2>.id,
                                                           Ecs<WorldID>.Components<C3>.id,
@@ -301,7 +301,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.id,
                                                           Ecs<WorldID>.Components<C2>.id,
                                                           Ecs<WorldID>.Components<C3>.id,
@@ -366,7 +366,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.id,
                                                           Ecs<WorldID>.Components<C2>.id,
                                                           Ecs<WorldID>.Components<C3>.id,
@@ -435,7 +435,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.id,
                                                           Ecs<WorldID>.Components<C2>.id,
                                                           Ecs<WorldID>.Components<C3>.id,
@@ -509,7 +509,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            BitMaskUtils<WorldID, IComponent>.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.id,
                                                           Ecs<WorldID>.Components<C2>.id,
                                                           Ecs<WorldID>.Components<C3>.id,

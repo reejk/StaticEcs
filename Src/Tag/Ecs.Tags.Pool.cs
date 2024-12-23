@@ -17,10 +17,11 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public abstract partial class Tags<T> where T : struct, ITag {
-            internal static ushort id;
+            private static BitMask _bitMask;
             private static Entity[] _entities;
             private static int[] _dataIdxByEntityId;
             private static int _tagCount;
+            internal static ushort id;
 
             #if DEBUG
             private static int _blockers;
@@ -30,7 +31,8 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleTags.RegisterTag<T>();
             }
 
-            internal static void Create(ushort tagId, uint baseCapacity = 128) {
+            internal static void Create(ushort tagId, BitMask bitMask, uint baseCapacity = 128) {
+                _bitMask = bitMask;
                 id = tagId;
                 _entities = new Entity[baseCapacity];
                 _tagCount = 0;
@@ -57,7 +59,7 @@ namespace FFS.Libraries.StaticEcs {
                 _entities[idx] = entity;
                 _dataIdxByEntityId[entity._id] = _tagCount;
 
-                ModuleTags.SetTagBit(entity, id);
+                _bitMask.Set(entity._id, id);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -112,7 +114,7 @@ namespace FFS.Libraries.StaticEcs {
                         _dataIdxByEntityId[e._id] = idx + 1;
                     }
 
-                    ModuleTags.UnsetTagBit(entity, id);
+                    _bitMask.Del(entity._id, id);
                     return true;
                 }
 
@@ -160,6 +162,11 @@ namespace FFS.Libraries.StaticEcs {
                     count = _tagCount;
                     entities = _entities;
                 }
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static int[] GetDataIdxByEntityId() {
+                return _dataIdxByEntityId;
             }
 
             [MethodImpl(AggressiveInlining)]

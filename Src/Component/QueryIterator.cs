@@ -49,7 +49,7 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public ref struct QueryComponentsIterator<WorldID, C, QW>
         where C : struct, IComponent
-        where QW : struct, IQueryWith
+        where QW : struct, IQueryMethod
         where WorldID : struct, IWorldId {
         private readonly C[] _data;                               //8
         private readonly Ecs<WorldID>.Entity[] _entities; //8
@@ -83,7 +83,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 _count--;
 
-                if (_with.CheckEntity(_entities[_count])) {
+                if (_with.CheckEntity(_entities[_count]._id)) {
                     return true;
                 }
             }

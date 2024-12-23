@@ -93,7 +93,7 @@
         <Compile Include="Src\Tag\Tag.cs" />
         <Compile Include="Src\Tag\TagTypes.cs" />
         <Compile Include="Src\Tag\TagTypesRaw.cs" />
-        <Compile Include="Src\Utils\BitMaskUtils.cs" />
+        <Compile Include="Src\Utils\BitMask.cs" />
         <Compile Include="Src\Utils\Utils.cs" />
     </ItemGroup>
     <ItemGroup>

@@ -18,6 +18,7 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public abstract class ModuleComponents {
             private static ulong[] _bitMap;
+            internal static BitMask BitMask;
             private static IComponentsWrapper[] _pools;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
@@ -25,7 +26,7 @@ namespace FFS.Libraries.StaticEcs {
             private static ushort _poolsCount;
             private static ushort _bitMapLen;
             
-             #region PUBLIC
+            #region PUBLIC
             [MethodImpl(AggressiveInlining)]
             public static IComponentsWrapper GetPool(ComponentDynId id) {
                 #if DEBUG
@@ -47,7 +48,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
                 #endif
-                return BitMaskUtils<WorldID, IComponent>.Len(entity._id);
+                return BitMask.Len(entity._id);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -55,7 +56,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllComponents, World not initialized");
                 #endif
-                return BitMaskUtils<WorldID, IComponent>.HasAll(entity._id, allBufId);
+                return BitMask.HasAll(entity._id, allBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -63,7 +64,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyComponents, World not initialized");
                 #endif
-                return BitMaskUtils<WorldID, IComponent>.HasAny(entity._id, allBufId);
+                return BitMask.HasAny(entity._id, allBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -71,7 +72,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcComponents, World not initialized");
                 #endif
-                return BitMaskUtils<WorldID, IComponent>.HasAllAndExc(entity._id, allBufId, excBufId);
+                return BitMask.HasAllAndExc(entity._id, allBufId, excBufId);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -79,7 +80,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyComponents, World not initialized");
                 #endif
-                return BitMaskUtils<WorldID, IComponent>.NotHasAny(entity._id, anyBufId);
+                return BitMask.NotHasAny(entity._id, anyBufId);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -88,15 +89,15 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ToPrettyStringEntity, World not initialized");
                 #endif
                 var str = "Components:\n";
-                var bufId = BitMaskUtils<WorldID, IComponent>.BorrowBuf();
-                Array.Copy(_bitMap, entity._id * _bitMapLen, BitMaskUtils<WorldID, IComponent>._buffer, bufId * BitMaskUtils<WorldID, IComponent>._len, _bitMapLen);
-                var id = BitMaskUtils<WorldID, IComponent>.GetMinIndexBuffer(bufId);
+                var bufId = BitMask.BorrowBuf();
+                Array.Copy(_bitMap, entity._id * _bitMapLen, BitMask._buffer, bufId * BitMask._len, _bitMapLen);
+                var id = BitMask.GetMinIndexBuffer(bufId);
                 while (id >= 0) {
                     str += _pools[id].ToStringComponent(entity);
-                    BitMaskUtils<WorldID, IComponent>.DelInBuffer(bufId, (ushort) id);
-                    id = BitMaskUtils<WorldID, IComponent>.GetMinIndexBuffer(bufId);
+                    BitMask.DelInBuffer(bufId, (ushort) id);
+                    id = BitMask.GetMinIndexBuffer(bufId);
                 }
-                BitMaskUtils<WorldID, IComponent>.DropBuf(bufId);
+                BitMask.DropBuf(bufId);
                 return str;
             }
             #endregion
@@ -119,7 +120,8 @@ namespace FFS.Libraries.StaticEcs {
 
                 _bitMapLen = Utils.CalculateMaskLen(_poolsCount);
                 _bitMap = new ulong[World.EntitiesCapacity() * _bitMapLen];
-                BitMaskUtils<WorldID, IComponent>.Create(_bitMap, 32, _bitMapLen);
+                BitMask = new BitMask();
+                BitMask.Create(_bitMap, 32, _bitMapLen);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -137,8 +139,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 _bitMapLen = newEntityComponentBitMapLen;
-                BitMaskUtils<WorldID, IComponent>.SetNewBitMap(_bitMap);
-                BitMaskUtils<WorldID, IComponent>.ResizeBuffer(_bitMapLen);
+                BitMask.SetNewBitMap(_bitMap);
+                BitMask.ResizeBuffer(_bitMapLen);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -154,7 +156,7 @@ namespace FFS.Libraries.StaticEcs {
                 _pools[_poolsCount++] = new ComponentsWrapper<C>();
 
                 ComponentInfo<C>.Register();
-                Components<C>.Create(ComponentInfo<C>.Id, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
+                Components<C>.Create(ComponentInfo<C>.Id, BitMask, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
 
                 if (_actionsCount == _reInitActions.Length) {
                     Array.Resize(ref _reInitActions, _actionsCount << 1);
@@ -174,25 +176,25 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal static void DestroyEntity(Entity entity) {
-                var id = BitMaskUtils<WorldID, IComponent>.GetMinIndex(entity._id);
+                var id = BitMask.GetMinIndex(entity._id);
                 while (id >= 0) {
                     _pools[id].DeleteFromWorld(entity);
-                    id = BitMaskUtils<WorldID, IComponent>.GetMinIndex(entity._id);
+                    id = BitMask.GetMinIndex(entity._id);
                 }
             }
             
             [MethodImpl(AggressiveInlining)]
             internal static void CopyEntity(Entity srcEntity, Entity dstEntity) {
-                var bufId = BitMaskUtils<WorldID, IComponent>.BorrowBuf();
-                Array.Copy(_bitMap, srcEntity._id * _bitMapLen, BitMaskUtils<WorldID, IComponent>._buffer, bufId * BitMaskUtils<WorldID, IComponent>._len, _bitMapLen);
-                var id = BitMaskUtils<WorldID, IComponent>.GetMinIndexBuffer(bufId);
+                var bufId = BitMask.BorrowBuf();
+                Array.Copy(_bitMap, srcEntity._id * _bitMapLen, BitMask._buffer, bufId * BitMask._len, _bitMapLen);
+                var id = BitMask.GetMinIndexBuffer(bufId);
                 while (id >= 0) {
                     _pools[id].Copy(srcEntity, dstEntity);
-                    BitMaskUtils<WorldID, IComponent>.DelInBuffer(bufId, (ushort) id);
-                    id = BitMaskUtils<WorldID, IComponent>.GetMinIndexBuffer(bufId);
+                    BitMask.DelInBuffer(bufId, (ushort) id);
+                    id = BitMask.GetMinIndexBuffer(bufId);
                 }
 
-                BitMaskUtils<WorldID, IComponent>.DropBuf(bufId);
+                BitMask.DropBuf(bufId);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -201,7 +203,7 @@ namespace FFS.Libraries.StaticEcs {
                     _pools[i].Resize(cap);
                 }
                 Array.Resize(ref _bitMap, cap * _bitMapLen);
-                BitMaskUtils<WorldID, IComponent>.SetNewBitMap(_bitMap);
+                BitMask.SetNewBitMap(_bitMap);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -220,7 +222,8 @@ namespace FFS.Libraries.StaticEcs {
                     _resetActions[i]();
                 }
 
-                BitMaskUtils<WorldID, IComponent>.Destroy();
+                BitMask.Destroy();
+                BitMask = null;
                 _pools = null;
                 _poolsCount = 0;
                 _bitMap = null;

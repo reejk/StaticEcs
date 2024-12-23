@@ -9,19 +9,19 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption (Option.NullChecks, false)]
     [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
     #endif
-    public ref struct QueryEntitiesIterator<WorldID, QW> where QW : struct, IQueryWith where WorldID : struct, IWorldId {
+    public ref struct QueryEntitiesIterator<WorldID, QM> where QM : struct, IPrimaryQueryMethod where WorldID : struct, IWorldId {
         private readonly Ecs<WorldID>.Entity[] _entities; //8
         private Ecs<WorldID>.Entity _current;             //4
         private int _count;                               //4
-        private QW _with;                                 //???
+        private QM _queryMethod;                          //???
 
         [MethodImpl(AggressiveInlining)]
-        public QueryEntitiesIterator(QW with) {
-            _with = with;
+        public QueryEntitiesIterator(QM queryMethod) {
+            _queryMethod = queryMethod;
             _current = default;
             _entities = default;
             _count = int.MaxValue;
-            _with.SetData(ref _count, ref _entities);
+            _queryMethod.SetData(ref _count, ref _entities);
         }
 
         public readonly Ecs<WorldID>.Entity Current {
@@ -63,16 +63,16 @@ namespace FFS.Libraries.StaticEcs {
 
                 _count--;
                 _current = _entities[_count];
-                if (_with.CheckEntity(_current)) {
+                if (_queryMethod.CheckEntity(_current._id)) {
                     return true;
                 }
             }
         }
 
         [MethodImpl(AggressiveInlining)]
-        public readonly QueryEntitiesIterator<WorldID, QW> GetEnumerator() => this;
+        public readonly QueryEntitiesIterator<WorldID, QM> GetEnumerator() => this;
 
         [MethodImpl(AggressiveInlining)]
-        public void Dispose() => _with.Dispose<WorldID>();
+        public void Dispose() => _queryMethod.Dispose<WorldID>();
     }
 }
