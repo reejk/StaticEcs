@@ -24,14 +24,14 @@ namespace FFS.Libraries.StaticEcs {
             #region HAS
             [MethodImpl(AggressiveInlining)]
             public readonly bool HasAllOfMasks<C>() where C : struct, IMask {
-                return Masks<C>.Has(this);
+                return Masks<C>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool HasAllOfMasks<C1, C2>()
                 where C1 : struct, IMask
                 where C2 : struct, IMask {
-                return Masks<C1>.Has(this) && Masks<C2>.Has(this);
+                return Masks<C1>.Value.Has(this) && Masks<C2>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -39,14 +39,14 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IMask
                 where C2 : struct, IMask
                 where C3 : struct, IMask {
-                return Masks<C1>.Has(this) && Masks<C2>.Has(this) && Masks<C3>.Has(this);
+                return Masks<C1>.Value.Has(this) && Masks<C2>.Value.Has(this) && Masks<C3>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly bool HasAnyOfMasks<C1, C2>()
                 where C1 : struct, IMask
                 where C2 : struct, IMask {
-                return Masks<C1>.Has(this) || Masks<C2>.Has(this);
+                return Masks<C1>.Value.Has(this) || Masks<C2>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -54,7 +54,7 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IMask
                 where C2 : struct, IMask
                 where C3 : struct, IMask {
-                return Masks<C1>.Has(this) || Masks<C2>.Has(this) || Masks<C3>.Has(this);
+                return Masks<C1>.Value.Has(this) || Masks<C2>.Value.Has(this) || Masks<C3>.Value.Has(this);
             }
             #endregion
 
@@ -62,15 +62,15 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public readonly void SetMask<C>()
                 where C : struct, IMask {
-                Masks<C>.Set(this);
+                Masks<C>.Value.Set(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly void SetMask<C1, C2>()
                 where C1 : struct, IMask
                 where C2 : struct, IMask {
-                Masks<C1>.Set(this);
-                Masks<C2>.Set(this);
+                Masks<C1>.Value.Set(this);
+                Masks<C2>.Value.Set(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -78,9 +78,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IMask
                 where C2 : struct, IMask
                 where C3 : struct, IMask {
-                Masks<C1>.Set(this);
-                Masks<C2>.Set(this);
-                Masks<C3>.Set(this);
+                Masks<C1>.Value.Set(this);
+                Masks<C2>.Value.Set(this);
+                Masks<C3>.Value.Set(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -89,10 +89,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IMask
                 where C3 : struct, IMask
                 where C4 : struct, IMask {
-                Masks<C1>.Set(this);
-                Masks<C2>.Set(this);
-                Masks<C3>.Set(this);
-                Masks<C4>.Set(this);
+                Masks<C1>.Value.Set(this);
+                Masks<C2>.Value.Set(this);
+                Masks<C3>.Value.Set(this);
+                Masks<C4>.Value.Set(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -102,26 +102,26 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IMask
                 where C4 : struct, IMask
                 where C5 : struct, IMask {
-                Masks<C1>.Set(this);
-                Masks<C2>.Set(this);
-                Masks<C3>.Set(this);
-                Masks<C4>.Set(this);
-                Masks<C5>.Set(this);
+                Masks<C1>.Value.Set(this);
+                Masks<C2>.Value.Set(this);
+                Masks<C3>.Value.Set(this);
+                Masks<C4>.Value.Set(this);
+                Masks<C5>.Value.Set(this);
             }
             #endregion
 
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public readonly void DeleteMask<C>() where C : struct, IMask {
-                Masks<C>.Delete(this);
+                Masks<C>.Value.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public readonly void DeleteMask<C1, C2>()
                 where C1 : struct, IMask
                 where C2 : struct, IMask {
-                Masks<C1>.Delete(this);
-                Masks<C2>.Delete(this);
+                Masks<C1>.Value.Delete(this);
+                Masks<C2>.Value.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -129,9 +129,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IMask
                 where C2 : struct, IMask
                 where C3 : struct, IMask {
-                Masks<C1>.Delete(this);
-                Masks<C2>.Delete(this);
-                Masks<C3>.Delete(this);
+                Masks<C1>.Value.Delete(this);
+                Masks<C2>.Value.Delete(this);
+                Masks<C3>.Value.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -140,10 +140,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IMask
                 where C3 : struct, IMask
                 where C4 : struct, IMask {
-                Masks<C1>.Delete(this);
-                Masks<C2>.Delete(this);
-                Masks<C3>.Delete(this);
-                Masks<C4>.Delete(this);
+                Masks<C1>.Value.Delete(this);
+                Masks<C2>.Value.Delete(this);
+                Masks<C3>.Value.Delete(this);
+                Masks<C4>.Value.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -153,11 +153,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IMask
                 where C4 : struct, IMask
                 where C5 : struct, IMask {
-                Masks<C1>.Delete(this);
-                Masks<C2>.Delete(this);
-                Masks<C3>.Delete(this);
-                Masks<C4>.Delete(this);
-                Masks<C5>.Delete(this);
+                Masks<C1>.Value.Delete(this);
+                Masks<C2>.Value.Delete(this);
+                Masks<C3>.Value.Delete(this);
+                Masks<C4>.Value.Delete(this);
+                Masks<C5>.Value.Delete(this);
             }
             #endregion
             #endregion

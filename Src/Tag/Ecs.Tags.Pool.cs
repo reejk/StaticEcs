@@ -17,8 +17,9 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public abstract partial class Tags<T> where T : struct, ITag {
+            private const int Empty = -1;
             private static BitMask _bitMask;
-            private static Entity[] _entities;
+            private static int[] _entities;
             private static int[] _dataIdxByEntityId;
             private static int _tagCount;
             internal static ushort id;
@@ -34,10 +35,12 @@ namespace FFS.Libraries.StaticEcs {
             internal static void Create(ushort tagId, BitMask bitMask, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = tagId;
-                _entities = new Entity[baseCapacity];
+                _entities = new int[baseCapacity];
                 _tagCount = 0;
-                _dataIdxByEntityId = null;
                 _dataIdxByEntityId = new int[World.EntitiesCapacity()];
+                for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Empty;
+                }
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -54,12 +57,11 @@ namespace FFS.Libraries.StaticEcs {
                     Array.Resize(ref _entities, _tagCount << 1);
                 }
 
-                var idx = _tagCount;
+                var eid = entity._id;
+                _entities[_tagCount] = eid;
+                _dataIdxByEntityId[eid] = _tagCount;
+                _bitMask.Set(eid, id);
                 _tagCount++;
-                _entities[idx] = entity;
-                _dataIdxByEntityId[entity._id] = _tagCount;
-
-                _bitMask.Set(entity._id, id);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -82,16 +84,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
-                return _dataIdxByEntityId[entity._id] > 0;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            internal static bool Has(Entity entity, out int internalId) {
-                #if DEBUG
-                if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
-                #endif
-                internalId = _dataIdxByEntityId[entity._id] - 1;
-                return internalId >= 0;
+                return _dataIdxByEntityId[entity._id] >= 0;
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -103,18 +96,17 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
 
                 ref var idxRef = ref _dataIdxByEntityId[entity._id];
-                var idx = idxRef - 1;
-                if (idx >= 0) {
-                    idxRef = 0;
+                if (idxRef >= 0) {
                     _tagCount--;
 
-                    if (idx < _tagCount) {
+                    if (idxRef < _tagCount) {
                         var e = _entities[_tagCount];
-                        _entities[idx] = e;
-                        _dataIdxByEntityId[e._id] = idx + 1;
+                        _entities[idxRef] = e;
+                        _dataIdxByEntityId[e] = idxRef;
                     }
 
                     _bitMask.Del(entity._id, id);
+                    idxRef = 0;
                     return true;
                 }
 
@@ -123,7 +115,11 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static void Resize(int cap) {
+                var lastLength = _dataIdxByEntityId.Length;
                 Array.Resize(ref _dataIdxByEntityId, cap);
+                for (var i = lastLength; i < cap; i++) {
+                    _dataIdxByEntityId[i] = Empty;
+                }
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -149,7 +145,7 @@ namespace FFS.Libraries.StaticEcs {
             public static int Count() => _tagCount;
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity[] EntitiesData() => _entities;
+            public static int[] EntitiesData() => _entities;
 
             [MethodImpl(AggressiveInlining)]
             public static string ToStringComponent(Entity entity) {
@@ -157,7 +153,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void SetDataIfCountLess(ref int count, ref Entity[] entities) {
+            internal static void SetDataIfCountLess(ref int count, ref int[] entities) {
                 if (_tagCount < count || count == 0) {
                     count = _tagCount;
                     entities = _entities;
@@ -180,7 +176,9 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static void Clear() {
                 Array.Clear(_entities, 0, _entities.Length);
-                Array.Clear(_dataIdxByEntityId, 0, _dataIdxByEntityId.Length);
+                for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Empty;
+                }
                 _tagCount = 0;
             }
 

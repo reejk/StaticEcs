@@ -13,19 +13,19 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public readonly struct ComponentDynId : IEquatable<ComponentDynId> {
-        internal readonly ushort Val;
+        public readonly ushort Value;
         
-        internal ComponentDynId(ushort val) {
-            Val = val;
+        internal ComponentDynId(ushort value) {
+            Value = value;
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool Equals(ComponentDynId other) => Val == other.Val;
+        public bool Equals(ComponentDynId other) => Value == other.Value;
 
         [MethodImpl(AggressiveInlining)]
-        public override int GetHashCode() => Val;
+        public override int GetHashCode() => Value;
 
         [MethodImpl(AggressiveInlining)]
-        public override string ToString() => $"ComponentDynamicId ID: {Val}";
+        public override string ToString() => $"ComponentDynamicId ID: {Value}";
     }
 }

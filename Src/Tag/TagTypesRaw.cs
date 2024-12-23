@@ -20,8 +20,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
-            Tags.SetData(ref minCount, ref entities);
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
+            Tags.SetData<WorldID>(ref minCount, ref entities);
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -50,7 +50,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
         }
         
@@ -91,7 +91,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
         }
@@ -136,7 +136,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
@@ -185,7 +185,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
@@ -239,7 +239,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
@@ -297,7 +297,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
@@ -359,7 +359,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
@@ -424,7 +424,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.ModuleTags.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.ModuleTags.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
@@ -477,7 +477,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             foreach (var type in Tags) {
                 Ecs<WorldID>.ModuleTags.GetPool(type).SetDataIfCountLess(ref minCount, ref entities);
             }

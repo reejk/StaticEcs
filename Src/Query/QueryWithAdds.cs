@@ -93,7 +93,7 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public readonly struct WithAddsNothing : IQueryMethod {
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId { }
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId { }
 
         [MethodImpl(AggressiveInlining)]
         public bool CheckEntity(int entityId) {
@@ -117,8 +117,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            _qm1.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            _qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -148,9 +148,9 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -184,10 +184,10 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
-            qm3.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm3.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -225,11 +225,11 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
-            qm3.SetData(ref minComponentsCount, ref minEntities);
-            qm4.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm3.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm4.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -271,12 +271,12 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
-            qm3.SetData(ref minComponentsCount, ref minEntities);
-            qm4.SetData(ref minComponentsCount, ref minEntities);
-            qm5.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm3.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm4.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm5.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -322,13 +322,13 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
-            qm3.SetData(ref minComponentsCount, ref minEntities);
-            qm4.SetData(ref minComponentsCount, ref minEntities);
-            qm5.SetData(ref minComponentsCount, ref minEntities);
-            qm6.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm3.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm4.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm5.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm6.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -378,14 +378,14 @@ namespace FFS.Libraries.StaticEcs {
         }
         
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
-            qm3.SetData(ref minComponentsCount, ref minEntities);
-            qm4.SetData(ref minComponentsCount, ref minEntities);
-            qm5.SetData(ref minComponentsCount, ref minEntities);
-            qm6.SetData(ref minComponentsCount, ref minEntities);
-            qm7.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm3.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm4.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm5.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm6.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm7.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -440,15 +440,15 @@ namespace FFS.Libraries.StaticEcs {
 
 
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minComponentsCount, ref Ecs<WorldID>.Entity[] minEntities) where WorldID : struct, IWorldId {
-            qm1.SetData(ref minComponentsCount, ref minEntities);
-            qm2.SetData(ref minComponentsCount, ref minEntities);
-            qm3.SetData(ref minComponentsCount, ref minEntities);
-            qm4.SetData(ref minComponentsCount, ref minEntities);
-            qm5.SetData(ref minComponentsCount, ref minEntities);
-            qm6.SetData(ref minComponentsCount, ref minEntities);
-            qm7.SetData(ref minComponentsCount, ref minEntities);
-            qm8.SetData(ref minComponentsCount, ref minEntities);
+        public void SetData<WorldID>(ref int minComponentsCount, ref int[] minEntities) where WorldID : struct, IWorldId {
+            qm1.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm2.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm3.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm4.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm5.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm6.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm7.SetData<WorldID>(ref minComponentsCount, ref minEntities);
+            qm8.SetData<WorldID>(ref minComponentsCount, ref minEntities);
         }
 
         [MethodImpl(AggressiveInlining)]

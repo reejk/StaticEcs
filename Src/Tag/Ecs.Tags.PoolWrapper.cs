@@ -30,7 +30,7 @@ namespace FFS.Libraries.StaticEcs {
 
             public int Count();
 
-            public Entity[] EntitiesData();
+            public int[] EntitiesData();
 
             public string ToStringComponent(Entity entity);
 
@@ -38,9 +38,7 @@ namespace FFS.Libraries.StaticEcs {
 
             public bool TryCast<C>(out TagsWrapper<C> wrapper) where C : struct, ITag;
 
-            internal bool Has(Entity entity, out int internalId);
-
-            internal void SetDataIfCountLess(ref int count, ref Entity[] entities);
+            internal void SetDataIfCountLess(ref int count, ref int[] entities);
 
             internal void Resize(int cap);
 
@@ -86,7 +84,7 @@ namespace FFS.Libraries.StaticEcs {
             public int Count() => Tags<T>.Count();
 
             [MethodImpl(AggressiveInlining)]
-            public Entity[] EntitiesData() => Tags<T>.EntitiesData();
+            public int[] EntitiesData() => Tags<T>.EntitiesData();
 
             [MethodImpl(AggressiveInlining)]
             public string ToStringComponent(Entity entity) => Tags<T>.ToStringComponent(entity);
@@ -102,10 +100,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            bool ITagsWrapper.Has(Entity entity, out int internalId) => Tags<T>.Has(entity, out internalId);
-
-            [MethodImpl(AggressiveInlining)]
-            void ITagsWrapper.SetDataIfCountLess(ref int count, ref Entity[] entities) {
+            void ITagsWrapper.SetDataIfCountLess(ref int count, ref int[] entities) {
                 Tags<T>.SetDataIfCountLess(ref count, ref entities);
             }
 

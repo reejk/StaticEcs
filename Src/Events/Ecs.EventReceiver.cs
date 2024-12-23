@@ -26,7 +26,7 @@ namespace FFS.Libraries.StaticEcs {
             #if DEBUG
             if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.MarkAsReadAll ] receiver is deleted");
             #endif
-            Ecs<WorldID>.Events.Pool<T>.MarkAsReadAll(_id);
+            Ecs<WorldID>.Events.Pool<T>.Value.MarkAsReadAll(_id);
         }
             
         [MethodImpl(AggressiveInlining)]
@@ -34,14 +34,14 @@ namespace FFS.Libraries.StaticEcs {
             #if DEBUG
             if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.SuppressAll ] receiver is deleted");
             #endif
-            Ecs<WorldID>.Events.Pool<T>.ClearEvents(_id);
+            Ecs<WorldID>.Events.Pool<T>.Value.ClearEvents(_id);
         }
 
         [MethodImpl(AggressiveInlining)]
         public Ecs<WorldID>.EventIterator<T> GetEnumerator() {
             #if DEBUG
             if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] receiver is deleted");
-            if (Ecs<WorldID>.Events.Pool<T>.IsBlocked()) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] event pool is blocked");
+            if (Ecs<WorldID>.Events.Pool<T>.Value.IsBlocked()) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] event pool is blocked");
             #endif
             return new Ecs<WorldID>.EventIterator<T>(_id);
         }
@@ -65,7 +65,7 @@ namespace FFS.Libraries.StaticEcs {
                 _id = id;
                 _current = new Event<T>(-1);
                 #if DEBUG
-                Events.Pool<T>.AddBlocker(1);
+                Events.Pool<T>.Value.AddBlocker(1);
                 #endif
             }
 
@@ -74,12 +74,12 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public bool MoveNext() => Events.Pool<T>.ShiftReceiverOffset(_id, _current._idx, out _current._idx);
+            public bool MoveNext() => Events.Pool<T>.Value.ShiftReceiverOffset(_id, _current._idx, out _current._idx);
             
             #if DEBUG
             [MethodImpl(AggressiveInlining)]
             public void Dispose() {
-                Events.Pool<T>.AddBlocker(-1);
+                Events.Pool<T>.Value.AddBlocker(-1);
             }
             #endif
         }

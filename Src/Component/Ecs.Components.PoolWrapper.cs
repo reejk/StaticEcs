@@ -26,12 +26,12 @@ namespace FFS.Libraries.StaticEcs {
             public void Move(Entity entity, Entity target);
 
             public int Count();
-
-            public Entity[] EntitiesData();
-
+            
             public bool Is<C>() where C : struct, IComponent;
 
             public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent;
+            
+            internal int[] EntitiesData();
 
             internal void Resize(int cap);
             
@@ -39,7 +39,9 @@ namespace FFS.Libraries.StaticEcs {
 
             internal void Destroy();
 
-            internal void SetDataIfCountLess(ref int count, ref Entity[] entities);
+            internal void SetDataIfCountLess(ref int count, ref int[] entities);
+            
+            internal void SetDataIfCountMore(ref int count, ref int[] entities);
 
             internal string ToStringComponent(Entity entity);
 
@@ -59,71 +61,74 @@ namespace FFS.Libraries.StaticEcs {
         public readonly struct ComponentsWrapper<T> : IComponentsWrapper, Stateless
             where T : struct, IComponent {
             [MethodImpl(AggressiveInlining)]
-            internal ref T RefMut(Entity entity) => ref Components<T>.RefMut(entity);
+            internal ref T RefMut(Entity entity) => ref Components<T>.Value.RefMut(entity);
 
             [MethodImpl(AggressiveInlining)]
-            internal ref readonly T Ref(Entity entity) => ref Components<T>.Ref(entity);
+            internal ref readonly T Ref(Entity entity) => ref Components<T>.Value.Ref(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void Add(Entity entity) => Components<T>.Add(entity);
+            public void Add(Entity entity) => Components<T>.Value.Add(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void TryAdd(Entity entity) => Components<T>.TryAdd(entity);
+            public void TryAdd(Entity entity) => Components<T>.Value.TryAdd(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void TryAdd(Entity entity, out bool added) => Components<T>.TryAdd(entity, out added);
+            public void TryAdd(Entity entity, out bool added) => Components<T>.Value.TryAdd(entity, out added);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Has(Entity entity) => Components<T>.Has(entity);
+            public bool Has(Entity entity) => Components<T>.Value.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Delete(Entity entity) => Components<T>.Delete(entity);
+            public bool Delete(Entity entity) => Components<T>.Value.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public T[] Data() => Components<T>.Data();
+            public T[] Data() => Components<T>.Value.Data();
 
             [MethodImpl(AggressiveInlining)]
-            public void Copy(Entity srcEntity, Entity dstEntity) => Components<T>.Copy(srcEntity, dstEntity);
+            public void Copy(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Copy(srcEntity, dstEntity);
             
             [MethodImpl(AggressiveInlining)]
-            public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Move(srcEntity, dstEntity);
+            public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Move(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => Components<T>.Count();
+            public int Count() => Components<T>.Value.Count();
 
             [MethodImpl(AggressiveInlining)]
-            public Entity[] EntitiesData() => Components<T>.EntitiesData();
+            public bool Is<C>() where C : struct, IComponent => Components<C>.Value.id == Components<T>.Value.id;
 
             [MethodImpl(AggressiveInlining)]
-            public bool Is<C>() where C : struct, IComponent => Components<C>.id == Components<T>.id;
+            public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent => Components<C>.Value.id == Components<T>.Value.id;
 
             [MethodImpl(AggressiveInlining)]
-            public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent => Components<C>.id == Components<T>.id;
+            int[] IComponentsWrapper.EntitiesData() => Components<T>.Value.EntitiesData();
 
             [MethodImpl(AggressiveInlining)]
-            string IComponentsWrapper.ToStringComponent(Entity entity) => Components<T>.ToStringComponent(entity);
+            string IComponentsWrapper.ToStringComponent(Entity entity) => Components<T>.Value.ToStringComponent(entity);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.SetDataIfCountLess(ref int count, ref Entity[] entities) => Components<T>.SetDataIfCountLess(ref count, ref entities);
+            void IComponentsWrapper.SetDataIfCountLess(ref int count, ref int[] entities) => Components<T>.Value.SetDataIfCountLess(ref count, ref entities);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.Resize(int cap) => Components<T>.Resize(cap);
+            void IComponentsWrapper.SetDataIfCountMore(ref int count, ref int[] entities) => Components<T>.Value.SetDataIfCountMore(ref count, ref entities);
 
             [MethodImpl(AggressiveInlining)]
-            bool IComponentsWrapper.DeleteFromWorld(Entity entity) => Components<T>.DeleteFromWorld(entity);
+            void IComponentsWrapper.Resize(int cap) => Components<T>.Value.Resize(cap);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.Destroy() => Components<T>.Destroy();
+            bool IComponentsWrapper.DeleteFromWorld(Entity entity) => Components<T>.Value.DeleteFromWorld(entity);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.EnsureSize(int size) => Components<T>.EnsureSize(size);
+            void IComponentsWrapper.Destroy() => Components<T>.Value.Destroy();
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.Clear() => Components<T>.Clear();
+            void IComponentsWrapper.EnsureSize(int size) => Components<T>.Value.EnsureSize(size);
+
+            [MethodImpl(AggressiveInlining)]
+            void IComponentsWrapper.Clear() => Components<T>.Value.Clear();
 
             #if DEBUG
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.AddBlocker(int val) => Components<T>.AddBlocker(val);
+            void IComponentsWrapper.AddBlocker(int val) => Components<T>.Value.AddBlocker(val);
             #endif
         }
     }

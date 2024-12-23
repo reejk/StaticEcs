@@ -39,38 +39,38 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public readonly struct MasksWrapper<T> : IMasksWrapper, Stateless where T : struct, IMask {
             [MethodImpl(AggressiveInlining)]
-            public ushort Id() => Masks<T>.Id();
+            public ushort Id() => Masks<T>.Value.Id();
 
             [MethodImpl(AggressiveInlining)]
-            public void Set(Entity entity) => Masks<T>.Set(entity);
+            public void Set(Entity entity) => Masks<T>.Value.Set(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Has(Entity entity) => Masks<T>.Has(entity);
+            public bool Has(Entity entity) => Masks<T>.Value.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void Del(Entity entity) => Masks<T>.Delete(entity);
+            public void Del(Entity entity) => Masks<T>.Value.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => ModuleMasks.CopyEntity(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => Masks<T>.Count();
+            public int Count() => Masks<T>.Value.Count();
 
             [MethodImpl(AggressiveInlining)]
-            public string ToStringComponent(Entity entity) => Masks<T>.ToStringComponent(entity);
+            public string ToStringComponent(Entity entity) => Masks<T>.Value.ToStringComponent(entity);
 
             [MethodImpl(AggressiveInlining)]
             public bool Is<C>() where C : struct, IMask {
-                return Masks<C>.id == Masks<T>.id;
+                return Masks<C>.Value.id == Masks<T>.Value.id;
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool TryCast<C>(out MasksWrapper<C> wrapper) where C : struct, IMask {
-                return Masks<C>.id == Masks<T>.id;
+                return Masks<C>.Value.id == Masks<T>.Value.id;
             }
 
             [MethodImpl(AggressiveInlining)]
-            void IMasksWrapper.Clear() => Masks<T>.Clear();
+            void IMasksWrapper.Clear() => Masks<T>.Value.Clear();
         }
     }
 }

@@ -7,7 +7,7 @@ using Unity.IL2CPP.CompilerServices;
 
 namespace FFS.Libraries.StaticEcs {
     public interface IComponentTags {
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] _entities) where WorldID : struct, IWorldId;
+        public void SetData<WorldID>(ref int minCount, ref int[] _entities) where WorldID : struct, IWorldId;
 
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId;
 
@@ -72,7 +72,7 @@ namespace FFS.Libraries.StaticEcs {
         public static TagAny<Tag<C1>> Any() => default;
         
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
         }
         
@@ -123,7 +123,7 @@ namespace FFS.Libraries.StaticEcs {
         
        
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
         }
@@ -176,7 +176,7 @@ namespace FFS.Libraries.StaticEcs {
         public static TagAny<Tag<C1, C2, C3>> Any() => default;
        
        [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C3>.SetDataIfCountLess(ref minCount, ref entities);
@@ -232,7 +232,7 @@ namespace FFS.Libraries.StaticEcs {
         public static TagAny<Tag<C1, C2, C3, C4>> Any() => default;
         
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C3>.SetDataIfCountLess(ref minCount, ref entities);
@@ -292,7 +292,7 @@ namespace FFS.Libraries.StaticEcs {
         public static TagAny<Tag<C1, C2, C3, C4, C5>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C3>.SetDataIfCountLess(ref minCount, ref entities);
@@ -356,7 +356,7 @@ namespace FFS.Libraries.StaticEcs {
         public static TagAny<Tag<C1, C2, C3, C4, C5, C6>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C3>.SetDataIfCountLess(ref minCount, ref entities);
@@ -424,7 +424,7 @@ namespace FFS.Libraries.StaticEcs {
         public static TagAny<Tag<C1, C2, C3, C4, C5, C6, C7>> Any() => default;
        
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C3>.SetDataIfCountLess(ref minCount, ref entities);
@@ -497,7 +497,7 @@ namespace FFS.Libraries.StaticEcs {
 
        
         [MethodImpl(AggressiveInlining)]
-        public void SetData<WorldID>(ref int minCount, ref Ecs<WorldID>.Entity[] entities) where WorldID : struct, IWorldId {
+        public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             Ecs<WorldID>.Tags<C1>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C2>.SetDataIfCountLess(ref minCount, ref entities);
             Ecs<WorldID>.Tags<C3>.SetDataIfCountLess(ref minCount, ref entities);

@@ -156,40 +156,50 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1> {
-            var count = Init(out var entities, ref with, out var dataC1);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            #endif
+            with.SetData<WorldID>(ref count, ref entities);
+
+            var dataC1 = Ecs<WorldID>.Components<C1>.Value.Data();
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if (with.CheckEntity(entity._id)) {
-                    runner.Run(entity, ref dataC1[count]);
+                if (with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity), ref dataC1[count]);
                 }
             }
 
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldID, C1> runner, P with) {
-            var count = Init(out var entities, ref with, out var dataC1);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            #endif
+            with.SetData<WorldID>(ref count, ref entities);
+
+            var dataC1 = Ecs<WorldID>.Components<C1>.Value.Data();
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if (with.CheckEntity(entity._id)) {
-                    runner(entity, ref dataC1[count]);
+                if (with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity), ref dataC1[count]);
                 }
             }
 
             with.Dispose<WorldID>();
-        }
-
-        [MethodImpl(AggressiveInlining)]
-        private static int Init(out Ecs<WorldID>.Entity[] entities, ref P with, out C1[] dataC1) {
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            with.SetData(ref count, ref entities);
-
-            dataC1 = Ecs<WorldID>.Components<C1>.Data();
-            return count;
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            #endif
         }
     }
 
@@ -197,69 +207,83 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2> {
-            var all = default(Double<C1, C2>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
+            #endif
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            Ecs<WorldID>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1]
+                var i1 = di1[entity];
+                var i2 = di2[entity];
+                if (i1 >= 0 && i2 >= 0 && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[i1],
+                               ref data2[i2]
                     );
                 }
             }
 
-            all.Dispose<WorldID>();
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2> runner, P with) {
-            var all = default(Double<C1, C2>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
+            #endif
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            Ecs<WorldID>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1]
+                var i1 = di1[entity];
+                var i2 = di2[entity];
+                if (i1 >= 0 && i2 >= 0 && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                               ref data1[i1],
+                               ref data2[i2]
                     );
                 }
             }
 
-            all.Dispose<WorldID>();
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
+            #endif
         }
     }
 
@@ -267,7 +291,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, C3, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, C3, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
@@ -275,68 +299,90 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3> {
-            var all = default(All<Types<C1, C2, C3>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
+            #endif
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            Ecs<WorldID>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldID>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1],
-                               ref data3[di3[id] - 1]
+                var i1 = di1[entity];
+                var i2 = di2[entity];
+                var i3 = di3[entity];
+                if (i1 >= 0 && i2 >= 0 && i3 >= 0 && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[i1],
+                               ref data2[i2],
+                               ref data3[i3]
                     );
                 }
             }
 
-            all.Dispose<WorldID>();
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3> runner, P with) {
-            var all = default(All<Types<C1, C2, C3>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
+            #endif
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            Ecs<WorldID>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldID>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1],
-                           ref data3[di3[id] - 1]
+                var i1 = di1[entity];
+                var i2 = di2[entity];
+                var i3 = di3[entity];
+                if (i1 >= 0 && i2 >= 0 && i3 >= 0 && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                               ref data1[i1],
+                               ref data2[i2],
+                               ref data3[i3]
                     );
                 }
             }
 
-            all.Dispose<WorldID>();
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
+            #endif
         }
     }
 
@@ -344,7 +390,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, C3, C4, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, C3, C4, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
@@ -353,74 +399,104 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4> {
-            var all = default(All<Types<C1, C2, C3, C4>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C4>.Value.AddBlocker(1);
+            #endif
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            Ecs<WorldID>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldID>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldID>.Components<C4>.Value.SetDataIfCountLess(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1],
-                               ref data3[di3[id] - 1],
-                               ref data4[di4[id] - 1]
+                var i1 = di1[entity];
+                var i2 = di2[entity];
+                var i3 = di3[entity];
+                var i4 = di4[entity];
+                if (i1 >= 0 && i2 >= 0 && i3 >= 0 && i4 >= 0 && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[i1],
+                               ref data2[i2],
+                               ref data3[i3],
+                               ref data4[i4]
                     );
                 }
             }
 
-            all.Dispose<WorldID>();
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C4>.Value.AddBlocker(-1);
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4> runner, P with) {
-            var all = default(All<Types<C1, C2, C3, C4>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+           #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
+            Ecs<WorldID>.Components<C4>.Value.AddBlocker(1);
+            #endif
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            Ecs<WorldID>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldID>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldID>.Components<C4>.Value.SetDataIfCountLess(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1],
-                           ref data3[di3[id] - 1],
-                           ref data4[di4[id] - 1]
+                var i1 = di1[entity];
+                var i2 = di2[entity];
+                var i3 = di3[entity];
+                var i4 = di4[entity];
+                if (i1 >= 0 && i2 >= 0 && i3 >= 0 && i4 >= 0 && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                               ref data1[i1],
+                               ref data2[i2],
+                               ref data3[i3],
+                               ref data4[i4]
                     );
                 }
             }
 
-            all.Dispose<WorldID>();
             with.Dispose<WorldID>();
+            #if DEBUG
+            Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
+            Ecs<WorldID>.Components<C4>.Value.AddBlocker(-1);
+            #endif
         }
     }
 
@@ -428,7 +504,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
@@ -438,35 +514,34 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5> {
-            var all = default(All<Types<C1, C2, C3, C4, C5>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1],
-                               ref data3[di3[id] - 1],
-                               ref data4[di4[id] - 1],
-                               ref data5[di5[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[di1[entity]],
+                               ref data2[di2[entity]],
+                               ref data3[di3[entity]],
+                               ref data4[di4[entity]],
+                               ref data5[di5[entity]]
                     );
                 }
             }
@@ -477,35 +552,34 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5> runner, P with) {
-            var all = default(All<Types<C1, C2, C3, C4, C5>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1],
-                           ref data3[di3[id] - 1],
-                           ref data4[di4[id] - 1],
-                           ref data5[di5[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                           ref data1[di1[entity]],
+                           ref data2[di2[entity]],
+                           ref data3[di3[entity]],
+                           ref data4[di4[entity]],
+                           ref data5[di5[entity]]
                     );
                 }
             }
@@ -519,7 +593,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, C6, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, C6, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
@@ -530,38 +604,37 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
-            var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5, C6>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
-            var di6 = Ecs<WorldID>.Components<C6>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
+            var di6 = Ecs<WorldID>.Components<C6>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
-            var data6 = Ecs<WorldID>.Components<C6>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
+            var data6 = Ecs<WorldID>.Components<C6>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1],
-                               ref data3[di3[id] - 1],
-                               ref data4[di4[id] - 1],
-                               ref data5[di5[id] - 1],
-                               ref data6[di6[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[di1[entity]],
+                               ref data2[di2[entity]],
+                               ref data3[di3[entity]],
+                               ref data4[di4[entity]],
+                               ref data5[di5[entity]],
+                               ref data6[di6[entity]]
                     );
                 }
             }
@@ -572,38 +645,37 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6> runner, P with) {
-            var all = default(All<Types<C1, C2, C3, C4, C5, C6>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5, C6>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
-            var di6 = Ecs<WorldID>.Components<C6>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
+            var di6 = Ecs<WorldID>.Components<C6>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
-            var data6 = Ecs<WorldID>.Components<C6>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
+            var data6 = Ecs<WorldID>.Components<C6>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1],
-                           ref data3[di3[id] - 1],
-                           ref data4[di4[id] - 1],
-                           ref data5[di5[id] - 1],
-                           ref data6[di6[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                           ref data1[di1[entity]],
+                           ref data2[di2[entity]],
+                           ref data3[di3[entity]],
+                           ref data4[di4[entity]],
+                           ref data5[di5[entity]],
+                           ref data6[di6[entity]]
                     );
                 }
             }
@@ -618,7 +690,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, C6, C7, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, C6, C7, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
@@ -630,41 +702,40 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-            var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5, C6, C7>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
-            var di6 = Ecs<WorldID>.Components<C6>.GetDataIdxByEntityId();
-            var di7 = Ecs<WorldID>.Components<C7>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
+            var di6 = Ecs<WorldID>.Components<C6>.Value.GetDataIdxByEntityId();
+            var di7 = Ecs<WorldID>.Components<C7>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
-            var data6 = Ecs<WorldID>.Components<C6>.Data();
-            var data7 = Ecs<WorldID>.Components<C7>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
+            var data6 = Ecs<WorldID>.Components<C6>.Value.Data();
+            var data7 = Ecs<WorldID>.Components<C7>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1],
-                               ref data3[di3[id] - 1],
-                               ref data4[di4[id] - 1],
-                               ref data5[di5[id] - 1],
-                               ref data6[di6[id] - 1],
-                               ref data7[di7[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[di1[entity]],
+                               ref data2[di2[entity]],
+                               ref data3[di3[entity]],
+                               ref data4[di4[entity]],
+                               ref data5[di5[entity]],
+                               ref data6[di6[entity]],
+                               ref data7[di7[entity]]
                     );
                 }
             }
@@ -675,41 +746,40 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6, C7> runner, P with) {
-            var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5, C6, C7>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
-            var di6 = Ecs<WorldID>.Components<C6>.GetDataIdxByEntityId();
-            var di7 = Ecs<WorldID>.Components<C7>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
+            var di6 = Ecs<WorldID>.Components<C6>.Value.GetDataIdxByEntityId();
+            var di7 = Ecs<WorldID>.Components<C7>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
-            var data6 = Ecs<WorldID>.Components<C6>.Data();
-            var data7 = Ecs<WorldID>.Components<C7>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
+            var data6 = Ecs<WorldID>.Components<C6>.Value.Data();
+            var data7 = Ecs<WorldID>.Components<C7>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1],
-                           ref data3[di3[id] - 1],
-                           ref data4[di4[id] - 1],
-                           ref data5[di5[id] - 1],
-                           ref data6[di6[id] - 1],
-                           ref data7[di7[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                           ref data1[di1[entity]],
+                           ref data2[di2[entity]],
+                           ref data3[di3[entity]],
+                           ref data4[di4[entity]],
+                           ref data5[di5[entity]],
+                           ref data6[di6[entity]],
+                           ref data7[di7[entity]]
                     );
                 }
             }
@@ -723,7 +793,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public static class QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, C6, C7, C8, P>
+    public readonly ref struct QueryFunctionRunner<WorldID, C1, C2, C3, C4, C5, C6, C7, C8, P>
         where P : struct, IQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
@@ -734,46 +804,46 @@ namespace FFS.Libraries.StaticEcs {
         where C7 : struct, IComponent
         where C8 : struct, IComponent
         where WorldID : struct, IWorldId {
+
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-            var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5, C6, C7, C8>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
-            var di6 = Ecs<WorldID>.Components<C6>.GetDataIdxByEntityId();
-            var di7 = Ecs<WorldID>.Components<C7>.GetDataIdxByEntityId();
-            var di8 = Ecs<WorldID>.Components<C8>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
+            var di6 = Ecs<WorldID>.Components<C6>.Value.GetDataIdxByEntityId();
+            var di7 = Ecs<WorldID>.Components<C7>.Value.GetDataIdxByEntityId();
+            var di8 = Ecs<WorldID>.Components<C8>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
-            var data6 = Ecs<WorldID>.Components<C6>.Data();
-            var data7 = Ecs<WorldID>.Components<C7>.Data();
-            var data8 = Ecs<WorldID>.Components<C8>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
+            var data6 = Ecs<WorldID>.Components<C6>.Value.Data();
+            var data7 = Ecs<WorldID>.Components<C7>.Value.Data();
+            var data8 = Ecs<WorldID>.Components<C8>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner.Run(entity,
-                               ref data1[di1[id] - 1],
-                               ref data2[di2[id] - 1],
-                               ref data3[di3[id] - 1],
-                               ref data4[di4[id] - 1],
-                               ref data5[di5[id] - 1],
-                               ref data6[di6[id] - 1],
-                               ref data7[di7[id] - 1],
-                               ref data8[di8[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldID>.Entity(entity),
+                               ref data1[di1[entity]],
+                               ref data2[di2[entity]],
+                               ref data3[di3[entity]],
+                               ref data4[di4[entity]],
+                               ref data5[di5[entity]],
+                               ref data6[di6[entity]],
+                               ref data7[di7[entity]],
+                               ref data8[di8[entity]]
                     );
                 }
             }
@@ -784,44 +854,43 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with) {
-            var all = default(All<Types<C1, C2, C3, C4, C5, C6, C7, C8>>);
-            var count = Ecs<WorldID>.Components<C1>.Count();
-            var entities = Ecs<WorldID>.Components<C1>.EntitiesData();
-            all.SetData(ref count, ref entities);
-            with.SetData(ref count, ref entities);
+            var all = default(All<C1, C2, C3, C4, C5, C6, C7, C8>);
+            var count = Ecs<WorldID>.Components<C1>.Value.Count();
+            var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
+            all.SetData<WorldID>(ref count, ref entities);
+            with.SetData<WorldID>(ref count, ref entities);
 
-            var di1 = Ecs<WorldID>.Components<C1>.GetDataIdxByEntityId();
-            var di2 = Ecs<WorldID>.Components<C2>.GetDataIdxByEntityId();
-            var di3 = Ecs<WorldID>.Components<C3>.GetDataIdxByEntityId();
-            var di4 = Ecs<WorldID>.Components<C4>.GetDataIdxByEntityId();
-            var di5 = Ecs<WorldID>.Components<C5>.GetDataIdxByEntityId();
-            var di6 = Ecs<WorldID>.Components<C6>.GetDataIdxByEntityId();
-            var di7 = Ecs<WorldID>.Components<C7>.GetDataIdxByEntityId();
-            var di8 = Ecs<WorldID>.Components<C8>.GetDataIdxByEntityId();
+            var di1 = Ecs<WorldID>.Components<C1>.Value.GetDataIdxByEntityId();
+            var di2 = Ecs<WorldID>.Components<C2>.Value.GetDataIdxByEntityId();
+            var di3 = Ecs<WorldID>.Components<C3>.Value.GetDataIdxByEntityId();
+            var di4 = Ecs<WorldID>.Components<C4>.Value.GetDataIdxByEntityId();
+            var di5 = Ecs<WorldID>.Components<C5>.Value.GetDataIdxByEntityId();
+            var di6 = Ecs<WorldID>.Components<C6>.Value.GetDataIdxByEntityId();
+            var di7 = Ecs<WorldID>.Components<C7>.Value.GetDataIdxByEntityId();
+            var di8 = Ecs<WorldID>.Components<C8>.Value.GetDataIdxByEntityId();
 
-            var data1 = Ecs<WorldID>.Components<C1>.Data();
-            var data2 = Ecs<WorldID>.Components<C2>.Data();
-            var data3 = Ecs<WorldID>.Components<C3>.Data();
-            var data4 = Ecs<WorldID>.Components<C4>.Data();
-            var data5 = Ecs<WorldID>.Components<C5>.Data();
-            var data6 = Ecs<WorldID>.Components<C6>.Data();
-            var data7 = Ecs<WorldID>.Components<C7>.Data();
-            var data8 = Ecs<WorldID>.Components<C8>.Data();
+            var data1 = Ecs<WorldID>.Components<C1>.Value.Data();
+            var data2 = Ecs<WorldID>.Components<C2>.Value.Data();
+            var data3 = Ecs<WorldID>.Components<C3>.Value.Data();
+            var data4 = Ecs<WorldID>.Components<C4>.Value.Data();
+            var data5 = Ecs<WorldID>.Components<C5>.Value.Data();
+            var data6 = Ecs<WorldID>.Components<C6>.Value.Data();
+            var data7 = Ecs<WorldID>.Components<C7>.Value.Data();
+            var data8 = Ecs<WorldID>.Components<C8>.Value.Data();
 
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                var id = entity._id;
-                if (all.CheckEntity(id) && with.CheckEntity(id)) {
-                    runner(entity,
-                           ref data1[di1[id] - 1],
-                           ref data2[di2[id] - 1],
-                           ref data3[di3[id] - 1],
-                           ref data4[di4[id] - 1],
-                           ref data5[di5[id] - 1],
-                           ref data6[di6[id] - 1],
-                           ref data7[di7[id] - 1],
-                           ref data8[di8[id] - 1]
+                if (all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldID>.Entity(entity),
+                           ref data1[di1[entity]],
+                           ref data2[di2[entity]],
+                           ref data3[di3[entity]],
+                           ref data4[di4[entity]],
+                           ref data5[di5[entity]],
+                           ref data6[di6[entity]],
+                           ref data7[di7[entity]],
+                           ref data8[di8[entity]]
                     );
                 }
             }
@@ -830,11 +899,5 @@ namespace FFS.Libraries.StaticEcs {
             with.Dispose<WorldID>();
         }
     }
-
-    #if ENABLE_IL2CPP
-    [Il2CppSetOption(Option.NullChecks, false)]
-    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
-    #endif
-    internal static class QueryFunctionRunner { }
     #endregion
 }

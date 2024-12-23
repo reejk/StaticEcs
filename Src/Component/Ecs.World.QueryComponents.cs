@@ -14,7 +14,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public readonly ref partial struct WithComponents<W> where W : struct, IQueryMethod {
+        public readonly ref struct WithComponents<W> where W : struct, IQueryMethod {
             private readonly W With;
 
             [MethodImpl(AggressiveInlining)]
@@ -289,7 +289,7 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.NullChecks, false)]
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
             #endif
-            public abstract partial class QueryComponents {
+            public struct QueryComponents {
                 public static WithComponents<W> With<W>(W with = default)
                     where W : struct, IQueryMethod {
                     return new WithComponents<W>(with);

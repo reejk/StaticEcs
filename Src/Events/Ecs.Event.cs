@@ -30,7 +30,7 @@ namespace FFS.Libraries.StaticEcs {
                     #if DEBUG
                     if (_idx < 0) throw new Exception($"[ Ecs<{typeof(World)}>.Event<{typeof(E)}>.Value ] event is deleted");
                     #endif
-                    return ref Events.Pool<E>.Get(_idx);
+                    return ref Events.Pool<E>.Value.Get(_idx);
                 }
             }
 
@@ -39,7 +39,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (_idx < 0) throw new Exception($"[ Ecs<{typeof(World)}>.Event<{typeof(E)}>.Suppress ] event is deleted");
                 #endif
-                Events.Pool<E>.Del((ushort) _idx);
+                Events.Pool<E>.Value.Del((ushort) _idx);
                 _idx = -1;
             }
         }

@@ -17,6 +17,9 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public partial struct Entity : IEquatable<Entity> {
             internal int _id;
+            internal Entity(int id) {
+                _id = id;
+            }
 
             [MethodImpl(AggressiveInlining)]
             public static Entity FromIdx(int idx) => new() { _id = idx };
@@ -205,7 +208,7 @@ namespace FFS.Libraries.StaticEcs {
             #region NEW_BY_TYPE_BATCH
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes<C1>(int count, Action<Entity> onCreate = null) where C1 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1>(),
@@ -217,8 +220,8 @@ namespace FFS.Libraries.StaticEcs {
             public static void NewOnes<C1, C2>(int count, Action<Entity> onCreate = null)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2>(),
@@ -231,9 +234,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
-                Components<C3>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
+                Components<C3>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2, C3>(),
@@ -247,10 +250,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
-                Components<C3>.EnsureSize(count);
-                Components<C4>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
+                Components<C3>.Value.EnsureSize(count);
+                Components<C4>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2, C3, C4>(),
@@ -265,11 +268,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
-                Components<C3>.EnsureSize(count);
-                Components<C4>.EnsureSize(count);
-                Components<C5>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
+                Components<C3>.Value.EnsureSize(count);
+                Components<C4>.Value.EnsureSize(count);
+                Components<C5>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new AddComponentFunction<WorldID, C1, C2, C3, C4, C5>(),
@@ -279,7 +282,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void NewOnes<C1>(int count, C1 c1, Action<Entity> onCreate = null) where C1 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1>(c1),
@@ -291,8 +294,8 @@ namespace FFS.Libraries.StaticEcs {
             public static void NewOnes<C1, C2>(int count, C1 c1, C2 c2, Action<Entity> onCreate = null)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2>(c1, c2),
@@ -305,9 +308,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
-                Components<C3>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
+                Components<C3>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2, C3>(c1, c2, c3),
@@ -321,10 +324,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
-                Components<C3>.EnsureSize(count);
-                Components<C4>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
+                Components<C3>.Value.EnsureSize(count);
+                Components<C4>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2, C3, C4>(c1, c2, c3, c4),
@@ -339,11 +342,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                Components<C1>.EnsureSize(count);
-                Components<C2>.EnsureSize(count);
-                Components<C3>.EnsureSize(count);
-                Components<C4>.EnsureSize(count);
-                Components<C5>.EnsureSize(count);
+                Components<C1>.Value.EnsureSize(count);
+                Components<C2>.Value.EnsureSize(count);
+                Components<C3>.Value.EnsureSize(count);
+                Components<C4>.Value.EnsureSize(count);
+                Components<C5>.Value.EnsureSize(count);
                 World.CreateEntitiesInternal(
                     count,
                     new PutComponentFunction<WorldID, C1, C2, C3, C4, C5>(c1, c2, c3, c4, c5),

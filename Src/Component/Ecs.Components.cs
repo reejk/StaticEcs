@@ -32,7 +32,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
                 #endif
-                return _pools[id.Val];
+                return _pools[id.Value];
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -49,38 +49,6 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
                 #endif
                 return BitMask.Len(entity._id);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAllComponents(Entity entity, byte allBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllComponents, World not initialized");
-                #endif
-                return BitMask.HasAll(entity._id, allBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAnyComponents(Entity entity, byte allBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyComponents, World not initialized");
-                #endif
-                return BitMask.HasAny(entity._id, allBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAllAndExcComponents(Entity entity, byte allBufId, byte excBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcComponents, World not initialized");
-                #endif
-                return BitMask.HasAllAndExc(entity._id, allBufId, excBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool NotHasAnyComponents(Entity entity, byte anyBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyComponents, World not initialized");
-                #endif
-                return BitMask.NotHasAny(entity._id, anyBufId);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -146,7 +114,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static ComponentDynId RegisterComponent<C>() where C : struct, IComponent {
                 if (ComponentInfo<C>.Has()) {
-                    return Components<C>.DynamicId();
+                    return Components<C>.Value.DynamicId();
                 }
 
                 if (_poolsCount == _pools.Length) {
@@ -156,7 +124,7 @@ namespace FFS.Libraries.StaticEcs {
                 _pools[_poolsCount++] = new ComponentsWrapper<C>();
 
                 ComponentInfo<C>.Register();
-                Components<C>.Create(ComponentInfo<C>.Id, BitMask, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
+                Components<C>.Value.Create(ComponentInfo<C>.Id, BitMask, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
 
                 if (_actionsCount == _reInitActions.Length) {
                     Array.Resize(ref _reInitActions, _actionsCount << 1);
@@ -171,7 +139,7 @@ namespace FFS.Libraries.StaticEcs {
                     ReInitialize();
                 }
 
-                return Components<C>.DynamicId();
+                return Components<C>.Value.DynamicId();
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -279,7 +247,7 @@ namespace FFS.Libraries.StaticEcs {
     public struct DeleteComponentsSystem<WorldId, T> : IUpdateSystem where T : struct, IComponent where WorldId : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public void Update() {
-            foreach (var entity in Ecs<WorldId>.World.QueryEntities.All<T>()) {
+            foreach (var entity in Ecs<WorldId>.World.QueryEntities.For<All<T>>()) {
                 entity.Delete<T>();
             }
         }

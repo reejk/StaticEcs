@@ -15,10 +15,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public QueryComponentsIterator(byte cs9fake) {
-            _data = Ecs<WorldID>.Components<C>.Data();
-            _count = Ecs<WorldID>.Components<C>.Count();
+            _data = Ecs<WorldID>.Components<C>.Value.Data();
+            _count = Ecs<WorldID>.Components<C>.Value.Count();
             #if DEBUG
-                Ecs<WorldID>.Components<C>.AddBlocker(1);
+            Ecs<WorldID>.Components<C>.Value.AddBlocker(1);
             #endif
         }
 
@@ -38,7 +38,7 @@ namespace FFS.Libraries.StaticEcs {
         #if DEBUG
             [MethodImpl(AggressiveInlining)]
             public void Dispose() {
-                Ecs<WorldID>.Components<C>.AddBlocker(-1);
+                Ecs<WorldID>.Components<C>.Value.AddBlocker(-1);
             }
         #endif
     }
@@ -52,21 +52,21 @@ namespace FFS.Libraries.StaticEcs {
         where QW : struct, IQueryMethod
         where WorldID : struct, IWorldId {
         private readonly C[] _data;                               //8
-        private readonly Ecs<WorldID>.Entity[] _entities; //8
+        private readonly int[] _entities; //8
         private int _count;                                       //4
         private QW _with;                                         //???
 
         [MethodImpl(AggressiveInlining)]
         public QueryComponentsIterator(QW with) {
             _with = with;
-            _data = Ecs<WorldID>.Components<C>.Data();
-            _count = Ecs<WorldID>.Components<C>.Count();
-            _entities = Ecs<WorldID>.Components<C>.EntitiesData();
+            _data = Ecs<WorldID>.Components<C>.Value.Data();
+            _count = Ecs<WorldID>.Components<C>.Value.Count();
+            _entities = Ecs<WorldID>.Components<C>.Value.EntitiesData();
             var count = int.MaxValue;
-            Ecs<WorldID>.Entity[] entities = null;
-            with.SetData(ref count, ref entities);
+            int[] entities = null;
+            with.SetData<WorldID>(ref count, ref entities);
             #if DEBUG
-            Ecs<WorldID>.Components<C>.AddBlocker(1);
+            Ecs<WorldID>.Components<C>.Value.AddBlocker(1);
             #endif
         }
 
@@ -83,7 +83,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 _count--;
 
-                if (_with.CheckEntity(_entities[_count]._id)) {
+                if (_with.CheckEntity(_entities[_count])) {
                     return true;
                 }
             }
@@ -95,7 +95,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void Dispose() {
             #if DEBUG
-            Ecs<WorldID>.Components<C>.AddBlocker(-1);
+            Ecs<WorldID>.Components<C>.Value.AddBlocker(-1);
             #endif
             _with.Dispose<WorldID>();
         }

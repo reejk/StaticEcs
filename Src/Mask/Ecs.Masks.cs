@@ -78,7 +78,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 MaskInfo<T>.Register();
-                Masks<T>.Create(MaskInfo<T>.Id, BitMask);
+                Masks<T>.Value.Create(MaskInfo<T>.Id, BitMask);
                 if (_poolsCount == _pools.Length) {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
@@ -106,7 +106,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMaskDynamicId, World not initialized");
                 #endif
-                return new MaskDynId(Masks<T>.Id());
+                return new MaskDynId(Masks<T>.Value.Id());
             }
 
             [MethodImpl(AggressiveInlining)]

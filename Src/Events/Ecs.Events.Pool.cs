@@ -18,24 +18,25 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
             [Il2CppEagerStaticClassConstruction]
             #endif
-            internal static class Pool<T> where T : struct {
-                private static T[] _data;
-                private static int[] _dataReceiverUnreadCount;
-                private static int[] _dataReceiverOffsets;
-                private static ushort[] _deletedReceivers;
-                private static int _dataCount;
-                private static int _dataFirstIdx;
-                private static ushort _deletedReceiversCount;
-                private static ushort _receiversCount;
-                internal static ushort Id;
-                internal static bool Initialized;
+            internal struct Pool<T> where T : struct {
+                internal static Pool<T> Value;
+                private T[] _data;
+                private int[] _dataReceiverUnreadCount;
+                private int[] _dataReceiverOffsets;
+                private ushort[] _deletedReceivers;
+                private int _dataCount;
+                private int _dataFirstIdx;
+                private ushort _deletedReceiversCount;
+                private ushort _receiversCount;
+                internal ushort Id;
+                internal bool Initialized;
                 
                 #if DEBUG
-                private static int _blockers;
+                private int _blockers;
                 #endif
 
                 [MethodImpl(AggressiveInlining)]
-                internal static void Create(ushort id) {
+                internal void Create(ushort id) {
                     Id = id;
                     _data = new T[cfg.BaseEventPoolCount];
                     _dataReceiverUnreadCount = new int[cfg.BaseEventPoolCount];
@@ -49,7 +50,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                internal static EventReceiver<WorldID, T> CreateReceiver() {
+                internal EventReceiver<WorldID, T> CreateReceiver() {
                     #if DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.CreateReceiver ] event pool cannot be changed, it is in read-only mode");
                     #endif
@@ -74,7 +75,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static void DeleteReceiver(ref EventReceiver<WorldID, T> receiver) {
+                internal void DeleteReceiver(ref EventReceiver<WorldID, T> receiver) {
                     #if DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.DeleteReceiver ] event pool cannot be changed, it is in read-only mode");
                     #endif
@@ -90,7 +91,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                internal static void Destroy() {
+                internal void Destroy() {
                     Initialized = false;
                     _dataReceiverUnreadCount = default;
                     _deletedReceiversCount = default;
@@ -104,12 +105,12 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static ref T Get(int idx) {
+                internal ref T Get(int idx) {
                     return ref _data[idx];
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                internal static void Add(T value = default) {
+                internal void Add(T value = default) {
                     #if DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.Add ] event pool cannot be changed, it is in read-only mode");
                     #endif
@@ -124,7 +125,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static void Del(int idx) {
+                internal void Del(int idx) {
                     _data[idx] = default;
                     _dataReceiverUnreadCount[idx] = 0;
                     
@@ -152,7 +153,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static bool ShiftReceiverOffset(int receiverId, int previous, out int next) {
+                internal bool ShiftReceiverOffset(int receiverId, int previous, out int next) {
                     if (previous >= 0) {
                         ref var unreadCount = ref _dataReceiverUnreadCount[previous];
                         if (unreadCount != 0 && --unreadCount == 0) {
@@ -176,7 +177,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static void MarkAsReadAll(int receiverId) {
+                internal void MarkAsReadAll(int receiverId) {
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
                         ref var unreadCount = ref _dataReceiverUnreadCount[offset];
@@ -191,7 +192,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                internal static void ClearEvents(int receiverId) {
+                internal void ClearEvents(int receiverId) {
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
                         Del(offset);
@@ -199,7 +200,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                private static bool TryDropOffsets() {
+                private bool TryDropOffsets() {
                     if (_dataFirstIdx == _dataCount) {
                         _dataFirstIdx = 0;
                         _dataCount = 0;
@@ -218,12 +219,12 @@ namespace FFS.Libraries.StaticEcs {
 
                 #if DEBUG
                 [MethodImpl(AggressiveInlining)]
-                internal static void AddBlocker(int val) {
+                internal void AddBlocker(int val) {
                     _blockers += val;
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal static bool IsBlocked() {
+                internal bool IsBlocked() {
                     return _blockers > 0;
                 }
                 #endif

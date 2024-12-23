@@ -29,8 +29,8 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] Ecs not initialized");
                 #endif
-                if (Pool<E>.Initialized) {
-                    Pool<E>.Add(value);
+                if (Pool<E>.Value.Initialized) {
+                    Pool<E>.Value.Add(value);
                 }
                 #if DEBUG
                 else {
@@ -56,10 +56,10 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.RegisterEventReceiver<{typeof(E)}> ] Ecs not initialized");
                 #endif
-                if (!Pool<E>.Initialized) {
+                if (!Pool<E>.Value.Initialized) {
                     RegisterEventPool<E>();
                 }
-                return Pool<E>.CreateReceiver();
+                return Pool<E>.Value.CreateReceiver();
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -67,8 +67,8 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.DeleteEventReceiver<{typeof(E)}> ] Ecs not initialized");
                 #endif
-                if (Pool<E>.Initialized) {
-                    Pool<E>.DeleteReceiver(ref receiver);
+                if (Pool<E>.Value.Initialized) {
+                    Pool<E>.Value.DeleteReceiver(ref receiver);
                 }
             }
             
@@ -77,8 +77,8 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] Ecs not initialized");
                 #endif
-                if (Pool<E>.Initialized) {
-                    return new EventDynId(Pool<E>.Id);
+                if (Pool<E>.Value.Initialized) {
+                    return new EventDynId(Pool<E>.Value.Id);
                 }
                 throw new Exception($"[ Ecs<{typeof(World)}>.Events.DynamicId<{typeof(E)}> ] Pool not initialized");
             }
@@ -93,17 +93,17 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal static void RegisterEventPool<T>() where T : struct {
-                Pool<T>.Create(_poolCount);
+                Pool<T>.Value.Create(_poolCount);
 
                 if (_poolCount == _poolDestroyMethods.Length) {
                     Array.Resize(ref _poolDestroyMethods, _poolCount << 1);
                     Array.Resize(ref _poolTryAddMethods, _poolCount << 1);
                 }
 
-                _poolDestroyMethods[_poolCount] = static () => Pool<T>.Destroy();
+                _poolDestroyMethods[_poolCount] = static () => Pool<T>.Value.Destroy();
                 _poolTryAddMethods[_poolCount] = static () => {
-                    if (Pool<T>.Initialized) {
-                        Pool<T>.Add();
+                    if (Pool<T>.Value.Initialized) {
+                        Pool<T>.Value.Add();
                         return true;
                     }
 

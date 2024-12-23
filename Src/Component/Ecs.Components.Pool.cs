@@ -15,16 +15,23 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract class Components<T> where T : struct, IComponent {
-            private static Entity[] _entities;
-            private static T[] _data;
-            private static int[] _dataIdxByEntityId;
-            private static BitMask _bitMask;
-            private static int _componentsCount;
-            internal static ushort id;
+        public struct Components<T> where T : struct, IComponent {
+            internal static Components<T> Value;
+            internal const int Empty = -1;
+            
+            internal AutoInitHandler<T> AutoInitHandler;
+            internal AutoResetHandler<T> AutoResetHandler;
+            internal AutoCopyHandler<T> AutoCopyHandler;
+            
+            private int[] _entities;
+            private T[] _data;
+            private int[] _dataIdxByEntityId;
+            private BitMask _bitMask;
+            private int _componentsCount;
+            internal ushort id;
 
             #if DEBUG
-            private static int _blockers;
+            private int _blockers;
             #endif
 
             #region PUBLIC
@@ -36,7 +43,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static ComponentDynId DynamicId() {
+            public ComponentDynId DynamicId() {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: DynamicId, World not initialized");
                 #endif
@@ -44,7 +51,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static ComponentsWrapper<T> Wrap() {
+            public ComponentsWrapper<T> Wrap() {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Wrap, World not initialized");
                 #endif
@@ -52,27 +59,27 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static ref T RefMut(Entity entity) {
+            public ref T RefMut(Entity entity) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: RefMut, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: RefMut, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: RefMut, ID - {entity._id} is missing on an entity");
                 #endif
-                return ref _data[_dataIdxByEntityId[entity._id] - 1];
+                return ref _data[_dataIdxByEntityId[entity._id]];
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static ref readonly T Ref(Entity entity) {
+            public ref readonly T Ref(Entity entity) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Ref, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Ref, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Ref, ID - {entity._id} is missing on an entity");
                 #endif
-                return ref _data[_dataIdxByEntityId[entity._id] - 1];
+                return ref _data[_dataIdxByEntityId[entity._id]];
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static ref T Add(Entity entity) {
+            public ref T Add(Entity entity) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Add, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Add, cannot access Entity ID - {id} from deleted entity");
@@ -84,31 +91,30 @@ namespace FFS.Libraries.StaticEcs {
                     ResizeData(_componentsCount << 1);
                 }
 
-                var idx = _componentsCount;
-                _componentsCount++;
-                _entities[idx] = entity;
-                _dataIdxByEntityId[entity._id] = _componentsCount;
+                var eid = entity._id;
+                _entities[_componentsCount] = eid;
+                _dataIdxByEntityId[eid] = _componentsCount;
 
-                _bitMask.Set(entity._id, id);
+                _bitMask.Set(eid, id);
                 
-                ref var data = ref _data[idx];
-                if (AutoHandlers<T>.Init != null) {
-                    AutoHandlers<T>.Init(ref data);
-                }
+                ref var data = ref _data[_componentsCount];
+                AutoInitHandler?.Invoke(ref data);
 
+                _componentsCount++;
                 return ref data;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void Put(Entity entity, T component) {
+            public void Put(Entity entity, T component) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Put, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Put, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Put, component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
-                ref var dataId = ref _dataIdxByEntityId[entity._id];
-                if (dataId > 0) {
-                    _data[dataId - 1] = component;
+                var eid = entity._id;
+                ref var dataId = ref _dataIdxByEntityId[eid];
+                if (dataId >= 0) {
+                    _data[dataId] = component;
                     return;
                 }
 
@@ -116,25 +122,24 @@ namespace FFS.Libraries.StaticEcs {
                     ResizeData(_componentsCount << 1);
                 }
 
-                var idx = _componentsCount;
-                _componentsCount++;
-                _entities[idx] = entity;
+                _entities[_componentsCount] = eid;
                 dataId = _componentsCount;
 
-                _bitMask.Set(entity._id, id);
+                _bitMask.Set(eid, id);
 
-                _data[idx] = component;
+                _data[_componentsCount] = component;
+                _componentsCount++;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static ref T TryAdd(Entity entity) {
+            public ref T TryAdd(Entity entity) {
                 return ref Has(entity)
                     ? ref RefMut(entity)
                     : ref Add(entity);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static ref T TryAdd(Entity entity, out bool added) {
+            public ref T TryAdd(Entity entity, out bool added) {
                 added = !Has(entity);
                 return ref added
                     ? ref Add(entity)
@@ -142,16 +147,16 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool Has(Entity entity) {
+            public bool Has(Entity entity) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Has, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
-                return _dataIdxByEntityId[entity._id] > 0;
+                return _dataIdxByEntityId[entity._id] >= 0;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool Delete(Entity entity) {
+            public bool Delete(Entity entity) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Delete, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Delete, cannot access ID - {id} from deleted entity");
@@ -161,7 +166,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static void Copy(Entity src, Entity dst) {
+            public void Copy(Entity src, Entity dst) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Copy, World not initialized");
                 if (!src.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
@@ -175,8 +180,8 @@ namespace FFS.Libraries.StaticEcs {
                         Add(dst);
                     }
 
-                    if (AutoHandlers<T>.Copy != null) {
-                        AutoHandlers<T>.Copy(ref srcData, ref RefMut(dst));
+                    if (AutoCopyHandler != null) {
+                        AutoCopyHandler(ref srcData, ref RefMut(dst));
                     } else {
                         RefMut(dst) = srcData;
                     }
@@ -184,13 +189,13 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static void Move(Entity src, Entity dst) {
+            public void Move(Entity src, Entity dst) {
                 Copy(src, dst);
                 Delete(src);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static int Count() {
+            public int Count() {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Count, World not initialized");
                 #endif
@@ -198,7 +203,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity[] EntitiesData() {
+            public int[] EntitiesData() {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: EntitiesData, World not initialized");
                 #endif
@@ -206,56 +211,90 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static T[] Data() {
+            public T[] Data() {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Data, World not initialized");
                 #endif
                 return _data;
             }
-            #endregion
-
-            #region INTERNAL
-            internal static void Create(ushort componentId, BitMask bitMask, uint baseCapacity = 128) {
-                _bitMask = bitMask;
-                id = componentId;
-                _entities = new Entity[baseCapacity];
-                _data = new T[baseCapacity];
-                _componentsCount = 0;
-                _dataIdxByEntityId = new int[World.EntitiesCapacity()];
+            
+            [MethodImpl(AggressiveInlining)]
+            public static void SetAutoInit(AutoInitHandler<T> handler) {
+                #if DEBUG
+                if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoInit, handler is null");
+                if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoInit, world status not `Created`");
+                #endif
+                Value.AutoInitHandler = handler;
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static bool DeleteFromWorld(Entity entity) {
+            public static void SetAutoReset(AutoResetHandler<T> handler) {
+                #if DEBUG
+                if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoReset, handler is null");
+                if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoReset, world status not `Created`");
+                #endif
+                Value.AutoResetHandler = handler;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static void SetAutoCopy(AutoCopyHandler<T> handler) {
+                #if DEBUG
+                if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoCopy, handler is null");
+                if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoCopy, world status not `Created`");
+                #endif
+                Value.AutoCopyHandler = handler;
+            }
+            #endregion
+
+            #region INTERNAL
+            internal void Create(ushort componentId, BitMask bitMask, uint baseCapacity = 128) {
+                _bitMask = bitMask;
+                id = componentId;
+                _entities = new int[baseCapacity];
+                _data = new T[baseCapacity];
+                _componentsCount = 0;
+                _dataIdxByEntityId = new int[World.EntitiesCapacity()];
+                for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Empty;
+                }
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool DeleteFromWorld(Entity entity) {
                 return DelInternal(entity, true);
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static int[] GetDataIdxByEntityId() {
+            internal int[] GetDataIdxByEntityId() {
                 return _dataIdxByEntityId;
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static void Resize(int cap) {
+            internal void Resize(int cap) {
+                var lastLength = _dataIdxByEntityId.Length;
                 Array.Resize(ref _dataIdxByEntityId, cap);
+                for (var i = lastLength; i < cap; i++) {
+                    _dataIdxByEntityId[i] = Empty;
+                }
             }
 
             [MethodImpl(AggressiveInlining)]
-            private static bool DelInternal(Entity entity, bool fromWorld) {
+            private bool DelInternal(Entity entity, bool fromWorld) {
                 ref var idxRef = ref _dataIdxByEntityId[entity._id];
-                var idx = idxRef - 1;
-                if (idx >= 0) {
-                    idxRef = 0;
+                if (idxRef >= 0) {
                     _componentsCount--;
 
-                    ResetComponent(idx);
-
-                    if (idx < _componentsCount) {
-                        var e = _entities[_componentsCount];
-                        _entities[idx] = e;
-                        _dataIdxByEntityId[e._id] = idx + 1;
-                        (_data[idx], _data[_componentsCount]) = (_data[_componentsCount], _data[idx]);
+                    if (idxRef == _componentsCount) {
+                        ResetComponent(idxRef);
+                    } else {
+                        var lastEntity = _entities[_componentsCount];
+                        _entities[idxRef] = lastEntity;
+                        _dataIdxByEntityId[lastEntity] = idxRef;
+                        _data[idxRef] = _data[_componentsCount];
+                        ResetComponent(_componentsCount);
                     }
 
+                    idxRef = Empty;
                     _bitMask.Del(entity._id, id);
                     if (!fromWorld && _bitMask.IsEmpty(entity._id)) {
                         World.DestroyEntity(entity);
@@ -266,30 +305,40 @@ namespace FFS.Libraries.StaticEcs {
                 return false;
             }
 
-            private static void ResetComponent(int idx) {
-                if (AutoHandlers<T>.Reset != null) {
-                    AutoHandlers<T>.Reset(ref _data[idx]);
+            private void ResetComponent(int idx) {
+                if (AutoResetHandler != null) {
+                    AutoResetHandler(ref _data[idx]);
                 } else {
                     _data[idx] = default;
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void SetDataIfCountLess(ref int count, ref Entity[] entities) {
+            internal void SetDataIfCountLess(ref int count, ref int[] entities) {
                 if (_componentsCount < count || count == 0) {
+                    count = _componentsCount;
+                    entities = _entities;
+                }
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal void SetDataIfCountMore(ref int count, ref int[] entities) {
+                if (_componentsCount > count || count == 0) {
                     count = _componentsCount;
                     entities = _entities;
                 }
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static string ToStringComponent(Entity entity) {
+            internal string ToStringComponent(Entity entity) {
                 return $" - [{id}] {typeof(T).Name} ( {RefMut(entity)} )\n";
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void Destroy() {
-                AutoHandlers<T>.Destroy();
+            internal void Destroy() {
+                AutoInitHandler = null;
+                AutoResetHandler = null;
+                AutoCopyHandler = null;
                 _entities = null;
                 _data = null;
                 _dataIdxByEntityId = null;
@@ -299,29 +348,31 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void EnsureSize(int size) {
+            internal void EnsureSize(int size) {
                 if (_componentsCount + size >= _entities.Length) {
                     ResizeData(Utils.CalculateSize(_componentsCount + size));
                 }
             }
 
             [MethodImpl(NoInlining)]
-            private static void ResizeData(int newSize) {
+            private void ResizeData(int newSize) {
                 Array.Resize(ref _entities, newSize);
                 Array.Resize(ref _data, newSize);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static void Clear() {
+            internal void Clear() {
                 Array.Clear(_entities, 0, _entities.Length);
                 Array.Clear(_data, 0, _data.Length);
-                Array.Clear(_dataIdxByEntityId, 0, _dataIdxByEntityId.Length);
+                for (int i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Empty;
+                }
                 _componentsCount = 0;
             }
             
             #if DEBUG
             [MethodImpl(AggressiveInlining)]
-            internal static void AddBlocker(int amount) {
+            internal void AddBlocker(int amount) {
                 _blockers += amount;
                 if (_blockers < 0) {
                     throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: AddBlocker, incorrect pool user balance when attempting to release");
@@ -329,54 +380,11 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static bool IsBlocked() {
+            internal bool IsBlocked() {
                 return _blockers > 1;
             }
             #endif
             #endregion
-        }
-
-        #if ENABLE_IL2CPP
-        [Il2CppEagerStaticClassConstruction]
-        #endif
-        public static class AutoHandlers<T> where T : struct, IComponent {
-            internal static AutoInitHandler<T> Init;
-            internal static AutoResetHandler<T> Reset;
-            internal static AutoCopyHandler<T> Copy;
-
-            [MethodImpl(AggressiveInlining)]
-            public static void SetAutoInit(AutoInitHandler<T> handler) {
-                #if DEBUG
-                if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoInit, handler is null");
-                if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoInit, world status not `Created`");
-                #endif
-                Init = handler;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static void SetAutoReset(AutoResetHandler<T> handler) {
-                #if DEBUG
-                if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoReset, handler is null");
-                if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoReset, world status not `Created`");
-                #endif
-                Reset = handler;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static void SetAutoCopy(AutoCopyHandler<T> handler) {
-                #if DEBUG
-                if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoCopy, handler is null");
-                if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoCopy, world status not `Created`");
-                #endif
-                Copy = handler;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            internal static void Destroy() {
-                Init = null;
-                Reset = null;
-                Copy = null;
-            }
         }
     }
 
