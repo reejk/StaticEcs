@@ -16,7 +16,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public struct Components<T> where T : struct, IComponent {
-            internal static Components<T> Value;
+            public static Components<T> Value;
             internal const int Empty = -1;
             
             internal AutoInitHandler<T> AutoInitHandler;
