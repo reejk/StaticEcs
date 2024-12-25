@@ -47,6 +47,9 @@ namespace FFS.Libraries.StaticEcs {
                 _bitMap = new ulong[World.EntitiesCapacity() * BitMapLen];
                 BitMask = new BitMask();
                 BitMask.Create(_bitMap, 32, BitMapLen);
+                for (var i = 0; i < _poolsCount; i++) {
+                    _pools[i].SetBitMask(BitMask);
+                }
             }
 
             [MethodImpl(AggressiveInlining)]

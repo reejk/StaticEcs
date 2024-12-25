@@ -29,6 +29,11 @@ namespace FFS.Libraries.StaticEcs {
                 _bitMask = bitMask;
                 id = componentId;
             }
+                        
+            [MethodImpl(AggressiveInlining)]
+            internal void SetBitMask(BitMask bitMask) {
+                _bitMask = bitMask;
+            }
 
             [MethodImpl(AggressiveInlining)]
             public ushort Id() => id;

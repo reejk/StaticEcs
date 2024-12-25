@@ -31,6 +31,8 @@ namespace FFS.Libraries.StaticEcs {
             public bool TryCast<C>(out MasksWrapper<C> wrapper) where C : struct, IMask;
 
             internal void Clear();
+            
+            internal void SetBitMask(BitMask bitMask);
         }
 
         #if ENABLE_IL2CPP
@@ -71,6 +73,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void IMasksWrapper.Clear() => Masks<T>.Value.Clear();
+
+            [MethodImpl(AggressiveInlining)]
+            void IMasksWrapper.SetBitMask(BitMask bitMask) => Masks<T>.Value.SetBitMask(bitMask);
         }
     }
 }

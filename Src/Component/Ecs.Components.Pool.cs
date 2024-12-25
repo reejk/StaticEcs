@@ -258,6 +258,11 @@ namespace FFS.Libraries.StaticEcs {
                     _dataIdxByEntityId[i] = Empty;
                 }
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal void SetBitMask(BitMask bitMask) {
+                _bitMask = bitMask;
+            }
 
             [MethodImpl(AggressiveInlining)]
             internal bool DeleteFromWorld(Entity entity) {

@@ -43,6 +43,8 @@ namespace FFS.Libraries.StaticEcs {
             internal void SetDataIfCountMore(ref int count, ref int[] entities);
 
             internal void Resize(int cap);
+            
+            internal void SetBitMask(BitMask bitMask);
 
             internal void Destroy();
 
@@ -125,6 +127,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void ITagsWrapper.Clear() => Tags<T>.Value.Clear();
+
+            [MethodImpl(AggressiveInlining)]
+            void ITagsWrapper.SetBitMask(BitMask bitMask) => Tags<T>.Value.SetBitMask(bitMask);
         }
     }
 }

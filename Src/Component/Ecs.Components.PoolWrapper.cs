@@ -46,6 +46,8 @@ namespace FFS.Libraries.StaticEcs {
             internal string ToStringComponent(Entity entity);
 
             internal void Clear();
+            
+            internal void SetBitMask(BitMask bitMask);
 
             internal void EnsureSize(int size);
 
@@ -125,6 +127,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Clear() => Components<T>.Value.Clear();
+
+            [MethodImpl(AggressiveInlining)]
+            void IComponentsWrapper.SetBitMask(BitMask bitMask) => Components<T>.Value.SetBitMask(bitMask);
 
             #if DEBUG
             [MethodImpl(AggressiveInlining)]

@@ -23,13 +23,16 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has<T>() => Context<T>.Has();
             
             [MethodImpl(AggressiveInlining)]
-            public ref T Get<T>() => ref Context<T>.Get();
+            public ref T Get<T>() => ref Context<T>._value;
 
             [MethodImpl(AggressiveInlining)]
             public void Set<T>(T value) => Context<T>.Set(value);
             
             [MethodImpl(AggressiveInlining)]
             public void Replace<T>(T value) => Context<T>.Replace(value);
+            
+            [MethodImpl(AggressiveInlining)]
+            public void Remove<T>() => Context<T>.Remove();
         }
 
         #if ENABLE_IL2CPP
@@ -38,8 +41,8 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppEagerStaticClassConstruction]
         #endif
         public abstract partial class Context<T> {
-            private static T _value;
-            private static bool _has;
+            internal static T _value;
+            internal static bool _has;
 
             [MethodImpl(AggressiveInlining)]
             public static void Set(T value) {
@@ -73,6 +76,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void Remove() {
+                _has = false;
                 _value = default;
             }
         }
