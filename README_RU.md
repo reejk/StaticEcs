@@ -83,7 +83,7 @@ public abstract class MySystems : Systems<MySystemsID> { }
 // Определояем системы
 public readonly struct VelocitySystem : IUpdateSystem {
     public void Update() {
-        foreach (var entity in MyWorld.QueryEntities.For<All<Types<Position, Velocity>>>()) {
+        foreach (var entity in MyWorld.QueryEntities.For<All<Position, Velocity>>()) {
             entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
         }
     }
