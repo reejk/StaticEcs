@@ -65,13 +65,13 @@ namespace FFS.Libraries.StaticEcs {
             
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
             [MethodImpl(AggressiveInlining)]
-            internal static void AddWorldDebugEventListener(IWorldDebugEventListener listener) {
+            public static void AddWorldDebugEventListener(IWorldDebugEventListener listener) {
                 _debugEventListeners ??= new List<IWorldDebugEventListener>();
                 _debugEventListeners.Add(listener);
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static void AddComponentsDebugEventListener(IComponentsDebugEventListener listener) {
+            public static void AddComponentsDebugEventListener(IComponentsDebugEventListener listener) {
                 ModuleComponents._debugEventListeners ??= new List<IComponentsDebugEventListener>();
                 ModuleComponents._debugEventListeners.Add(listener);
             }
@@ -87,17 +87,17 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static ComponentDynId GetComponentDynId<T>() where T : struct, IComponent {
+            public static ComponentDynId GetComponentDynId<T>() where T : struct, IComponent {
                 return Components<T>.Value.DynamicId();
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static IComponentsWrapper GetComponentsPool(ComponentDynId id) {
+            public static IComponentsWrapper GetComponentsPool(ComponentDynId id) {
                 return ModuleComponents.GetPool(id);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static ComponentsWrapper<T> GetComponentsPool<T>() where T : struct, IComponent {
+            public static ComponentsWrapper<T> GetComponentsPool<T>() where T : struct, IComponent {
                 return ModuleComponents.GetPool<T>();
             }
 
@@ -109,23 +109,23 @@ namespace FFS.Libraries.StaticEcs {
             }
                         
             [MethodImpl(AggressiveInlining)]
-            internal static TagDynId GetTagDynId<T>() where T : struct, ITag {
+            public static TagDynId GetTagDynId<T>() where T : struct, ITag {
                 return Tags<T>.Value.DynamicId();
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static ITagsWrapper GetTagsPool(TagDynId id) {
+            public static ITagsWrapper GetTagsPool(TagDynId id) {
                 return ModuleTags.GetPool(id);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static TagsWrapper<T> GetTagsPool<T>() where T : struct, ITag {
+            public static TagsWrapper<T> GetTagsPool<T>() where T : struct, ITag {
                 return ModuleTags.GetPool<T>();
             }
             
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
             [MethodImpl(AggressiveInlining)]
-            internal static void AddTagDebugEventListener(ITagDebugEventListener listener) {
+            public static void AddTagDebugEventListener(ITagDebugEventListener listener) {
                 ModuleTags._debugEventListeners ??= new List<ITagDebugEventListener>();
                 ModuleTags._debugEventListeners.Add(listener);
             }
@@ -139,23 +139,23 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static MaskDynId GetMaskDynId<T>() where T : struct, IMask {
+            public static MaskDynId GetMaskDynId<T>() where T : struct, IMask {
                 return Masks<T>.Value.DynamicId();
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static IMasksWrapper GetMasksPool(MaskDynId id) {
+            public static IMasksWrapper GetMasksPool(MaskDynId id) {
                 return ModuleMasks.GetPool(id);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal static MasksWrapper<T> GetMasksPool<T>() where T : struct, IMask {
+            public static MasksWrapper<T> GetMasksPool<T>() where T : struct, IMask {
                 return ModuleMasks.GetPool<T>();
             }
             
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
             [MethodImpl(AggressiveInlining)]
-            internal static void AddMaskDebugEventListener(IMaskDebugEventListener listener) {
+            public static void AddMaskDebugEventListener(IMaskDebugEventListener listener) {
                 ModuleMasks._debugEventListeners ??= new List<IMaskDebugEventListener>();
                 ModuleMasks._debugEventListeners.Add(listener);
             }
