@@ -395,8 +395,10 @@ namespace FFS.Libraries.StaticEcs {
                 _deletedEntitiesCount = 0;
                 Status = WorldStatus.NotCreated;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                foreach (var listener in _debugEventListeners) {
-                    listener.OnWorldDestroyed();
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnWorldDestroyed();
+                    }
                 }
 
                 _debugEventListeners = null;
