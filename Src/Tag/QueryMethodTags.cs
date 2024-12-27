@@ -39,7 +39,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _all.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_incBufId);
@@ -58,7 +58,7 @@ namespace FFS.Libraries.StaticEcs {
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             var types = default(Tag<C1>);
             types.SetData<WorldID>(ref minCount, ref entities);
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             types.BlockTags<WorldID>(1);
             #endif
             m1 = Ecs<WorldID>.Tags<C1>.Value.GetDataIdxByEntityId();
@@ -71,7 +71,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -92,7 +92,7 @@ namespace FFS.Libraries.StaticEcs {
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             var types = default(Tag<C1, C2>);
             types.SetData<WorldID>(ref minCount, ref entities);
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             types.BlockTags<WorldID>(1);
             #endif
             m1 = Ecs<WorldID>.Tags<C1>.Value.GetDataIdxByEntityId();
@@ -106,7 +106,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -129,7 +129,7 @@ namespace FFS.Libraries.StaticEcs {
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             var types = default(Tag<C1, C2, C3>);
             types.SetData<WorldID>(ref minCount, ref entities);
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             types.BlockTags<WorldID>(1);
             #endif
             m1 = Ecs<WorldID>.Tags<C1>.Value.GetDataIdxByEntityId();
@@ -144,7 +144,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2, C3>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -169,7 +169,7 @@ namespace FFS.Libraries.StaticEcs {
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             var types = default(Tag<C1, C2, C3, C4>);
             types.SetData<WorldID>(ref minCount, ref entities);
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             types.BlockTags<WorldID>(1);
             #endif
             m1 = Ecs<WorldID>.Tags<C1>.Value.GetDataIdxByEntityId();
@@ -185,7 +185,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2, C3, C4>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -221,7 +221,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -258,7 +258,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -296,7 +296,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -335,7 +335,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -386,7 +386,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _all.Dispose<WorldID>();
             _exc.Dispose<WorldID>();
             #endif
@@ -429,7 +429,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _exc.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_excBufId);
@@ -446,7 +446,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1>);
             types.BlockTags<WorldID>(1);
             #endif
@@ -460,7 +460,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -479,7 +479,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2>);
             types.BlockTags<WorldID>(1);
             #endif
@@ -494,7 +494,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -528,7 +528,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -563,7 +563,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -600,7 +600,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -637,7 +637,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -675,7 +675,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -714,7 +714,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -754,7 +754,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _any.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_anyBufId);
@@ -773,7 +773,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2>);
             types.BlockTags<WorldID>(1);
             #endif
@@ -788,7 +788,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             var types = default(Tag<C1, C2>);
             types.BlockTags<WorldID>(-1);
             #endif
@@ -821,7 +821,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -855,7 +855,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -891,7 +891,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -927,7 +927,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -964,7 +964,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);
@@ -1002,7 +1002,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _types.Dispose<WorldID>();
             #endif
             _bitMask.DropBuf(_bufId);

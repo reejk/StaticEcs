@@ -60,7 +60,7 @@ namespace FFS.Libraries.StaticEcs {
 
             #region NEW_BY_TYPE_SINGLE
 
-            #if DEBUG || FFS_ECS_EMPTY_ENTITY
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_EMPTY_ENTITY
             [MethodImpl(AggressiveInlining)]
             public static Entity New() {
                 return World.CreateEntityInternal();
@@ -435,7 +435,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public string ToPrettyString() => World.ToPrettyStringEntity(this);
             
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             [MethodImpl(AggressiveInlining)]
             public override string ToString() => World.ToPrettyStringEntity(this);
             #else

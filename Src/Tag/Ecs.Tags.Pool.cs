@@ -25,7 +25,7 @@ namespace FFS.Libraries.StaticEcs {
             private int _tagCount;
             internal ushort id;
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             private int _blockers;
             #endif
 
@@ -49,7 +49,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public void Add(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, cannot access ID - {id} from deleted entity");
                 if (Has(entity)) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Add, ID - {entity._id} is missing on an entity");
                 #endif
@@ -63,6 +63,14 @@ namespace FFS.Libraries.StaticEcs {
                 _dataIdxByEntityId[eid] = _tagCount;
                 _bitMask.Set(eid, id);
                 _tagCount++;
+
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleTags._debugEventListeners != null) {
+                    foreach (var listener in ModuleTags._debugEventListeners) {
+                        listener.OnTagAdd<T>(entity);
+                    }
+                }
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -82,7 +90,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public bool Has(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
                 return _dataIdxByEntityId[entity._id] >= 0;
@@ -90,7 +98,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public bool Delete(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.EntityVersion(entity) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: DelInternal, cannot access ID - {id} from deleted entity");
                 if (!IsNotBlocked())
                     throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: DelInternal,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
@@ -100,6 +108,14 @@ namespace FFS.Libraries.StaticEcs {
                 if (idxRef >= 0) {
                     _tagCount--;
 
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                    if (ModuleTags._debugEventListeners != null) {
+                        foreach (var listener in ModuleTags._debugEventListeners) {
+                            listener.OnTagDelete<T>(entity);
+                        }
+                    }
+                    #endif
+                    
                     if (idxRef < _tagCount) {
                         var e = _entities[_tagCount];
                         _entities[idxRef] = e;
@@ -125,7 +141,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity src, Entity dst) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.EntityVersion(src) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (World.EntityVersion(dst) < 0) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (!IsNotBlocked()) throw new Exception($"TagPool<{typeof(WorldID)}, {typeof(T)}>, Method: Copy,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
@@ -191,11 +207,11 @@ namespace FFS.Libraries.StaticEcs {
                 _tagCount = 0;
             }
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             [MethodImpl(AggressiveInlining)]
             internal void AddBlocker(int amount) {
                 _blockers += amount;
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (_blockers < 0) throw new Exception($"TagsPool<{typeof(WorldID)}, {typeof(T)}>, Method: AddBlocker, incorrect pool user balance when attempting to release");
                 #endif
             }
@@ -203,7 +219,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal bool IsNotBlocked() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 return _blockers <= 1;
                 #endif
                 return true;

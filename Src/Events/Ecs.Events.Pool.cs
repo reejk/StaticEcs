@@ -31,7 +31,7 @@ namespace FFS.Libraries.StaticEcs {
                 internal ushort Id;
                 internal bool Initialized;
                 
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 private int _blockers;
                 #endif
 
@@ -51,7 +51,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 [MethodImpl(AggressiveInlining)]
                 internal EventReceiver<WorldID, T> CreateReceiver() {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.CreateReceiver ] event pool cannot be changed, it is in read-only mode");
                     #endif
                     for (var i = _dataFirstIdx; i < _dataCount; i++) {
@@ -76,7 +76,7 @@ namespace FFS.Libraries.StaticEcs {
                 
                 [MethodImpl(AggressiveInlining)]
                 internal void DeleteReceiver(ref EventReceiver<WorldID, T> receiver) {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.DeleteReceiver ] event pool cannot be changed, it is in read-only mode");
                     #endif
                     if (_deletedReceiversCount == _deletedReceivers.Length) {
@@ -111,7 +111,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 [MethodImpl(AggressiveInlining)]
                 internal void Add(T value = default) {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.Add ] event pool cannot be changed, it is in read-only mode");
                     #endif
                     if (_receiversCount > 0) {
@@ -217,7 +217,7 @@ namespace FFS.Libraries.StaticEcs {
                     return false;
                 }
 
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 [MethodImpl(AggressiveInlining)]
                 internal void AddBlocker(int val) {
                     _blockers += val;

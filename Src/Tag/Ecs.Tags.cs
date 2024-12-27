@@ -1,5 +1,6 @@
 #if !FFS_ECS_DISABLE_TAGS
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using static System.Runtime.CompilerServices.MethodImplOptions;
@@ -18,6 +19,10 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         internal abstract class ModuleTags {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal static List<ITagDebugEventListener> _debugEventListeners;
+            #endif
+
             internal static BitMask BitMask;
             
             private static ulong[] _bitMap;
@@ -78,7 +83,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static TagDynId RegisterTag<C>() where C : struct, ITag {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterTag, World not created");
                 #endif
                 if (TagInfo<C>.Has()) {
@@ -115,7 +120,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static ITagsWrapper GetPool(TagDynId id) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
                 #endif
                 return _pools[id.Val];
@@ -123,7 +128,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static TagsWrapper<T> GetPool<T>() where T : struct, ITag {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
                 #endif
                 return default;
@@ -131,7 +136,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static ushort TagsCount(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: TagsCount, World not initialized");
                 #endif
                 return BitMask.Len(entity._id);
@@ -205,6 +210,9 @@ namespace FFS.Libraries.StaticEcs {
                 _poolsCount = 0;
                 _bitMap = null;
                 BitMapLen = 0;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                _debugEventListeners = null;
+                #endif
             }
 
             #if ENABLE_IL2CPP
@@ -232,6 +240,14 @@ namespace FFS.Libraries.StaticEcs {
                 public static bool Has() => Id < ushort.MaxValue;
             }
         }
+        
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+        public interface ITagDebugEventListener {
+            void OnTagAdd<T>(Entity entity) where T : struct, ITag;
+            void OnTagDelete<T>(Entity entity) where T : struct, ITag;
+        }
+        #endif
+
     }
     
     public struct DeleteTagsSystem<WorldId, T> : IUpdateSystem where T : struct, ITag where WorldId : struct, IWorldId {

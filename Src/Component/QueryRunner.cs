@@ -158,7 +158,7 @@ namespace FFS.Libraries.StaticEcs {
         public void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1> {
             var count = Ecs<WorldID>.Components<C1>.Value.Count();
             var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             #endif
             with.SetData<WorldID>(ref count, ref entities);
@@ -173,7 +173,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             #endif
         }
@@ -182,7 +182,7 @@ namespace FFS.Libraries.StaticEcs {
         public void Run(DelegateQueryFunction<WorldID, C1> runner, P with) {
             var count = Ecs<WorldID>.Components<C1>.Value.Count();
             var entities = Ecs<WorldID>.Components<C1>.Value.EntitiesData();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             #endif
             with.SetData<WorldID>(ref count, ref entities);
@@ -197,7 +197,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             #endif
         }
@@ -214,7 +214,7 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2> {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
             #endif
@@ -243,7 +243,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
             #endif
@@ -251,7 +251,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2> runner, P with) {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
             #endif
@@ -280,7 +280,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
             #endif
@@ -299,7 +299,7 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3> {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
@@ -334,7 +334,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
@@ -343,7 +343,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3> runner, P with) {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
@@ -378,7 +378,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
@@ -399,7 +399,7 @@ namespace FFS.Libraries.StaticEcs {
         where WorldID : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public static void Run<R>(ref R runner, P with) where R : struct, Ecs<WorldID>.IQueryFunction<C1, C2, C3, C4> {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
@@ -440,7 +440,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);
@@ -450,7 +450,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public static void Run(DelegateQueryFunction<WorldID, C1, C2, C3, C4> runner, P with) {
-           #if DEBUG
+           #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(1);
@@ -491,7 +491,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             with.Dispose<WorldID>();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldID>.Components<C3>.Value.AddBlocker(-1);

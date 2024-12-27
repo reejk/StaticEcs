@@ -21,6 +21,9 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public abstract partial class World {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal static List<IWorldDebugEventListener> _debugEventListeners;
+            #endif
             internal static short[] _entityVersions;
             internal static Entity[] _deletedEntities;
             internal static int _entityVersionsCount;
@@ -51,11 +54,32 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleMasks.Initialize();
                 #endif
                 Status = WorldStatus.Initialized;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnWorldInitialized();
+                    }
+                }
+                #endif
             }
+            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            [MethodImpl(AggressiveInlining)]
+            internal static void AddWorldDebugEventListener(IWorldDebugEventListener listener) {
+                _debugEventListeners ??= new List<IWorldDebugEventListener>();
+                _debugEventListeners.Add(listener);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static void AddComponentsDebugEventListener(IComponentsDebugEventListener listener) {
+                ModuleComponents._debugEventListeners ??= new List<IComponentsDebugEventListener>();
+                ModuleComponents._debugEventListeners.Add(listener);
+            }
+            #endif
 
             [MethodImpl(AggressiveInlining)]
             public static ComponentDynId RegisterComponent<C>(uint basePoolCapacity = 128) where C : struct, IComponent {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterComponent, World not created");
                 #endif
                 ModuleComponents.SetBasePoolCapacity<C>(basePoolCapacity);
@@ -98,6 +122,14 @@ namespace FFS.Libraries.StaticEcs {
             internal static TagsWrapper<T> GetTagsPool<T>() where T : struct, ITag {
                 return ModuleTags.GetPool<T>();
             }
+            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            [MethodImpl(AggressiveInlining)]
+            internal static void AddTagDebugEventListener(ITagDebugEventListener listener) {
+                ModuleTags._debugEventListeners ??= new List<ITagDebugEventListener>();
+                ModuleTags._debugEventListeners.Add(listener);
+            }
+            #endif
             #endif
 
             #if !FFS_ECS_DISABLE_MASKS
@@ -120,6 +152,14 @@ namespace FFS.Libraries.StaticEcs {
             internal static MasksWrapper<T> GetMasksPool<T>() where T : struct, IMask {
                 return ModuleMasks.GetPool<T>();
             }
+            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            [MethodImpl(AggressiveInlining)]
+            internal static void AddMaskDebugEventListener(IMaskDebugEventListener listener) {
+                ModuleMasks._debugEventListeners ??= new List<IMaskDebugEventListener>();
+                ModuleMasks._debugEventListeners.Add(listener);
+            }
+            #endif
             #endif
 
             [MethodImpl(AggressiveInlining)]
@@ -127,7 +167,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static Entity CreateEntityInternal() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CreateEntityInternal, World not initialized");
                 #endif
                 Entity entity;
@@ -151,6 +191,13 @@ namespace FFS.Libraries.StaticEcs {
                     _entityVersions[_entityVersionsCount++] = 1;
                 }
 
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnEntityCreated(entity);
+                    }
+                }
+                #endif
                 return entity;
             }
             
@@ -171,6 +218,13 @@ namespace FFS.Libraries.StaticEcs {
                         entity._id = _entityVersionsCount;
                         _entityVersions[_entityVersionsCount++] = 1;
                     }
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                    if (_debugEventListeners != null) {
+                        foreach (var listener in _debugEventListeners) {
+                            listener.OnEntityCreated(entity);
+                        }
+                    }
+                    #endif
                     onCreateEntity.OnCreate(entity);
                     additional?.Invoke(entity);
                 }
@@ -191,7 +245,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void DestroyEntity(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: DestroyEntity, World not initialized");
                 #endif
                 ref var version = ref _entityVersions[entity._id];
@@ -212,11 +266,18 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 _deletedEntities[_deletedEntitiesCount++] = entity;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnEntityDestroyed(entity);
+                    }
+                }
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
             public static void CopyEntityData(Entity srcEntity, Entity dstEntity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CopyEntityData, World not initialized");
                 #endif
                 
@@ -231,7 +292,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static Entity CloneEntity(Entity srcEntity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CloneEntity, World not initialized");
                 #endif
                 
@@ -256,7 +317,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCount() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntitiesCount, World not initialized");
                 #endif
                 return _entityVersionsCount - _deletedEntitiesCount;
@@ -264,7 +325,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCapacity() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: GetEntitiesCapacity, World not initialized");
                 #endif
                 return _entityVersions.Length;
@@ -272,7 +333,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static short EntityVersion(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntityVersion, World not initialized");
                 #endif
                 return _entityVersions[entity._id];
@@ -290,7 +351,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal static void Clear() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Clear, World not initialized");
                 #endif
 
@@ -310,7 +371,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static void Destroy() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Destroy, World not initialized");
                 #endif
                 
@@ -333,8 +394,24 @@ namespace FFS.Libraries.StaticEcs {
                 _entityVersionsCount = 0;
                 _deletedEntitiesCount = 0;
                 Status = WorldStatus.NotCreated;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                foreach (var listener in _debugEventListeners) {
+                    listener.OnWorldDestroyed();
+                }
+
+                _debugEventListeners = null;
+                #endif
             }
         }
+        
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+        public interface IWorldDebugEventListener {
+            void OnEntityCreated(Entity entity);
+            void OnEntityDestroyed(Entity entity);
+            void OnWorldInitialized();
+            void OnWorldDestroyed();
+        }
+        #endif
     }
 
     public enum WorldStatus {

@@ -1,5 +1,6 @@
 ﻿#if !FFS_ECS_DISABLE_MASKS
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using static System.Runtime.CompilerServices.MethodImplOptions;
@@ -18,6 +19,10 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         internal abstract class ModuleMasks {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal static List<IMaskDebugEventListener> _debugEventListeners;
+            #endif
+
             internal static BitMask BitMask;
             
             private static ulong[] _bitMap;
@@ -69,7 +74,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static MaskDynId RegisterMask<T>() where T : struct, IMask {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterMask, World not created");
                 #endif
                 if (MaskInfo<T>.Has()) {
@@ -106,7 +111,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static ushort MasksCount(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: MasksCount, World not initialized");
                 #endif
                 return BitMask.Len(entity._id);
@@ -114,7 +119,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static IMasksWrapper GetPool(MaskDynId id) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
                 #endif
                 return _pools[id.Val];
@@ -122,7 +127,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static MasksWrapper<T> GetPool<T>() where T : struct, IMask {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
                 #endif
                 return default;
@@ -179,6 +184,9 @@ namespace FFS.Libraries.StaticEcs {
                 _poolsCount = 0;
                 _bitMap = null;
                 BitMapLen = 0;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                _debugEventListeners = null;
+                #endif
             }
 
             #if ENABLE_IL2CPP
@@ -201,6 +209,14 @@ namespace FFS.Libraries.StaticEcs {
                 public static bool Has() => Id < ushort.MaxValue;
             }
         }
+        
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+        public interface IMaskDebugEventListener {
+            void OnMaskSet<T>(Entity entity) where T : struct, IMask;
+            void OnMaskDelete<T>(Entity entity) where T : struct, IMask;
+        }
+        #endif
+
     }
 }
 #endif

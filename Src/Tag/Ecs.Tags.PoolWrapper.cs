@@ -46,7 +46,7 @@ namespace FFS.Libraries.StaticEcs {
 
             internal void Destroy();
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             internal void AddBlocker(int val);
             #endif
 
@@ -117,7 +117,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             void ITagsWrapper.Destroy() => Tags<T>.Value.Destroy();
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             void ITagsWrapper.AddBlocker(int val) {
                 Tags<T>.Value.AddBlocker(val);
             }

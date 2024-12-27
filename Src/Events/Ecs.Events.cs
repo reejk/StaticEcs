@@ -26,13 +26,13 @@ namespace FFS.Libraries.StaticEcs {
             #region PUBLIC
             [MethodImpl(AggressiveInlining)]
             public static void Send<E>(E value = default) where E : struct, IEvent {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] Ecs not initialized");
                 #endif
                 if (Pool<E>.Value.Initialized) {
                     Pool<E>.Value.Add(value);
                 }
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 else {
                     EcsDebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] The event will not be sent. No receiver is registered.");
                 }
@@ -41,11 +41,11 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public static void SendDefault(EventDynId value) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send ] Ecs not initialized");
                 #endif
                 if (!_poolTryAddMethods[value.Val]()) {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     EcsDebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send ] The event will not be sent. No receiver is registered.");
                     #endif
                 }
@@ -53,7 +53,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public static EventReceiver<WorldID, E> RegisterEventReceiver<E>() where E : struct, IEvent {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.RegisterEventReceiver<{typeof(E)}> ] Ecs not initialized");
                 #endif
                 if (!Pool<E>.Value.Initialized) {
@@ -64,7 +64,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public static void DeleteEventReceiver<E>(ref EventReceiver<WorldID, E> receiver) where E : struct, IEvent {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.DeleteEventReceiver<{typeof(E)}> ] Ecs not initialized");
                 #endif
                 if (Pool<E>.Value.Initialized) {
@@ -74,7 +74,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public static EventDynId DynamicId<E>() where E : struct, IEvent {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] Ecs not initialized");
                 #endif
                 if (Pool<E>.Value.Initialized) {

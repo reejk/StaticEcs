@@ -17,7 +17,7 @@ namespace FFS.Libraries.StaticEcs {
         public QueryComponentsIterator(byte cs9fake) {
             _data = Ecs<WorldID>.Components<C>.Value.Data();
             _count = Ecs<WorldID>.Components<C>.Value.Count();
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C>.Value.AddBlocker(1);
             #endif
         }
@@ -35,7 +35,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public QueryComponentsIterator<WorldID, C> GetEnumerator() => this;
 
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
             [MethodImpl(AggressiveInlining)]
             public void Dispose() {
                 Ecs<WorldID>.Components<C>.Value.AddBlocker(-1);
@@ -65,7 +65,7 @@ namespace FFS.Libraries.StaticEcs {
             var count = int.MaxValue;
             int[] entities = null;
             with.SetData<WorldID>(ref count, ref entities);
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C>.Value.AddBlocker(1);
             #endif
         }
@@ -94,7 +94,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Dispose() {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldID>.Components<C>.Value.AddBlocker(-1);
             #endif
             _with.Dispose<WorldID>();

@@ -27,7 +27,7 @@ namespace FFS.Libraries.StaticEcs {
             public ref E Value {
                 [MethodImpl(AggressiveInlining)]
                 get {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     if (_idx < 0) throw new Exception($"[ Ecs<{typeof(World)}>.Event<{typeof(E)}>.Value ] event is deleted");
                     #endif
                     return ref Events.Pool<E>.Value.Get(_idx);
@@ -36,7 +36,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public void Suppress() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (_idx < 0) throw new Exception($"[ Ecs<{typeof(World)}>.Event<{typeof(E)}>.Suppress ] event is deleted");
                 #endif
                 Events.Pool<E>.Value.Del((ushort) _idx);

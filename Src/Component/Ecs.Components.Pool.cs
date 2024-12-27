@@ -30,12 +30,12 @@ namespace FFS.Libraries.StaticEcs {
             private int _componentsCount;
             internal ushort id;
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             private int _blockers;
             #endif
             
             static Components() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.Status == WorldStatus.NotCreated) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: `Components static constructor`, World not created");
                 #endif
                 ModuleComponents.RegisterComponent<T>();
@@ -44,7 +44,7 @@ namespace FFS.Libraries.StaticEcs {
             #region PUBLIC
             [MethodImpl(AggressiveInlining)]
             public ComponentDynId DynamicId() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: DynamicId, World not initialized");
                 #endif
                 return new ComponentDynId(id);
@@ -52,7 +52,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public ComponentsWrapper<T> Wrap() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Wrap, World not initialized");
                 #endif
                 return default;
@@ -60,7 +60,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public ref T RefMut(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: RefMut, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: RefMut, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: RefMut, ID - {entity._id} is missing on an entity");
@@ -70,7 +70,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public ref readonly T Ref(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Ref, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Ref, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Ref, ID - {entity._id} is missing on an entity");
@@ -80,7 +80,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public ref T Add(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Add, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Add, cannot access Entity ID - {id} from deleted entity");
                 if (Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Add, ID - {entity._id} is already on an entity");
@@ -101,12 +101,21 @@ namespace FFS.Libraries.StaticEcs {
                 AutoInitHandler?.Invoke(ref data);
 
                 _componentsCount++;
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleComponents._debugEventListeners != null) {
+                    foreach (var listener in ModuleComponents._debugEventListeners) {
+                        listener.OnComponentAdd(entity, ref data);
+                    }
+                }
+                #endif
+                
                 return ref data;
             }
 
             [MethodImpl(AggressiveInlining)]
             public void Put(Entity entity, T component) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Put, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Put, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Put, component pool cannot be changed, it is in read-only mode due to multiple accesses");
@@ -115,6 +124,13 @@ namespace FFS.Libraries.StaticEcs {
                 ref var dataId = ref _dataIdxByEntityId[eid];
                 if (dataId >= 0) {
                     _data[dataId] = component;
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                    if (ModuleComponents._debugEventListeners != null) {
+                        foreach (var listener in ModuleComponents._debugEventListeners) {
+                            listener.OnComponentPut(entity, ref _data[dataId]);
+                        }
+                    }
+                    #endif
                     return;
                 }
 
@@ -129,6 +145,14 @@ namespace FFS.Libraries.StaticEcs {
 
                 _data[_componentsCount] = component;
                 _componentsCount++;
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleComponents._debugEventListeners != null) {
+                    foreach (var listener in ModuleComponents._debugEventListeners) {
+                        listener.OnComponentPut(entity, ref _data[dataId]);
+                    }
+                }
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -148,7 +172,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public bool Has(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Has, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
@@ -157,7 +181,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public bool Delete(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Delete, World not initialized");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Delete, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Delete,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
@@ -167,7 +191,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity src, Entity dst) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Copy, World not initialized");
                 if (!src.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (!dst.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
@@ -196,7 +220,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public int Count() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Count, World not initialized");
                 #endif
                 return _componentsCount;
@@ -204,7 +228,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public T[] Data() {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: Data, World not initialized");
                 #endif
                 return _data;
@@ -212,7 +236,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public static void SetAutoInit(AutoInitHandler<T> handler) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoInit, handler is null");
                 if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoInit, world status not `Created`");
                 #endif
@@ -221,7 +245,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void SetAutoReset(AutoResetHandler<T> handler) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoReset, handler is null");
                 if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoReset, world status not `Created`");
                 #endif
@@ -230,7 +254,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public static void SetAutoCopy(AutoCopyHandler<T> handler) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoCopy, handler is null");
                 if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldID)}, {typeof(T)}>, Method: SetAutoCopy, world status not `Created`");
                 #endif
@@ -277,6 +301,11 @@ namespace FFS.Libraries.StaticEcs {
                     _componentsCount--;
 
                     if (idxRef == _componentsCount) {
+                        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                        foreach (var listener in ModuleComponents._debugEventListeners) {
+                            listener.OnComponentDelete(entity, ref _data[idxRef]);
+                        }
+                        #endif
                         ResetComponent(idxRef);
                     } else {
                         var lastEntity = _entities[_componentsCount];
@@ -367,7 +396,7 @@ namespace FFS.Libraries.StaticEcs {
                 _componentsCount = 0;
             }
             
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             [MethodImpl(AggressiveInlining)]
             internal void AddBlocker(int amount) {
                 _blockers += amount;

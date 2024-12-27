@@ -55,7 +55,7 @@ namespace FFS.Libraries.StaticEcs {
 
             internal void EnsureSize(int size);
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             internal void AddBlocker(int val);
             #endif
         }
@@ -147,7 +147,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Clear() => Components<T>.Value.Clear();
 
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.AddBlocker(int val) => Components<T>.Value.AddBlocker(val);
             #endif

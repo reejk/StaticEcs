@@ -29,7 +29,7 @@ namespace FFS.Libraries.StaticEcs {
             Tags.SetMask<WorldID>(bufId);
         }
 
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             Tags.Dispose<WorldID>();
@@ -56,14 +56,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             BlockTags<WorldID>(1);
             #endif
 
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId,  C1.Val);
         }
 
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -98,14 +98,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
             
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, C1.Val, C2.Val);
         }
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -144,14 +144,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
 
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val);
         }
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -194,7 +194,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
 
@@ -202,7 +202,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -249,14 +249,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
             
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val);
         }
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -308,14 +308,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
 
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val, C6.Val);
         }
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -371,14 +371,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
 
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val, C6.Val, C7.Val);
         }
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -437,14 +437,14 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            #if DEBUG            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG            
             BlockTags<WorldID>(1);
             #endif
 
             Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, C1.Val, C2.Val, C3.Val, C4.Val, C5.Val, C6.Val, C7.Val, C8.Val);
         }
 
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             BlockTags<WorldID>(-1);
@@ -487,13 +487,13 @@ namespace FFS.Libraries.StaticEcs {
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
             foreach (var type in Tags) {
                 Ecs<WorldID>.ModuleTags.BitMask.SetInBuffer(bufId, type.Val);
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 Ecs<WorldID>.ModuleTags.GetPool(type).AddBlocker(1);
                 #endif
             }
         }
        
-        #if DEBUG
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             foreach (var type in Tags) {

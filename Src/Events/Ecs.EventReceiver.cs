@@ -23,7 +23,7 @@ namespace FFS.Libraries.StaticEcs {
             
         [MethodImpl(AggressiveInlining)]
         public void MarkAsReadAll() {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.MarkAsReadAll ] receiver is deleted");
             #endif
             Ecs<WorldID>.Events.Pool<T>.Value.MarkAsReadAll(_id);
@@ -31,7 +31,7 @@ namespace FFS.Libraries.StaticEcs {
             
         [MethodImpl(AggressiveInlining)]
         public void SuppressAll() {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.SuppressAll ] receiver is deleted");
             #endif
             Ecs<WorldID>.Events.Pool<T>.Value.ClearEvents(_id);
@@ -39,7 +39,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public Ecs<WorldID>.EventIterator<T> GetEnumerator() {
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             if (_id < 0) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] receiver is deleted");
             if (Ecs<WorldID>.Events.Pool<T>.Value.IsBlocked()) throw new Exception($"[ Ecs<{typeof(WorldID)}>.EventReceiver<{typeof(T)}>.GetEnumerator ] event pool is blocked");
             #endif
@@ -64,7 +64,7 @@ namespace FFS.Libraries.StaticEcs {
             internal EventIterator(int id) {
                 _id = id;
                 _current = new Event<T>(-1);
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 Events.Pool<T>.Value.AddBlocker(1);
                 #endif
             }
@@ -76,7 +76,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public bool MoveNext() => Events.Pool<T>.Value.ShiftReceiverOffset(_id, _current._idx, out _current._idx);
             
-            #if DEBUG
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             [MethodImpl(AggressiveInlining)]
             public void Dispose() {
                 Events.Pool<T>.Value.AddBlocker(-1);

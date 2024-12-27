@@ -58,13 +58,13 @@ namespace FFS.Libraries.StaticEcs {
             for (var i = 0; i < _allSystemsCount; i++) {
                 var system = _allSystems[i].system;
                 if (system is IInitSystem initSystem) {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     EcsDebugLogger.Info($"Init: {initSystem.GetType().GetGenericName()}");
                     #endif
                     initSystem.Init();
                 }
                 if (system is ISystemsBatch batch) {
-                    #if DEBUG
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     EcsDebugLogger.Info($"Init: {batch.GetType().GetGenericName()}");
                     #endif
                     batch.Init();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -16,6 +17,10 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         internal abstract class ModuleComponents {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal static List<IComponentsDebugEventListener> _debugEventListeners;
+            #endif
+            
             internal static BitMask BitMask;
 
             private static ulong[] _bitMap;
@@ -99,7 +104,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal static IComponentsWrapper GetPool(ComponentDynId id) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
                 #endif
                 return _pools[id.Value];
@@ -107,7 +112,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static ComponentsWrapper<T> GetPool<T>() where T : struct, IComponent {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<>, World not initialized");
                 #endif
                 return default;
@@ -115,7 +120,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal static ushort ComponentsCount(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
                 #endif
                 return BitMask.Len(entity._id);
@@ -123,7 +128,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal static string ToPrettyStringEntity(Entity entity) {
-                #if DEBUG
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ToPrettyStringEntity, World not initialized");
                 #endif
                 var str = "Components:\n";
@@ -193,6 +198,9 @@ namespace FFS.Libraries.StaticEcs {
                 _poolsCount = default;
                 _bitMap = default;
                 _bitMapLen = default;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                _debugEventListeners = null;
+                #endif
             }
 
             internal static void SetBasePoolCapacity<T>(uint capacity) where T : struct, IComponent {
@@ -228,6 +236,14 @@ namespace FFS.Libraries.StaticEcs {
                 public static bool Has() => Id < ushort.MaxValue;
             }
         }
+        
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+        public interface IComponentsDebugEventListener {
+            void OnComponentAdd<T>(Entity entity, ref T component) where T : struct, IComponent;
+            void OnComponentPut<T>(Entity entity, ref T component) where T : struct, IComponent;
+            void OnComponentDelete<T>(Entity entity, ref T component) where T : struct, IComponent;
+        }
+        #endif
     }
     
     public struct DeleteComponentsSystem<WorldId, T> : IUpdateSystem where T : struct, IComponent where WorldId : struct, IWorldId {

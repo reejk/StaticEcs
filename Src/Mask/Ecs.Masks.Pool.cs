@@ -40,6 +40,13 @@ namespace FFS.Libraries.StaticEcs {
             public void Set(Entity entity) {
                 _bitMask.Set(entity._id, id);
                 count++;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleMasks._debugEventListeners != null) {
+                    foreach (var listener in ModuleMasks._debugEventListeners) {
+                        listener.OnMaskSet<T>(entity);
+                    }
+                }
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -51,6 +58,13 @@ namespace FFS.Libraries.StaticEcs {
             public void Delete(Entity entity) {
                 _bitMask.Del(entity._id, id);
                 count--;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleMasks._debugEventListeners != null) {
+                    foreach (var listener in ModuleMasks._debugEventListeners) {
+                        listener.OnMaskDelete<T>(entity);
+                    }
+                }
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
