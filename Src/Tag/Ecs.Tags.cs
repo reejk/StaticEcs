@@ -27,6 +27,7 @@ namespace FFS.Libraries.StaticEcs {
             
             private static ulong[] _bitMap;
             private static ITagsWrapper[] _pools;
+            private static Dictionary<Type, int> _poolsByType;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
@@ -36,6 +37,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
                 _pools = new ITagsWrapper[baseComponentsCapacity];
+                _poolsByType = new Dictionary<Type, int>();
                 _reInitActions ??= new Action[baseComponentsCapacity];
                 _resetActions ??= new Action[baseComponentsCapacity];
             }
@@ -105,6 +107,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 _pools[_poolsCount] = new TagsWrapper<C>();
+                _poolsByType[typeof(C)] = _poolsCount;
                 _reInitActions[_poolsCount] = static () => RegisterTag<C>();
                 _resetActions[_poolsCount] = static () => TagInfo<C>.Reset();
 
@@ -124,6 +127,14 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
                 #endif
                 return _pools[id.Val];
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static ITagsWrapper GetPool(Type tagType) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetTagPool, World not initialized");
+                #endif
+                return _pools[_poolsByType[tagType]];
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -205,13 +216,14 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 BitMask.Destroy();
-                BitMask = null;
-                _pools = null;
-                _poolsCount = 0;
-                _bitMap = null;
-                BitMapLen = 0;
+                BitMask = default;
+                _pools = default;
+                _poolsByType = default;
+                _poolsCount = default;
+                _bitMap = default;
+                BitMapLen = default;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                _debugEventListeners = null;
+                _debugEventListeners = default;
                 #endif
             }
 

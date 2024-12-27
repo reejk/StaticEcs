@@ -95,6 +95,11 @@ namespace FFS.Libraries.StaticEcs {
             public static IComponentsWrapper GetComponentsPool(ComponentDynId id) {
                 return ModuleComponents.GetPool(id);
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static IComponentsWrapper GetComponentsPool(Type componentType) {
+                return ModuleComponents.GetPool(componentType);
+            }
 
             [MethodImpl(AggressiveInlining)]
             public static ComponentsWrapper<T> GetComponentsPool<T>() where T : struct, IComponent {
@@ -116,6 +121,11 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static ITagsWrapper GetTagsPool(TagDynId id) {
                 return ModuleTags.GetPool(id);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static ITagsWrapper GetTagsPool(Type tagType) {
+                return ModuleTags.GetPool(tagType);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -146,6 +156,11 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static IMasksWrapper GetMasksPool(MaskDynId id) {
                 return ModuleMasks.GetPool(id);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static IMasksWrapper GetMasksPool(Type maskType) {
+                return ModuleMasks.GetPool(maskType);
             }
 
             [MethodImpl(AggressiveInlining)]

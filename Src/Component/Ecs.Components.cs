@@ -25,6 +25,7 @@ namespace FFS.Libraries.StaticEcs {
 
             private static ulong[] _bitMap;
             private static IComponentsWrapper[] _pools;
+            private static Dictionary<Type, int> _poolsByType;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
@@ -34,6 +35,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
                 _pools = new IComponentsWrapper[baseComponentsCapacity];
+                _poolsByType = new Dictionary<Type, int>();
                 _reInitActions ??= new Action[baseComponentsCapacity];
                 _resetActions ??= new Action[baseComponentsCapacity];
             }
@@ -82,6 +84,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 _pools[_poolsCount] = new ComponentsWrapper<C>();
+                _poolsByType[typeof(C)] = _poolsCount;
                 ComponentInfo<C>.Register(_poolsCount++);
                 BitMask ??= new BitMask();
                 Components<C>.Value.Create(ComponentInfo<C>.Id, BitMask, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
@@ -108,6 +111,14 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
                 #endif
                 return _pools[id.Value];
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static IComponentsWrapper GetPool(Type componentType) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                #endif
+                return _pools[_poolsByType[componentType]];
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -195,6 +206,7 @@ namespace FFS.Libraries.StaticEcs {
                 BitMask.Destroy();
                 BitMask = default;
                 _pools = default;
+                _poolsByType = default;
                 _poolsCount = default;
                 _bitMap = default;
                 _bitMapLen = default;
