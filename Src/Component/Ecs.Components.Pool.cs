@@ -302,8 +302,10 @@ namespace FFS.Libraries.StaticEcs {
 
                     if (idxRef == _componentsCount) {
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                        foreach (var listener in ModuleComponents._debugEventListeners) {
-                            listener.OnComponentDelete(entity, ref _data[idxRef]);
+                        if (ModuleComponents._debugEventListeners != null) {
+                            foreach (var listener in ModuleComponents._debugEventListeners) {
+                                listener.OnComponentDelete(entity, ref _data[idxRef]);
+                            }
                         }
                         #endif
                         ResetComponent(idxRef);
