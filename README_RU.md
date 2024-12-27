@@ -939,9 +939,9 @@ TagDynId unitTagId = MyWorld.RegisterTag<Unit>();
 MaskDynId frozenMaskId = MyWorld.RegisterMask<Frozen>();
 
 // Альтернативно можно после инициализации мира в любой момент получить данные идентификаторы след образом:
-ComponentDynId positionId = Ecs.Components.GetDynamicId<Position>();
-TagDynId unitTagId = Ecs.Tags.GetDynamicId<Unit>();
-MaskDynId frozenMaskId = Ecs.Masks.GetDynamicId<Frozen>();
+ComponentDynId positionId = Ecs.Components.DynamicId<Position>();
+TagDynId unitTagId = Ecs.Tags.DynamicId<Unit>();
+MaskDynId frozenMaskId = Ecs.Masks.DynamicId<Frozen>();
 
 // Данные идентификаторы можно сохранить любым удобным способом и использовать в операциях c сущностью или Query
 // Существую перегрузки для большинства методов работы с сущностью для данных идентификаторов

@@ -33,15 +33,15 @@ namespace FFS.Libraries.StaticEcs {
             #if DEBUG
             private int _blockers;
             #endif
-
-            #region PUBLIC
+            
             static Components() {
                 #if DEBUG
                 if (World.Status == WorldStatus.NotCreated) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: `Components static constructor`, World not created");
                 #endif
                 ModuleComponents.RegisterComponent<T>();
             }
-            
+
+            #region PUBLIC
             [MethodImpl(AggressiveInlining)]
             public ComponentDynId DynamicId() {
                 #if DEBUG
@@ -201,14 +201,6 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 return _componentsCount;
             }
-
-            [MethodImpl(AggressiveInlining)]
-            public int[] EntitiesData() {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}> Method: EntitiesData, World not initialized");
-                #endif
-                return _entities;
-            }
             
             [MethodImpl(AggressiveInlining)]
             public T[] Data() {
@@ -257,11 +249,6 @@ namespace FFS.Libraries.StaticEcs {
                 for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
                     _dataIdxByEntityId[i] = Empty;
                 }
-            }
-            
-            [MethodImpl(AggressiveInlining)]
-            internal void SetBitMask(BitMask bitMask) {
-                _bitMask = bitMask;
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -332,6 +319,11 @@ namespace FFS.Libraries.StaticEcs {
                     count = _componentsCount;
                     entities = _entities;
                 }
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal int[] EntitiesData() {
+                return _entities;
             }
             
             [MethodImpl(AggressiveInlining)]

@@ -74,7 +74,8 @@ namespace FFS.Libraries.StaticEcs {
             Dispose();
             return count;
         }
-        
+
+        #region COMPONENTS
         [MethodImpl(AggressiveInlining)]
         public void AddForAll<T1>() where T1 : struct, IComponent {
             ref var components = ref Ecs<WorldID>.Components<T1>.Value;
@@ -88,12 +89,12 @@ namespace FFS.Libraries.StaticEcs {
         public void AddForAll<T1, T2>() 
             where T1 : struct, IComponent
             where T2 : struct, IComponent{
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity);
-                components2.Add(entity);
+                container1.Add(entity);
+                container2.Add(entity);
             }
             Dispose();
         }
@@ -103,14 +104,14 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity);
-                components2.Add(entity);
-                components3.Add(entity);
+                container1.Add(entity);
+                container2.Add(entity);
+                container3.Add(entity);
             }
             Dispose();
         }
@@ -121,16 +122,16 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity);
-                components2.Add(entity);
-                components3.Add(entity);
-                components4.Add(entity);
+                container1.Add(entity);
+                container2.Add(entity);
+                container3.Add(entity);
+                container4.Add(entity);
             }
             Dispose();
         }
@@ -142,18 +143,101 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
-            ref var components5 = ref Ecs<WorldID>.Components<T5>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Components<T5>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity);
-                components2.Add(entity);
-                components3.Add(entity);
-                components4.Add(entity);
-                components5.Add(entity);
+                container1.Add(entity);
+                container2.Add(entity);
+                container3.Add(entity);
+                container4.Add(entity);
+                container5.Add(entity);
+            }
+            Dispose();
+        }
+        
+                [MethodImpl(AggressiveInlining)]
+        public void TryAddForAll<T1>() where T1 : struct, IComponent {
+            ref var components = ref Ecs<WorldID>.Components<T1>.Value;
+            while (MoveNext()) {
+                components.TryAdd(new Ecs<WorldID>.Entity(_current));
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddForAll<T1, T2>() 
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent{
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddForAll<T1, T2, T3>() 
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent {
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+                container3.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddForAll<T1, T2, T3, T4>() 
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent
+            where T4 : struct, IComponent {
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+                container3.TryAdd(entity);
+                container4.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddForAll<T1, T2, T3, T4, T5>() 
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent
+            where T4 : struct, IComponent
+            where T5 : struct, IComponent {
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Components<T5>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+                container3.TryAdd(entity);
+                container4.TryAdd(entity);
+                container5.TryAdd(entity);
             }
             Dispose();
         }
@@ -161,10 +245,10 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void AddForAll<T1>(T1 t1) 
             where T1 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity) = t1;
+                container1.Add(entity) = t1;
             }
             Dispose();
         }
@@ -173,12 +257,12 @@ namespace FFS.Libraries.StaticEcs {
         public void AddForAll<T1, T2>(T1 t1, T2 t2) 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity) = t1;
-                components2.Add(entity) = t2;
+                container1.Add(entity) = t1;
+                container2.Add(entity) = t2;
             }
             Dispose();
         }
@@ -188,14 +272,14 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity) = t1;
-                components2.Add(entity) = t2;
-                components3.Add(entity) = t3;
+                container1.Add(entity) = t1;
+                container2.Add(entity) = t2;
+                container3.Add(entity) = t3;
             }
             Dispose();
         }
@@ -206,16 +290,16 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity) = t1;
-                components2.Add(entity) = t2;
-                components3.Add(entity) = t3;
-                components4.Add(entity) = t4;
+                container1.Add(entity) = t1;
+                container2.Add(entity) = t2;
+                container3.Add(entity) = t3;
+                container4.Add(entity) = t4;
             }
             Dispose();
         }
@@ -227,18 +311,18 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
-            ref var components5 = ref Ecs<WorldID>.Components<T5>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Components<T5>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Add(entity) = t1;
-                components2.Add(entity) = t2;
-                components3.Add(entity) = t3;
-                components4.Add(entity) = t4;
-                components5.Add(entity) = t5;
+                container1.Add(entity) = t1;
+                container2.Add(entity) = t2;
+                container3.Add(entity) = t3;
+                container4.Add(entity) = t4;
+                container5.Add(entity) = t5;
             }
             Dispose();
         }
@@ -246,10 +330,10 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void PutForAll<T1>(T1 t1) 
             where T1 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Put(entity, t1);
+                container1.Put(entity, t1);
             }
             Dispose();
         }
@@ -258,12 +342,12 @@ namespace FFS.Libraries.StaticEcs {
         public void PutForAll<T1, T2>(T1 t1, T2 t2) 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Put(entity, t1);
-                components2.Put(entity, t2);
+                container1.Put(entity, t1);
+                container2.Put(entity, t2);
             }
             Dispose();
         }
@@ -273,14 +357,14 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Put(entity, t1);
-                components2.Put(entity, t2);
-                components3.Put(entity, t3);
+                container1.Put(entity, t1);
+                container2.Put(entity, t2);
+                container3.Put(entity, t3);
             }
             Dispose();
         }
@@ -291,16 +375,16 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Put(entity, t1);
-                components2.Put(entity, t2);
-                components3.Put(entity, t3);
-                components4.Put(entity, t4);
+                container1.Put(entity, t1);
+                container2.Put(entity, t2);
+                container3.Put(entity, t3);
+                container4.Put(entity, t4);
             }
             Dispose();
         }
@@ -312,18 +396,18 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
-            ref var components5 = ref Ecs<WorldID>.Components<T5>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Components<T5>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Put(entity, t1);
-                components2.Put(entity, t2);
-                components3.Put(entity, t3);
-                components4.Put(entity, t4);
-                components5.Put(entity, t5);
+                container1.Put(entity, t1);
+                container2.Put(entity, t2);
+                container3.Put(entity, t3);
+                container4.Put(entity, t4);
+                container5.Put(entity, t5);
             }
             Dispose();
         }
@@ -331,10 +415,10 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void DeleteForAll<T1>() 
             where T1 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Delete(entity);
+                container1.Delete(entity);
             }
             Dispose();
         }
@@ -343,12 +427,12 @@ namespace FFS.Libraries.StaticEcs {
         public void DeleteForAll<T1, T2>() 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Delete(entity);
-                components2.Delete(entity);
+                container1.Delete(entity);
+                container2.Delete(entity);
             }
             Dispose();
         }
@@ -358,14 +442,14 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Delete(entity);
-                components2.Delete(entity);
-                components3.Delete(entity);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
             }
             Dispose();
         }
@@ -376,16 +460,16 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Delete(entity);
-                components2.Delete(entity);
-                components3.Delete(entity);
-                components4.Delete(entity);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+                container4.Delete(entity);
             }
             Dispose();
         }
@@ -397,20 +481,448 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var components1 = ref Ecs<WorldID>.Components<T1>.Value;
-            ref var components2 = ref Ecs<WorldID>.Components<T2>.Value;
-            ref var components3 = ref Ecs<WorldID>.Components<T3>.Value;
-            ref var components4 = ref Ecs<WorldID>.Components<T4>.Value;
-            ref var components5 = ref Ecs<WorldID>.Components<T5>.Value;
+            ref var container1 = ref Ecs<WorldID>.Components<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Components<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Components<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Components<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Components<T5>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                components1.Delete(entity);
-                components2.Delete(entity);
-                components3.Delete(entity);
-                components4.Delete(entity);
-                components5.Delete(entity);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+                container4.Delete(entity);
+                container5.Delete(entity);
             }
             Dispose();
         }
+        #endregion
+
+        #region TAGS
+        #if !FFS_ECS_DISABLE_TAGS
+        [MethodImpl(AggressiveInlining)]
+        public void AddTagForAll<T1>() where T1 : struct, ITag {
+            ref var container = ref Ecs<WorldID>.Tags<T1>.Value;
+            while (MoveNext()) {
+                container.Add(new Ecs<WorldID>.Entity(_current));
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void AddTagForAll<T1, T2>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Add(entity);
+                container2.Add(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void AddTagForAll<T1, T2, T3>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Add(entity);
+                container2.Add(entity);
+                container3.Add(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void AddTagForAll<T1, T2, T3, T4>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag
+            where T4 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Add(entity);
+                container2.Add(entity);
+                container3.Add(entity);
+                container4.Add(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void AddTagForAll<T1, T2, T3, T4, T5>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag
+            where T4 : struct, ITag
+            where T5 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Tags<T5>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Add(entity);
+                container2.Add(entity);
+                container3.Add(entity);
+                container4.Add(entity);
+                container5.Add(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddTagForAll<T1>() where T1 : struct, ITag {
+            ref var container = ref Ecs<WorldID>.Tags<T1>.Value;
+            while (MoveNext()) {
+                container.TryAdd(new Ecs<WorldID>.Entity(_current));
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddTagForAll<T1, T2>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddTagForAll<T1, T2, T3>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+                container3.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddTagForAll<T1, T2, T3, T4>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag
+            where T4 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+                container3.TryAdd(entity);
+                container4.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void TryAddTagForAll<T1, T2, T3, T4, T5>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag
+            where T4 : struct, ITag
+            where T5 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Tags<T5>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.TryAdd(entity);
+                container2.TryAdd(entity);
+                container3.TryAdd(entity);
+                container4.TryAdd(entity);
+                container5.TryAdd(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteTagForAll<T1>() 
+            where T1 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteTagForAll<T1, T2>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteTagForAll<T1, T2, T3>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteTagForAll<T1, T2, T3, T4>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag
+            where T4 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+                container4.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteTagForAll<T1, T2, T3, T4, T5>() 
+            where T1 : struct, ITag
+            where T2 : struct, ITag
+            where T3 : struct, ITag
+            where T4 : struct, ITag
+            where T5 : struct, ITag {
+            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Tags<T5>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+                container4.Delete(entity);
+                container5.Delete(entity);
+            }
+            Dispose();
+        }
+        #endif
+        #endregion
+        
+        #region MASKS
+        #if !FFS_ECS_DISABLE_MASKS
+        [MethodImpl(AggressiveInlining)]
+        public void SetMaskForAll<T1>() where T1 : struct, IMask {
+            ref var container = ref Ecs<WorldID>.Masks<T1>.Value;
+            while (MoveNext()) {
+                container.Set(new Ecs<WorldID>.Entity(_current));
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void SetMaskForAll<T1, T2>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Set(entity);
+                container2.Set(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void SetMaskForAll<T1, T2, T3>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask
+            where T3 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Masks<T3>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Set(entity);
+                container2.Set(entity);
+                container3.Set(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void SetMaskForAll<T1, T2, T3, T4>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask
+            where T3 : struct, IMask
+            where T4 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Masks<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Masks<T4>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Set(entity);
+                container2.Set(entity);
+                container3.Set(entity);
+                container4.Set(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void SetMaskForAll<T1, T2, T3, T4, T5>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask
+            where T3 : struct, IMask
+            where T4 : struct, IMask
+            where T5 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Masks<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Masks<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Masks<T5>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Set(entity);
+                container2.Set(entity);
+                container3.Set(entity);
+                container4.Set(entity);
+                container5.Set(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteMaskForAll<T1>() 
+            where T1 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteMaskForAll<T1, T2>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteMaskForAll<T1, T2, T3>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask
+            where T3 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Masks<T3>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteMaskForAll<T1, T2, T3, T4>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask
+            where T3 : struct, IMask
+            where T4 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Masks<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Masks<T4>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+                container4.Delete(entity);
+            }
+            Dispose();
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void DeleteMaskForAll<T1, T2, T3, T4, T5>() 
+            where T1 : struct, IMask
+            where T2 : struct, IMask
+            where T3 : struct, IMask
+            where T4 : struct, IMask
+            where T5 : struct, IMask {
+            ref var container1 = ref Ecs<WorldID>.Masks<T1>.Value;
+            ref var container2 = ref Ecs<WorldID>.Masks<T2>.Value;
+            ref var container3 = ref Ecs<WorldID>.Masks<T3>.Value;
+            ref var container4 = ref Ecs<WorldID>.Masks<T4>.Value;
+            ref var container5 = ref Ecs<WorldID>.Masks<T5>.Value;
+            while (MoveNext()) {
+                var entity = new Ecs<WorldID>.Entity(_current);
+                container1.Delete(entity);
+                container2.Delete(entity);
+                container3.Delete(entity);
+                container4.Delete(entity);
+                container5.Delete(entity);
+            }
+            Dispose();
+        }
+        #endif
+        #endregion
     }
 }

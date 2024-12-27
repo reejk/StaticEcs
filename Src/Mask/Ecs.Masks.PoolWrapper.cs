@@ -12,7 +12,7 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public abstract partial class Ecs<WorldID> {
         public interface IMasksWrapper {
-            public ushort Id();
+            public MaskDynId DynamicId();
 
             public void Set(Entity entity);
 
@@ -31,8 +31,6 @@ namespace FFS.Libraries.StaticEcs {
             public bool TryCast<C>(out MasksWrapper<C> wrapper) where C : struct, IMask;
 
             internal void Clear();
-            
-            internal void SetBitMask(BitMask bitMask);
         }
 
         #if ENABLE_IL2CPP
@@ -41,7 +39,7 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public readonly struct MasksWrapper<T> : IMasksWrapper, Stateless where T : struct, IMask {
             [MethodImpl(AggressiveInlining)]
-            public ushort Id() => Masks<T>.Value.Id();
+            public MaskDynId DynamicId() => Masks<T>.Value.DynamicId();
 
             [MethodImpl(AggressiveInlining)]
             public void Set(Entity entity) => Masks<T>.Value.Set(entity);
@@ -73,9 +71,6 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void IMasksWrapper.Clear() => Masks<T>.Value.Clear();
-
-            [MethodImpl(AggressiveInlining)]
-            void IMasksWrapper.SetBitMask(BitMask bitMask) => Masks<T>.Value.SetBitMask(bitMask);
         }
     }
 }

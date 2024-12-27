@@ -21,11 +21,19 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool Equals(ComponentDynId other) => Value == other.Value;
+        
+        public override bool Equals(object obj) => throw new Exception("ComponentDynId` Equals object` not allowed!");
 
         [MethodImpl(AggressiveInlining)]
         public override int GetHashCode() => Value;
 
         [MethodImpl(AggressiveInlining)]
         public override string ToString() => $"ComponentDynamicId ID: {Value}";
+        
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator ==(ComponentDynId left, ComponentDynId right) => left.Equals(right);
+
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator !=(ComponentDynId left, ComponentDynId right) => !left.Equals(right);
     }
 }

@@ -61,6 +61,21 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleComponents.SetBasePoolCapacity<C>(basePoolCapacity);
                 return ModuleComponents.RegisterComponent<C>();
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static ComponentDynId GetComponentDynId<T>() where T : struct, IComponent {
+                return Components<T>.Value.DynamicId();
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static IComponentsWrapper GetComponentsPool(ComponentDynId id) {
+                return ModuleComponents.GetPool(id);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal static ComponentsWrapper<T> GetComponentsPool<T>() where T : struct, IComponent {
+                return ModuleComponents.GetPool<T>();
+            }
 
             #if !FFS_ECS_DISABLE_TAGS
             [MethodImpl(AggressiveInlining)]
@@ -68,12 +83,42 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleTags.SetBasePoolCapacity<T>(basePoolCapacity);
                 return ModuleTags.RegisterTag<T>();
             }
+                        
+            [MethodImpl(AggressiveInlining)]
+            internal static TagDynId GetTagDynId<T>() where T : struct, ITag {
+                return Tags<T>.Value.DynamicId();
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static ITagsWrapper GetTagsPool(TagDynId id) {
+                return ModuleTags.GetPool(id);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal static TagsWrapper<T> GetTagsPool<T>() where T : struct, ITag {
+                return ModuleTags.GetPool<T>();
+            }
             #endif
 
             #if !FFS_ECS_DISABLE_MASKS
             [MethodImpl(AggressiveInlining)]
             public static MaskDynId RegisterMask<M>() where M : struct, IMask {
                 return ModuleMasks.RegisterMask<M>();
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static MaskDynId GetMaskDynId<T>() where T : struct, IMask {
+                return Masks<T>.Value.DynamicId();
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static IMasksWrapper GetMasksPool(MaskDynId id) {
+                return ModuleMasks.GetPool(id);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal static MasksWrapper<T> GetMasksPool<T>() where T : struct, IMask {
+                return ModuleMasks.GetPool<T>();
             }
             #endif
 

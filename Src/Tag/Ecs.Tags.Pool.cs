@@ -13,8 +13,8 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public abstract partial class Ecs<WorldID> {
         #if ENABLE_IL2CPP
-            [Il2CppSetOption(Option.NullChecks, false)]
-            [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public struct Tags<T> where T : struct, ITag {
             public static Tags<T> Value;
@@ -43,14 +43,9 @@ namespace FFS.Libraries.StaticEcs {
                     _dataIdxByEntityId[i] = Empty;
                 }
             }
-                        
-            [MethodImpl(AggressiveInlining)]
-            internal void SetBitMask(BitMask bitMask) {
-                _bitMask = bitMask;
-            }
 
             [MethodImpl(AggressiveInlining)]
-            public ushort Id() => id;
+            public TagDynId DynamicId() => new(id);
 
             [MethodImpl(AggressiveInlining)]
             public void Add(Entity entity) {

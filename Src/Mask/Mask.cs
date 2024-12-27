@@ -20,12 +20,20 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool Equals(MaskDynId other) => Val == other.Val;
+        
+        public override bool Equals(object obj) => throw new Exception("MaskDynId` Equals object` not allowed!");
 
         [MethodImpl(AggressiveInlining)]
         public override int GetHashCode() => Val;
 
         [MethodImpl(AggressiveInlining)]
         public override string ToString() => $"MaskDynamicId ID: {Val}";
+                
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator ==(MaskDynId left, MaskDynId right) => left.Equals(right);
+
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator !=(MaskDynId left, MaskDynId right) => !left.Equals(right);
     }
 }
 #endif

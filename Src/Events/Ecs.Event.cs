@@ -63,11 +63,19 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool Equals(EventDynId other) => Val == other.Val;
+        
+        public override bool Equals(object obj) => throw new Exception("EventDynId` Equals object` not allowed!");
 
         [MethodImpl(AggressiveInlining)]
         public override int GetHashCode() => Val;
 
         [MethodImpl(AggressiveInlining)]
         public override string ToString() => $"EventDynId ID: {Val}";
+        
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator ==(EventDynId left, EventDynId right) => left.Equals(right);
+
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator !=(EventDynId left, EventDynId right) => !left.Equals(right);
     }
 }

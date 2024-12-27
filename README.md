@@ -939,9 +939,9 @@ TagDynId unitTagId = MyWorld.RegisterTag<Unit>();
 MaskDynId frozenMaskId = MyWorld.RegisterMask<Frozen>();
 
 // Alternatively, it is possible to get these identifiers at any time after initializing the world in the following way:
-ComponentDynId positionId = Ecs.Components.GetDynamicId<Position>();
-TagDynId unitTagId = Ecs.Tags.GetDynamicId<Unit>();
-MaskDynId frozenMaskId = Ecs.Masks.GetDynamicId<Frozen>();
+ComponentDynId positionId = Ecs.Components.DynamicId<Position>();
+TagDynId unitTagId = Ecs.Tags.DynamicId<Unit>();
+MaskDynId frozenMaskId = Ecs.Masks.DynamicId<Frozen>();
 
 // These identifiers can be saved in any convenient way and used in entity or Query operations
 // There are overloads for most entity methods for these identifiers.

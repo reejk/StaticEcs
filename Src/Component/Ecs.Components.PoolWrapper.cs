@@ -11,6 +11,12 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public abstract partial class Ecs<WorldID> {
         public interface IComponentsWrapper {
+            public ComponentDynId DynamicId();
+            
+            public IComponent GetRaw(Entity entity);
+            
+            public void PutRaw(Entity entity, IComponent component);
+            
             public bool Has(Entity entity);
 
             public void Add(Entity entity);
@@ -46,8 +52,6 @@ namespace FFS.Libraries.StaticEcs {
             internal string ToStringComponent(Entity entity);
 
             internal void Clear();
-            
-            internal void SetBitMask(BitMask bitMask);
 
             internal void EnsureSize(int size);
 
@@ -62,11 +66,26 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public readonly struct ComponentsWrapper<T> : IComponentsWrapper, Stateless
             where T : struct, IComponent {
+            
+            [MethodImpl(AggressiveInlining)]
+            public ComponentDynId DynamicId() => Components<T>.Value.DynamicId();
+            
             [MethodImpl(AggressiveInlining)]
             internal ref T RefMut(Entity entity) => ref Components<T>.Value.RefMut(entity);
 
             [MethodImpl(AggressiveInlining)]
             internal ref readonly T Ref(Entity entity) => ref Components<T>.Value.Ref(entity);
+            
+            [MethodImpl(AggressiveInlining)]
+            public IComponent GetRaw(Entity entity) => Components<T>.Value.Ref(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void PutRaw(Entity entity, IComponent component) {
+                Components<T>.Value.Put(entity, (T) component);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public void Put(Entity entity, T component) => Components<T>.Value.Put(entity, component);
 
             [MethodImpl(AggressiveInlining)]
             public void Add(Entity entity) => Components<T>.Value.Add(entity);
@@ -127,9 +146,6 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Clear() => Components<T>.Value.Clear();
-
-            [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.SetBitMask(BitMask bitMask) => Components<T>.Value.SetBitMask(bitMask);
 
             #if DEBUG
             [MethodImpl(AggressiveInlining)]

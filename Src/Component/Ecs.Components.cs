@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
@@ -16,61 +15,17 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract class ModuleComponents {
-            private static ulong[] _bitMap;
+        internal abstract class ModuleComponents {
             internal static BitMask BitMask;
+
+            private static ulong[] _bitMap;
             private static IComponentsWrapper[] _pools;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
             private static ushort _poolsCount;
             private static ushort _bitMapLen;
-            
-            #region PUBLIC
-            [MethodImpl(AggressiveInlining)]
-            public static IComponentsWrapper GetPool(ComponentDynId id) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
-                #endif
-                return _pools[id.Value];
-            }
 
-            [MethodImpl(AggressiveInlining)]
-            public static ComponentsWrapper<T> GetPool<T>() where T : struct, IComponent {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<>, World not initialized");
-                #endif
-                return default;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static ushort ComponentsCount(Entity entity) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
-                #endif
-                return BitMask.Len(entity._id);
-            }
-            
-            [MethodImpl(AggressiveInlining)]
-            public static string ToPrettyStringEntity(Entity entity) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ToPrettyStringEntity, World not initialized");
-                #endif
-                var str = "Components:\n";
-                var bufId = BitMask.BorrowBuf();
-                Array.Copy(_bitMap, entity._id * _bitMapLen, BitMask._buffer, bufId * BitMask._len, _bitMapLen);
-                var id = BitMask.GetMinIndexBuffer(bufId);
-                while (id >= 0) {
-                    str += _pools[id].ToStringComponent(entity);
-                    BitMask.DelInBuffer(bufId, (ushort) id);
-                    id = BitMask.GetMinIndexBuffer(bufId);
-                }
-                BitMask.DropBuf(bufId);
-                return str;
-            }
-            #endregion
-
-            #region INTERNAL
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
                 _pools = new IComponentsWrapper[baseComponentsCapacity];
@@ -88,11 +43,8 @@ namespace FFS.Libraries.StaticEcs {
 
                 _bitMapLen = Utils.CalculateMaskLen(_poolsCount);
                 _bitMap = new ulong[World.EntitiesCapacity() * _bitMapLen];
-                BitMask = new BitMask();
+                BitMask ??= new BitMask();
                 BitMask.Create(_bitMap, 32, _bitMapLen);
-                for (var i = 0; i < _poolsCount; i++) {
-                    _pools[i].SetBitMask(BitMask);
-                }
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -124,9 +76,9 @@ namespace FFS.Libraries.StaticEcs {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
 
-                _pools[_poolsCount++] = new ComponentsWrapper<C>();
-
-                ComponentInfo<C>.Register();
+                _pools[_poolsCount] = new ComponentsWrapper<C>();
+                ComponentInfo<C>.Register(_poolsCount++);
+                BitMask ??= new BitMask();
                 Components<C>.Value.Create(ComponentInfo<C>.Id, BitMask, ComponentInfo<C>.BaseCapacity ?? ComponentInfo.BaseCapacity);
 
                 if (_actionsCount == _reInitActions.Length) {
@@ -143,6 +95,48 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 return Components<C>.Value.DynamicId();
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static IComponentsWrapper GetPool(ComponentDynId id) {
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                #endif
+                return _pools[id.Value];
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal static ComponentsWrapper<T> GetPool<T>() where T : struct, IComponent {
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<>, World not initialized");
+                #endif
+                return default;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal static ushort ComponentsCount(Entity entity) {
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
+                #endif
+                return BitMask.Len(entity._id);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static string ToPrettyStringEntity(Entity entity) {
+                #if DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ToPrettyStringEntity, World not initialized");
+                #endif
+                var str = "Components:\n";
+                var bufId = BitMask.BorrowBuf();
+                Array.Copy(_bitMap, entity._id * _bitMapLen, BitMask._buffer, bufId * BitMask._len, _bitMapLen);
+                var id = BitMask.GetMinIndexBuffer(bufId);
+                while (id >= 0) {
+                    str += _pools[id].ToStringComponent(entity);
+                    BitMask.DelInBuffer(bufId, (ushort) id);
+                    id = BitMask.GetMinIndexBuffer(bufId);
+                }
+                BitMask.DropBuf(bufId);
+                return str;
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -194,12 +188,11 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 BitMask.Destroy();
-                BitMask = null;
-                _pools = null;
-                _poolsCount = 0;
-                _bitMap = null;
-                _bitMapLen = 0;
-                ComponentsCounter.Value = -1;
+                BitMask = default;
+                _pools = default;
+                _poolsCount = default;
+                _bitMap = default;
+                _bitMapLen = default;
             }
 
             internal static void SetBasePoolCapacity<T>(uint capacity) where T : struct, IComponent {
@@ -208,14 +201,6 @@ namespace FFS.Libraries.StaticEcs {
 
             internal static void SetBasePoolCapacity(uint capacity) {
                 ComponentInfo.BaseCapacity = capacity;
-            }
-            #endregion
-
-            #if ENABLE_IL2CPP
-            [Il2CppEagerStaticClassConstruction]
-            #endif
-            private static class ComponentsCounter {
-                public static int Value = -1;
             }
 
             #if ENABLE_IL2CPP
@@ -231,11 +216,9 @@ namespace FFS.Libraries.StaticEcs {
             private static class ComponentInfo<T> where T : struct, IComponent {
                 public static ushort Id = ushort.MaxValue;
                 public static uint? BaseCapacity;
-                public static Type Type;
 
-                public static void Register() {
-                    Id = (ushort) Interlocked.Increment(ref ComponentsCounter.Value);
-                    Type = typeof(T);
+                public static void Register(ushort val) {
+                    Id = val;
                 }
 
                 public static void Reset() {
@@ -250,9 +233,7 @@ namespace FFS.Libraries.StaticEcs {
     public struct DeleteComponentsSystem<WorldId, T> : IUpdateSystem where T : struct, IComponent where WorldId : struct, IWorldId {
         [MethodImpl(AggressiveInlining)]
         public void Update() {
-            foreach (var entity in Ecs<WorldId>.World.QueryEntities.For<All<T>>()) {
-                entity.Delete<T>();
-            }
+            Ecs<WorldId>.World.QueryEntities.For<All<T>>().DeleteForAll<T>();
         }
     }
 }

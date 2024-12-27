@@ -21,12 +21,20 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool Equals(TagDynId other) => Val == other.Val;
+        
+        public override bool Equals(object obj) => throw new Exception("TagDynId` Equals object` not allowed!");
 
         [MethodImpl(AggressiveInlining)]
         public override int GetHashCode() => Val;
 
         [MethodImpl(AggressiveInlining)]
         public override string ToString() => $"TagDynamicId ID: {Val}";
+                
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator ==(TagDynId left, TagDynId right) => left.Equals(right);
+
+        [MethodImpl(AggressiveInlining)]
+        public static bool operator !=(TagDynId left, TagDynId right) => !left.Equals(right);
     }
 }
 #endif

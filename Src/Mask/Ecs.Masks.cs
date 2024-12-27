@@ -17,16 +17,16 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public abstract partial class ModuleMasks {
-            internal static ulong[] _bitMap;
+        internal abstract class ModuleMasks {
             internal static BitMask BitMask;
+            
+            private static ulong[] _bitMap;
             private static IMasksWrapper[] _pools;
             private static Action[] _resetActions;
             private static Action[] _reInitActions;
             private static ushort _actionsCount;
             private static ushort _poolsCount;
-
-            internal static ushort BitMapLen;
+            private static ushort BitMapLen;
 
             [MethodImpl(AggressiveInlining)]
             internal static void Create(uint baseComponentsCapacity) {
@@ -45,11 +45,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 BitMapLen = Utils.CalculateMaskLen(_poolsCount);
                 _bitMap = new ulong[World.EntitiesCapacity() * BitMapLen];
-                BitMask = new BitMask();
-                BitMask.Create(_bitMap, 32, BitMapLen);
-                for (var i = 0; i < _poolsCount; i++) {
-                    _pools[i].SetBitMask(BitMask);
-                }
+                BitMask ??= new BitMask();
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -77,43 +73,39 @@ namespace FFS.Libraries.StaticEcs {
                 if (World.Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterMask, World not created");
                 #endif
                 if (MaskInfo<T>.Has()) {
-                    return GetDynamicId<T>();
+                    return Masks<T>.Value.DynamicId();
                 }
-
-                MaskInfo<T>.Register();
-                Masks<T>.Value.Create(MaskInfo<T>.Id, BitMask);
+                
+                BitMask ??= new BitMask();
+                
                 if (_poolsCount == _pools.Length) {
                     Array.Resize(ref _pools, _poolsCount << 1);
                 }
-
-                _pools[_poolsCount++] = new MasksWrapper<T>();
+                _pools[_poolsCount] = new MasksWrapper<T>();
+                
+                MaskInfo<T>.Register(_poolsCount);
+                Masks<T>.Value.Create(MaskInfo<T>.Id, BitMask);
 
                 if (_actionsCount == _reInitActions.Length) {
                     Array.Resize(ref _reInitActions, _actionsCount << 1);
                     Array.Resize(ref _resetActions, _actionsCount << 1);
                 }
 
-                _reInitActions[MaskInfo<T>.Id] = static () => RegisterMask<T>();
-                _resetActions[MaskInfo<T>.Id] = static () => MaskInfo<T>.Reset();
+                _reInitActions[_poolsCount] = static () => RegisterMask<T>();
+                _resetActions[_poolsCount] = static () => MaskInfo<T>.Reset();
+                
                 _actionsCount++;
-
+                _poolsCount++;
+                
                 if (World.IsInitialized() && _poolsCount % 64 == 0) {
                     ReInitialize();
                 }
 
-                return GetDynamicId<T>();
+                return Masks<T>.Value.DynamicId();
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static MaskDynId GetDynamicId<T>() where T : struct, IMask {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMaskDynamicId, World not initialized");
-                #endif
-                return new MaskDynId(Masks<T>.Value.Id());
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static ushort MasksCount(Entity entity) {
+            internal static ushort MasksCount(Entity entity) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: MasksCount, World not initialized");
                 #endif
@@ -121,39 +113,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static bool HasAllMasks(Entity entity, byte allBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllMasks, World not initialized");
-                #endif
-                return BitMask.HasAll(entity._id, allBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAnyMasks(Entity entity, byte anyBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAnyMasks, World not initialized");
-                #endif
-                return BitMask.HasAny(entity._id, anyBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool HasAllAndExcMasks(Entity entity, byte allBufId, byte excBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: HasAllAndExcMasks, World not initialized");
-                #endif
-                return BitMask.HasAllAndExc(entity._id, allBufId, excBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static bool NotHasAnyMasks(Entity entity, byte excBufId) {
-                #if DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: NotHasAnyMasks, World not initialized");
-                #endif
-                return BitMask.NotHasAny(entity._id, excBufId);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public static IMasksWrapper GetPool(MaskDynId id) {
+            internal static IMasksWrapper GetPool(MaskDynId id) {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
                 #endif
@@ -161,7 +121,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static MasksWrapper<T> GetPool<T>() where T : struct, IMask {
+            internal static MasksWrapper<T> GetPool<T>() where T : struct, IMask {
                 #if DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetMasksPool, World not initialized");
                 #endif
@@ -180,7 +140,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static string ToPrettyStringEntity(Entity entity) {
+            internal static string ToPrettyStringEntity(Entity entity) {
                 var str = "Masks:\n";
                 var bufId = BitMask.BorrowBuf();
                 Array.Copy(_bitMap, entity._id * BitMapLen, BitMask._buffer, bufId * BitMask._len, BitMapLen);
@@ -197,16 +157,6 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static void CopyEntity(Entity srcEntity, Entity dstEntity) {
                 Array.Copy(_bitMap, srcEntity._id * BitMapLen, _bitMap, dstEntity._id * BitMapLen, BitMapLen);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            internal static void SetMaskBit(Entity entity, ushort index) {
-                BitMask.Set(entity._id, index);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            internal static void UnsetMaskBit(Entity entity, ushort index) {
-                BitMask.Del(entity._id, index);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -229,14 +179,6 @@ namespace FFS.Libraries.StaticEcs {
                 _poolsCount = 0;
                 _bitMap = null;
                 BitMapLen = 0;
-                MaskCounter.Value = -1;
-            }
-
-            #if ENABLE_IL2CPP
-            [Il2CppEagerStaticClassConstruction]
-            #endif
-            private static class MaskCounter {
-                public static int Value = -1;
             }
 
             #if ENABLE_IL2CPP
@@ -244,17 +186,18 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             private static class MaskInfo<T> where T : struct, IMask {
                 public static ushort Id = ushort.MaxValue;
-                public static Type Type;
 
-                public static void Register() {
-                    Id = (ushort) Interlocked.Increment(ref MaskCounter.Value);
-                    Type = typeof(T);
+                [MethodImpl(AggressiveInlining)]
+                public static void Register(ushort val) {
+                    Id = val;
                 }
 
+                [MethodImpl(AggressiveInlining)]
                 public static void Reset() {
                     Id = ushort.MaxValue;
                 }
 
+                [MethodImpl(AggressiveInlining)]
                 public static bool Has() => Id < ushort.MaxValue;
             }
         }

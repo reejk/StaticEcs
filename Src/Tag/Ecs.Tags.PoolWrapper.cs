@@ -12,7 +12,7 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     public abstract partial class Ecs<WorldID> {
         public interface ITagsWrapper {
-            public ushort Id();
+            public TagDynId DynamicId();
 
             public void Add(Entity entity);
 
@@ -43,8 +43,6 @@ namespace FFS.Libraries.StaticEcs {
             internal void SetDataIfCountMore(ref int count, ref int[] entities);
 
             internal void Resize(int cap);
-            
-            internal void SetBitMask(BitMask bitMask);
 
             internal void Destroy();
 
@@ -61,7 +59,7 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public readonly struct TagsWrapper<T> : ITagsWrapper, Stateless where T : struct, ITag {
             [MethodImpl(AggressiveInlining)]
-            public ushort Id() => Tags<T>.Value.Id();
+            public TagDynId DynamicId() => Tags<T>.Value.DynamicId();
 
             [MethodImpl(AggressiveInlining)]
             public void Add(Entity entity) => Tags<T>.Value.Add(entity);
@@ -127,9 +125,6 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void ITagsWrapper.Clear() => Tags<T>.Value.Clear();
-
-            [MethodImpl(AggressiveInlining)]
-            void ITagsWrapper.SetBitMask(BitMask bitMask) => Tags<T>.Value.SetBitMask(bitMask);
         }
     }
 }
