@@ -468,6 +468,7 @@ namespace FFS.Libraries.StaticEcs {
         public int EntitiesCapacity();
         
         public void Clear();
+        public IContext Context();
     }
     
     #if ENABLE_IL2CPP
@@ -493,6 +494,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Clear() => Ecs<WorldId>.World.Clear();
+
+        [MethodImpl(AggressiveInlining)]
+        public IContext Context() => Ecs<WorldId>.Context.Value;
     }
 
     public enum WorldStatus {

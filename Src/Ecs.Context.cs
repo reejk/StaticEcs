@@ -16,7 +16,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public readonly struct Context {
+        public readonly struct Context : IContext {
             public static Context Value = default;
             
             [MethodImpl(AggressiveInlining)]
@@ -80,5 +80,17 @@ namespace FFS.Libraries.StaticEcs {
                 _value = default;
             }
         }
+    }
+    
+    public interface IContext {
+        public bool Has<T>();
+            
+        public ref T Get<T>();
+
+        public void Set<T>(T value);
+            
+        public void Replace<T>(T value);
+            
+        public void Remove<T>();
     }
 }
