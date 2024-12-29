@@ -1,5 +1,6 @@
 ﻿#if !FFS_ECS_DISABLE_MASKS
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -20,6 +21,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public int MasksCount() => ModuleMasks.MasksCount(this);
+
+            [MethodImpl(AggressiveInlining)]
+            public void GetAllMasks(List<IMask> result) => ModuleMasks.GetAllMasks(this, result);
 
             #region BY_TYPE
             #region HAS
@@ -287,6 +291,8 @@ namespace FFS.Libraries.StaticEcs {
     
     public partial interface IEntity {
         public int MasksCount();
+
+        public void GetAllMasks(List<IMask> result);
         
         public bool HasAllOfMasks<C>() where C : struct, IMask;
 

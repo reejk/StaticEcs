@@ -169,6 +169,22 @@ namespace FFS.Libraries.StaticEcs {
                 BitMask.DropBuf(bufId);
                 return str;
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal static void GetAllMasks(Entity entity, List<IMask> result) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetAllMasks, World not initialized");
+                #endif
+                var bufId = BitMask.BorrowBuf();
+                Array.Copy(_bitMap, entity._id * BitMapLen, BitMask._buffer, bufId * BitMask._len, BitMapLen);
+                var id = BitMask.GetMinIndexBuffer(bufId);
+                while (id >= 0) {
+                    result.Add(_pools[id].GetRaw());
+                    BitMask.DelInBuffer(bufId, (ushort) id);
+                    id = BitMask.GetMinIndexBuffer(bufId);
+                }
+                BitMask.DropBuf(bufId);
+            }
 
             [MethodImpl(AggressiveInlining)]
             internal static void CopyEntity(Entity srcEntity, Entity dstEntity) {

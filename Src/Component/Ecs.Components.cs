@@ -156,6 +156,23 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
+            internal static void GetAllComponents(Entity entity, List<IComponent> result) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetComponents, World not initialized");
+                #endif
+                result.Clear();
+                var bufId = BitMask.BorrowBuf();
+                Array.Copy(_bitMap, entity._id * _bitMapLen, BitMask._buffer, bufId * BitMask._len, _bitMapLen);
+                var id = BitMask.GetMinIndexBuffer(bufId);
+                while (id >= 0) {
+                    result.Add(_pools[id].GetRaw(entity));
+                    BitMask.DelInBuffer(bufId, (ushort) id);
+                    id = BitMask.GetMinIndexBuffer(bufId);
+                }
+                BitMask.DropBuf(bufId);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
             internal static void DestroyEntity(Entity entity) {
                 var id = BitMask.GetMinIndex(entity._id);
                 while (id >= 0) {

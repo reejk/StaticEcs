@@ -445,6 +445,11 @@ namespace FFS.Libraries.StaticEcs {
         }
         
         [MethodImpl(AggressiveInlining)]
+        public static IReadOnlyCollection<IWorld> GetAll() {
+            return _worlds.Values;
+        }
+        
+        [MethodImpl(AggressiveInlining)]
         internal static void Set(Type worldIdType, IWorld world) {
             _worlds[worldIdType] = world;
         }
@@ -468,6 +473,7 @@ namespace FFS.Libraries.StaticEcs {
         public int EntitiesCapacity();
         
         public void Clear();
+
         public IContext Context();
     }
     

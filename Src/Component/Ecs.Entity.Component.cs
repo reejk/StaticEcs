@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -19,6 +20,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public int ComponentsCount() => ModuleComponents.ComponentsCount(this);
+
+            [MethodImpl(AggressiveInlining)]
+            public void GetAllComponents(List<IComponent> result) => ModuleComponents.GetAllComponents(this, result);
 
             #region BY_TYPE
             #region REF
@@ -803,6 +807,8 @@ namespace FFS.Libraries.StaticEcs {
     
     public partial interface IEntity {
         public int ComponentsCount();
+
+        public void GetAllComponents(List<IComponent> result);
         
         public ref C RefMut<C>() where C : struct, IComponent;
 

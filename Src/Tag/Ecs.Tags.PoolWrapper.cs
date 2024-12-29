@@ -13,6 +13,8 @@ namespace FFS.Libraries.StaticEcs {
     public abstract partial class Ecs<WorldID> {
         public interface ITagsWrapper {
             public TagDynId DynamicId();
+            
+            public ITag GetRaw();
 
             public void Add(Entity entity);
 
@@ -60,6 +62,9 @@ namespace FFS.Libraries.StaticEcs {
         public readonly struct TagsWrapper<T> : ITagsWrapper, Stateless where T : struct, ITag {
             [MethodImpl(AggressiveInlining)]
             public TagDynId DynamicId() => Tags<T>.Value.DynamicId();
+
+            [MethodImpl(AggressiveInlining)]
+            public ITag GetRaw() => new T();
 
             [MethodImpl(AggressiveInlining)]
             public void Add(Entity entity) => Tags<T>.Value.Add(entity);

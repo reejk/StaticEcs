@@ -21,11 +21,10 @@ namespace FFS.Libraries.StaticEcs {
         public void Destroy();
     }
     
-    public interface ISystemsBatch : ISystem {
-        public void Run();
+    internal interface ISystemsBatch : ISystem {
+        internal void Update();
         internal void Init();
         internal void Destroy();
-        internal uint Count();
     }
 
     #if ENABLE_IL2CPP
@@ -38,12 +37,15 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         internal struct SW<TSystem>
-            where TSystem : IUpdateSystem, new() {
+            where TSystem : IUpdateSystem {
             internal TSystem System;
+            
+            public SW(TSystem system) {
+                System = system;
+            }
 
             [MethodImpl(AggressiveInlining)]
             public void Init() {
-                System = new TSystem();
                 if (System is IInitSystem system) {
                     system.Init();
                     System = (TSystem) system;
