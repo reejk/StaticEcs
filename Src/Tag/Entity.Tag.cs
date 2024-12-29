@@ -1,4 +1,5 @@
 ﻿#if !FFS_ECS_DISABLE_TAGS
+using System;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -18,24 +19,24 @@ namespace FFS.Libraries.StaticEcs {
         public partial struct Entity {
 
             [MethodImpl(AggressiveInlining)]
-            public readonly int TagsCount() => ModuleTags.TagsCount(this);
+            public int TagsCount() => ModuleTags.TagsCount(this);
 
             #region BY_TYPE
             #region HAS
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAllOfTags<C>() where C : struct, ITag {
+            public bool HasAllOfTags<C>() where C : struct, ITag {
                 return Tags<C>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAllOfTags<C1, C2>()
+            public bool HasAllOfTags<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 return Tags<C1>.Value.Has(this) && Tags<C2>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAllOfTags<C1, C2, C3>()
+            public bool HasAllOfTags<C1, C2, C3>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -43,14 +44,14 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAnyOfTags<C1, C2>()
+            public bool HasAnyOfTags<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 return Tags<C1>.Value.Has(this) || Tags<C2>.Value.Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAnyOfTags<C1, C2, C3>()
+            public bool HasAnyOfTags<C1, C2, C3>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -60,13 +61,13 @@ namespace FFS.Libraries.StaticEcs {
 
             #region ADD
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag<C>()
+            public void AddTag<C>()
                 where C : struct, ITag {
                 Tags<C>.Value.Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag<C1, C2>()
+            public void AddTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 Tags<C1>.Value.Add(this);
@@ -74,7 +75,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag<C1, C2, C3>()
+            public void AddTag<C1, C2, C3>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -84,7 +85,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag<C1, C2, C3, C4>()
+            public void AddTag<C1, C2, C3, C4>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -96,7 +97,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag<C1, C2, C3, C4, C5>()
+            public void AddTag<C1, C2, C3, C4, C5>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -110,13 +111,13 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C>()
+            public void TryAddTag<C>()
                 where C : struct, ITag {
                 Tags<C>.Value.TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2>()
+            public void TryAddTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 Tags<C1>.Value.TryAdd(this);
@@ -124,7 +125,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2, C3>()
+            public void TryAddTag<C1, C2, C3>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -134,7 +135,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2, C3, C4>()
+            public void TryAddTag<C1, C2, C3, C4>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -146,7 +147,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2, C3, C4, C5>()
+            public void TryAddTag<C1, C2, C3, C4, C5>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -160,13 +161,13 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C>(out bool added)
+            public void TryAddTag<C>(out bool added)
                 where C : struct, ITag {
                 Tags<C>.Value.TryAdd(this, out added);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2>(out bool added)
+            public void TryAddTag<C1, C2>(out bool added)
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 Tags<C1>.Value.TryAdd(this, out var added1);
@@ -175,7 +176,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2, C3>(out bool added)
+            public void TryAddTag<C1, C2, C3>(out bool added)
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -186,7 +187,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2, C3, C4>(out bool added)
+            public void TryAddTag<C1, C2, C3, C4>(out bool added)
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -199,7 +200,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag<C1, C2, C3, C4, C5>(out bool added)
+            public void TryAddTag<C1, C2, C3, C4, C5>(out bool added)
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -216,12 +217,12 @@ namespace FFS.Libraries.StaticEcs {
 
             #region DELETE
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag<C>() where C : struct, ITag {
+            public bool DeleteTag<C>() where C : struct, ITag {
                 return Tags<C>.Value.Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag<C1, C2>()
+            public bool DeleteTag<C1, C2>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 var delC1 = Tags<C1>.Value.Delete(this);
@@ -230,7 +231,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag<C1, C2, C3>()
+            public bool DeleteTag<C1, C2, C3>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -242,7 +243,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag<C1, C2, C3, C4>()
+            public bool DeleteTag<C1, C2, C3, C4>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -256,7 +257,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag<C1, C2, C3, C4, C5>()
+            public bool DeleteTag<C1, C2, C3, C4, C5>()
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -274,13 +275,13 @@ namespace FFS.Libraries.StaticEcs {
             
             #region MOVE
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo<C1>(Entity target)
+            public void MoveTagsTo<C1>(Entity target)
                 where C1 : struct, ITag {
                 Tags<C1>.Value.Move(this, target);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo<C1, C2>(Entity target)
+            public void MoveTagsTo<C1, C2>(Entity target)
                 where C1 : struct, ITag
                 where C2 : struct, ITag {
                 Tags<C1>.Value.Move(this, target);
@@ -288,7 +289,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo<C1, C2, C3>(Entity target)
+            public void MoveTagsTo<C1, C2, C3>(Entity target)
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag {
@@ -298,7 +299,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo<C1, C2, C3, C4>(Entity target)
+            public void MoveTagsTo<C1, C2, C3, C4>(Entity target)
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -310,7 +311,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo<C1, C2, C3, C4, C5>(Entity target)
+            public void MoveTagsTo<C1, C2, C3, C4, C5>(Entity target)
                 where C1 : struct, ITag
                 where C2 : struct, ITag
                 where C3 : struct, ITag
@@ -328,52 +329,52 @@ namespace FFS.Libraries.StaticEcs {
             #region BY_ID
             #region HAS
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAllOfTags(TagDynId c) {
+            public bool HasAllOfTags(TagDynId c) {
                 return ModuleTags.GetPool(c).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAllOfTags(TagDynId c1, TagDynId c2) {
+            public bool HasAllOfTags(TagDynId c1, TagDynId c2) {
                 return ModuleTags.GetPool(c1).Has(this) && ModuleTags.GetPool(c2).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAllOfTags(TagDynId c1, TagDynId c2, TagDynId c3) {
+            public bool HasAllOfTags(TagDynId c1, TagDynId c2, TagDynId c3) {
                 return ModuleTags.GetPool(c1).Has(this) && ModuleTags.GetPool(c2).Has(this) && ModuleTags.GetPool(c3).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAnyOfTags(TagDynId c1, TagDynId c2) {
+            public bool HasAnyOfTags(TagDynId c1, TagDynId c2) {
                 return ModuleTags.GetPool(c1).Has(this) || ModuleTags.GetPool(c2).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool HasAnyOfTags(TagDynId c1, TagDynId c2, TagDynId c3) {
+            public bool HasAnyOfTags(TagDynId c1, TagDynId c2, TagDynId c3) {
                 return ModuleTags.GetPool(c1).Has(this) || ModuleTags.GetPool(c2).Has(this) || ModuleTags.GetPool(c3).Has(this);
             }
             #endregion
             
             #region ADD
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag(TagDynId c) {
+            public void AddTag(TagDynId c) {
                 ModuleTags.GetPool(c).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag(TagDynId c1, TagDynId c2) {
+            public void AddTag(TagDynId c1, TagDynId c2) {
                 ModuleTags.GetPool(c1).Add(this);
                 ModuleTags.GetPool(c2).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag(TagDynId c1, TagDynId c2, TagDynId c3) {
+            public void AddTag(TagDynId c1, TagDynId c2, TagDynId c3) {
                 ModuleTags.GetPool(c1).Add(this);
                 ModuleTags.GetPool(c2).Add(this);
                 ModuleTags.GetPool(c3).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4) {
+            public void AddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4) {
                 ModuleTags.GetPool(c1).Add(this);
                 ModuleTags.GetPool(c2).Add(this);
                 ModuleTags.GetPool(c3).Add(this);
@@ -381,7 +382,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void AddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5) {
+            public void AddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5) {
                 ModuleTags.GetPool(c1).Add(this);
                 ModuleTags.GetPool(c2).Add(this);
                 ModuleTags.GetPool(c3).Add(this);
@@ -390,25 +391,25 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c) {
+            public void TryAddTag(TagDynId c) {
                 ModuleTags.GetPool(c).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2) {
+            public void TryAddTag(TagDynId c1, TagDynId c2) {
                 ModuleTags.GetPool(c1).TryAdd(this);
                 ModuleTags.GetPool(c2).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3) {
                 ModuleTags.GetPool(c1).TryAdd(this);
                 ModuleTags.GetPool(c2).TryAdd(this);
                 ModuleTags.GetPool(c3).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4) {
                 ModuleTags.GetPool(c1).TryAdd(this);
                 ModuleTags.GetPool(c2).TryAdd(this);
                 ModuleTags.GetPool(c3).TryAdd(this);
@@ -416,7 +417,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5) {
                 ModuleTags.GetPool(c1).TryAdd(this);
                 ModuleTags.GetPool(c2).TryAdd(this);
                 ModuleTags.GetPool(c3).TryAdd(this);
@@ -425,19 +426,19 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c, out bool added) {
+            public void TryAddTag(TagDynId c, out bool added) {
                 ModuleTags.GetPool(c).TryAdd(this, out added);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, out bool added) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, out bool added) {
                 ModuleTags.GetPool(c1).TryAdd(this, out var added1);
                 ModuleTags.GetPool(c2).TryAdd(this, out var added2);
                 added = added1 || added2;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, out bool added) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, out bool added) {
                 ModuleTags.GetPool(c1).TryAdd(this, out var added1);
                 ModuleTags.GetPool(c2).TryAdd(this, out var added2);
                 ModuleTags.GetPool(c3).TryAdd(this, out var added3);
@@ -445,7 +446,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, out bool added) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, out bool added) {
                 ModuleTags.GetPool(c1).TryAdd(this, out var added1);
                 ModuleTags.GetPool(c2).TryAdd(this, out var added2);
                 ModuleTags.GetPool(c3).TryAdd(this, out var added3);
@@ -454,7 +455,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5, out bool added) {
+            public void TryAddTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5, out bool added) {
                 ModuleTags.GetPool(c1).TryAdd(this, out var added1);
                 ModuleTags.GetPool(c2).TryAdd(this, out var added2);
                 ModuleTags.GetPool(c3).TryAdd(this, out var added3);
@@ -466,12 +467,12 @@ namespace FFS.Libraries.StaticEcs {
             
             #region DELETE
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag(TagDynId c) {
+            public bool DeleteTag(TagDynId c) {
                 return ModuleTags.GetPool(c).Del(this);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag(TagDynId c1, TagDynId c2) {
+            public bool DeleteTag(TagDynId c1, TagDynId c2) {
                 var delC1 = ModuleTags.GetPool(c1).Del(this);
                 var delC2 = ModuleTags.GetPool(c2).Del(this);
 
@@ -479,7 +480,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag(TagDynId c1, TagDynId c2, TagDynId c3) {
+            public bool DeleteTag(TagDynId c1, TagDynId c2, TagDynId c3) {
                 var delC1 = ModuleTags.GetPool(c1).Del(this);
                 var delC2 = ModuleTags.GetPool(c2).Del(this);
                 var delC3 = ModuleTags.GetPool(c3).Del(this);
@@ -488,7 +489,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4) {
+            public bool DeleteTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4) {
                 var delC1 = ModuleTags.GetPool(c1).Del(this);
                 var delC2 = ModuleTags.GetPool(c2).Del(this);
                 var delC3 = ModuleTags.GetPool(c3).Del(this);
@@ -498,7 +499,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool DeleteTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5) {
+            public bool DeleteTag(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5) {
                 var delC1 = ModuleTags.GetPool(c1).Del(this);
                 var delC2 = ModuleTags.GetPool(c2).Del(this);
                 var delC3 = ModuleTags.GetPool(c3).Del(this);
@@ -511,25 +512,25 @@ namespace FFS.Libraries.StaticEcs {
             
             #region MOVE
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo(TagDynId c, Entity target) {
+            public void MoveTagsTo(TagDynId c, Entity target) {
                 ModuleTags.GetPool(c).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, Entity target) {
+            public void MoveTagsTo(TagDynId c1, TagDynId c2, Entity target) {
                 ModuleTags.GetPool(c1).Move(this, target);
                 ModuleTags.GetPool(c2).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, Entity target) {
+            public void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, Entity target) {
                 ModuleTags.GetPool(c1).Move(this, target);
                 ModuleTags.GetPool(c2).Move(this, target);
                 ModuleTags.GetPool(c3).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, Entity target) {
+            public void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, Entity target) {
                 ModuleTags.GetPool(c1).Move(this, target);
                 ModuleTags.GetPool(c2).Move(this, target);
                 ModuleTags.GetPool(c3).Move(this, target);
@@ -537,7 +538,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5, Entity target) {
+            public void MoveTagsTo(TagDynId c1, TagDynId c2, TagDynId c3, TagDynId c4, TagDynId c5, Entity target) {
                 ModuleTags.GetPool(c1).Move(this, target);
                 ModuleTags.GetPool(c2).Move(this, target);
                 ModuleTags.GetPool(c3).Move(this, target);
@@ -546,7 +547,60 @@ namespace FFS.Libraries.StaticEcs {
             }
             #endregion
             #endregion
+            
+            #region BY_RAW_TYPE
+            [MethodImpl(AggressiveInlining)]
+            public bool HasAllOfTags(Type tagType) {
+                return ModuleTags.GetPool(tagType).Has(this);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public void AddTag(Type tagType) {
+                ModuleTags.GetPool(tagType).Add(this);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public void TryAddTag(Type tagType) {
+                ModuleTags.GetPool(tagType).TryAdd(this);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public void TryAddTag(Type tagType, out bool added) {
+                ModuleTags.GetPool(tagType).TryAdd(this, out added);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public bool DeleteTag(Type tagType) {
+                return ModuleTags.GetPool(tagType).Del(this);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public void MoveTagsTo(Type tagType, Entity target) {
+                ModuleTags.GetPool(tagType).Move(this, target);
+            }
+            #endregion
         }
+    }
+    
+    public partial interface IEntity {
+        public int TagsCount();
+
+        public bool HasAllOfTags<C>() where C : struct, ITag;
+
+        public void AddTag<C>() where C : struct, ITag;
+
+        public bool DeleteTag<C>() where C : struct, ITag;
+
+        public bool HasAllOfTags(Type tagType);
+
+        public void AddTag(Type tagType);
+
+        public void TryAddTag(Type tagType);
+
+        public void TryAddTag(Type tagType, out bool added);
+
+        public bool DeleteTag(Type tagType);
+
     }
 }
 #endif

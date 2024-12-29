@@ -53,6 +53,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if !FFS_ECS_DISABLE_MASKS
                 ModuleMasks.Initialize();
                 #endif
+                Worlds.Set(typeof(WorldID), new WorldWrapper<WorldID>());
                 Status = WorldStatus.Initialized;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 if (_debugEventListeners != null) {
@@ -190,7 +191,7 @@ namespace FFS.Libraries.StaticEcs {
                     entity = _deletedEntities[--_deletedEntitiesCount];
                     _entityVersions[entity._id] *= -1;
                 } else {
-                    entity._id = _entityVersionsCount;
+                    entity = new Entity(_entityVersionsCount);
                     
                     if (_entityVersionsCount == _entityVersions.Length) {
                         Array.Resize(ref _entityVersions, _entityVersionsCount << 1);
@@ -230,7 +231,7 @@ namespace FFS.Libraries.StaticEcs {
                         entity = _deletedEntities[--_deletedEntitiesCount];
                         _entityVersions[entity._id] *= -1;
                     } else {
-                        entity._id = _entityVersionsCount;
+                        entity = new Entity(_entityVersionsCount);
                         _entityVersions[_entityVersionsCount++] = 1;
                     }
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
@@ -365,7 +366,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static void Clear() {
+            public static void Clear() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Clear, World not initialized");
                 #endif
@@ -417,6 +418,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 _debugEventListeners = null;
+                Worlds.Delete(typeof(WorldID));
                 #endif
             }
         }
@@ -429,6 +431,68 @@ namespace FFS.Libraries.StaticEcs {
             void OnWorldDestroyed();
         }
         #endif
+    }
+
+    #if ENABLE_IL2CPP
+    [Il2CppEagerStaticClassConstruction]
+    #endif
+    public static class Worlds {
+        internal static readonly Dictionary<Type, IWorld> _worlds = new();
+
+        [MethodImpl(AggressiveInlining)]
+        public static IWorld Get(Type worldIdType) {
+            return _worlds[worldIdType];
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        internal static void Set(Type worldIdType, IWorld world) {
+            _worlds[worldIdType] = world;
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        internal static void Delete(Type worldIdType) {
+            _worlds[worldIdType] = null;
+        }
+    }
+
+    public interface IWorld {
+        
+        public IEntity NewEntity(Type componentType);
+        
+        public IEntity NewEntity(IComponent component);
+
+        public IEntity NewEntity<T>(T component) where T : struct, IComponent;
+
+        public int EntitiesCount();
+        
+        public int EntitiesCapacity();
+        
+        public void Clear();
+    }
+    
+    #if ENABLE_IL2CPP
+    [Il2CppSetOption(Option.NullChecks, false)]
+    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+    #endif
+    public struct WorldWrapper<WorldId> : IWorld where WorldId : struct, IWorldId {
+        
+        [MethodImpl(AggressiveInlining)]
+        public IEntity NewEntity(Type componentType) => Ecs<WorldId>.Entity.New(componentType);
+
+        [MethodImpl(AggressiveInlining)]
+        public IEntity NewEntity(IComponent component) => Ecs<WorldId>.Entity.New(component);
+
+        [MethodImpl(AggressiveInlining)]
+        public IEntity NewEntity<T>(T component) where T : struct, IComponent => Ecs<WorldId>.Entity.New(component);
+
+        [MethodImpl(AggressiveInlining)]
+        public int EntitiesCount() => Ecs<WorldId>.World.EntitiesCount();
+
+        [MethodImpl(AggressiveInlining)]
+        public int EntitiesCapacity() => Ecs<WorldId>.World.EntitiesCapacity();
+
+        [MethodImpl(AggressiveInlining)]
+        public void Clear() => Ecs<WorldId>.World.Clear();
     }
 
     public enum WorldStatus {

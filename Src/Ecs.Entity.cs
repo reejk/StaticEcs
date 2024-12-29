@@ -15,29 +15,35 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public partial struct Entity : IEquatable<Entity> {
-            internal int _id;
+        public readonly partial struct Entity : IEquatable<Entity>, IEntity {
+            internal readonly int _id;
             internal Entity(int id) {
                 _id = id;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity FromIdx(int idx) => new() { _id = idx };
+            public static Entity FromIdx(int idx) => new(idx);
 
             [MethodImpl(AggressiveInlining)]
-            public readonly short Version() => World.EntityVersion(this);
+            public short Version() => World.EntityVersion(this);
 
             [MethodImpl(AggressiveInlining)]
-            public readonly bool IsActual() => World.EntityVersion(this) > 0;
+            Type IEntity.WorldIdType() => typeof(WorldID);
 
             [MethodImpl(AggressiveInlining)]
-            public readonly Entity Clone() => World.CloneEntity(this);
+            IWorld IEntity.World() => Worlds.Get(typeof(WorldID));
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void CopyTo(Entity dstEntity) => World.CopyEntityData(this, dstEntity);
+            public bool IsActual() => World.EntityVersion(this) > 0;
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void MoveTo(Entity dstEntity) {
+            public Entity Clone() => World.CloneEntity(this);
+
+            [MethodImpl(AggressiveInlining)]
+            public void CopyTo(Entity dstEntity) => World.CopyEntityData(this, dstEntity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void MoveTo(Entity dstEntity) {
                 World.CopyEntityData(this, dstEntity);
                 this.Destroy();
             }
@@ -53,10 +59,10 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public readonly PackedEntity Pack() => new() { _entity = _id, _version = World.EntityVersion(this) };
+            public PackedEntity Pack() => new() { _entity = _id, _version = World.EntityVersion(this) };
 
             [MethodImpl(AggressiveInlining)]
-            public readonly void Destroy() => World.DestroyEntity(this);
+            public void Destroy() => World.DestroyEntity(this);
 
             #region NEW_BY_TYPE_SINGLE
 
@@ -164,6 +170,22 @@ namespace FFS.Libraries.StaticEcs {
                 where C5 : struct, IComponent {
                 var entity = World.CreateEntityInternal();
                 entity.Put(comp1, comp2, comp3, comp4, comp5);
+                return entity;
+            }
+            #endregion
+            
+            #region NEW_BY_RAW_TYPE
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New(Type componentType) {
+                var entity = World.CreateEntityInternal();
+                World.GetComponentsPool(componentType).Add(entity);
+                return entity;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static Entity New(IComponent component) {
+                var entity = World.CreateEntityInternal();
+                World.GetComponentsPool(component.GetType()).PutRaw(entity, component);
                 return entity;
             }
             #endregion
@@ -418,19 +440,13 @@ namespace FFS.Libraries.StaticEcs {
             #endregion
 
             [MethodImpl(AggressiveInlining)]
-            public bool Equals(Entity entity) {
-                return _id == entity._id;
-            }
+            public bool Equals(Entity entity) => _id == entity._id;
 
             [MethodImpl(AggressiveInlining)]
-            public override bool Equals(object obj) {
-                return obj is Entity other && Equals(other);
-            }
+            public override bool Equals(object obj) => throw new Exception("Entity` Equals object` not allowed!");
 
             [MethodImpl(AggressiveInlining)]
-            public override int GetHashCode() {
-                return _id;
-            }
+            public override int GetHashCode() => _id;
 
             [MethodImpl(AggressiveInlining)]
             public string ToPrettyString() => World.ToPrettyStringEntity(this);
@@ -440,9 +456,25 @@ namespace FFS.Libraries.StaticEcs {
             public override string ToString() => World.ToPrettyStringEntity(this);
             #else
             [MethodImpl(AggressiveInlining)]
-            public override string ToString() => $"Entity ID: {_id}";
+            publi readonlyc override string ToString() => $"Entity ID: {_id}";
             #endif
         }
+    }
+
+    public partial interface IEntity {
+        
+        public IWorld World();
+        
+        public Type WorldIdType();
+        
+        public short Version();
+
+        public bool IsActual();
+
+        public PackedEntity Pack();
+
+        public void Destroy();
+        
     }
     
     public struct PackedEntity : IEquatable<PackedEntity> {
