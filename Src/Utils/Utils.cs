@@ -6,6 +6,8 @@ using Unity.IL2CPP.CompilerServices;
 #endif
 
 [assembly: InternalsVisibleTo("Tests")]
+[assembly: InternalsVisibleTo("FFS.StaticEcs.Unity")]
+[assembly: InternalsVisibleTo("FFS.StaticEcs.Unity.Editor")]
 
 namespace FFS.Libraries.StaticEcs {
     #if ENABLE_IL2CPP

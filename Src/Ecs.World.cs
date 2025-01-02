@@ -461,7 +461,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         internal static void Delete(Type worldIdType) {
-            _worlds[worldIdType] = null;
+            _worlds.Remove(worldIdType);
         }
     }
 
