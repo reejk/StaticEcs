@@ -33,6 +33,8 @@ namespace FFS.Libraries.StaticEcs {
             public bool TryCast<C>(out MasksWrapper<C> wrapper) where C : struct, IMask;
 
             internal void Clear();
+
+            internal void Destroy();
         }
 
         #if ENABLE_IL2CPP
@@ -56,7 +58,7 @@ namespace FFS.Libraries.StaticEcs {
             public void Del(Entity entity) => Masks<T>.Value.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void Copy(Entity srcEntity, Entity dstEntity) => ModuleMasks.CopyEntity(srcEntity, dstEntity);
+            public void Copy(Entity srcEntity, Entity dstEntity) => ModuleMasks.Value.CopyEntity(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
             public int Count() => Masks<T>.Value.Count();
@@ -76,6 +78,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void IMasksWrapper.Clear() => Masks<T>.Value.Clear();
+
+            [MethodImpl(AggressiveInlining)]
+            void IMasksWrapper.Destroy() => Masks<T>.Value.Destroy();
         }
     }
 }

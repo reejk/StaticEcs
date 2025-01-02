@@ -74,7 +74,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,  Ecs<WorldID>.Components<C1>.Value.id);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,  Ecs<WorldID>.Components<C1>.Value.id);
         }
        
         #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -123,7 +123,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, Ecs<WorldID>.Components<C1>.Value.id, Ecs<WorldID>.Components<C2>.Value.id);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, Ecs<WorldID>.Components<C1>.Value.id, Ecs<WorldID>.Components<C2>.Value.id);
         }
        
         #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -174,7 +174,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.Value.id,
                                                           Ecs<WorldID>.Components<C2>.Value.id,
                                                           Ecs<WorldID>.Components<C3>.Value.id);
@@ -231,7 +231,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.Value.id,
                                                           Ecs<WorldID>.Components<C2>.Value.id,
                                                           Ecs<WorldID>.Components<C3>.Value.id,
@@ -292,7 +292,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.Value.id,
                                                           Ecs<WorldID>.Components<C2>.Value.id,
                                                           Ecs<WorldID>.Components<C3>.Value.id,
@@ -357,7 +357,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.Value.id,
                                                           Ecs<WorldID>.Components<C2>.Value.id,
                                                           Ecs<WorldID>.Components<C3>.Value.id,
@@ -426,7 +426,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.Value.id,
                                                           Ecs<WorldID>.Components<C2>.Value.id,
                                                           Ecs<WorldID>.Components<C3>.Value.id,
@@ -500,7 +500,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId,
                                                           Ecs<WorldID>.Components<C1>.Value.id,
                                                           Ecs<WorldID>.Components<C2>.Value.id,
                                                           Ecs<WorldID>.Components<C3>.Value.id,

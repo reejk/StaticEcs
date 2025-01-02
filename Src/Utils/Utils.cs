@@ -19,7 +19,7 @@ namespace FFS.Libraries.StaticEcs {
                 len++;
             }
 
-            return (ushort) (len == 0 ? 1 : len);
+            return len;
         }
         
         

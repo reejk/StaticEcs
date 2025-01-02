@@ -256,7 +256,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void OnCreate(Ecs<WorldID>.Entity entity) {
-            Ecs<WorldID>.ModuleComponents.GetPool(t1).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t1).Add(entity);
         }
     }
     
@@ -278,8 +278,8 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void OnCreate(Ecs<WorldID>.Entity entity) {
-            Ecs<WorldID>.ModuleComponents.GetPool(t1).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t2).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t1).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t2).Add(entity);
         }
     }
     
@@ -303,9 +303,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void OnCreate(Ecs<WorldID>.Entity entity) {
-            Ecs<WorldID>.ModuleComponents.GetPool(t1).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t2).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t3).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t1).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t2).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t3).Add(entity);
         }
     }
     
@@ -331,10 +331,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void OnCreate(Ecs<WorldID>.Entity entity) {
-            Ecs<WorldID>.ModuleComponents.GetPool(t1).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t2).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t3).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t4).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t1).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t2).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t3).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t4).Add(entity);
         }
     }
     
@@ -362,11 +362,11 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void OnCreate(Ecs<WorldID>.Entity entity) {
-            Ecs<WorldID>.ModuleComponents.GetPool(t1).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t2).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t3).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t4).Add(entity);
-            Ecs<WorldID>.ModuleComponents.GetPool(t4).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t1).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t2).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t3).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t4).Add(entity);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(t4).Add(entity);
         }
     }
 }

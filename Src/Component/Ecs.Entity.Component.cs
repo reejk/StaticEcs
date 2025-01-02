@@ -19,10 +19,10 @@ namespace FFS.Libraries.StaticEcs {
         public readonly partial struct Entity {
 
             [MethodImpl(AggressiveInlining)]
-            public int ComponentsCount() => ModuleComponents.ComponentsCount(this);
+            public int ComponentsCount() => ModuleComponents.Value.ComponentsCount(this);
 
             [MethodImpl(AggressiveInlining)]
-            public void GetAllComponents(List<IComponent> result) => ModuleComponents.GetAllComponents(this, result);
+            public void GetAllComponents(List<IComponent> result) => ModuleComponents.Value.GetAllComponents(this, result);
 
             #region BY_TYPE
             #region REF
@@ -501,137 +501,137 @@ namespace FFS.Libraries.StaticEcs {
             #region HAS
             [MethodImpl(AggressiveInlining)]
             public bool HasAllOf(ComponentDynId c) {
-                return ModuleComponents.GetPool(c).Has(this);
+                return ModuleComponents.Value.GetPool(c).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool HasAllOf(ComponentDynId c1, ComponentDynId c2) {
-                return ModuleComponents.GetPool(c1).Has(this) && ModuleComponents.GetPool(c2).Has(this);
+                return ModuleComponents.Value.GetPool(c1).Has(this) && ModuleComponents.Value.GetPool(c2).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool HasAllOf(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3) {
-                return ModuleComponents.GetPool(c1).Has(this) && ModuleComponents.GetPool(c2).Has(this) && ModuleComponents.GetPool(c3).Has(this);
+                return ModuleComponents.Value.GetPool(c1).Has(this) && ModuleComponents.Value.GetPool(c2).Has(this) && ModuleComponents.Value.GetPool(c3).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool HasAnyOf(ComponentDynId c1, ComponentDynId c2) {
-                return ModuleComponents.GetPool(c1).Has(this) || ModuleComponents.GetPool(c2).Has(this);
+                return ModuleComponents.Value.GetPool(c1).Has(this) || ModuleComponents.Value.GetPool(c2).Has(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool HasAnyOf(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3) {
-                return ModuleComponents.GetPool(c1).Has(this) || ModuleComponents.GetPool(c2).Has(this) || ModuleComponents.GetPool(c3).Has(this);
+                return ModuleComponents.Value.GetPool(c1).Has(this) || ModuleComponents.Value.GetPool(c2).Has(this) || ModuleComponents.Value.GetPool(c3).Has(this);
             }
             #endregion
             
             #region ADD
             [MethodImpl(AggressiveInlining)]
             public void Add(ComponentDynId c) {
-                ModuleComponents.GetPool(c).Add(this);
+                ModuleComponents.Value.GetPool(c).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void Add(ComponentDynId c1, ComponentDynId c2) {
-                ModuleComponents.GetPool(c1).Add(this);
-                ModuleComponents.GetPool(c2).Add(this);
+                ModuleComponents.Value.GetPool(c1).Add(this);
+                ModuleComponents.Value.GetPool(c2).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void Add(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3) {
-                ModuleComponents.GetPool(c1).Add(this);
-                ModuleComponents.GetPool(c2).Add(this);
-                ModuleComponents.GetPool(c3).Add(this);
+                ModuleComponents.Value.GetPool(c1).Add(this);
+                ModuleComponents.Value.GetPool(c2).Add(this);
+                ModuleComponents.Value.GetPool(c3).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void Add(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4) {
-                ModuleComponents.GetPool(c1).Add(this);
-                ModuleComponents.GetPool(c2).Add(this);
-                ModuleComponents.GetPool(c3).Add(this);
-                ModuleComponents.GetPool(c4).Add(this);
+                ModuleComponents.Value.GetPool(c1).Add(this);
+                ModuleComponents.Value.GetPool(c2).Add(this);
+                ModuleComponents.Value.GetPool(c3).Add(this);
+                ModuleComponents.Value.GetPool(c4).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void Add(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5) {
-                ModuleComponents.GetPool(c1).Add(this);
-                ModuleComponents.GetPool(c2).Add(this);
-                ModuleComponents.GetPool(c3).Add(this);
-                ModuleComponents.GetPool(c4).Add(this);
-                ModuleComponents.GetPool(c5).Add(this);
+                ModuleComponents.Value.GetPool(c1).Add(this);
+                ModuleComponents.Value.GetPool(c2).Add(this);
+                ModuleComponents.Value.GetPool(c3).Add(this);
+                ModuleComponents.Value.GetPool(c4).Add(this);
+                ModuleComponents.Value.GetPool(c5).Add(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c) {
-                ModuleComponents.GetPool(c).TryAdd(this);
+                ModuleComponents.Value.GetPool(c).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2) {
-                ModuleComponents.GetPool(c1).TryAdd(this);
-                ModuleComponents.GetPool(c2).TryAdd(this);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3) {
-                ModuleComponents.GetPool(c1).TryAdd(this);
-                ModuleComponents.GetPool(c2).TryAdd(this);
-                ModuleComponents.GetPool(c3).TryAdd(this);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this);
+                ModuleComponents.Value.GetPool(c3).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4) {
-                ModuleComponents.GetPool(c1).TryAdd(this);
-                ModuleComponents.GetPool(c2).TryAdd(this);
-                ModuleComponents.GetPool(c3).TryAdd(this);
-                ModuleComponents.GetPool(c4).TryAdd(this);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this);
+                ModuleComponents.Value.GetPool(c3).TryAdd(this);
+                ModuleComponents.Value.GetPool(c4).TryAdd(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5) {
-                ModuleComponents.GetPool(c1).TryAdd(this);
-                ModuleComponents.GetPool(c2).TryAdd(this);
-                ModuleComponents.GetPool(c3).TryAdd(this);
-                ModuleComponents.GetPool(c4).TryAdd(this);
-                ModuleComponents.GetPool(c5).TryAdd(this);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this);
+                ModuleComponents.Value.GetPool(c3).TryAdd(this);
+                ModuleComponents.Value.GetPool(c4).TryAdd(this);
+                ModuleComponents.Value.GetPool(c5).TryAdd(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c, out bool added) {
-                ModuleComponents.GetPool(c).TryAdd(this, out added);
+                ModuleComponents.Value.GetPool(c).TryAdd(this, out added);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, out bool added) {
-                ModuleComponents.GetPool(c1).TryAdd(this, out var added1);
-                ModuleComponents.GetPool(c2).TryAdd(this, out var added2);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this, out var added1);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this, out var added2);
                 added = added1 || added2;
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, out bool added) {
-                ModuleComponents.GetPool(c1).TryAdd(this, out var added1);
-                ModuleComponents.GetPool(c2).TryAdd(this, out var added2);
-                ModuleComponents.GetPool(c3).TryAdd(this, out var added3);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this, out var added1);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this, out var added2);
+                ModuleComponents.Value.GetPool(c3).TryAdd(this, out var added3);
                 added = added1 || added2 || added3;
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, out bool added) {
-                ModuleComponents.GetPool(c1).TryAdd(this, out var added1);
-                ModuleComponents.GetPool(c2).TryAdd(this, out var added2);
-                ModuleComponents.GetPool(c3).TryAdd(this, out var added3);
-                ModuleComponents.GetPool(c4).TryAdd(this, out var added4);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this, out var added1);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this, out var added2);
+                ModuleComponents.Value.GetPool(c3).TryAdd(this, out var added3);
+                ModuleComponents.Value.GetPool(c4).TryAdd(this, out var added4);
                 added = added1 || added2 || added3 || added4;
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5, out bool added) {
-                ModuleComponents.GetPool(c1).TryAdd(this, out var added1);
-                ModuleComponents.GetPool(c2).TryAdd(this, out var added2);
-                ModuleComponents.GetPool(c3).TryAdd(this, out var added3);
-                ModuleComponents.GetPool(c4).TryAdd(this, out var added4);
-                ModuleComponents.GetPool(c5).TryAdd(this, out var added5);
+                ModuleComponents.Value.GetPool(c1).TryAdd(this, out var added1);
+                ModuleComponents.Value.GetPool(c2).TryAdd(this, out var added2);
+                ModuleComponents.Value.GetPool(c3).TryAdd(this, out var added3);
+                ModuleComponents.Value.GetPool(c4).TryAdd(this, out var added4);
+                ModuleComponents.Value.GetPool(c5).TryAdd(this, out var added5);
                 added = added1 || added2 || added3 || added4 || added5;
             }
             #endregion
@@ -639,43 +639,43 @@ namespace FFS.Libraries.StaticEcs {
             #region DELETE
             [MethodImpl(AggressiveInlining)]
             public bool Delete(ComponentDynId c) {
-                return ModuleComponents.GetPool(c).Delete(this);
+                return ModuleComponents.Value.GetPool(c).Delete(this);
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool Delete(ComponentDynId c1, ComponentDynId c2) {
-                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
-                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
+                var delC1 = ModuleComponents.Value.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.Value.GetPool(c2).Delete(this);
 
                 return delC1 && delC2;
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool Delete(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3) {
-                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
-                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
-                var delC3 = ModuleComponents.GetPool(c3).Delete(this);
+                var delC1 = ModuleComponents.Value.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.Value.GetPool(c2).Delete(this);
+                var delC3 = ModuleComponents.Value.GetPool(c3).Delete(this);
 
                 return delC1 && delC2 && delC3;
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool Delete(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4) {
-                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
-                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
-                var delC3 = ModuleComponents.GetPool(c3).Delete(this);
-                var delC4 = ModuleComponents.GetPool(c4).Delete(this);
+                var delC1 = ModuleComponents.Value.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.Value.GetPool(c2).Delete(this);
+                var delC3 = ModuleComponents.Value.GetPool(c3).Delete(this);
+                var delC4 = ModuleComponents.Value.GetPool(c4).Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4;
             }
 
             [MethodImpl(AggressiveInlining)]
             public bool Delete(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5) {
-                var delC1 = ModuleComponents.GetPool(c1).Delete(this);
-                var delC2 = ModuleComponents.GetPool(c2).Delete(this);
-                var delC3 = ModuleComponents.GetPool(c3).Delete(this);
-                var delC4 = ModuleComponents.GetPool(c4).Delete(this);
-                var delC5 = ModuleComponents.GetPool(c5).Delete(this);
+                var delC1 = ModuleComponents.Value.GetPool(c1).Delete(this);
+                var delC2 = ModuleComponents.Value.GetPool(c2).Delete(this);
+                var delC3 = ModuleComponents.Value.GetPool(c3).Delete(this);
+                var delC4 = ModuleComponents.Value.GetPool(c4).Delete(this);
+                var delC5 = ModuleComponents.Value.GetPool(c5).Delete(this);
 
                 return delC1 && delC2 && delC3 && delC4 && delC5;
             }
@@ -684,74 +684,74 @@ namespace FFS.Libraries.StaticEcs {
             #region COPY
             [MethodImpl(AggressiveInlining)]
             public void CopyComponentsTo(ComponentDynId c, Entity target) {
-                ModuleComponents.GetPool(c).Copy(this, target);
+                ModuleComponents.Value.GetPool(c).Copy(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void CopyComponentsTo(ComponentDynId c1, ComponentDynId c2, Entity target) {
-                ModuleComponents.GetPool(c1).Copy(this, target);
-                ModuleComponents.GetPool(c2).Copy(this, target);
+                ModuleComponents.Value.GetPool(c1).Copy(this, target);
+                ModuleComponents.Value.GetPool(c2).Copy(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void CopyComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, Entity target) {
-                ModuleComponents.GetPool(c1).Copy(this, target);
-                ModuleComponents.GetPool(c2).Copy(this, target);
-                ModuleComponents.GetPool(c3).Copy(this, target);
+                ModuleComponents.Value.GetPool(c1).Copy(this, target);
+                ModuleComponents.Value.GetPool(c2).Copy(this, target);
+                ModuleComponents.Value.GetPool(c3).Copy(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void CopyComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, Entity target) {
-                ModuleComponents.GetPool(c1).Copy(this, target);
-                ModuleComponents.GetPool(c2).Copy(this, target);
-                ModuleComponents.GetPool(c3).Copy(this, target);
-                ModuleComponents.GetPool(c4).Copy(this, target);
+                ModuleComponents.Value.GetPool(c1).Copy(this, target);
+                ModuleComponents.Value.GetPool(c2).Copy(this, target);
+                ModuleComponents.Value.GetPool(c3).Copy(this, target);
+                ModuleComponents.Value.GetPool(c4).Copy(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void CopyComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5, Entity target) {
-                ModuleComponents.GetPool(c1).Copy(this, target);
-                ModuleComponents.GetPool(c2).Copy(this, target);
-                ModuleComponents.GetPool(c3).Copy(this, target);
-                ModuleComponents.GetPool(c4).Copy(this, target);
-                ModuleComponents.GetPool(c5).Copy(this, target);
+                ModuleComponents.Value.GetPool(c1).Copy(this, target);
+                ModuleComponents.Value.GetPool(c2).Copy(this, target);
+                ModuleComponents.Value.GetPool(c3).Copy(this, target);
+                ModuleComponents.Value.GetPool(c4).Copy(this, target);
+                ModuleComponents.Value.GetPool(c5).Copy(this, target);
             }
             #endregion
             
             #region MOVE
             [MethodImpl(AggressiveInlining)]
             public void MoveComponentsTo(ComponentDynId c, Entity target) {
-                ModuleComponents.GetPool(c).Move(this, target);
+                ModuleComponents.Value.GetPool(c).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, Entity target) {
-                ModuleComponents.GetPool(c1).Move(this, target);
-                ModuleComponents.GetPool(c2).Move(this, target);
+                ModuleComponents.Value.GetPool(c1).Move(this, target);
+                ModuleComponents.Value.GetPool(c2).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, Entity target) {
-                ModuleComponents.GetPool(c1).Move(this, target);
-                ModuleComponents.GetPool(c2).Move(this, target);
-                ModuleComponents.GetPool(c3).Move(this, target);
+                ModuleComponents.Value.GetPool(c1).Move(this, target);
+                ModuleComponents.Value.GetPool(c2).Move(this, target);
+                ModuleComponents.Value.GetPool(c3).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, Entity target) {
-                ModuleComponents.GetPool(c1).Move(this, target);
-                ModuleComponents.GetPool(c2).Move(this, target);
-                ModuleComponents.GetPool(c3).Move(this, target);
-                ModuleComponents.GetPool(c4).Move(this, target);
+                ModuleComponents.Value.GetPool(c1).Move(this, target);
+                ModuleComponents.Value.GetPool(c2).Move(this, target);
+                ModuleComponents.Value.GetPool(c3).Move(this, target);
+                ModuleComponents.Value.GetPool(c4).Move(this, target);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void MoveComponentsTo(ComponentDynId c1, ComponentDynId c2, ComponentDynId c3, ComponentDynId c4, ComponentDynId c5, Entity target) {
-                ModuleComponents.GetPool(c1).Move(this, target);
-                ModuleComponents.GetPool(c2).Move(this, target);
-                ModuleComponents.GetPool(c3).Move(this, target);
-                ModuleComponents.GetPool(c4).Move(this, target);
-                ModuleComponents.GetPool(c5).Move(this, target);
+                ModuleComponents.Value.GetPool(c1).Move(this, target);
+                ModuleComponents.Value.GetPool(c2).Move(this, target);
+                ModuleComponents.Value.GetPool(c3).Move(this, target);
+                ModuleComponents.Value.GetPool(c4).Move(this, target);
+                ModuleComponents.Value.GetPool(c5).Move(this, target);
             }
             #endregion
             #endregion
@@ -759,47 +759,47 @@ namespace FFS.Libraries.StaticEcs {
             #region BY_RAW_TYPE
             [MethodImpl(AggressiveInlining)]
             public bool HasAllOf(Type componentType) {
-                return ModuleComponents.GetPool(componentType).Has(this);
+                return ModuleComponents.Value.GetPool(componentType).Has(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public void Add(Type componentType) {
-                ModuleComponents.GetPool(componentType).Add(this);
+                ModuleComponents.Value.GetPool(componentType).Add(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public IComponent GetRaw(Type componentType) {
-               return ModuleComponents.GetPool(componentType).GetRaw(this);
+               return ModuleComponents.Value.GetPool(componentType).GetRaw(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public void PutRaw(IComponent component) {
-                ModuleComponents.GetPool(component.GetType()).PutRaw(this, component);
+                ModuleComponents.Value.GetPool(component.GetType()).PutRaw(this, component);
             }
 
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(Type componentType) {
-                ModuleComponents.GetPool(componentType).TryAdd(this);
+                ModuleComponents.Value.GetPool(componentType).TryAdd(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public void TryAdd(Type componentType, out bool added) {
-                ModuleComponents.GetPool(componentType).TryAdd(this, out added);
+                ModuleComponents.Value.GetPool(componentType).TryAdd(this, out added);
             }
             
             [MethodImpl(AggressiveInlining)]
             public bool Delete(Type componentType) {
-                return ModuleComponents.GetPool(componentType).Delete(this);
+                return ModuleComponents.Value.GetPool(componentType).Delete(this);
             }
             
             [MethodImpl(AggressiveInlining)]
             public void CopyComponentsTo(Type componentType, Entity target) {
-                ModuleComponents.GetPool(componentType).Copy(this, target);
+                ModuleComponents.Value.GetPool(componentType).Copy(this, target);
             }
             
             [MethodImpl(AggressiveInlining)]
             public void MoveComponentsTo(Type componentType, Entity target) {
-                ModuleComponents.GetPool(componentType).Move(this, target);
+                ModuleComponents.Value.GetPool(componentType).Move(this, target);
             }
             #endregion
         }

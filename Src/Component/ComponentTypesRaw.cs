@@ -49,7 +49,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -58,7 +58,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value);
         }
 
         #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -69,7 +69,7 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
         }
         #endif
     }
@@ -90,8 +90,8 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -100,7 +100,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value);
         }
 
 
@@ -112,8 +112,8 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
         }
         #endif
     }
@@ -136,9 +136,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -147,7 +147,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value);
         }
 
 
@@ -159,9 +159,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).AddBlocker(val);
         }
         #endif
     }
@@ -186,10 +186,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -198,7 +198,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value);
         }
 
 
@@ -210,10 +210,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).AddBlocker(val);
         }
         #endif
     }
@@ -240,11 +240,11 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -253,7 +253,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value);
         }
 
 
@@ -265,11 +265,11 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).AddBlocker(val);
         }
         #endif
     }
@@ -299,12 +299,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C6).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C6).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -313,7 +313,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value, C6.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value, C6.Value);
         }
 
 
@@ -325,12 +325,12 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C6).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C6).AddBlocker(val);
         }
         #endif
     }
@@ -362,13 +362,13 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C6).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C7).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C6).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C7).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -377,7 +377,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
             
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value, C6.Value, C7.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value, C6.Value, C7.Value);
         }
 
 
@@ -389,13 +389,13 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C6).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C7).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C6).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C7).AddBlocker(val);
         }
         #endif
     }
@@ -428,14 +428,14 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C6).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C7).SetDataIfCountLess(ref minCount, ref entities);
-            Ecs<WorldID>.ModuleComponents.GetPool(C8).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C6).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C7).SetDataIfCountLess(ref minCount, ref entities);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C8).SetDataIfCountLess(ref minCount, ref entities);
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -444,7 +444,7 @@ namespace FFS.Libraries.StaticEcs {
             BlockComponents<WorldID>(1);
             #endif
 
-            Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value, C6.Value, C7.Value, C8.Value);
+            Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, C1.Value, C2.Value, C3.Value, C4.Value, C5.Value, C6.Value, C7.Value, C8.Value);
         }
 
         #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -455,14 +455,14 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void BlockComponents<WorldID>(int val) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleComponents.GetPool(C1).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C2).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C3).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C4).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C5).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C6).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C7).AddBlocker(val);
-            Ecs<WorldID>.ModuleComponents.GetPool(C8).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C1).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C2).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C3).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C4).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C5).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C6).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C7).AddBlocker(val);
+            Ecs<WorldID>.ModuleComponents.Value.GetPool(C8).AddBlocker(val);
         }
         #endif
     }
@@ -482,16 +482,16 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void SetData<WorldID>(ref int minCount, ref int[] entities) where WorldID : struct, IWorldId {
             foreach (var type in Types) {
-                Ecs<WorldID>.ModuleComponents.GetPool(type).SetDataIfCountLess(ref minCount, ref entities);
+                Ecs<WorldID>.ModuleComponents.Value.GetPool(type).SetDataIfCountLess(ref minCount, ref entities);
             }
         }
 
         [MethodImpl(AggressiveInlining)]
         public void SetBitMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
             foreach (var type in Types) {
-                Ecs<WorldID>.ModuleComponents.BitMask.SetInBuffer(bufId, type.Value);
+                Ecs<WorldID>.ModuleComponents.Value.BitMask.SetInBuffer(bufId, type.Value);
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                Ecs<WorldID>.ModuleComponents.GetPool(type).AddBlocker(1);
+                Ecs<WorldID>.ModuleComponents.Value.GetPool(type).AddBlocker(1);
                 #endif
             }
         }
@@ -500,7 +500,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void Dispose<WorldID>() where WorldID : struct, IWorldId {
             foreach (var type in Types) {
-                Ecs<WorldID>.ModuleComponents.GetPool(type).AddBlocker(-1);
+                Ecs<WorldID>.ModuleComponents.Value.GetPool(type).AddBlocker(-1);
             }
         }
         #endif

@@ -12,22 +12,22 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public readonly struct MaskDynId : IEquatable<MaskDynId> {
-        internal readonly ushort Val;
+        internal readonly ushort Value;
         
-        internal MaskDynId(ushort val) {
-            Val = val;
+        internal MaskDynId(ushort value) {
+            Value = value;
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool Equals(MaskDynId other) => Val == other.Val;
+        public bool Equals(MaskDynId other) => Value == other.Value;
         
         public override bool Equals(object obj) => throw new Exception("MaskDynId` Equals object` not allowed!");
 
         [MethodImpl(AggressiveInlining)]
-        public override int GetHashCode() => Val;
+        public override int GetHashCode() => Value;
 
         [MethodImpl(AggressiveInlining)]
-        public override string ToString() => $"MaskDynamicId ID: {Val}";
+        public override string ToString() => $"MaskDynamicId ID: {Value}";
                 
         [MethodImpl(AggressiveInlining)]
         public static bool operator ==(MaskDynId left, MaskDynId right) => left.Equals(right);

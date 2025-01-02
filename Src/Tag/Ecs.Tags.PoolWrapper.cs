@@ -16,11 +16,7 @@ namespace FFS.Libraries.StaticEcs {
             
             public ITag GetRaw();
 
-            public void Add(Entity entity);
-
-            public void TryAdd(Entity entity);
-
-            public void TryAdd(Entity entity, out bool added);
+            public void Set(Entity entity);
 
             public bool Has(Entity entity);
 
@@ -67,13 +63,7 @@ namespace FFS.Libraries.StaticEcs {
             public ITag GetRaw() => new T();
 
             [MethodImpl(AggressiveInlining)]
-            public void Add(Entity entity) => Tags<T>.Value.Add(entity);
-
-            [MethodImpl(AggressiveInlining)]
-            public void TryAdd(Entity entity) => Tags<T>.Value.TryAdd(entity);
-
-            [MethodImpl(AggressiveInlining)]
-            public void TryAdd(Entity entity, out bool added) => Tags<T>.Value.TryAdd(entity, out added);
+            public void Set(Entity entity) => Tags<T>.Value.Set(entity);
 
             [MethodImpl(AggressiveInlining)]
             public bool Has(Entity entity) => Tags<T>.Value.Has(entity);

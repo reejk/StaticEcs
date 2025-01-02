@@ -9,8 +9,6 @@ using Unity.IL2CPP.CompilerServices;
 namespace FFS.Libraries.StaticEcs {
     public interface ISystemsId { }
 
-    public struct DefaultSystemsId : ISystemsId { }
-
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]

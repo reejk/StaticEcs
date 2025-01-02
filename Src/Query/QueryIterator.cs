@@ -501,30 +501,30 @@ namespace FFS.Libraries.StaticEcs {
         #region TAGS
         #if !FFS_ECS_DISABLE_TAGS
         [MethodImpl(AggressiveInlining)]
-        public void AddTagForAll<T1>() where T1 : struct, ITag {
+        public void SetTagForAll<T1>() where T1 : struct, ITag {
             ref var container = ref Ecs<WorldID>.Tags<T1>.Value;
             while (MoveNext()) {
-                container.Add(new Ecs<WorldID>.Entity(_current));
+                container.Set(new Ecs<WorldID>.Entity(_current));
             }
             Dispose();
         }
         
         [MethodImpl(AggressiveInlining)]
-        public void AddTagForAll<T1, T2>() 
+        public void SetTagForAll<T1, T2>() 
             where T1 : struct, ITag
             where T2 : struct, ITag {
             ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
             ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                container1.Add(entity);
-                container2.Add(entity);
+                container1.Set(entity);
+                container2.Set(entity);
             }
             Dispose();
         }
         
         [MethodImpl(AggressiveInlining)]
-        public void AddTagForAll<T1, T2, T3>() 
+        public void SetTagForAll<T1, T2, T3>() 
             where T1 : struct, ITag
             where T2 : struct, ITag
             where T3 : struct, ITag {
@@ -533,15 +533,15 @@ namespace FFS.Libraries.StaticEcs {
             ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                container1.Add(entity);
-                container2.Add(entity);
-                container3.Add(entity);
+                container1.Set(entity);
+                container2.Set(entity);
+                container3.Set(entity);
             }
             Dispose();
         }
         
         [MethodImpl(AggressiveInlining)]
-        public void AddTagForAll<T1, T2, T3, T4>() 
+        public void SetTagForAll<T1, T2, T3, T4>() 
             where T1 : struct, ITag
             where T2 : struct, ITag
             where T3 : struct, ITag
@@ -552,16 +552,16 @@ namespace FFS.Libraries.StaticEcs {
             ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                container1.Add(entity);
-                container2.Add(entity);
-                container3.Add(entity);
-                container4.Add(entity);
+                container1.Set(entity);
+                container2.Set(entity);
+                container3.Set(entity);
+                container4.Set(entity);
             }
             Dispose();
         }
         
         [MethodImpl(AggressiveInlining)]
-        public void AddTagForAll<T1, T2, T3, T4, T5>() 
+        public void SetTagForAll<T1, T2, T3, T4, T5>() 
             where T1 : struct, ITag
             where T2 : struct, ITag
             where T3 : struct, ITag
@@ -574,94 +574,11 @@ namespace FFS.Libraries.StaticEcs {
             ref var container5 = ref Ecs<WorldID>.Tags<T5>.Value;
             while (MoveNext()) {
                 var entity = new Ecs<WorldID>.Entity(_current);
-                container1.Add(entity);
-                container2.Add(entity);
-                container3.Add(entity);
-                container4.Add(entity);
-                container5.Add(entity);
-            }
-            Dispose();
-        }
-        
-        [MethodImpl(AggressiveInlining)]
-        public void TryAddTagForAll<T1>() where T1 : struct, ITag {
-            ref var container = ref Ecs<WorldID>.Tags<T1>.Value;
-            while (MoveNext()) {
-                container.TryAdd(new Ecs<WorldID>.Entity(_current));
-            }
-            Dispose();
-        }
-        
-        [MethodImpl(AggressiveInlining)]
-        public void TryAddTagForAll<T1, T2>() 
-            where T1 : struct, ITag
-            where T2 : struct, ITag {
-            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
-            while (MoveNext()) {
-                var entity = new Ecs<WorldID>.Entity(_current);
-                container1.TryAdd(entity);
-                container2.TryAdd(entity);
-            }
-            Dispose();
-        }
-        
-        [MethodImpl(AggressiveInlining)]
-        public void TryAddTagForAll<T1, T2, T3>() 
-            where T1 : struct, ITag
-            where T2 : struct, ITag
-            where T3 : struct, ITag {
-            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
-            while (MoveNext()) {
-                var entity = new Ecs<WorldID>.Entity(_current);
-                container1.TryAdd(entity);
-                container2.TryAdd(entity);
-                container3.TryAdd(entity);
-            }
-            Dispose();
-        }
-        
-        [MethodImpl(AggressiveInlining)]
-        public void TryAddTagForAll<T1, T2, T3, T4>() 
-            where T1 : struct, ITag
-            where T2 : struct, ITag
-            where T3 : struct, ITag
-            where T4 : struct, ITag {
-            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
-            while (MoveNext()) {
-                var entity = new Ecs<WorldID>.Entity(_current);
-                container1.TryAdd(entity);
-                container2.TryAdd(entity);
-                container3.TryAdd(entity);
-                container4.TryAdd(entity);
-            }
-            Dispose();
-        }
-        
-        [MethodImpl(AggressiveInlining)]
-        public void TryAddTagForAll<T1, T2, T3, T4, T5>() 
-            where T1 : struct, ITag
-            where T2 : struct, ITag
-            where T3 : struct, ITag
-            where T4 : struct, ITag
-            where T5 : struct, ITag {
-            ref var container1 = ref Ecs<WorldID>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldID>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldID>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldID>.Tags<T4>.Value;
-            ref var container5 = ref Ecs<WorldID>.Tags<T5>.Value;
-            while (MoveNext()) {
-                var entity = new Ecs<WorldID>.Entity(_current);
-                container1.TryAdd(entity);
-                container2.TryAdd(entity);
-                container3.TryAdd(entity);
-                container4.TryAdd(entity);
-                container5.TryAdd(entity);
+                container1.Set(entity);
+                container2.Set(entity);
+                container3.Set(entity);
+                container4.Set(entity);
+                container5.Set(entity);
             }
             Dispose();
         }

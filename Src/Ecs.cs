@@ -71,8 +71,6 @@ namespace FFS.Libraries.StaticEcs {
         public uint BaseComponentTypesCount;
         public uint BaseMaskTypesCount;
         public uint BaseTagTypesCount;
-        public uint BaseComponentPoolCount;
-        public uint BaseTagPoolCount;
         public uint BaseEventPoolCount;
 
         public static EcsConfig Default() => new() {
@@ -81,8 +79,6 @@ namespace FFS.Libraries.StaticEcs {
             BaseComponentTypesCount = 64,
             BaseMaskTypesCount = 64,
             BaseTagTypesCount = 64,
-            BaseComponentPoolCount = 128,
-            BaseTagPoolCount = 128,
             BaseEventPoolCount = 32,
         };
     }

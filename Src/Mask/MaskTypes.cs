@@ -62,7 +62,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(0, Ecs<WorldID>.Masks<C1>.Value.id);
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(0, Ecs<WorldID>.Masks<C1>.Value.id);
         }
     }
 
@@ -88,7 +88,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id);
         }
@@ -117,7 +117,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(AggressiveInlining)]
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id,
                                                      Ecs<WorldID>.Masks<C3>.Value.id);
@@ -147,7 +147,7 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<C1, C2, C3, C4> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id,
                                                      Ecs<WorldID>.Masks<C3>.Value.id,
@@ -179,7 +179,7 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<C1, C2, C3, C4, C5> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id,
                                                      Ecs<WorldID>.Masks<C3>.Value.id,
@@ -213,7 +213,7 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<C1, C2, C3, C4, C5, C6> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id,
                                                      Ecs<WorldID>.Masks<C3>.Value.id,
@@ -249,7 +249,7 @@ namespace FFS.Libraries.StaticEcs {
         public static MaskAny<C1, C2, C3, C4, C5, C6, C7> Any() => default;
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id,
                                                      Ecs<WorldID>.Masks<C3>.Value.id,
@@ -288,7 +288,7 @@ namespace FFS.Libraries.StaticEcs {
 
         
         public void SetMask<WorldID>(byte bufId) where WorldID : struct, IWorldId {
-            Ecs<WorldID>.ModuleMasks.BitMask.SetInBuffer(bufId,
+            Ecs<WorldID>.ModuleMasks.Value.BitMask.SetInBuffer(bufId,
                                                      Ecs<WorldID>.Masks<C1>.Value.id,
                                                      Ecs<WorldID>.Masks<C2>.Value.id,
                                                      Ecs<WorldID>.Masks<C3>.Value.id,
