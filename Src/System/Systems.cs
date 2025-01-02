@@ -14,13 +14,13 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Systems<SysID> where SysID : struct, ISystemsId {
-        private static ISystemsBatch[] _batchSystems;
-        private static (ISystem system, short order)[] _allSystems;
-        private static int _allSystemsCount;
-        private static int _batchSystemsCount;
+        internal static ISystemsBatch[] _batchSystems;
+        internal static (ISystem system, short order)[] _allSystems;
+        internal static int _allSystemsCount;
+        internal static int _batchSystemsCount;
 
-        private static uint _currentSystemIndex;
-        private static uint _updateSystemsCount;
+        internal static uint _currentSystemIndex;
+        internal static uint _updateSystemsCount;
 
         [MethodImpl(AggressiveInlining)]
         public static void Create(uint baseSize = 64) {
