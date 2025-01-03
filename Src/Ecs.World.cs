@@ -103,17 +103,17 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetComponentsPool(ComponentDynId id, out IComponentsWrapper pool) {
+            public static bool TryGetComponentsPool(ComponentDynId id, out IComponentsWrapper pool) {
                 return ModuleComponents.Value.TryGetPool(id, out pool);
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetComponentsPool(Type componentType, out IComponentsWrapper pool) {
+            public static bool TryGetComponentsPool(Type componentType, out IComponentsWrapper pool) {
                 return ModuleComponents.Value.TryGetPool(componentType, out pool);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetComponentsPool<T>(out ComponentsWrapper<T> pool) where T : struct, IComponent {
+            public static bool TryGetComponentsPool<T>(out ComponentsWrapper<T> pool) where T : struct, IComponent {
                 return ModuleComponents.Value.TryGetPool(out pool);
             }
 
@@ -147,17 +147,17 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetTagsPool(TagDynId id, out ITagsWrapper pool) {
+            public static bool TryGetTagsPool(TagDynId id, out ITagsWrapper pool) {
                 return ModuleTags.Value.TryGetPool(id, out pool);
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetTagsPool(Type tagType, out ITagsWrapper pool) {
+            public static bool TryGetTagsPool(Type tagType, out ITagsWrapper pool) {
                 return ModuleTags.Value.TryGetPool(tagType, out pool);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetTagsPool<T>(out TagsWrapper<T> pool) where T : struct, ITag {
+            public static bool TryGetTagsPool<T>(out TagsWrapper<T> pool) where T : struct, ITag {
                 return ModuleTags.Value.TryGetPool(out pool);
             }
             
@@ -200,17 +200,17 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetMasksPool(MaskDynId id, out IMasksWrapper pool) {
+            public static bool TryGetMasksPool(MaskDynId id, out IMasksWrapper pool) {
                 return ModuleMasks.Value.TryGetPool(id, out pool);
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetMasksPool(Type maskType, out IMasksWrapper pool) {
+            public static bool TryGetMasksPool(Type maskType, out IMasksWrapper pool) {
                 return ModuleMasks.Value.TryGetPool(maskType, out pool);
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal bool TryGetMasksPool<T>(out MasksWrapper<T> pool) where T : struct, IMask {
+            public static bool TryGetMasksPool<T>(out MasksWrapper<T> pool) where T : struct, IMask {
                 return ModuleMasks.Value.TryGetPool(out pool);
             }
             
