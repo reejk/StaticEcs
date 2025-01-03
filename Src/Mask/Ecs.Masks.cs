@@ -95,6 +95,43 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 return default;
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool(MaskDynId id, out IMasksWrapper pool) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.ModuleMasks, Method: GetPool, World not initialized");
+                #endif
+                if (id.Value >= _poolsCount) {
+                    pool = default;
+                    return false;
+                }
+                
+                pool = _pools[id.Value];
+                return true;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool(Type maskType, out IMasksWrapper pool) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.ModuleMasks, Method: GetPool, World not initialized");
+                #endif
+                if (!_poolIdxByType.TryGetValue(maskType, out var idx)) {
+                    pool = default;
+                    return false;
+                }
+                
+                pool = _pools[idx];
+                return true;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool<T>(out MasksWrapper<T> pool) where T : struct, IMask {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.ModuleMasks, Method: GetPool, World not initialized");
+                #endif
+                pool = default;
+                return MaskInfo<T>.IsRegistered();
+            }
 
             [MethodImpl(AggressiveInlining)]
             internal void Resize(int cap) {

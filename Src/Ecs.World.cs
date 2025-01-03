@@ -101,6 +101,21 @@ namespace FFS.Libraries.StaticEcs {
             public static ComponentsWrapper<T> GetComponentsPool<T>() where T : struct, IComponent {
                 return ModuleComponents.Value.GetPool<T>();
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetComponentsPool(ComponentDynId id, out IComponentsWrapper pool) {
+                return ModuleComponents.Value.TryGetPool(id, out pool);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetComponentsPool(Type componentType, out IComponentsWrapper pool) {
+                return ModuleComponents.Value.TryGetPool(componentType, out pool);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetComponentsPool<T>(out ComponentsWrapper<T> pool) where T : struct, IComponent {
+                return ModuleComponents.Value.TryGetPool(out pool);
+            }
 
             #if !FFS_ECS_DISABLE_TAGS
             [MethodImpl(AggressiveInlining)]
@@ -129,6 +144,21 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static TagsWrapper<T> GetTagsPool<T>() where T : struct, ITag {
                 return ModuleTags.Value.GetPool<T>();
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetTagsPool(TagDynId id, out ITagsWrapper pool) {
+                return ModuleTags.Value.TryGetPool(id, out pool);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetTagsPool(Type tagType, out ITagsWrapper pool) {
+                return ModuleTags.Value.TryGetPool(tagType, out pool);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetTagsPool<T>(out TagsWrapper<T> pool) where T : struct, ITag {
+                return ModuleTags.Value.TryGetPool(out pool);
             }
             
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
@@ -169,6 +199,21 @@ namespace FFS.Libraries.StaticEcs {
                 return ModuleMasks.Value.GetPool<T>();
             }
             
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetMasksPool(MaskDynId id, out IMasksWrapper pool) {
+                return ModuleMasks.Value.TryGetPool(id, out pool);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetMasksPool(Type maskType, out IMasksWrapper pool) {
+                return ModuleMasks.Value.TryGetPool(maskType, out pool);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetMasksPool<T>(out MasksWrapper<T> pool) where T : struct, IMask {
+                return ModuleMasks.Value.TryGetPool(out pool);
+            }
+            
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
             [MethodImpl(AggressiveInlining)]
             public static void AddMaskDebugEventListener(IMaskDebugEventListener listener) {
@@ -201,6 +246,14 @@ namespace FFS.Libraries.StaticEcs {
                         #endif
                         #if !FFS_ECS_DISABLE_MASKS
                         ModuleMasks.Value.Resize(_entityVersionsCount << 1);
+                        #endif
+                        
+                        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                        if (_debugEventListeners != null) {
+                            foreach (var listener in _debugEventListeners) {
+                                listener.OnWorldResized(_entityVersionsCount << 1);
+                            }
+                        }
                         #endif
                     }
                     
@@ -256,6 +309,14 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 #if !FFS_ECS_DISABLE_MASKS
                 ModuleMasks.Value.Resize(newSize);
+                #endif
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnWorldResized(newSize);
+                    }
+                }
                 #endif
             }
 
@@ -330,11 +391,19 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 return result;
             }
-
+            
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCount() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntitiesCount, World not initialized");
+                #endif
+                return _entityVersionsCount;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static int EntitiesCountWithoutDestroyed() {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntitiesCountWithoutDestroyed, World not initialized");
                 #endif
                 return _entityVersionsCount - _deletedEntitiesCount;
             }
@@ -391,6 +460,14 @@ namespace FFS.Libraries.StaticEcs {
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Destroy, World not initialized");
                 #endif
                 
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnWorldDestroyed();
+                    }
+                }
+                #endif
+                
                 for (var i = _entityVersionsCount - 1; i >= 0; i--) {
                     if (_entityVersions[i] > 0) {
                         DestroyEntity(Entity.FromIdx(i));
@@ -410,16 +487,8 @@ namespace FFS.Libraries.StaticEcs {
                 _entityVersionsCount = 0;
                 _deletedEntitiesCount = 0;
                 Status = WorldStatus.NotCreated;
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (_debugEventListeners != null) {
-                    foreach (var listener in _debugEventListeners) {
-                        listener.OnWorldDestroyed();
-                    }
-                }
-
                 _debugEventListeners = null;
                 Worlds.Delete(typeof(WorldID));
-                #endif
             }
         }
         
@@ -429,6 +498,7 @@ namespace FFS.Libraries.StaticEcs {
             void OnEntityDestroyed(Entity entity);
             void OnWorldInitialized();
             void OnWorldDestroyed();
+            void OnWorldResized(int capacity);
         }
         #endif
     }
@@ -473,6 +543,8 @@ namespace FFS.Libraries.StaticEcs {
 
         public IEntity NewEntity<T>(T component) where T : struct, IComponent;
 
+        public int EntitiesCountWithoutDestroyed();
+
         public int EntitiesCount();
         
         public int EntitiesCapacity();
@@ -496,6 +568,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public IEntity NewEntity<T>(T component) where T : struct, IComponent => Ecs<WorldId>.Entity.New(component);
+
+        [MethodImpl(AggressiveInlining)]
+        public int EntitiesCountWithoutDestroyed() => Ecs<WorldId>.World.EntitiesCountWithoutDestroyed();
 
         [MethodImpl(AggressiveInlining)]
         public int EntitiesCount() => Ecs<WorldId>.World.EntitiesCount();

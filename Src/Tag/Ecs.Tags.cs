@@ -87,6 +87,43 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 return default;
             }
+                        
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool(TagDynId id, out ITagsWrapper pool) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.ModuleTags, Method: GetPool, World not initialized");
+                #endif
+                if (id.Value >= _poolsCount) {
+                    pool = default;
+                    return false;
+                }
+                
+                pool = _pools[id.Value];
+                return true;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool(Type tagType, out ITagsWrapper pool) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.ModuleTags, Method: GetPool, World not initialized");
+                #endif
+                if (!_poolIdxByType.TryGetValue(tagType, out var idx)) {
+                    pool = default;
+                    return false;
+                }
+                
+                pool = _pools[idx];
+                return true;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool<T>(out TagsWrapper<T> pool) where T : struct, ITag {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldID)}>.ModuleTags, Method: GetPool<{typeof(T)}, World not initialized");
+                #endif
+                pool = default;
+                return TagInfo<T>.IsRegistered();
+            }
 
             [MethodImpl(AggressiveInlining)]
             internal ushort TagsCount(Entity entity) {

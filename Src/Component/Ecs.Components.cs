@@ -85,6 +85,43 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 return default;
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool(ComponentDynId id, out IComponentsWrapper pool) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                #endif
+                if (id.Value >= _poolsCount) {
+                    pool = default;
+                    return false;
+                }
+                
+                pool = _pools[id.Value];
+                return true;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool(Type componentType, out IComponentsWrapper pool) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                #endif
+                if (!_poolIdxByType.TryGetValue(componentType, out var idx)) {
+                    pool = default;
+                    return false;
+                }
+                
+                pool = _pools[idx];
+                return true;
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal bool TryGetPool<T>(out ComponentsWrapper<T> pool) where T : struct, IComponent {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<{typeof(T)}>, World not initialized");
+                #endif
+                pool = default;
+                return ComponentInfo<T>.IsRegistered();
+            }
 
             [MethodImpl(AggressiveInlining)]
             internal ushort ComponentsCount(Entity entity) {
