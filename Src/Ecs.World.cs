@@ -68,9 +68,19 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
+            public static void RemoveWorldDebugEventListener(IWorldDebugEventListener listener) {
+                _debugEventListeners?.Remove(listener);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
             public static void AddComponentsDebugEventListener(IComponentsDebugEventListener listener) {
                 ModuleComponents.Value._debugEventListeners ??= new List<IComponentsDebugEventListener>();
                 ModuleComponents.Value._debugEventListeners.Add(listener);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static void RemoveComponentsDebugEventListener(IComponentsDebugEventListener listener) {
+                ModuleComponents.Value._debugEventListeners?.Remove(listener);
             }
             #endif
 
@@ -167,6 +177,11 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleTags.Value._debugEventListeners ??= new List<ITagDebugEventListener>();
                 ModuleTags.Value._debugEventListeners.Add(listener);
             }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static void RemoveTagDebugEventListener(ITagDebugEventListener listener) {
+                ModuleTags.Value._debugEventListeners?.Remove(listener);
+            }
             #endif
             #endif
 
@@ -219,6 +234,11 @@ namespace FFS.Libraries.StaticEcs {
             public static void AddMaskDebugEventListener(IMaskDebugEventListener listener) {
                 ModuleMasks.Value._debugEventListeners ??= new List<IMaskDebugEventListener>();
                 ModuleMasks.Value._debugEventListeners.Add(listener);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public static void RemoveMaskDebugEventListener(IMaskDebugEventListener listener) {
+                ModuleMasks.Value._debugEventListeners?.Remove(listener);
             }
             #endif
             #endif
