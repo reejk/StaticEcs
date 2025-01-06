@@ -18,16 +18,16 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
             [Il2CppEagerStaticClassConstruction]
             #endif
-            internal struct Pool<T> where T : struct {
+            internal struct Pool<T> where T : struct, IEvent {
                 internal static Pool<T> Value;
-                private T[] _data;
-                private int[] _dataReceiverUnreadCount;
-                private int[] _dataReceiverOffsets;
-                private ushort[] _deletedReceivers;
-                private int _dataCount;
-                private int _dataFirstIdx;
-                private ushort _deletedReceiversCount;
-                private ushort _receiversCount;
+                internal T[] _data;
+                internal int[] _dataReceiverUnreadCount;
+                internal int[] _dataReceiverOffsets;
+                internal ushort[] _deletedReceivers;
+                internal int _dataCount;
+                internal int _dataFirstIdx;
+                internal ushort _deletedReceiversCount;
+                internal ushort _receiversCount;
                 internal ushort Id;
                 internal bool Initialized;
                 
@@ -120,12 +120,28 @@ namespace FFS.Libraries.StaticEcs {
                             Array.Resize(ref _dataReceiverUnreadCount, _dataCount << 1);
                         }
                         _data[_dataCount] = value;
-                        _dataReceiverUnreadCount[_dataCount++] = _receiversCount;
+                        _dataReceiverUnreadCount[_dataCount] = _receiversCount;
+                        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                        if (_debugEventListeners != null) {
+                            foreach (var listener in _debugEventListeners) {
+                                listener.OnEventAdd(ref value, _dataCount - 1);
+                            }
+                        }
+
+                        _dataCount++;
+                        #endif
                     }
                 }
                 
                 [MethodImpl(AggressiveInlining)]
                 internal void Del(int idx) {
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                    if (_debugEventListeners != null) {
+                        foreach (var listener in _debugEventListeners) {
+                            listener.OnEventAdd(ref _data[idx], idx);
+                        }
+                    }
+                    #endif
                     _data[idx] = default;
                     _dataReceiverUnreadCount[idx] = 0;
                     
@@ -135,8 +151,12 @@ namespace FFS.Libraries.StaticEcs {
                         return;
                     }
 
-                    if (idx != _dataFirstIdx) {
-                        _data[idx] = _data[_dataFirstIdx];
+                    if (_dataFirstIdx + 4 >= idx) {
+                        while (idx >= _dataFirstIdx) {
+                            _data[idx] = _data[--idx];
+                        }
+                    } else if (idx != _dataFirstIdx) {
+                        Array.Copy(_data, _dataFirstIdx, _data, _dataFirstIdx + 1, idx - _dataFirstIdx);
                     }
 
                     _dataFirstIdx++;

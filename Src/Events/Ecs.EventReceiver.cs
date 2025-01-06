@@ -13,7 +13,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct EventReceiver<WorldID, T> where T : struct where WorldID : struct, IWorldId {
+    public struct EventReceiver<WorldID, T> where T : struct, IEvent where WorldID : struct, IWorldId {
         internal int _id;
 
         [MethodImpl(AggressiveInlining)]
@@ -56,7 +56,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public ref struct EventIterator<T> where T : struct {
+        public ref struct EventIterator<T> where T : struct, IEvent {
             private Event<T> _current;
             internal readonly int _id;
 

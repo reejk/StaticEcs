@@ -299,22 +299,21 @@ namespace FFS.Libraries.StaticEcs {
                 ref var idxRef = ref _dataIdxByEntityId[entity._id];
                 if (idxRef >= 0) {
                     _componentsCount--;
-
-                    if (idxRef == _componentsCount) {
-                        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                        if (ModuleComponents.Value._debugEventListeners != null) {
-                            foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                                listener.OnComponentDelete(entity, ref _data[idxRef]);
-                            }
+                    
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                    if (ModuleComponents.Value._debugEventListeners != null) {
+                        foreach (var listener in ModuleComponents.Value._debugEventListeners) {
+                            listener.OnComponentDelete(entity, ref _data[idxRef]);
                         }
-                        #endif
-                        ResetComponent(idxRef);
-                    } else {
+                    }
+                    #endif
+                    ResetComponent(idxRef);
+
+                    if (idxRef != _componentsCount) {
                         var lastEntity = _entities[_componentsCount];
                         _entities[idxRef] = lastEntity;
                         _dataIdxByEntityId[lastEntity] = idxRef;
                         _data[idxRef] = _data[_componentsCount];
-                        ResetComponent(_componentsCount);
                     }
 
                     idxRef = Empty;

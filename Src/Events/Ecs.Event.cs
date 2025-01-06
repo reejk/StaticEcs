@@ -16,7 +16,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public struct Event<E> where E : struct {
+        public struct Event<E> where E : struct, IEvent {
             internal int _idx;
                 
             [MethodImpl(AggressiveInlining)]

@@ -140,7 +140,11 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void DestroyEntity(Entity entity) {
-                BitMask.ClearAll(entity._id);
+                var id = BitMask.GetMinIndex(entity._id);
+                while (id >= 0) {
+                    _pools[id].Del(entity);
+                    id = BitMask.GetMinIndex(entity._id);
+                }
             }
 
             [MethodImpl(AggressiveInlining)]

@@ -26,6 +26,8 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public short Version() => World.EntityVersion(this);
+            
+            int IEntity.GetId() => _id;
 
             [MethodImpl(AggressiveInlining)]
             Type IEntity.WorldIdType() => typeof(WorldID);
@@ -463,9 +465,11 @@ namespace FFS.Libraries.StaticEcs {
 
     public partial interface IEntity {
         
-        public IWorld World();
+        internal int GetId();
         
-        public Type WorldIdType();
+        internal Type WorldIdType();
+
+        internal IWorld World();
         
         public short Version();
 

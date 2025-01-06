@@ -1,5 +1,6 @@
 ﻿#if !FFS_ECS_DISABLE_EVENTS
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -19,6 +20,10 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppEagerStaticClassConstruction]
         #endif
         public abstract partial class Events {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal static List<IEventsDebugEventListener> _debugEventListeners;
+            #endif
+            
             private static Action[] _poolDestroyMethods;
             private static Func<bool>[] _poolTryAddMethods;
             private static ushort _poolCount;
@@ -82,6 +87,19 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 throw new Exception($"[ Ecs<{typeof(World)}>.Events.DynamicId<{typeof(E)}> ] Pool not initialized");
             }
+            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            [MethodImpl(AggressiveInlining)]
+            public static void AddEventsDebugEventListener(IEventsDebugEventListener listener) {
+                _debugEventListeners ??= new List<IEventsDebugEventListener>();
+                _debugEventListeners.Add(listener);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public static void RemoveEventsDebugEventListener(IEventsDebugEventListener listener) {
+                _debugEventListeners?.Remove(listener);
+            }
+            #endif
             #endregion
 
             #region INTERNAL
@@ -92,7 +110,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static void RegisterEventPool<T>() where T : struct {
+            internal static void RegisterEventPool<T>() where T : struct, IEvent {
                 Pool<T>.Value.Create(_poolCount);
 
                 if (_poolCount == _poolDestroyMethods.Length) {
@@ -121,9 +139,19 @@ namespace FFS.Libraries.StaticEcs {
                 _poolCount = default;
                 _poolDestroyMethods = default;
                 _poolTryAddMethods = default;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                _debugEventListeners = default;
+                #endif
             }
             #endregion
         }
+        
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+        public interface IEventsDebugEventListener {
+            void OnEventAdd<T>(ref T value, int idx) where T : struct, IEvent;
+            void OnEventDelete<T>(ref T value, int idx) where T : struct, IEvent;
+        }
+        #endif
     }
 }
 #endif

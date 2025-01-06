@@ -95,10 +95,10 @@ namespace FFS.Libraries.StaticEcs {
                     }
                     #endif
                     
-                    if (idx < _tagCount) {
-                        var e = _entities[_tagCount];
-                        _entities[idx] = e;
-                        _dataIdxByEntityId[e] = idx;
+                    if (idx != _tagCount) {
+                        var lastEntity = _entities[_tagCount];
+                        _entities[idx] = lastEntity;
+                        _dataIdxByEntityId[lastEntity] = idx;
                     }
 
                     _bitMask.Del(entity._id, id);
