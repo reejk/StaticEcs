@@ -102,7 +102,7 @@ namespace FFS.Libraries.StaticEcs {
                     }
 
                     _bitMask.Del(entity._id, id);
-                    idx = 0;
+                    idx = Empty;
                     return true;
                 }
 
