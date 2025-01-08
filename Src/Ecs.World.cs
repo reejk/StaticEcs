@@ -572,6 +572,17 @@ namespace FFS.Libraries.StaticEcs {
         public void Clear();
 
         public IContext Context();
+
+        internal bool TryGetComponentsRawPool(Type type, out IRawPool pool);
+        
+        #if !FFS_ECS_DISABLE_TAGS
+        internal bool TryGetTagsRawPool(Type type, out IRawPool pool);
+        #endif
+        
+        #if !FFS_ECS_DISABLE_MASKS
+        internal bool TryGetMasksRawPool(Type type, out IRawPool pool);
+        #endif
+        
     }
     
     #if ENABLE_IL2CPP
@@ -603,6 +614,40 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public IContext Context() => Ecs<WorldId>.Context.Value;
+
+        bool IWorld.TryGetComponentsRawPool(Type type, out IRawPool pool) {
+            if (Ecs<WorldId>.World.TryGetComponentsPool(type, out var p)) {
+                pool = p;
+                return true;
+            }
+            
+            pool = default;
+            return false;
+        }
+
+        #if !FFS_ECS_DISABLE_TAGS
+        bool IWorld.TryGetTagsRawPool(Type type, out IRawPool pool) {
+            if (Ecs<WorldId>.World.TryGetTagsPool(type, out var p)) {
+                pool = p;
+                return true;
+            }
+            
+            pool = default;
+            return false;
+        }
+        #endif
+
+        #if !FFS_ECS_DISABLE_MASKS
+        bool IWorld.TryGetMasksRawPool(Type type, out IRawPool pool) {
+            if (Ecs<WorldId>.World.TryGetMasksPool(type, out var p)) {
+                pool = p;
+                return true;
+            }
+            
+            pool = default;
+            return false;
+        }
+        #endif
     }
 
     public enum WorldStatus {

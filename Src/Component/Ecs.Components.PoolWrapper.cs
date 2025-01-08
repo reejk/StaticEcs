@@ -5,12 +5,34 @@ using Unity.IL2CPP.CompilerServices;
 #endif
 
 namespace FFS.Libraries.StaticEcs {
+    
+    public interface IRawPool {
+        internal object GetRaw(int entity);
+            
+        internal void PutRaw(int entity, object value);
+            
+        internal bool Has(int entity);
+
+        internal void Add(int entity);
+
+        internal bool Delete(int entity);
+
+        internal void Copy(int srcEntity, int dstEntity);
+            
+        internal void Move(int entity, int target);
+
+        internal int Capacity();
+        
+        public int Count();
+    }
+    
+    
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldID> {
-        public interface IComponentsWrapper {
+        public interface IComponentsWrapper: IRawPool {
             public ComponentDynId DynamicId();
             
             public IComponent GetRaw(Entity entity);
@@ -30,8 +52,6 @@ namespace FFS.Libraries.StaticEcs {
             public void Copy(Entity srcEntity, Entity dstEntity);
             
             public void Move(Entity entity, Entity target);
-
-            public int Count();
             
             public bool Is<C>() where C : struct, IComponent;
 
@@ -80,10 +100,8 @@ namespace FFS.Libraries.StaticEcs {
             public IComponent GetRaw(Entity entity) => Components<T>.Value.Ref(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void PutRaw(Entity entity, IComponent component) {
-                Components<T>.Value.Put(entity, (T) component);
-            }
-            
+            public void PutRaw(Entity entity, IComponent component) => Components<T>.Value.Put(entity, (T) component);
+
             [MethodImpl(AggressiveInlining)]
             public void Put(Entity entity, T component) => Components<T>.Value.Put(entity, component);
 
@@ -110,6 +128,30 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Move(srcEntity, dstEntity);
+
+            [MethodImpl(AggressiveInlining)]
+            object IRawPool.GetRaw(int entity) => Components<T>.Value.Ref(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.PutRaw(int entity, object value) => Components<T>.Value.Put(new Entity(entity), (T) value);
+
+            [MethodImpl(AggressiveInlining)]
+            bool IRawPool.Has(int entity) => Components<T>.Value.Has(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Add(int entity) => Components<T>.Value.Add(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            bool IRawPool.Delete(int entity) => Components<T>.Value.Delete(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Copy(int srcEntity, int dstEntity) => Components<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Move(int entity, int target) => Components<T>.Value.Move(new Entity(entity), new Entity(target));
+
+            [MethodImpl(AggressiveInlining)]
+            int IRawPool.Capacity() => Components<T>.Value.EntitiesData().Length;
 
             [MethodImpl(AggressiveInlining)]
             public int Count() => Components<T>.Value.Count();

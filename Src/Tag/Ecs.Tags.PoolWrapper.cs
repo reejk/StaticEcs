@@ -11,7 +11,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldID> {
-        public interface ITagsWrapper {
+        public interface ITagsWrapper: IRawPool {
             public TagDynId DynamicId();
             
             public ITag GetRaw();
@@ -25,8 +25,6 @@ namespace FFS.Libraries.StaticEcs {
             public void Copy(Entity srcEntity, Entity dstEntity);
             
             public void Move(Entity entity, Entity target);
-
-            public int Count();
 
             public string ToStringComponent(Entity entity);
 
@@ -92,6 +90,30 @@ namespace FFS.Libraries.StaticEcs {
             public bool TryCast<C>(out TagsWrapper<C> wrapper) where C : struct, ITag {
                 return Tags<C>.Value.id == Tags<T>.Value.id;
             }
+
+            [MethodImpl(AggressiveInlining)]
+            object IRawPool.GetRaw(int entity) => default(T);
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.PutRaw(int entity, object value) => Tags<T>.Value.Set(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            bool IRawPool.Has(int entity) => Tags<T>.Value.Has(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Add(int entity) => Tags<T>.Value.Set(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            bool IRawPool.Delete(int entity) => Tags<T>.Value.Delete(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Copy(int srcEntity, int dstEntity) => Tags<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Move(int entity, int target) => Tags<T>.Value.Move(new Entity(entity), new Entity(target));
+
+            [MethodImpl(AggressiveInlining)]
+            int IRawPool.Capacity() => -1;
 
             [MethodImpl(AggressiveInlining)]
             int[] ITagsWrapper.EntitiesData() => Tags<T>.Value.EntitiesData();
