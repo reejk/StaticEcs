@@ -113,7 +113,7 @@ namespace FFS.Libraries.StaticEcs {
             void IRawPool.Move(int entity, int target) => Tags<T>.Value.Move(new Entity(entity), new Entity(target));
 
             [MethodImpl(AggressiveInlining)]
-            int IRawPool.Capacity() => -1;
+            int IRawPool.Capacity() => Tags<T>.Value.EntitiesData().Length;
 
             [MethodImpl(AggressiveInlining)]
             int[] ITagsWrapper.EntitiesData() => Tags<T>.Value.EntitiesData();

@@ -452,14 +452,8 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public string ToPrettyString() => World.ToPrettyStringEntity(this);
-            
-            #if DEBUG || FFS_ECS_ENABLE_DEBUG
-            [MethodImpl(AggressiveInlining)]
-            public override string ToString() => World.ToPrettyStringEntity(this);
-            #else
-            [MethodImpl(AggressiveInlining)]
+
             public override string ToString() => $"Entity ID: {_id}";
-            #endif
         }
     }
 
