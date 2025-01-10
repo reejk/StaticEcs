@@ -148,8 +148,8 @@ namespace FFS.Libraries.StaticEcs {
         
         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
         public interface IEventsDebugEventListener {
-            void OnEventAdd<T>(ref T value, int idx) where T : struct, IEvent;
-            void OnEventDelete<T>(ref T value, int idx) where T : struct, IEvent;
+            void OnEventAdd<T>(Event<T> value) where T : struct, IEvent;
+            void OnEventDelete<T>(Event<T> value) where T : struct, IEvent;
         }
         #endif
     }

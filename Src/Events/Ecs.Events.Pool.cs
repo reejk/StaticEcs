@@ -124,7 +124,7 @@ namespace FFS.Libraries.StaticEcs {
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                         if (_debugEventListeners != null) {
                             foreach (var listener in _debugEventListeners) {
-                                listener.OnEventAdd(ref value, _dataCount);
+                                listener.OnEventAdd(new Event<T>(_dataCount));
                             }
                         }
 
@@ -138,7 +138,7 @@ namespace FFS.Libraries.StaticEcs {
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                     if (_debugEventListeners != null) {
                         foreach (var listener in _debugEventListeners) {
-                            listener.OnEventDelete(ref _data[idx], idx);
+                            listener.OnEventDelete(new Event<T>(idx));
                         }
                     }
                     #endif
@@ -177,6 +177,13 @@ namespace FFS.Libraries.StaticEcs {
                     if (previous >= 0) {
                         ref var unreadCount = ref _dataReceiverUnreadCount[previous];
                         if (unreadCount != 0 && --unreadCount == 0) {
+                            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                            if (_debugEventListeners != null) {
+                                foreach (var listener in _debugEventListeners) {
+                                    listener.OnEventDelete(new Event<T>(previous));
+                                }
+                            }
+                            #endif
                             _data[previous] = default;
                             _dataFirstIdx++;
                             if (TryDropOffsets()) {

@@ -44,7 +44,17 @@ namespace FFS.Libraries.StaticEcs {
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: RefMut, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: RefMut, ID - {entity._id} is missing on an entity");
                 #endif
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                ref var val = ref _data[_dataIdxByEntityId[entity._id]];
+                if (ModuleComponents.Value._debugEventListeners != null) {
+                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
+                        listener.OnComponentRefMut(entity, ref val);
+                    }
+                }
+                return ref val;
+                #else
                 return ref _data[_dataIdxByEntityId[entity._id]];
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -55,7 +65,17 @@ namespace FFS.Libraries.StaticEcs {
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Ref, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Ref, ID - {entity._id} is missing on an entity");
                 #endif
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                ref var val = ref _data[_dataIdxByEntityId[entity._id]];
+                if (ModuleComponents.Value._debugEventListeners != null) {
+                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
+                        listener.OnComponentRef(entity, ref val);
+                    }
+                }
+                return ref val;
+                #else
                 return ref _data[_dataIdxByEntityId[entity._id]];
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -181,6 +201,14 @@ namespace FFS.Libraries.StaticEcs {
                 if (!src.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (!dst.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
+                #endif
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleComponents.Value._debugEventListeners != null) {
+                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
+                        listener.OnComponentCopy<T>(src, dst);
+                    }
+                }
                 #endif
 
                 if (Has(src)) {
@@ -358,7 +386,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal string ToStringComponent(Entity entity) {
-                return $" - [{id}] {typeof(T).Name} ( {RefMut(entity)} )\n";
+                return $" - [{id}] {typeof(T).Name} ( {_data[_dataIdxByEntityId[entity._id]]} )\n";
             }
 
             [MethodImpl(AggressiveInlining)]

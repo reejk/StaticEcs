@@ -118,6 +118,14 @@ namespace FFS.Libraries.StaticEcs {
                 if (!dst.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldID)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: Copy,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (ModuleTags.Value._debugEventListeners != null) {
+                    foreach (var listener in ModuleTags.Value._debugEventListeners) {
+                        listener.OnTagCopy<T>(src, dst);
+                    }
+                }
+                #endif
 
                 if (Has(src)) {
                     Set(dst);

@@ -239,6 +239,7 @@ namespace FFS.Libraries.StaticEcs {
         
         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
         public interface ITagDebugEventListener {
+            void OnTagCopy<T>(Entity src, Entity dst) where T : struct, ITag;
             void OnTagAdd<T>(Entity entity) where T : struct, ITag;
             void OnTagDelete<T>(Entity entity) where T : struct, ITag;
         }

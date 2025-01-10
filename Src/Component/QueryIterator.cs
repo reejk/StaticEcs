@@ -23,7 +23,20 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         public readonly ref C Current {
-            [MethodImpl(AggressiveInlining)] get => ref _data[_count];
+            [MethodImpl(AggressiveInlining)]
+            get {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                ref var val = ref _data[_count];
+                if (Ecs<WorldID>.ModuleComponents.Value._debugEventListeners != null) {
+                    foreach (var listener in Ecs<WorldID>.ModuleComponents.Value._debugEventListeners) {
+                        listener.OnComponentRefMut(new Ecs<WorldID>.Entity(Ecs<WorldID>.Components<C>.Value.EntitiesData()[_count]), ref val);
+                    }
+                }
+                return ref val;
+                #else
+                return ref _data[_count];
+                #endif
+            }
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -71,7 +84,20 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         public readonly ref C Current {
-            [MethodImpl(AggressiveInlining)] get => ref _data[_count];
+            [MethodImpl(AggressiveInlining)]
+            get {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                ref var val = ref _data[_count];
+                if (Ecs<WorldID>.ModuleComponents.Value._debugEventListeners != null) {
+                    foreach (var listener in Ecs<WorldID>.ModuleComponents.Value._debugEventListeners) {
+                        listener.OnComponentRefMut(new Ecs<WorldID>.Entity(_entities[_count]), ref val);
+                    }
+                }
+                return ref val;
+                #else
+                return ref _data[_count];
+                #endif
+            }
         }
 
         [MethodImpl(AggressiveInlining)]
