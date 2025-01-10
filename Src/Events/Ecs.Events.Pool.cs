@@ -124,7 +124,7 @@ namespace FFS.Libraries.StaticEcs {
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                         if (_debugEventListeners != null) {
                             foreach (var listener in _debugEventListeners) {
-                                listener.OnEventAdd(ref value, _dataCount - 1);
+                                listener.OnEventAdd(ref value, _dataCount);
                             }
                         }
 
@@ -138,7 +138,7 @@ namespace FFS.Libraries.StaticEcs {
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                     if (_debugEventListeners != null) {
                         foreach (var listener in _debugEventListeners) {
-                            listener.OnEventAdd(ref _data[idx], idx);
+                            listener.OnEventDelete(ref _data[idx], idx);
                         }
                     }
                     #endif

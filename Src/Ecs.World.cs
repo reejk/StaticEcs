@@ -482,7 +482,8 @@ namespace FFS.Libraries.StaticEcs {
                 
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 if (_debugEventListeners != null) {
-                    foreach (var listener in _debugEventListeners) {
+                    for (var i = _debugEventListeners.Count - 1; i >= 0; i--) {
+                        var listener = _debugEventListeners[i];
                         listener.OnWorldDestroyed();
                     }
                 }
