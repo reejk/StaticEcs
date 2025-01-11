@@ -18,6 +18,16 @@ namespace FFS.Libraries.StaticEcs {
         public void AddRaw(IEvent value);
         
         public void Add();
+
+        internal bool IsDeleted(int idx);
+
+        internal int GetUnreadCount(int idx);
+
+        internal int GetCount(int idx);
+
+        internal int GetCapacity(int idx);
+
+        internal int GetReceiversCount(int idx);
     }
     
     #if ENABLE_IL2CPP
@@ -44,10 +54,25 @@ namespace FFS.Libraries.StaticEcs {
         public void Add() => Ecs<WorldID>.Events.Pool<T>.Value.Add();
 
         [MethodImpl(AggressiveInlining)]
-        void IEventPoolWrapper.Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx);
+        void IEventPoolWrapper.Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx, true);
 
         [MethodImpl(AggressiveInlining)]
-        internal void Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx);
+        bool IEventPoolWrapper.IsDeleted(int idx) => !Ecs<WorldID>.Events.Pool<T>.Value._notDeleted[idx];
+
+        [MethodImpl(AggressiveInlining)]
+        int IEventPoolWrapper.GetUnreadCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._dataReceiverUnreadCount[idx];
+
+        [MethodImpl(AggressiveInlining)]
+        int IEventPoolWrapper.GetCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._notDeletedCount;
+
+        [MethodImpl(AggressiveInlining)]
+        int IEventPoolWrapper.GetCapacity(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._data.Length;
+
+        [MethodImpl(AggressiveInlining)]
+        int IEventPoolWrapper.GetReceiversCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._receiversCount - Ecs<WorldID>.Events.Pool<T>.Value._deletedReceiversCount;
+
+        [MethodImpl(AggressiveInlining)]
+        internal void Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx, true);
     }
     
     #if ENABLE_IL2CPP
@@ -65,10 +90,12 @@ namespace FFS.Libraries.StaticEcs {
             internal struct Pool<T> where T : struct, IEvent {
                 internal static Pool<T> Value;
                 internal T[] _data;
+                internal bool[] _notDeleted;
                 internal int[] _dataReceiverUnreadCount;
                 internal int[] _dataReceiverOffsets;
                 internal ushort[] _deletedReceivers;
                 internal int _dataCount;
+                internal int _notDeletedCount;
                 internal int _dataFirstIdx;
                 internal ushort _deletedReceiversCount;
                 internal ushort _receiversCount;
@@ -83,6 +110,7 @@ namespace FFS.Libraries.StaticEcs {
                 internal void Create(ushort id) {
                     Id = id;
                     _data = new T[cfg.BaseEventPoolCount];
+                    _notDeleted = new bool[cfg.BaseEventPoolCount];
                     _dataReceiverUnreadCount = new int[cfg.BaseEventPoolCount];
                     _dataFirstIdx = 0;
                     _dataCount = 0;
@@ -90,6 +118,7 @@ namespace FFS.Libraries.StaticEcs {
                     _deletedReceivers = new ushort[8];
                     _receiversCount = 0;
                     _deletedReceiversCount = 0;
+                    _notDeletedCount = 0;
                     Initialized = true;
                 }
 
@@ -141,9 +170,11 @@ namespace FFS.Libraries.StaticEcs {
                     _deletedReceiversCount = default;
                     _dataReceiverOffsets = default;
                     _deletedReceivers = default;
+                    _notDeletedCount = default;
                     _receiversCount = default;
                     _dataFirstIdx = default;
                     _dataCount = default;
+                    _notDeleted = default;
                     _data = default;
                     Id = default;
                 }
@@ -159,11 +190,14 @@ namespace FFS.Libraries.StaticEcs {
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.Add ] event pool cannot be changed, it is in read-only mode");
                     #endif
                     if (_receiversCount > 0) {
+                        _notDeletedCount++;
                         if (_dataCount == _data.Length) {
                             Array.Resize(ref _data, _dataCount << 1);
+                            Array.Resize(ref _notDeleted, _dataCount << 1);
                             Array.Resize(ref _dataReceiverUnreadCount, _dataCount << 1);
                         }
                         _data[_dataCount] = value;
+                        _notDeleted[_dataCount] = true;
                         _dataReceiverUnreadCount[_dataCount] = _receiversCount;
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                         if (_debugEventListeners != null) {
@@ -178,69 +212,55 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                internal void Del(int idx) {
-                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                    if (_debugEventListeners != null) {
-                        foreach (var listener in _debugEventListeners) {
-                            listener.OnEventSuppress(new Event<T>(idx));
+                internal bool Del(int idx, bool suppressed) {
+                    if (_notDeleted[idx]) {
+                        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                        if (_debugEventListeners != null) {
+                            foreach (var listener in _debugEventListeners) {
+                                if (suppressed) {
+                                    listener.OnEventSuppress(new Event<T>(idx));
+                                } else {
+                                    listener.OnEventReadAll(new Event<T>(idx));
+                                }
+                            }
                         }
-                    }
-                    #endif
-                    _data[idx] = default;
-                    _dataReceiverUnreadCount[idx] = 0;
+                        #endif
+                        _notDeletedCount--;
+                        _data[idx] = default;
+                        _notDeleted[idx] = false;
+                        _dataReceiverUnreadCount[idx] = 0;
                     
-                    if (idx == _dataCount - 1) {
-                        _dataCount--;
-                        TryDropOffsets();
-                        return;
+                        if (idx == _dataCount - 1) {
+                            _dataCount--;
+                            return TryDropOffsets();
+                        }
+
+                        if (_dataFirstIdx == idx) {
+                            while (!_notDeleted[idx]) {
+                                _dataFirstIdx++;
+                                idx++;
+                            }
+                        
+                            return TryDropOffsets();
+                        }
                     }
 
-                    if (_dataFirstIdx + 4 >= idx) {
-                        while (idx > _dataFirstIdx) {
-                            _data[idx] = _data[--idx];
-                        }
-                    } else if (idx != _dataFirstIdx) {
-                        Array.Copy(_data, _dataFirstIdx, _data, _dataFirstIdx + 1, idx - _dataFirstIdx);
-                    }
-
-                    _dataFirstIdx++;
-                    if (TryDropOffsets()) {
-                        return;
-                    }
-                    
-                    for (var i = 0; i < _receiversCount; i++) {
-                        ref var offset = ref _dataReceiverOffsets[i];
-                        if (offset >= 0 && offset < _dataFirstIdx) {
-                            offset = _dataFirstIdx;
-                        }
-                    }
+                    return false;
                 }
                 
                 [MethodImpl(AggressiveInlining)]
                 internal bool ShiftReceiverOffset(int receiverId, int previous, out int next) {
-                    if (previous >= 0) {
-                        ref var unreadCount = ref _dataReceiverUnreadCount[previous];
-                        if (unreadCount != 0 && --unreadCount == 0) {
-                            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                            if (_debugEventListeners != null) {
-                                foreach (var listener in _debugEventListeners) {
-                                    listener.OnEventReadAll(new Event<T>(previous));
-                                }
-                            }
-                            #endif
-                            _data[previous] = default;
-                            _dataFirstIdx++;
-                            if (TryDropOffsets()) {
-                                next = -1;
-                                return false;
-                            }
-                        }
+                    if (previous >= 0 && MarkAsRead(previous)) {
+                        next = -1;
+                        return false;
                     }
                     
                     ref var offset = ref _dataReceiverOffsets[receiverId];
-                    if (offset < _dataCount) {
-                        next = offset++;
-                        return true;
+                    for (; offset < _dataCount; offset++) {
+                        if (_notDeleted[offset]) {
+                            next = offset++;
+                            return true;
+                        }
                     }
 
                     next = -1;
@@ -251,22 +271,31 @@ namespace FFS.Libraries.StaticEcs {
                 internal void MarkAsReadAll(int receiverId) {
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
-                        ref var unreadCount = ref _dataReceiverUnreadCount[offset];
-                        if (unreadCount != 0 && --unreadCount == 0) {
-                            _data[offset] = default;
-                            _dataFirstIdx++;
-                            if (TryDropOffsets()) {
-                                return;
-                            }
+                        if (_notDeleted[offset] && MarkAsRead(offset)) {
+                            return;
                         }
                     }
+                }
+
+                [MethodImpl(AggressiveInlining)]
+                private bool MarkAsRead(int offset) {
+                    ref var unreadCount = ref _dataReceiverUnreadCount[offset];
+                    if (unreadCount != 0 && --unreadCount == 0) {
+                        if (Del(offset, false)) {
+                            return true;
+                        }
+                    }
+
+                    return false;
                 }
 
                 [MethodImpl(AggressiveInlining)]
                 internal void ClearEvents(int receiverId) {
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
-                        Del(offset);
+                        if (_notDeleted[offset]) {
+                            Del(offset, true);
+                        }
                     }
                 }
 

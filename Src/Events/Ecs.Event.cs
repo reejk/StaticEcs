@@ -16,7 +16,7 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        public struct Event<E> where E : struct, IEvent {
+        public ref struct Event<E> where E : struct, IEvent {
             internal int _idx;
                 
             [MethodImpl(AggressiveInlining)]
@@ -39,7 +39,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (_idx < 0) throw new Exception($"[ Ecs<{typeof(World)}>.Event<{typeof(E)}>.Suppress ] event is deleted");
                 #endif
-                Events.Pool<E>.Value.Del((ushort) _idx);
+                Events.Pool<E>.Value.Del((ushort) _idx, true);
                 _idx = -1;
             }
         }
