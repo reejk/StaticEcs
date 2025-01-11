@@ -573,6 +573,10 @@ namespace FFS.Libraries.StaticEcs {
         public void Clear();
 
         public IContext Context();
+        
+        #if !FFS_ECS_DISABLE_EVENTS
+        public IEvents Events();
+        #endif
 
         internal bool TryGetComponentsRawPool(Type type, out IRawPool pool);
         
@@ -615,6 +619,11 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public IContext Context() => Ecs<WorldId>.Context.Value;
+
+        #if !FFS_ECS_DISABLE_EVENTS
+        [MethodImpl(AggressiveInlining)]
+        public IEvents Events() => new EventsWrapper<WorldId>();
+        #endif
 
         bool IWorld.TryGetComponentsRawPool(Type type, out IRawPool pool) {
             if (Ecs<WorldId>.World.TryGetComponentsPool(type, out var p)) {

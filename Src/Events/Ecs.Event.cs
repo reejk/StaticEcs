@@ -55,22 +55,22 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public readonly struct EventDynId : IEquatable<EventDynId> {
-        internal readonly ushort Val;
+        internal readonly ushort Value;
         
-        internal EventDynId(ushort val) {
-            Val = val;
+        internal EventDynId(ushort value) {
+            Value = value;
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool Equals(EventDynId other) => Val == other.Val;
+        public bool Equals(EventDynId other) => Value == other.Value;
         
         public override bool Equals(object obj) => throw new Exception("EventDynId` Equals object` not allowed!");
 
         [MethodImpl(AggressiveInlining)]
-        public override int GetHashCode() => Val;
+        public override int GetHashCode() => Value;
 
         [MethodImpl(AggressiveInlining)]
-        public override string ToString() => $"EventDynId ID: {Val}";
+        public override string ToString() => $"EventDynId ID: {Value}";
         
         [MethodImpl(AggressiveInlining)]
         public static bool operator ==(EventDynId left, EventDynId right) => left.Equals(right);

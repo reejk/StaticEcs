@@ -7,11 +7,55 @@ using Unity.IL2CPP.CompilerServices;
 #endif
 
 namespace FFS.Libraries.StaticEcs {
+    
+    public interface IEventPoolWrapper {
+        internal IEvent GetRaw(int idx);
+
+        internal void Del(int idx);
+        
+        internal void Destroy();
+        
+        public void AddRaw(IEvent value);
+        
+        public void Add();
+    }
+    
+    #if ENABLE_IL2CPP
+    [Il2CppSetOption(Option.NullChecks, false)]
+    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+    #endif
+    public readonly struct EventPoolWrapper<WorldID, T> : IEventPoolWrapper where T : struct, IEvent where WorldID : struct, IWorldId {
+        [MethodImpl(AggressiveInlining)]
+        internal ref T Get(int idx) => ref Ecs<WorldID>.Events.Pool<T>.Value.Get(idx);
+
+        [MethodImpl(AggressiveInlining)]
+        public void Add(T value) => Ecs<WorldID>.Events.Pool<T>.Value.Add(value);
+
+        [MethodImpl(AggressiveInlining)]
+        IEvent IEventPoolWrapper.GetRaw(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Get(idx);
+
+        [MethodImpl(AggressiveInlining)]
+        void IEventPoolWrapper.Destroy() => Ecs<WorldID>.Events.Pool<T>.Value.Destroy();
+
+        [MethodImpl(AggressiveInlining)]
+        public void AddRaw(IEvent value) => Ecs<WorldID>.Events.Pool<T>.Value.Add((T) value);
+
+        [MethodImpl(AggressiveInlining)]
+        public void Add() => Ecs<WorldID>.Events.Pool<T>.Value.Add();
+
+        [MethodImpl(AggressiveInlining)]
+        void IEventPoolWrapper.Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx);
+
+        [MethodImpl(AggressiveInlining)]
+        internal void Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx);
+    }
+    
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldID> {
+        
         public abstract partial class Events {
             #if ENABLE_IL2CPP
             [Il2CppSetOption(Option.NullChecks, false)]
@@ -152,7 +196,7 @@ namespace FFS.Libraries.StaticEcs {
                     }
 
                     if (_dataFirstIdx + 4 >= idx) {
-                        while (idx >= _dataFirstIdx) {
+                        while (idx > _dataFirstIdx) {
                             _data[idx] = _data[--idx];
                         }
                     } else if (idx != _dataFirstIdx) {
