@@ -21,13 +21,15 @@ namespace FFS.Libraries.StaticEcs {
 
         internal bool IsDeleted(int idx);
 
-        internal int GetUnreadCount(int idx);
+        internal int UnreadCount(int idx);
 
-        internal int GetCount(int idx);
+        internal int NotDeletedCount(int idx);
 
         internal int GetCapacity(int idx);
 
         internal int GetReceiversCount(int idx);
+
+        internal int Last();
     }
     
     #if ENABLE_IL2CPP
@@ -60,10 +62,13 @@ namespace FFS.Libraries.StaticEcs {
         bool IEventPoolWrapper.IsDeleted(int idx) => !Ecs<WorldID>.Events.Pool<T>.Value._notDeleted[idx];
 
         [MethodImpl(AggressiveInlining)]
-        int IEventPoolWrapper.GetUnreadCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._dataReceiverUnreadCount[idx];
+        int IEventPoolWrapper.UnreadCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._dataReceiverUnreadCount[idx];
 
         [MethodImpl(AggressiveInlining)]
-        int IEventPoolWrapper.GetCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._notDeletedCount;
+        int IEventPoolWrapper.Last() => Ecs<WorldID>.Events.Pool<T>.Value._dataCount - 1;
+
+        [MethodImpl(AggressiveInlining)]
+        int IEventPoolWrapper.NotDeletedCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._notDeletedCount;
 
         [MethodImpl(AggressiveInlining)]
         int IEventPoolWrapper.GetCapacity(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._data.Length;
