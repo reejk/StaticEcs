@@ -30,6 +30,10 @@ namespace FFS.Libraries.StaticEcs {
         internal int GetReceiversCount(int idx);
 
         internal int Last();
+
+        internal short Version(int idx);
+
+        internal void PutRaw(int idx, IEvent value);
     }
     
     #if ENABLE_IL2CPP
@@ -53,13 +57,19 @@ namespace FFS.Libraries.StaticEcs {
         public void AddRaw(IEvent value) => Ecs<WorldID>.Events.Pool<T>.Value.Add((T) value);
 
         [MethodImpl(AggressiveInlining)]
+        void IEventPoolWrapper.PutRaw(int idx, IEvent value) => Ecs<WorldID>.Events.Pool<T>.Value.Get(idx) = (T) value;
+
+        [MethodImpl(AggressiveInlining)]
         public void Add() => Ecs<WorldID>.Events.Pool<T>.Value.Add();
 
         [MethodImpl(AggressiveInlining)]
         void IEventPoolWrapper.Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx, true);
 
         [MethodImpl(AggressiveInlining)]
-        bool IEventPoolWrapper.IsDeleted(int idx) => !Ecs<WorldID>.Events.Pool<T>.Value._notDeleted[idx];
+        short IEventPoolWrapper.Version(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._versions[idx];
+
+        [MethodImpl(AggressiveInlining)]
+        bool IEventPoolWrapper.IsDeleted(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._versions[idx] <= 0;
 
         [MethodImpl(AggressiveInlining)]
         int IEventPoolWrapper.UnreadCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._dataReceiverUnreadCount[idx];
@@ -95,7 +105,7 @@ namespace FFS.Libraries.StaticEcs {
             internal struct Pool<T> where T : struct, IEvent {
                 internal static Pool<T> Value;
                 internal T[] _data;
-                internal bool[] _notDeleted;
+                internal short[] _versions;
                 internal int[] _dataReceiverUnreadCount;
                 internal int[] _dataReceiverOffsets;
                 internal ushort[] _deletedReceivers;
@@ -115,7 +125,7 @@ namespace FFS.Libraries.StaticEcs {
                 internal void Create(ushort id) {
                     Id = id;
                     _data = new T[cfg.BaseEventPoolCount];
-                    _notDeleted = new bool[cfg.BaseEventPoolCount];
+                    _versions = new short[cfg.BaseEventPoolCount];
                     _dataReceiverUnreadCount = new int[cfg.BaseEventPoolCount];
                     _dataFirstIdx = 0;
                     _dataCount = 0;
@@ -179,7 +189,7 @@ namespace FFS.Libraries.StaticEcs {
                     _receiversCount = default;
                     _dataFirstIdx = default;
                     _dataCount = default;
-                    _notDeleted = default;
+                    _versions = default;
                     _data = default;
                     Id = default;
                 }
@@ -198,11 +208,16 @@ namespace FFS.Libraries.StaticEcs {
                         _notDeletedCount++;
                         if (_dataCount == _data.Length) {
                             Array.Resize(ref _data, _dataCount << 1);
-                            Array.Resize(ref _notDeleted, _dataCount << 1);
+                            Array.Resize(ref _versions, _dataCount << 1);
                             Array.Resize(ref _dataReceiverUnreadCount, _dataCount << 1);
                         }
                         _data[_dataCount] = value;
-                        _notDeleted[_dataCount] = true;
+                        ref var version = ref _versions[_dataCount];
+                        version *= -1;
+                        if (version == short.MaxValue) {
+                            version = 0;
+                        }
+                        version++;
                         _dataReceiverUnreadCount[_dataCount] = _receiversCount;
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                         if (_debugEventListeners != null) {
@@ -218,7 +233,7 @@ namespace FFS.Libraries.StaticEcs {
                 
                 [MethodImpl(AggressiveInlining)]
                 internal bool Del(int idx, bool suppressed) {
-                    if (_notDeleted[idx]) {
+                    if (_versions[idx] > 0) {
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                         if (_debugEventListeners != null) {
                             foreach (var listener in _debugEventListeners) {
@@ -232,7 +247,7 @@ namespace FFS.Libraries.StaticEcs {
                         #endif
                         _notDeletedCount--;
                         _data[idx] = default;
-                        _notDeleted[idx] = false;
+                        _versions[idx] *= -1;
                         _dataReceiverUnreadCount[idx] = 0;
                     
                         if (idx == _dataCount - 1) {
@@ -241,7 +256,7 @@ namespace FFS.Libraries.StaticEcs {
                         }
 
                         if (_dataFirstIdx == idx) {
-                            while (!_notDeleted[idx]) {
+                            while (_versions[idx] <= 0 && idx < _dataCount) {
                                 _dataFirstIdx++;
                                 idx++;
                             }
@@ -262,7 +277,7 @@ namespace FFS.Libraries.StaticEcs {
                     
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
-                        if (_notDeleted[offset]) {
+                        if (_versions[offset] > 0) {
                             next = offset++;
                             return true;
                         }
@@ -276,7 +291,7 @@ namespace FFS.Libraries.StaticEcs {
                 internal void MarkAsReadAll(int receiverId) {
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
-                        if (_notDeleted[offset] && MarkAsRead(offset)) {
+                        if (_versions[offset] > 0 && MarkAsRead(offset)) {
                             return;
                         }
                     }
@@ -298,9 +313,7 @@ namespace FFS.Libraries.StaticEcs {
                 internal void ClearEvents(int receiverId) {
                     ref var offset = ref _dataReceiverOffsets[receiverId];
                     for (; offset < _dataCount; offset++) {
-                        if (_notDeleted[offset]) {
-                            Del(offset, true);
-                        }
+                        Del(offset, true);
                     }
                 }
 
