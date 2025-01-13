@@ -23,11 +23,11 @@ namespace FFS.Libraries.StaticEcs {
 
         internal int UnreadCount(int idx);
 
-        internal int NotDeletedCount(int idx);
+        internal int NotDeletedCount();
 
-        internal int GetCapacity(int idx);
+        internal int Capacity();
 
-        internal int GetReceiversCount(int idx);
+        internal int ReceiversCount();
 
         internal int Last();
 
@@ -78,13 +78,13 @@ namespace FFS.Libraries.StaticEcs {
         int IEventPoolWrapper.Last() => Ecs<WorldID>.Events.Pool<T>.Value._dataCount - 1;
 
         [MethodImpl(AggressiveInlining)]
-        int IEventPoolWrapper.NotDeletedCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._notDeletedCount;
+        int IEventPoolWrapper.NotDeletedCount() => Ecs<WorldID>.Events.Pool<T>.Value._notDeletedCount;
 
         [MethodImpl(AggressiveInlining)]
-        int IEventPoolWrapper.GetCapacity(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._data.Length;
+        int IEventPoolWrapper.Capacity() => Ecs<WorldID>.Events.Pool<T>.Value._data.Length;
 
         [MethodImpl(AggressiveInlining)]
-        int IEventPoolWrapper.GetReceiversCount(int idx) => Ecs<WorldID>.Events.Pool<T>.Value._receiversCount - Ecs<WorldID>.Events.Pool<T>.Value._deletedReceiversCount;
+        int IEventPoolWrapper.ReceiversCount() => Ecs<WorldID>.Events.Pool<T>.Value._receiversCount - Ecs<WorldID>.Events.Pool<T>.Value._deletedReceiversCount;
 
         [MethodImpl(AggressiveInlining)]
         internal void Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx, true);
