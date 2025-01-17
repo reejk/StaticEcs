@@ -1293,6 +1293,11 @@ public class Main : MonoBehaviour {
     
     void Start() {
         MyEcs.Create(EcsConfig.Default());
+                
+        MyWorld.RegisterComponent<Position>();
+        MyWorld.RegisterComponent<Direction>();
+        MyWorld.RegisterComponent<Velocity>();
+        
         MyEcs.Initialize();
         
         MyEcs.Context<SceneData>.Set(sceneData);
