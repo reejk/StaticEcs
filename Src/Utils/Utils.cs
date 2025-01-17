@@ -149,20 +149,7 @@ namespace FFS.Libraries.StaticEcs {
         }
     }
 
-    public sealed class FileLogger<WorldId> : Ecs<WorldId>.IWorldDebugEventListener,
-                                              Ecs<WorldId>.IComponentsDebugEventListener
-                                              #if !FFS_ECS_DISABLE_TAGS
-                                              , Ecs<WorldId>.ITagDebugEventListener,
-                                              #endif
-                                              #if !FFS_ECS_DISABLE_MASKS
-                                              Ecs<WorldId>.IMaskDebugEventListener,
-                                              #endif
-                                              #if !FFS_ECS_DISABLE_EVENTS
-                                              Ecs<WorldId>.IEventsDebugEventListener
-                                              #endif
-        where WorldId : struct, IWorldId {
-        internal static readonly Ecs<WorldId>.Entity EmptyEntity = Ecs<WorldId>.Entity.FromIdx(-1);
-
+    internal static class FileLogger {
         internal static readonly string[] MethodNames = {
             "CREATE",
             "DESTROY",
@@ -181,10 +168,27 @@ namespace FFS.Libraries.StaticEcs {
             "SYS_UPDATE",
             "SYS_DESTROY",
         };
-
+        
         internal static string MethodName(OperationType operationType) {
             return MethodNames[(int) operationType];
         }
+    }
+
+    public sealed class FileLogger<WorldId> : Ecs<WorldId>.IWorldDebugEventListener,
+                                              Ecs<WorldId>.IComponentsDebugEventListener
+                                              #if !FFS_ECS_DISABLE_TAGS
+                                              , Ecs<WorldId>.ITagDebugEventListener,
+                                              #endif
+                                              #if !FFS_ECS_DISABLE_MASKS
+                                              Ecs<WorldId>.IMaskDebugEventListener,
+                                              #endif
+                                              #if !FFS_ECS_DISABLE_EVENTS
+                                              Ecs<WorldId>.IEventsDebugEventListener
+                                              #endif
+        where WorldId : struct, IWorldId {
+        internal static readonly Ecs<WorldId>.Entity EmptyEntity = Ecs<WorldId>.Entity.FromIdx(-1);
+
+
 
         internal readonly string LogsFilePath;
         internal readonly DateTime DateTime;
@@ -309,7 +313,7 @@ namespace FFS.Libraries.StaticEcs {
                 columnWriter.TryAddColumn(entity, Writer);
             }
 
-            Writer.Write(MethodName(operation));
+            Writer.Write(FileLogger.MethodName(operation));
             Writer.Write(";");
             if (type != null) {
                 Writer.WriteLine(type);
