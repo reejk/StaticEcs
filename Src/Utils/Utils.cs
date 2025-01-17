@@ -258,7 +258,7 @@ namespace FFS.Libraries.StaticEcs {
 
             Writer.Write("EntityId");
             Writer.Write(csvSeparator);
-            Writer.WriteLine("Version");
+            Writer.Write("Version");
             Writer.Write(csvSeparator);
             foreach (var columnWriter in ColumnWriters) {
                 Writer.Write(columnWriter.ColumnName());
@@ -267,7 +267,7 @@ namespace FFS.Libraries.StaticEcs {
 
             Writer.Write("Operation");
             Writer.Write(csvSeparator);
-            Writer.Write("Type");
+            Writer.WriteLine("Type");
         }
 
         public void OnWorldInitialized() {
@@ -289,16 +289,23 @@ namespace FFS.Libraries.StaticEcs {
             if (ExcludedOperations[(int) operation]) {
                 return;
             }
-
-            foreach (var columnWriter in ColumnWriters) {
-                columnWriter.TryAddColumn(entity, Writer);
-            }
-
+            
             if (entity._id >= 0) {
                 Writer.Write(entity._id);
             }
 
             Writer.Write(csvSeparator);
+            
+            if (entity._id >= 0) {
+                Writer.Write(entity.Version());
+            }
+
+            Writer.Write(csvSeparator);
+
+            foreach (var columnWriter in ColumnWriters) {
+                columnWriter.TryAddColumn(entity, Writer);
+            }
+
             Writer.Write(MethodName(operation));
             Writer.Write(csvSeparator);
             if (type != null) {
