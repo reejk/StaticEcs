@@ -1248,7 +1248,7 @@ public struct MySystemsType : ISystemsType { }
 
 public abstract class MyEcs : Ecs<MyWorldType> { }
 public abstract class MyWorld : MyEcs.World { }
-public abstract class MySystems : Systems<MySystemsType> { }
+public abstract class MySystems : MyEcs.Systems<MySystemsType> { }
 
 public struct Position : IComponent {
     public Transform Value;
@@ -1299,8 +1299,8 @@ public class Main : MonoBehaviour {
         
         MySystems.Create();
         
-        MySystems.AddCallOnce<CreateRandomEntities>();
-        MySystems.AddUpdate<UpdatePositions>();
+        MySystems.AddCallOnce(new CreateRandomEntities());
+        MySystems.AddUpdate(new UpdatePositions());
         
         MySystems.Initialize();
     }
