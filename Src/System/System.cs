@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
@@ -25,45 +26,114 @@ namespace FFS.Libraries.StaticEcs {
         internal void Update();
         internal void Init();
         internal void Destroy();
+        
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
+        internal void Info(List<(string name, int avgUpdateTime, bool enabled)> res);
+
+        internal bool SetActive(int sysIdx, bool active);
+        #endif
     }
 
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public abstract partial class Systems<SysID> {
+    public abstract partial class Ecs<WorldID> where WorldID : struct, IWorldId {
         #if ENABLE_IL2CPP
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
-        internal struct SW<TSystem>
-            where TSystem : IUpdateSystem {
-            internal TSystem System;
+        public abstract partial class Systems<SysID> {
+            #if ENABLE_IL2CPP
+            [Il2CppSetOption(Option.NullChecks, false)]
+            [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+            #endif
+            internal struct SW<TSystem>
+                where TSystem : IUpdateSystem {
+                internal TSystem System;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                internal bool Active;
+                internal int Time;
+                internal System.Diagnostics.Stopwatch Stopwatch;
+                #endif
             
-            public SW(TSystem system) {
-                System = system;
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public void Init() {
-                if (System is IInitSystem system) {
-                    system.Init();
-                    System = (TSystem) system;
+                public SW(TSystem system) {
+                    System = system;
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                    Active = true;
+                    Time = 0;
+                    Stopwatch = new System.Diagnostics.Stopwatch();
+                    #endif
                 }
-            }
 
-            [MethodImpl(AggressiveInlining)]
-            public void Run() {
-                System.Update();
-                IncrementSystemIndex();
-            }
+                [MethodImpl(AggressiveInlining)]
+                public void Init() {
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                    if (!Active) {
+                        return;
+                    }
+                    #endif
 
-            [MethodImpl(AggressiveInlining)]
-            public void Destroy() {
-                if (System is IDestroySystem system) {
-                    system.Destroy();
-                    System = (TSystem) system;
+                    if (System is IInitSystem system) {
+                        #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                        if (FileLogger != null && FileLogger.Enabled) {
+                            FileLogger.Write(OperationType.SystemCallInit, TypeData<TSystem>.Name);
+                        }
+                        #endif
+
+                        system.Init();
+                        System = (TSystem) system;
+                    }
                 }
+
+                [MethodImpl(AggressiveInlining)]
+                public void Run() {
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                    if (!Active) {
+                        IncrementSystemIndex();
+                        return;
+                    }
+                    if (FileLogger != null && FileLogger.Enabled) {
+                        FileLogger.Write(OperationType.SystemCallUpdate, TypeData<TSystem>.Name);
+                    }
+                    Stopwatch.Restart();
+                    #endif
+                    System.Update();
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                    Stopwatch.Stop();
+                    Time = ((int) Stopwatch.ElapsedMilliseconds + Time) / 2;
+                    #endif
+                    IncrementSystemIndex();
+                }
+
+                [MethodImpl(AggressiveInlining)]
+                public void Destroy() {
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                    if (!Active) {
+                        return;
+                    }
+                    #endif
+                    if (System is IDestroySystem system) {
+                        #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                        if (FileLogger != null && FileLogger.Enabled) {
+                            FileLogger.Write(OperationType.SystemCallDestroy, TypeData<TSystem>.Name);
+                        }
+                        #endif
+                        system.Destroy();
+                        System = (TSystem) system;
+                    }
+                }
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                internal (string name, int time, bool active) Info() {
+                    return (TypeData<TSystem>.Name, Time, Active);
+                }
+                
+                internal bool SetActive(bool val) {
+                    Active = val;
+                    return true;
+                }
+                #endif
             }
         }
     }

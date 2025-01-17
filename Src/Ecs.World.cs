@@ -487,6 +487,7 @@ namespace FFS.Libraries.StaticEcs {
                         listener.OnWorldDestroyed();
                     }
                 }
+                _debugEventListeners = null;
                 #endif
                 
                 for (var i = _entityVersionsCount - 1; i >= 0; i--) {
@@ -508,7 +509,6 @@ namespace FFS.Libraries.StaticEcs {
                 _entityVersionsCount = 0;
                 _deletedEntitiesCount = 0;
                 Status = WorldStatus.NotCreated;
-                _debugEventListeners = null;
                 Worlds.Delete(typeof(WorldID));
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -202,25 +203,21 @@ namespace FFS.Libraries.StaticEcs {
                 if (!dst.IsActual()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldID)}>.Components<{typeof(T)}>, Method: Copy,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
-                
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                        listener.OnComponentCopy<T>(src, dst);
-                    }
-                }
-                #endif
 
                 if (Has(src)) {
-                    ref var srcData = ref RefMut(src);
-                    if (!Has(dst)) {
-                        Add(dst);
-                    }
-
                     if (AutoCopyHandler != null) {
-                        AutoCopyHandler(ref srcData, ref RefMut(dst));
+                        if (!Has(dst)) {
+                            AutoCopyHandler(ref RefMut(src), ref Add(dst));
+                        } else {
+                            AutoCopyHandler(ref RefMut(src), ref RefMut(dst));
+                        }
+                        return;
+                    }
+                    
+                    if (!Has(dst)) {
+                        Add(dst) = RefMut(src);
                     } else {
-                        RefMut(dst) = srcData;
+                        RefMut(dst) = RefMut(src);
                     }
                 }
             }
@@ -281,6 +278,12 @@ namespace FFS.Libraries.StaticEcs {
             #endregion
 
             #region INTERNAL
+            
+            [MethodImpl(AggressiveInlining)]
+            internal ref T RefMutInternal(Entity entity) {
+                return ref _data[_dataIdxByEntityId[entity._id]];
+            }
+            
             internal void Create(ushort componentId, BitMask bitMask, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = componentId;

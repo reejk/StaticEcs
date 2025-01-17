@@ -242,7 +242,6 @@ namespace FFS.Libraries.StaticEcs {
         public interface IComponentsDebugEventListener {
             void OnComponentRef<T>(Entity entity, ref T component) where T : struct, IComponent;
             void OnComponentRefMut<T>(Entity entity, ref T component) where T : struct, IComponent;
-            void OnComponentCopy<T>(Entity src, Entity dst) where T : struct, IComponent;
             void OnComponentAdd<T>(Entity entity, ref T component) where T : struct, IComponent;
             void OnComponentPut<T>(Entity entity, ref T component) where T : struct, IComponent;
             void OnComponentDelete<T>(Entity entity, ref T component) where T : struct, IComponent;

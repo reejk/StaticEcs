@@ -15,9 +15,9 @@ namespace FFS.Libraries.StaticEcs {
         
         internal void Destroy();
         
-        public void AddRaw(IEvent value);
+        public bool AddRaw(IEvent value);
         
-        public void Add();
+        public bool Add();
 
         internal bool IsDeleted(int idx);
 
@@ -45,7 +45,7 @@ namespace FFS.Libraries.StaticEcs {
         internal ref T Get(int idx) => ref Ecs<WorldID>.Events.Pool<T>.Value.Get(idx);
 
         [MethodImpl(AggressiveInlining)]
-        public void Add(T value) => Ecs<WorldID>.Events.Pool<T>.Value.Add(value);
+        public bool Add(T value) => Ecs<WorldID>.Events.Pool<T>.Value.Add(value);
 
         [MethodImpl(AggressiveInlining)]
         IEvent IEventPoolWrapper.GetRaw(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Get(idx);
@@ -54,13 +54,13 @@ namespace FFS.Libraries.StaticEcs {
         void IEventPoolWrapper.Destroy() => Ecs<WorldID>.Events.Pool<T>.Value.Destroy();
 
         [MethodImpl(AggressiveInlining)]
-        public void AddRaw(IEvent value) => Ecs<WorldID>.Events.Pool<T>.Value.Add((T) value);
+        public bool AddRaw(IEvent value) => Ecs<WorldID>.Events.Pool<T>.Value.Add((T) value);
 
         [MethodImpl(AggressiveInlining)]
         void IEventPoolWrapper.PutRaw(int idx, IEvent value) => Ecs<WorldID>.Events.Pool<T>.Value.Get(idx) = (T) value;
 
         [MethodImpl(AggressiveInlining)]
-        public void Add() => Ecs<WorldID>.Events.Pool<T>.Value.Add();
+        public bool Add() => Ecs<WorldID>.Events.Pool<T>.Value.Add();
 
         [MethodImpl(AggressiveInlining)]
         void IEventPoolWrapper.Del(int idx) => Ecs<WorldID>.Events.Pool<T>.Value.Del(idx, true);
@@ -200,7 +200,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                internal void Add(T value = default) {
+                internal bool Add(T value = default) {
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     if (_blockers > 0) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Pool<{typeof(T)}>.Add ] event pool cannot be changed, it is in read-only mode");
                     #endif
@@ -225,10 +225,12 @@ namespace FFS.Libraries.StaticEcs {
                                 listener.OnEventSent(new Event<T>(_dataCount));
                             }
                         }
-
-                        _dataCount++;
                         #endif
+                        _dataCount++;
+                        return true;
                     }
+
+                    return false;
                 }
                 
                 [MethodImpl(AggressiveInlining)]

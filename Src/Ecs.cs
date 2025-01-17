@@ -32,36 +32,11 @@ namespace FFS.Libraries.StaticEcs {
             Events.Destroy();
             #endif
             World.Destroy();
-        }
-    }
-    
-    public static class EcsDebugLogger {
-        private const string InfoText = "[INFO] ";
-        private const string WarnText = "[WARN] ";
-        
-        [MethodImpl(AggressiveInlining)]
-        public static void SetMethods(Action<string> info, Action<string> warn) {
-            InfoMethod = info;
-            WarnMethod = warn;
-        }
-            
-        internal static Action<string> InfoMethod = static s => {
-            Console.Write(InfoText);
-            Console.WriteLine(s);
-        };
-        internal static Action<string> WarnMethod = static s => {
-            Console.Write(WarnText);
-            Console.WriteLine(s);
-        };
-            
-        [MethodImpl(AggressiveInlining)]
-        internal static void Info(string msg) {
-            InfoMethod(msg);
-        }
-        
-        [MethodImpl(AggressiveInlining)]
-        internal static void Warn(string msg) {
-            WarnMethod(msg);
+            cfg = default;
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            FileLogger?.Disable();
+            FileLogger = default;
+            #endif
         }
     }
     

@@ -72,33 +72,19 @@ namespace FFS.Libraries.StaticEcs {
 
             #region PUBLIC
             [MethodImpl(AggressiveInlining)]
-            public static void Send<E>(E value = default) where E : struct, IEvent {
+            public static bool Send<E>(E value = default) where E : struct, IEvent {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] Ecs not initialized");
                 #endif
-                if (Pool<E>.Value.Initialized) {
-                    Pool<E>.Value.Add(value);
-                }
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                else {
-                    EcsDebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send<{typeof(E)}> ] The event will not be sent. No receiver is registered.");
-                }
-                #endif
+                return Pool<E>.Value.Initialized && Pool<E>.Value.Add(value);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void SendDefault(EventDynId value) {
+            public static bool SendDefault(EventDynId value) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"[ Ecs<{typeof(World)}>.Events.Send ] Ecs not initialized");
                 #endif
-                if (value.Value >= _poolsCount) {
-                    #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                    EcsDebugLogger.Warn($"[ Ecs<{typeof(World)}>.Events.Send ] The event will not be sent. No receiver is registered.");
-                    #endif
-                    return;
-                }
-
-                _pools[value.Value].Add();
+                return value.Value < _poolsCount && _pools[value.Value].Add();
             }
 
             [MethodImpl(AggressiveInlining)]

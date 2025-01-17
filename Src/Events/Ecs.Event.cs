@@ -1,7 +1,8 @@
-﻿#if !FFS_ECS_DISABLE_EVENTS
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
+
+#if !FFS_ECS_DISABLE_EVENTS
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
 #endif
