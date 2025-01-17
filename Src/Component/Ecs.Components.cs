@@ -11,7 +11,7 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public abstract partial class Ecs<WorldID> {
+    public abstract partial class Ecs<WorldType> {
         #if ENABLE_IL2CPP
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
@@ -62,8 +62,8 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal IComponentsWrapper GetPool(ComponentDynId id) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
-                if (id.Value >= _poolsCount) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, Component type for dyn id {id.Value} not registered");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, World not initialized");
+                if (id.Value >= _poolsCount) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, Component type for dyn id {id.Value} not registered");
                 #endif
                 return _pools[id.Value];
             }
@@ -71,8 +71,8 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal IComponentsWrapper GetPool(Type componentType) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
-                if (!_poolIdxByType.ContainsKey(componentType)) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, Component type {componentType} not registered");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, World not initialized");
+                if (!_poolIdxByType.ContainsKey(componentType)) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, Component type {componentType} not registered");
                 #endif
                 return _pools[_poolIdxByType[componentType]];
             }
@@ -80,8 +80,8 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal ComponentsWrapper<T> GetPool<T>() where T : struct, IComponent {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<{typeof(T)}>, World not initialized");
-                if (!ComponentInfo<T>.IsRegistered()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<{typeof(T)}>, Component type not registered");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, World not initialized");
+                if (!ComponentInfo<T>.IsRegistered()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, Component type not registered");
                 #endif
                 return default;
             }
@@ -89,7 +89,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal bool TryGetPool(ComponentDynId id, out IComponentsWrapper pool) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, World not initialized");
                 #endif
                 if (id.Value >= _poolsCount) {
                     pool = default;
@@ -103,7 +103,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal bool TryGetPool(Type componentType, out IComponentsWrapper pool) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool, World not initialized");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, World not initialized");
                 #endif
                 if (!_poolIdxByType.TryGetValue(componentType, out var idx)) {
                     pool = default;
@@ -117,7 +117,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal bool TryGetPool<T>(out ComponentsWrapper<T> pool) where T : struct, IComponent {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetPool<{typeof(T)}>, World not initialized");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, World not initialized");
                 #endif
                 pool = default;
                 return ComponentInfo<T>.IsRegistered();
@@ -126,7 +126,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal ushort ComponentsCount(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ComponentsCount, World not initialized");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: ComponentsCount, World not initialized");
                 #endif
                 return BitMask.Len(entity._id);
             }
@@ -134,7 +134,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal string ToPrettyStringEntity(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: ToPrettyStringEntity, World not initialized");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: ToPrettyStringEntity, World not initialized");
                 #endif
                 var str = "Components:\n";
                 var bufId = BitMask.BorrowBuf();
@@ -152,7 +152,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal void GetAllComponents(Entity entity, List<IComponent> result) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: GetComponents, World not initialized");
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetComponents, World not initialized");
                 #endif
                 result.Clear();
                 var bufId = BitMask.BorrowBuf();
@@ -249,10 +249,10 @@ namespace FFS.Libraries.StaticEcs {
         #endif
     }
     
-    public struct DeleteComponentsSystem<WorldId, T> : IUpdateSystem where T : struct, IComponent where WorldId : struct, IWorldId {
+    public struct DeleteComponentsSystem<WorldType, T> : IUpdateSystem where T : struct, IComponent where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
         public void Update() {
-            Ecs<WorldId>.World.QueryEntities.For<All<T>>().DeleteForAll<T>();
+            Ecs<WorldType>.World.QueryEntities.For<All<T>>().DeleteForAll<T>();
         }
     }
 }

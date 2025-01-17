@@ -7,13 +7,13 @@ using Unity.IL2CPP.CompilerServices;
 #endif
 
 namespace FFS.Libraries.StaticEcs {
-    public interface IWorldId { }
+    public interface IWorldType { }
 
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public abstract partial class Ecs<WorldID> {
+    public abstract partial class Ecs<WorldType> {
         #if ENABLE_IL2CPP
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
@@ -49,7 +49,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if !FFS_ECS_DISABLE_MASKS
                 ModuleMasks.Value.Initialize();
                 #endif
-                Worlds.Set(typeof(WorldID), new WorldWrapper<WorldID>());
+                Worlds.Set(typeof(WorldType), new WorldWrapper<WorldType>());
                 Status = WorldStatus.Initialized;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 if (_debugEventListeners != null) {
@@ -87,7 +87,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static ComponentDynId RegisterComponent<T>(uint basePoolCapacity = 128) where T : struct, IComponent {
                 if (Status != WorldStatus.Created) {
-                    throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterComponent<{typeof(T)}>, World not created");
+                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterComponent<{typeof(T)}>, World not created");
                 }
                 return ModuleComponents.Value.RegisterComponent<T>(basePoolCapacity);
             }
@@ -131,7 +131,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static TagDynId RegisterTag<T>(uint basePoolCapacity = 128) where T : struct, ITag {
                 if (Status != WorldStatus.Created) {
-                    throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterTag<{typeof(T)}>, World not created");
+                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterTag<{typeof(T)}>, World not created");
                 }
                 return ModuleTags.Value.RegisterTag<T>(basePoolCapacity);
             }
@@ -189,7 +189,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static MaskDynId RegisterMask<M>() where M : struct, IMask {
                 if (Status != WorldStatus.Created) {
-                    throw new Exception($"World<{typeof(WorldID)}>, Method: RegisterMask<{typeof(M)}>, World not created");
+                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterMask<{typeof(M)}>, World not created");
                 }
                 return ModuleMasks.Value.RegisterMask<M>();
             }
@@ -249,7 +249,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static Entity CreateEntityInternal() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CreateEntityInternal, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: CreateEntityInternal, World not initialized");
                 #endif
                 Entity entity;
                 if (_deletedEntitiesCount > 0) {
@@ -291,7 +291,7 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal static void CreateEntitiesInternal<C>(int count, C onCreateEntity, Action<Entity> additional = null) where C : struct, IOnCreateEntityFunction<WorldID> {
+            internal static void CreateEntitiesInternal<C>(int count, C onCreateEntity, Action<Entity> additional = null) where C : struct, IOnCreateEntityFunction<WorldType> {
                 var newEntitiesCount = count - (_entityVersions.Length - _entityVersionsCount + _deletedEntitiesCount);
                 if (newEntitiesCount >= 0) {
                     ResizeFor(newEntitiesCount);
@@ -343,7 +343,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static void DestroyEntity(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: DestroyEntity, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, World not initialized");
                 #endif
                 ref var version = ref _entityVersions[entity._id];
                 if (version < 0) {
@@ -375,7 +375,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static void CopyEntityData(Entity srcEntity, Entity dstEntity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CopyEntityData, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: CopyEntityData, World not initialized");
                 #endif
                 
                 ModuleComponents.Value.CopyEntity(srcEntity, dstEntity);
@@ -390,7 +390,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static Entity CloneEntity(Entity srcEntity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: CloneEntity, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: CloneEntity, World not initialized");
                 #endif
                 
                 var dstEntity = CreateEntityInternal();
@@ -415,7 +415,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCount() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntitiesCount, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: EntitiesCount, World not initialized");
                 #endif
                 return _entityVersionsCount;
             }
@@ -423,7 +423,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCountWithoutDestroyed() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntitiesCountWithoutDestroyed, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: EntitiesCountWithoutDestroyed, World not initialized");
                 #endif
                 return _entityVersionsCount - _deletedEntitiesCount;
             }
@@ -431,7 +431,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static int EntitiesCapacity() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldID)}>, Method: GetEntitiesCapacity, World not initialized");
+                if(Status == WorldStatus.NotCreated) throw new Exception($"World<{typeof(WorldType)}>, Method: GetEntitiesCapacity, World not initialized");
                 #endif
                 return _entityVersions.Length;
             }
@@ -439,7 +439,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static short EntityVersion(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: EntityVersion, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: EntityVersion, World not initialized");
                 #endif
                 return _entityVersions[entity._id];
             }
@@ -457,7 +457,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static void Clear() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Clear, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: Clear, World not initialized");
                 #endif
 
                 ModuleComponents.Value.Clear();
@@ -477,7 +477,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal static void Destroy() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldID)}>, Method: Destroy, World not initialized");
+                if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: Destroy, World not initialized");
                 #endif
                 
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
@@ -509,7 +509,7 @@ namespace FFS.Libraries.StaticEcs {
                 _entityVersionsCount = 0;
                 _deletedEntitiesCount = 0;
                 Status = WorldStatus.NotCreated;
-                Worlds.Delete(typeof(WorldID));
+                Worlds.Delete(typeof(WorldType));
             }
         }
         
@@ -531,13 +531,13 @@ namespace FFS.Libraries.StaticEcs {
         internal static readonly Dictionary<Type, IWorld> _worlds = new();
 
         [MethodImpl(AggressiveInlining)]
-        public static IWorld Get(Type worldIdType) {
-            return _worlds[worldIdType];
+        public static IWorld Get(Type WorldTypeType) {
+            return _worlds[WorldTypeType];
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static bool Has(Type worldIdType) {
-            return _worlds.ContainsKey(worldIdType);
+        public static bool Has(Type WorldTypeType) {
+            return _worlds.ContainsKey(WorldTypeType);
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -546,13 +546,13 @@ namespace FFS.Libraries.StaticEcs {
         }
         
         [MethodImpl(AggressiveInlining)]
-        internal static void Set(Type worldIdType, IWorld world) {
-            _worlds[worldIdType] = world;
+        internal static void Set(Type WorldTypeType, IWorld world) {
+            _worlds[WorldTypeType] = world;
         }
         
         [MethodImpl(AggressiveInlining)]
-        internal static void Delete(Type worldIdType) {
-            _worlds.Remove(worldIdType);
+        internal static void Delete(Type WorldTypeType) {
+            _worlds.Remove(WorldTypeType);
         }
     }
 
@@ -594,39 +594,39 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public struct WorldWrapper<WorldId> : IWorld where WorldId : struct, IWorldId {
+    public struct WorldWrapper<WorldType> : IWorld where WorldType : struct, IWorldType {
         
         [MethodImpl(AggressiveInlining)]
-        public IEntity NewEntity(Type componentType) => Ecs<WorldId>.Entity.New(componentType);
+        public IEntity NewEntity(Type componentType) => Ecs<WorldType>.Entity.New(componentType);
 
         [MethodImpl(AggressiveInlining)]
-        public IEntity NewEntity(IComponent component) => Ecs<WorldId>.Entity.New(component);
+        public IEntity NewEntity(IComponent component) => Ecs<WorldType>.Entity.New(component);
 
         [MethodImpl(AggressiveInlining)]
-        public IEntity NewEntity<T>(T component) where T : struct, IComponent => Ecs<WorldId>.Entity.New(component);
+        public IEntity NewEntity<T>(T component) where T : struct, IComponent => Ecs<WorldType>.Entity.New(component);
 
         [MethodImpl(AggressiveInlining)]
-        public int EntitiesCountWithoutDestroyed() => Ecs<WorldId>.World.EntitiesCountWithoutDestroyed();
+        public int EntitiesCountWithoutDestroyed() => Ecs<WorldType>.World.EntitiesCountWithoutDestroyed();
 
         [MethodImpl(AggressiveInlining)]
-        public int EntitiesCount() => Ecs<WorldId>.World.EntitiesCount();
+        public int EntitiesCount() => Ecs<WorldType>.World.EntitiesCount();
 
         [MethodImpl(AggressiveInlining)]
-        public int EntitiesCapacity() => Ecs<WorldId>.World.EntitiesCapacity();
+        public int EntitiesCapacity() => Ecs<WorldType>.World.EntitiesCapacity();
 
         [MethodImpl(AggressiveInlining)]
-        public void Clear() => Ecs<WorldId>.World.Clear();
+        public void Clear() => Ecs<WorldType>.World.Clear();
 
         [MethodImpl(AggressiveInlining)]
-        public IContext Context() => Ecs<WorldId>.Context.Value;
+        public IContext Context() => Ecs<WorldType>.Context.Value;
 
         #if !FFS_ECS_DISABLE_EVENTS
         [MethodImpl(AggressiveInlining)]
-        public IEvents Events() => new EventsWrapper<WorldId>();
+        public IEvents Events() => new EventsWrapper<WorldType>();
         #endif
 
         bool IWorld.TryGetComponentsRawPool(Type type, out IRawPool pool) {
-            if (Ecs<WorldId>.World.TryGetComponentsPool(type, out var p)) {
+            if (Ecs<WorldType>.World.TryGetComponentsPool(type, out var p)) {
                 pool = p;
                 return true;
             }
@@ -637,7 +637,7 @@ namespace FFS.Libraries.StaticEcs {
 
         #if !FFS_ECS_DISABLE_TAGS
         bool IWorld.TryGetTagsRawPool(Type type, out IRawPool pool) {
-            if (Ecs<WorldId>.World.TryGetTagsPool(type, out var p)) {
+            if (Ecs<WorldType>.World.TryGetTagsPool(type, out var p)) {
                 pool = p;
                 return true;
             }
@@ -649,7 +649,7 @@ namespace FFS.Libraries.StaticEcs {
 
         #if !FFS_ECS_DISABLE_MASKS
         bool IWorld.TryGetMasksRawPool(Type type, out IRawPool pool) {
-            if (Ecs<WorldId>.World.TryGetMasksPool(type, out var p)) {
+            if (Ecs<WorldType>.World.TryGetMasksPool(type, out var p)) {
                 pool = p;
                 return true;
             }
