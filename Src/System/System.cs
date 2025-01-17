@@ -31,7 +31,7 @@ namespace FFS.Libraries.StaticEcs {
         internal void Destroy();
         
         #if DEBUG || FFS_ECS_ENABLE_DEBUG
-        internal void Info(List<(string name, float avgUpdateTime, bool enabled)> res);
+        internal void Info(List<(string name, float avgUpdateTime, bool enabled, bool initSystem, bool destroySystem)> res);
 
         internal bool SetActive(int sysIdx, bool active);
         #endif
@@ -58,6 +58,8 @@ namespace FFS.Libraries.StaticEcs {
                 internal bool Active;
                 internal float Time;
                 internal Stopwatch stopwatch;
+                internal bool initSystem;
+                internal bool destroySystem;
                 #endif
             
                 public SW(TSystem system) {
@@ -66,6 +68,8 @@ namespace FFS.Libraries.StaticEcs {
                     Active = true;
                     Time = 0;
                     stopwatch = new Stopwatch();
+                    initSystem = System is IInitSystem;
+                    destroySystem = System is IDestroySystem;
                     #endif
                 }
 
@@ -128,8 +132,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                internal (string name, float time, bool active) Info() {
-                    return (TypeData<TSystem>.Name, Time, Active);
+                internal (string name, float avgUpdateTime, bool enabled, bool initSystem, bool destroySystem) Info() {
+                    return (TypeData<TSystem>.Name, Time, Active, initSystem, destroySystem);
                 }
                 
                 internal bool SetActive(bool val) {

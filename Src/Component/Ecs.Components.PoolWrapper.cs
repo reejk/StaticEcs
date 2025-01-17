@@ -130,7 +130,7 @@ namespace FFS.Libraries.StaticEcs {
             public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Move(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            object IRawPool.GetRaw(int entity) => Components<T>.Value.Ref(new Entity(entity));
+            object IRawPool.GetRaw(int entity) => Components<T>.Value.RefMutInternal(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
             void IRawPool.PutRaw(int entity, object value) => Components<T>.Value.Put(new Entity(entity), (T) value);

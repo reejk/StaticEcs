@@ -145,7 +145,7 @@ namespace FFS.Libraries.StaticEcs {
                 Ecs<WorldId>.Components<T>.Value.RefMutInternal(entity).WriteColumn(writer);
             }
 
-            writer.Write(FileLogger<WorldId>.csvSeparator);
+            writer.Write(";");
         }
     }
 
@@ -161,7 +161,6 @@ namespace FFS.Libraries.StaticEcs {
                                               Ecs<WorldId>.IEventsDebugEventListener
                                               #endif
         where WorldId : struct, IWorldId {
-        internal static readonly string csvSeparator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
         internal static readonly Ecs<WorldId>.Entity EmptyEntity = Ecs<WorldId>.Entity.FromIdx(-1);
 
         internal static readonly string[] MethodNames = {
@@ -257,17 +256,21 @@ namespace FFS.Libraries.StaticEcs {
             Writer = new StreamWriter($"{LogsFilePath}/entities_log_{typeof(WorldId).Name}_{Part}_{DateTime:yyyy_MM_dd_HH_mm_ss}.csv", true, Encoding.UTF8);
 
             Writer.Write("EntityId");
-            Writer.Write(csvSeparator);
+            Writer.Write(";");
             Writer.Write("Version");
-            Writer.Write(csvSeparator);
+            Writer.Write(";");
             foreach (var columnWriter in ColumnWriters) {
                 Writer.Write(columnWriter.ColumnName());
-                Writer.Write(csvSeparator);
+                Writer.Write(";");
             }
 
             Writer.Write("Operation");
-            Writer.Write(csvSeparator);
+            Writer.Write(";");
             Writer.WriteLine("Type");
+        }
+        
+        public void Flush() {
+            Writer.Flush();
         }
 
         public void OnWorldInitialized() {
@@ -294,20 +297,20 @@ namespace FFS.Libraries.StaticEcs {
                 Writer.Write(entity._id);
             }
 
-            Writer.Write(csvSeparator);
+            Writer.Write(";");
             
             if (entity._id >= 0) {
                 Writer.Write(entity.Version());
             }
 
-            Writer.Write(csvSeparator);
+            Writer.Write(";");
 
             foreach (var columnWriter in ColumnWriters) {
                 columnWriter.TryAddColumn(entity, Writer);
             }
 
             Writer.Write(MethodName(operation));
-            Writer.Write(csvSeparator);
+            Writer.Write(";");
             if (type != null) {
                 Writer.WriteLine(type);
             } else {
