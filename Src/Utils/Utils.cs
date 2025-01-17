@@ -210,7 +210,7 @@ namespace FFS.Libraries.StaticEcs {
             ColumnWriters = columnWriters ?? Array.Empty<ICsvColumnHandler<WorldId>>();
             var files = Directory.GetFiles(logsFilePath);
             foreach (var file in files) {
-                if (file.StartsWith($"entities_log_{typeof(WorldId).Name}")) {
+                if (file.Contains($"entities_log_{typeof(WorldId).Name}")) {
                     File.Delete(file);
                 }
             }
