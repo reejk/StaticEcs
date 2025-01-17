@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
+#if DEBUG || FFS_ECS_ENABLE_DEBUG
+using System.Diagnostics;
+#endif
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
 #endif
@@ -28,7 +31,7 @@ namespace FFS.Libraries.StaticEcs {
         internal void Destroy();
         
         #if DEBUG || FFS_ECS_ENABLE_DEBUG
-        internal void Info(List<(string name, int avgUpdateTime, bool enabled)> res);
+        internal void Info(List<(string name, float avgUpdateTime, bool enabled)> res);
 
         internal bool SetActive(int sysIdx, bool active);
         #endif
@@ -53,8 +56,8 @@ namespace FFS.Libraries.StaticEcs {
                 internal TSystem System;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 internal bool Active;
-                internal int Time;
-                internal System.Diagnostics.Stopwatch Stopwatch;
+                internal float Time;
+                internal Stopwatch stopwatch;
                 #endif
             
                 public SW(TSystem system) {
@@ -62,7 +65,7 @@ namespace FFS.Libraries.StaticEcs {
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG
                     Active = true;
                     Time = 0;
-                    Stopwatch = new System.Diagnostics.Stopwatch();
+                    stopwatch = new Stopwatch();
                     #endif
                 }
 
@@ -96,12 +99,12 @@ namespace FFS.Libraries.StaticEcs {
                     if (FileLogger != null && FileLogger.Enabled) {
                         FileLogger.Write(OperationType.SystemCallUpdate, TypeData<TSystem>.Name);
                     }
-                    Stopwatch.Restart();
+                    stopwatch.Restart();
                     #endif
                     System.Update();
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                    Stopwatch.Stop();
-                    Time = ((int) Stopwatch.ElapsedMilliseconds + Time) / 2;
+                    stopwatch.Stop();
+                    Time = ((float)stopwatch.ElapsedTicks / Stopwatch.Frequency * 1000 + Time) * 0.5f;
                     #endif
                     IncrementSystemIndex();
                 }
@@ -125,7 +128,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                internal (string name, int time, bool active) Info() {
+                internal (string name, float time, bool active) Info() {
                     return (TypeData<TSystem>.Name, Time, Active);
                 }
                 
