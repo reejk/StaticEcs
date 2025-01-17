@@ -198,8 +198,11 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public static EventDynId RegisterEventType<T>() where T : struct, IEvent {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"Events<{typeof(WorldType)}>, Method: RegisterEventType<{typeof(T)}>, World not initialized");
+                if (World.Status != WorldStatus.Created) {
+                    throw new Exception($"Events<{typeof(WorldType)}>, Method: RegisterEventType<{typeof(T)}>, World not initialized");
+                }
                 #endif
+
                 Pool<T>.Value.Create(_poolsCount);
 
                 if (_poolsCount == _pools.Length) {
