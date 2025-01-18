@@ -177,13 +177,13 @@ namespace FFS.Libraries.StaticEcs {
     public sealed class FileLogger<WorldType> : Ecs<WorldType>.IWorldDebugEventListener,
                                               Ecs<WorldType>.IComponentsDebugEventListener
                                               #if !FFS_ECS_DISABLE_TAGS
-                                              , Ecs<WorldType>.ITagDebugEventListener,
+                                              , Ecs<WorldType>.ITagDebugEventListener
                                               #endif
                                               #if !FFS_ECS_DISABLE_MASKS
-                                              Ecs<WorldType>.IMaskDebugEventListener,
+                                              , Ecs<WorldType>.IMaskDebugEventListener
                                               #endif
                                               #if !FFS_ECS_DISABLE_EVENTS
-                                              Ecs<WorldType>.IEventsDebugEventListener
+                                              , Ecs<WorldType>.IEventsDebugEventListener
                                               #endif
         where WorldType : struct, IWorldType {
         internal static readonly Ecs<WorldType>.Entity EmptyEntity = Ecs<WorldType>.Entity.FromIdx(-1);

@@ -571,6 +571,8 @@ namespace FFS.Libraries.StaticEcs {
         public int EntitiesCapacity();
         
         public void Clear();
+        
+        public WorldStatus Status();
 
         public IContext Context();
         
@@ -616,6 +618,9 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public void Clear() => Ecs<WorldType>.World.Clear();
+
+        [MethodImpl(AggressiveInlining)]
+        public WorldStatus Status() => Ecs<WorldType>.World.Status;
 
         [MethodImpl(AggressiveInlining)]
         public IContext Context() => Ecs<WorldType>.Context.Value;
