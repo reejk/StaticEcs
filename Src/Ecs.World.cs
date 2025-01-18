@@ -85,11 +85,11 @@ namespace FFS.Libraries.StaticEcs {
             #endif
 
             [MethodImpl(AggressiveInlining)]
-            public static ComponentDynId RegisterComponent<T>(uint basePoolCapacity = 128) where T : struct, IComponent {
+            public static ComponentDynId RegisterComponentType<T>(uint basePoolCapacity = 128) where T : struct, IComponent {
                 if (Status != WorldStatus.Created) {
-                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterComponent<{typeof(T)}>, World not created");
+                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterComponentType<{typeof(T)}>, World not created");
                 }
-                return ModuleComponents.Value.RegisterComponent<T>(basePoolCapacity);
+                return ModuleComponents.Value.RegisterComponentType<T>(basePoolCapacity);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -129,11 +129,11 @@ namespace FFS.Libraries.StaticEcs {
 
             #if !FFS_ECS_DISABLE_TAGS
             [MethodImpl(AggressiveInlining)]
-            public static TagDynId RegisterTag<T>(uint basePoolCapacity = 128) where T : struct, ITag {
+            public static TagDynId RegisterTagType<T>(uint basePoolCapacity = 128) where T : struct, ITag {
                 if (Status != WorldStatus.Created) {
-                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterTag<{typeof(T)}>, World not created");
+                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterTagType<{typeof(T)}>, World not created");
                 }
-                return ModuleTags.Value.RegisterTag<T>(basePoolCapacity);
+                return ModuleTags.Value.RegisterTagType<T>(basePoolCapacity);
             }
                         
             [MethodImpl(AggressiveInlining)]
@@ -187,11 +187,11 @@ namespace FFS.Libraries.StaticEcs {
 
             #if !FFS_ECS_DISABLE_MASKS
             [MethodImpl(AggressiveInlining)]
-            public static MaskDynId RegisterMask<M>() where M : struct, IMask {
+            public static MaskDynId RegisterMaskType<M>() where M : struct, IMask {
                 if (Status != WorldStatus.Created) {
-                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterMask<{typeof(M)}>, World not created");
+                    throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterMaskType<{typeof(M)}>, World not created");
                 }
-                return ModuleMasks.Value.RegisterMask<M>();
+                return ModuleMasks.Value.RegisterMaskType<M>();
             }
             
             [MethodImpl(AggressiveInlining)]

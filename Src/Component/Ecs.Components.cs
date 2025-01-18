@@ -42,7 +42,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal ComponentDynId RegisterComponent<T>(uint capacity) where T : struct, IComponent {
+            internal ComponentDynId RegisterComponentType<T>(uint capacity) where T : struct, IComponent {
                 if (ComponentInfo<T>.IsRegistered()) {
                     return Components<T>.Value.DynamicId();
                 }

@@ -43,7 +43,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal MaskDynId RegisterMask<T>() where T : struct, IMask {
+            internal MaskDynId RegisterMaskType<T>() where T : struct, IMask {
                 if (MaskInfo<T>.IsRegistered()) {
                     return Masks<T>.Value.DynamicId();
                 }

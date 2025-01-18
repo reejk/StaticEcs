@@ -43,7 +43,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal TagDynId RegisterTag<C>(uint capacity) where C : struct, ITag {
+            internal TagDynId RegisterTagType<C>(uint capacity) where C : struct, ITag {
                 if (TagInfo<C>.IsRegistered()) {
                     return Tags<C>.Value.DynamicId();
                 }

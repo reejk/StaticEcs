@@ -95,8 +95,8 @@ public class Program {
         MyEcs.Create(EcsConfig.Default());
         
         // Регестрируем компоненты
-        MyWorld.RegisterComponent<Position>();
-        MyWorld.RegisterComponent<Velocity>();
+        MyWorld.RegisterComponentType<Position>();
+        MyWorld.RegisterComponentType<Velocity>();
         
         // Инициализацируем мир
         MyEcs.Initialize();
@@ -251,7 +251,7 @@ public struct Position : IComponent {
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterComponent<Position>();
+MyEcs.World.RegisterComponentType<Position>();
 //...
 MyEcs.Initialize();
 ```
@@ -339,7 +339,7 @@ public struct Unit : ITag { }
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterTag<Unit>();
+MyEcs.World.RegisterTagType<Unit>();
 //...
 MyEcs.Initialize();
 ```
@@ -387,7 +387,7 @@ public struct Visible : IMask { }
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterMask<Visible>();
+MyEcs.World.RegisterMaskType<Visible>();
 //...
 MyEcs.Initialize();
 ```
@@ -525,13 +525,13 @@ MyEcs.Initialize();
 ```c#
 // При регистрации компонента возможно указать базовой размер массива даных компонентов этого типа
 // Также возвращается динамическй идентификатор типа компонента (раздел дополнительные возможности)
-var positionComponentId = MyWorld.RegisterComponent<Position>(256);
+var positionComponentId = MyWorld.RegisterComponentType<Position>(256);
 
-// аналогично RegisterComponent, но для тегов
-var unitTagId = MyWorld.RegisterTag<Unit>(256);
+// аналогично RegisterComponentType, но для тегов
+var unitTagId = MyWorld.RegisterTagType<Unit>(256);
 
-// аналогично RegisterComponent, но для масок
-var visibleMaskId = MyWorld.RegisterMask<Visible>();
+// аналогично RegisterComponentType, но для масок
+var visibleMaskId = MyWorld.RegisterMaskType<Visible>();
 
 // true если мир инициализирован
 bool initialized = MyWorld.IsInitialized();
@@ -968,9 +968,9 @@ public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, Ecs.IQueryFunctio
 ```csharp
 // После вызова Ecs.Create(EcsConfig.Default());
 // Можно явно зарегистрировать типы компонентов и получить структуру содержащую идентифкатор типа
-ComponentDynId positionId = MyWorld.RegisterComponent<Position>();
-TagDynId unitTagId = MyWorld.RegisterTag<Unit>();
-MaskDynId frozenMaskId = MyWorld.RegisterMask<Frozen>();
+ComponentDynId positionId = MyWorld.RegisterComponentType<Position>();
+TagDynId unitTagId = MyWorld.RegisterTagType<Unit>();
+MaskDynId frozenMaskId = MyWorld.RegisterMaskType<Frozen>();
 
 // Альтернативно можно после инициализации мира в любой момент получить данные идентификаторы след образом:
 ComponentDynId positionId = Ecs.Components.DynamicId<Position>();
@@ -1295,9 +1295,9 @@ public class Main : MonoBehaviour {
     void Start() {
         MyEcs.Create(EcsConfig.Default());
         
-        MyWorld.RegisterComponent<Position>();
-        MyWorld.RegisterComponent<Direction>();
-        MyWorld.RegisterComponent<Velocity>();
+        MyWorld.RegisterComponentType<Position>();
+        MyWorld.RegisterComponentType<Direction>();
+        MyWorld.RegisterComponentType<Velocity>();
         
         MyEcs.Initialize();
         

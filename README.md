@@ -95,8 +95,8 @@ public class Program {
         MyEcs.Create(EcsConfig.Default());
         
         // Registering components
-        MyWorld.RegisterComponent<Position>();
-        MyWorld.RegisterComponent<Velocity>();
+        MyWorld.RegisterComponentType<Position>();
+        MyWorld.RegisterComponentType<Velocity>();
         
         // Initializing the world
         MyEcs.Initialize();
@@ -250,7 +250,7 @@ Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterComponent<Position>();
+MyEcs.World.RegisterComponentType<Position>();
 //...
 MyEcs.Initialize();
 ```
@@ -338,7 +338,7 @@ Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterTag<Unit>();
+MyEcs.World.RegisterTagType<Unit>();
 //...
 MyEcs.Initialize();
 ```
@@ -386,7 +386,7 @@ Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterMask<Visible>();
+MyEcs.World.RegisterMaskType<Visible>();
 //...
 MyEcs.Initialize();
 ```
@@ -524,13 +524,13 @@ MyEcs.Initialize();
 ```c#
 // When registering a component, it is possible to specify the base size of the data array of components of this type
 // The dynamic identifier of the component type is also returned (section Additional Features)
-var positionComponentId = MyWorld.RegisterComponent<Position>(256);
+var positionComponentId = MyWorld.RegisterComponentType<Position>(256);
 
-// similar to RegisterComponent, but for tags
-var unitTagId = MyWorld.RegisterTag<Unit>(256);
+// similar to RegisterComponentType, but for tags
+var unitTagId = MyWorld.RegisterTagType<Unit>(256);
 
-// similar to RegisterComponent, but for masks
-var visibleMaskId = MyWorld.RegisterMask<Visible>();
+// similar to RegisterComponentType, but for masks
+var visibleMaskId = MyWorld.RegisterMaskType<Visible>();
 
 // true if the world is initialized
 bool initialized = MyWorld.IsInitialized();
@@ -967,9 +967,9 @@ How it works:
 ```csharp
 // After calling Ecs.Create(EcsConfig.Default());
 // You can explicitly register component types and get a structure containing the type identifier
-ComponentDynId positionId = MyWorld.RegisterComponent<Position>();
-TagDynId unitTagId = MyWorld.RegisterTag<Unit>();
-MaskDynId frozenMaskId = MyWorld.RegisterMask<Frozen>();
+ComponentDynId positionId = MyWorld.RegisterComponentType<Position>();
+TagDynId unitTagId = MyWorld.RegisterTagType<Unit>();
+MaskDynId frozenMaskId = MyWorld.RegisterMaskType<Frozen>();
 
 // Alternatively, it is possible to get these identifiers at any time after initializing the world in the following way:
 ComponentDynId positionId = Ecs.Components.DynamicId<Position>();
@@ -1294,9 +1294,9 @@ public class Main : MonoBehaviour {
     void Start() {
         MyEcs.Create(EcsConfig.Default());
                 
-        MyWorld.RegisterComponent<Position>();
-        MyWorld.RegisterComponent<Direction>();
-        MyWorld.RegisterComponent<Velocity>();
+        MyWorld.RegisterComponentType<Position>();
+        MyWorld.RegisterComponentType<Direction>();
+        MyWorld.RegisterComponentType<Velocity>();
         
         MyEcs.Initialize();
         
