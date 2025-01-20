@@ -55,7 +55,7 @@ ___
 * [Telegram](https://t.me/felid_force_studios)
 # Установка
 * ### В виде исходников
-  Со страцины релизов или как архив из нужной ветки. В ветки `master` стабильная проверенная версия
+  Со страцины релизов или как архив из нужной ветки. В ветке `master` стабильная проверенная версия
 * ### Установка для Unity
   Как git модуль `https://github.com/Felid-Force-Studios/StaticEcs.git` в Unity PackageManager или добавления в `Packages/manifest.json`:
 
