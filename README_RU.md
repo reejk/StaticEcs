@@ -1327,4 +1327,4 @@ public class Main : MonoBehaviour {
 **WIP**
 
 # Лицензия
-[MIT license](./LICENSE)
+[MIT license](./LICENSE.md)
