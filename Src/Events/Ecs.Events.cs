@@ -203,6 +203,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 #endif
 
+                if (Pool<T>.Value.Initialized) {
+                    return new EventDynId(Pool<T>.Value.Id);
+                }
+                
                 Pool<T>.Value.Create(_poolsCount);
 
                 if (_poolsCount == _pools.Length) {
