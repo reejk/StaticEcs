@@ -164,7 +164,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void SetDataIfCountLess(ref int count, ref int[] entities) {
-                if (_tagCount < count || count == 0) {
+                if (_tagCount < count) {
                     count = _tagCount;
                     entities = _entities;
                 }
@@ -184,7 +184,7 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void SetDataIfCountMore(ref int count, ref int[] entities) {
-                if (_tagCount > count || count == 0) {
+                if (_tagCount > count) {
                     count = _tagCount;
                     entities = _entities;
                 }

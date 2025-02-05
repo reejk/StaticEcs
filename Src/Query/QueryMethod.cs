@@ -14,7 +14,7 @@ namespace FFS.Libraries.StaticEcs {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool CheckOne<WorldType>(this IQueryMethod method, Ecs<WorldType>.Entity entity) where WorldType : struct, IWorldType {
-            var count = 0;
+            var count = int.MaxValue;
             int[] entities = null;
             method.SetData<WorldType>(ref count, ref entities);
             var checkEntity = method.CheckEntity(entity._id);
