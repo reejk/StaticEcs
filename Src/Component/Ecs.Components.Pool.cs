@@ -344,7 +344,7 @@ namespace FFS.Libraries.StaticEcs {
                         var lastEntity = _entities[_componentsCount];
                         _entities[idxRef] = lastEntity;
                         _dataIdxByEntityId[lastEntity] = idxRef;
-                        _data[idxRef] = _data[_componentsCount];
+                        (_data[idxRef], _data[_componentsCount]) = (_data[_componentsCount], _data[idxRef]);
                     }
 
                     idxRef = Empty;
