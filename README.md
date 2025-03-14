@@ -32,6 +32,7 @@ ___
     * [Entity](#entity)
     * [PackedEntity](#packedentity)
     * [Component](#component)
+    * [StandardComponent](#standardComponent)
     * [Tag](#tag)
     * [Mask](#mask)
     * [WorldType](#WorldType)
