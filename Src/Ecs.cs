@@ -42,6 +42,7 @@ namespace FFS.Libraries.StaticEcs {
     public struct EcsConfig {
         public uint BaseEntitiesCount;
         public uint BaseDeletedEntitiesCount;
+        public uint BaseStandardComponentTypesCount;
         public uint BaseComponentTypesCount;
         public uint BaseMaskTypesCount;
         public uint BaseTagTypesCount;
@@ -50,6 +51,7 @@ namespace FFS.Libraries.StaticEcs {
         public static EcsConfig Default() => new() {
             BaseEntitiesCount = 256,
             BaseDeletedEntitiesCount = 256,
+            BaseStandardComponentTypesCount = 4,
             BaseComponentTypesCount = 64,
             BaseMaskTypesCount = 64,
             BaseTagTypesCount = 64,

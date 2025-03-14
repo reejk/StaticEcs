@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.1-blue.svg?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.2-blue.svg?style=for-the-badge)
 
 ### LANGUAGE
 [RU](./README_RU.md)
@@ -317,6 +317,84 @@ bool deleted = entity.Delete<Position, Velocity, Name>();  // deleted = true if 
 var entity2 = MyEcs.Entity.New<Name>();
 // Copy the specified components to another entity (overload methods from 1-5 components)
 entity.CopyComponentsTo<Position, Velocity>(entity2);
+```
+</details>
+
+
+### StandardComponent
+Default Component - standard entity properties, present on every entity created by default
+> Should be used when ALL entities in the world must contain components of some type  
+> for example, if the position component must be on every entity without exception, you should use the standard component  
+> as the access times are faster, and there will be no additional memory overhead
+>
+> Can also be used for small components 1-8 bytes in size, if no logic is required based on the presence or absence of a component
+>
+> For example, the internal version of an entity `entity.Version()` is a standard component
+- Optimized storage and direct access to data by entity ID
+- Cannot be deleted, only modified
+- When the last `IComponent` is deleted, the Standard Component is ignored and the entity is deleted
+- Not included in queries, as it is present on all entities
+- Represented as a custom structure with a `IStandardComponent` marker interface
+
+Example:
+```c#
+public struct EnitiyType : IStandardComponent {
+    public int Val;
+}
+```
+
+**IMPORTANT** ❗️  
+Requires registration in the world between creation and initialization
+
+Example:
+```c#
+MyEcs.Create(EcsConfig.Default());
+//...
+MyEcs.World.RegisterStandardComponentType<EnitiyType>();
+//...
+MyEcs.Initialize();
+```
+
+**IMPORTANT** ❗️  
+If automatic initialization when creating an entity or automatic reset when deleting an entity is required  
+handlers must be explicitly registered
+
+Example:
+```c#
+MyEcs.Create(EcsConfig.Default());
+//...
+MyEcs.World.RegisterStandardComponentType<EnitiyType>();
+
+// This function will be called when the entity is created  
+MyEcs.StandardComponents<EnitiyType>.SetAutoInit((ref EnitiyType component) => component.Val = 1);
+
+// This function will be called when the entity is destroyed  
+MyEcs.StandardComponents<EnitiyType>.SetAutoReset((ref EnitiyType component) => component.Val = -1);
+
+// When copying standard components, this entity will be called instead of just copying it
+MyEcs.StandardComponents<EnitiyType>.SetAutoCopy((ref EnitiyType src, ref EnitiyType dst) => dst.Val = src.Val);
+//...
+MyEcs.Initialize();
+```
+
+<details><summary><u><b>Usage 👇</b></u></summary>
+
+- Basic operations:
+```c#
+// Get the number of standard components per entity
+int standardComponentsCount = entity.StandardComponentsCount();
+
+// Get ref reference to a standard read/write component
+ref var enitiyType = ref entity.RefMutStandard<EnitiyType>();
+enitiyType.Val = 123;
+
+// Get ref reference to a standard read-only component
+ref readonly var readOnlyEnitiyType = ref entity.RefStandard<EnitiyType>();
+//readOnlyEnitiyType.Val = 123;  -   ERROR
+
+var entity2 = MyEcs.Entity.New<SomeComponent>();
+// Copy the specified standard components to another entity (overload methods from 1-5 components)
+entity.CopyStandardComponentsTo<EnitiyType>(entity2);
 ```
 </details>
 

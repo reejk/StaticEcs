@@ -25,7 +25,7 @@ namespace FFS.Libraries.StaticEcs {
             public static Entity FromIdx(int idx) => new(idx);
 
             [MethodImpl(AggressiveInlining)]
-            public short Version() => World.EntityVersion(this);
+            public short Version() => StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value;
             
             int IEntity.GetId() => _id;
 
@@ -36,7 +36,7 @@ namespace FFS.Libraries.StaticEcs {
             IWorld IEntity.World() => Worlds.Get(typeof(WorldType));
 
             [MethodImpl(AggressiveInlining)]
-            public bool IsActual() => World.EntityVersion(this) > 0;
+            public bool IsActual() => StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value > 0;
 
             [MethodImpl(AggressiveInlining)]
             public Entity Clone() => World.CloneEntity(this);
@@ -61,7 +61,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public PackedEntity Pack() => new() { _entity = _id, _version = World.EntityVersion(this) };
+            public PackedEntity Pack() => new() { _entity = _id, _version = StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value };
 
             [MethodImpl(AggressiveInlining)]
             public void Destroy() => World.DestroyEntity(this);
@@ -482,7 +482,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public readonly bool TryUnpack<WorldType>(out Ecs<WorldType>.Entity entity) where WorldType : struct, IWorldType {
             entity = Ecs<WorldType>.Entity.FromIdx(_entity);
-            return Ecs<WorldType>.World.EntityVersion(entity) == _version;
+            return Ecs<WorldType>.StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value == _version;
         }
 
         [MethodImpl(AggressiveInlining)]
