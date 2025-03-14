@@ -181,8 +181,8 @@ namespace FFS.Libraries.StaticEcs {
                 var id = BitMask.GetMinIndexBuffer(bufId);
                 while (id >= 0) {
                     _pools[id].Copy(srcEntity, dstEntity);
-                    BitMask.Del(bufId, (ushort) id);
-                    id = BitMask.GetMinIndex(bufId);
+                    BitMask.DelInBuffer(bufId, (ushort) id);
+                    id = BitMask.GetMinIndexBuffer(bufId);
                 }
 
                 BitMask.DropBuf();
