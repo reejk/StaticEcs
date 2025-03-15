@@ -139,7 +139,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             public void SetRawStandard(IStandardComponent component) {
-                ModuleStandardComponents.Value.GetPool(component.GetType()).SetRaw(this, component);
+                ModuleStandardComponents.Value.GetPool(component.GetType()).PutRaw(this, component);
             }
             
             [MethodImpl(AggressiveInlining)]

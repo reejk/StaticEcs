@@ -641,6 +641,8 @@ namespace FFS.Libraries.StaticEcs {
         public IEvents Events();
         #endif
 
+        internal bool TryGetStandardComponentsRawPool(Type type, out IStandardRawPool pool);
+        
         internal bool TryGetComponentsRawPool(Type type, out IRawPool pool);
         
         #if !FFS_ECS_DISABLE_TAGS
@@ -690,6 +692,16 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public IEvents Events() => new EventsWrapper<WorldType>();
         #endif
+        
+        bool IWorld.TryGetStandardComponentsRawPool(Type type, out IStandardRawPool pool) {
+            if (Ecs<WorldType>.World.TryGetStandardComponentsPool(type, out var p)) {
+                pool = p;
+                return true;
+            }
+            
+            pool = default;
+            return false;
+        }
 
         bool IWorld.TryGetComponentsRawPool(Type type, out IRawPool pool) {
             if (Ecs<WorldType>.World.TryGetComponentsPool(type, out var p)) {

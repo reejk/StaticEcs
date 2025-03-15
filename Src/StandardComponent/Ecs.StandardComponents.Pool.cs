@@ -82,15 +82,6 @@ namespace FFS.Libraries.StaticEcs {
                     AutoCopyHandler(ref RefMut(src), ref RefMut(dst));
                 }
             }
-            
-            [MethodImpl(AggressiveInlining)]
-            public T[] Data() {
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Data, World not initialized");
-                if (!ModuleStandardComponents.StandardComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Data, Component type not registered");
-                #endif
-                return _data;
-            }
 
             [MethodImpl(AggressiveInlining)]
             public static void SetAutoInit(AutoInitHandler<T> handler) {
@@ -159,6 +150,11 @@ namespace FFS.Libraries.StaticEcs {
                 if (!ModuleStandardComponents.StandardComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: DynamicId, Component type not registered");
                 #endif
                 return new StandardComponentDynId(id);
+            }
+                        
+            [MethodImpl(AggressiveInlining)]
+            internal T[] Data() {
+                return _data;
             }
             
             [MethodImpl(AggressiveInlining)]

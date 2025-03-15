@@ -9,7 +9,7 @@ namespace FFS.Libraries.StaticEcs {
     public interface IStandardRawPool {
         internal object GetRaw(int entity);
             
-        internal void SetRaw(int entity, object value);
+        internal void PutRaw(int entity, object value);
 
         internal void Copy(int srcEntity, int dstEntity);
 
@@ -29,7 +29,7 @@ namespace FFS.Libraries.StaticEcs {
             
             public IStandardComponent GetRaw(Entity entity);
             
-            public void SetRaw(Entity entity, IStandardComponent component);
+            public void PutRaw(Entity entity, IStandardComponent component);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
             
@@ -70,7 +70,7 @@ namespace FFS.Libraries.StaticEcs {
             public IStandardComponent GetRaw(Entity entity) => StandardComponents<T>.Value.Ref(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public void SetRaw(Entity entity, IStandardComponent component) => StandardComponents<T>.Value.RefMut(entity) = (T) component;
+            public void PutRaw(Entity entity, IStandardComponent component) => StandardComponents<T>.Value.RefMut(entity) = (T) component;
 
             [MethodImpl(AggressiveInlining)]
             public T[] Data() => StandardComponents<T>.Value.Data();
@@ -82,7 +82,7 @@ namespace FFS.Libraries.StaticEcs {
             object IStandardRawPool.GetRaw(int entity) => StandardComponents<T>.Value.RefMutInternal(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            void IStandardRawPool.SetRaw(int entity, object value) => StandardComponents<T>.Value.RefMut(new Entity(entity)) = (T) value;
+            void IStandardRawPool.PutRaw(int entity, object value) => StandardComponents<T>.Value.RefMut(new Entity(entity)) = (T) value;
 
             [MethodImpl(AggressiveInlining)]
             void IStandardRawPool.Copy(int srcEntity, int dstEntity) => StandardComponents<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
@@ -91,7 +91,7 @@ namespace FFS.Libraries.StaticEcs {
             int IStandardRawPool.Capacity() => StandardComponents<T>.Value.Data().Length;
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => StandardComponents<T>.Value.Data().Length;
+            public int Count() => World.EntitiesCountWithoutDestroyed();
 
             [MethodImpl(AggressiveInlining)]
             public bool Is<C>() where C : struct, IStandardComponent => StandardComponents<C>.Value.id == StandardComponents<T>.Value.id;
