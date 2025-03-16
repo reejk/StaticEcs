@@ -1242,8 +1242,8 @@ public static class $COMPONENT$Extension {
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static void Add$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Value.Add(entity) = $COMPONENT$;
+    public static void Add$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ value) {
+        $ECS$.Components<$COMPONENT$>.Value.Add(entity) = value;
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -1252,13 +1252,13 @@ public static class $COMPONENT$Extension {
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static void TryAdd$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Value.TryAdd(entity) = $COMPONENT$;
+    public static void TryAdd$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ value) {
+        $ECS$.Components<$COMPONENT$>.Value.TryAdd(entity) = value;
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static void Put$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ $COMPONENT$) {
-        $ECS$.Components<$COMPONENT$>.Value.Put(entity, $COMPONENT$);
+    public static void Put$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ value) {
+        $ECS$.Components<$COMPONENT$>.Value.Put(entity, value);
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
@@ -1269,6 +1269,27 @@ public static class $COMPONENT$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static bool Delete$COMPONENT$(this $ECS$.Entity entity) {
         return $ECS$.Components<$COMPONENT$>.Value.Del(entity);
+    }
+}
+```
+
+Standard component live template
+```csharp
+public static class $COMPONENT$Extension {
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static ref readonly $COMPONENT$ $COMPONENT$(this $ECS$.Entity entity) {
+        return ref $ECS$.StandardComponents<$COMPONENT$>.Value.Ref(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static ref $COMPONENT$ Mut$COMPONENT$(this $ECS$.Entity entity) {
+        return ref $ECS$.StandardComponents<$COMPONENT$>.Value.RefMut(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static void Set$COMPONENT$(this $ECS$.Entity entity, $COMPONENT$ value) {
+        $ECS$.StandardComponents<$COMPONENT$>.Value.RefMut(entity) = value;
     }
 }
 ```
