@@ -27,8 +27,8 @@ namespace FFS.Libraries.StaticEcs {
             get {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 ref var val = ref _data[_count];
-                if (Ecs<WorldType>.ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in Ecs<WorldType>.ModuleComponents.Value._debugEventListeners) {
+                if (Ecs<WorldType>.Components<C>.Value.debugEventListeners != null) {
+                    foreach (var listener in Ecs<WorldType>.Components<C>.Value.debugEventListeners) {
                         listener.OnComponentRefMut(new Ecs<WorldType>.Entity(Ecs<WorldType>.Components<C>.Value.EntitiesData()[_count]), ref val);
                     }
                 }
@@ -88,8 +88,8 @@ namespace FFS.Libraries.StaticEcs {
             get {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 ref var val = ref _data[_count];
-                if (Ecs<WorldType>.ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in Ecs<WorldType>.ModuleComponents.Value._debugEventListeners) {
+                if (Ecs<WorldType>.Components<C>.Value.debugEventListeners != null) {
+                    foreach (var listener in Ecs<WorldType>.Components<C>.Value.debugEventListeners) {
                         listener.OnComponentRefMut(new Ecs<WorldType>.Entity(_entities[_count]), ref val);
                     }
                 }

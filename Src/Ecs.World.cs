@@ -100,11 +100,11 @@ namespace FFS.Libraries.StaticEcs {
             #endif
 
             [MethodImpl(AggressiveInlining)]
-            public static ComponentDynId RegisterComponentType<T>(uint basePoolCapacity = 128) where T : struct, IComponent {
+            public static ComponentDynId RegisterComponentType<T>(AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null, uint basePoolCapacity = 128) where T : struct, IComponent {
                 if (Status != WorldStatus.Created) {
                     throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterComponentType<{typeof(T)}>, World not created");
                 }
-                return ModuleComponents.Value.RegisterComponentType<T>(basePoolCapacity);
+                return ModuleComponents.Value.RegisterComponentType(basePoolCapacity, autoInit, autoReset, autoCopy);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -143,11 +143,11 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static StandardComponentDynId RegisterStandardComponentType<T>() where T : struct, IStandardComponent {
+            public static StandardComponentDynId RegisterStandardComponentType<T>(AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null) where T : struct, IStandardComponent {
                 if (Status != WorldStatus.Created) {
                     throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterStandardComponentType<{typeof(T)}>, World not created");
                 }
-                return ModuleStandardComponents.Value.RegisterComponentType<T>();
+                return ModuleStandardComponents.Value.RegisterComponentType(autoInit, autoReset, autoCopy);
             }
             
             [MethodImpl(AggressiveInlining)]

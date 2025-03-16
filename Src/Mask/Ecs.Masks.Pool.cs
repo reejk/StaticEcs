@@ -1,5 +1,6 @@
 ﻿#if !FFS_ECS_DISABLE_MASKS
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
@@ -19,21 +20,32 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public struct Masks<T> where T : struct, IMask {
             public static Masks<T> Value;
+            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal List<IMaskDebugEventListener> debugEventListeners;
+            #endif
+            
             private BitMask _bitMask;
             internal ushort id;
             internal int count;
+            private bool _registered;
 
             internal void Create(ushort componentId, BitMask bitMask) {
                 _bitMask = bitMask;
                 id = componentId;
-                ModuleMasks.MaskInfo<T>.Register();
+                _registered = true;
+            }
+                       
+            [MethodImpl(AggressiveInlining)]
+            public bool IsRegistered() {
+                return _registered;
             }
 
             [MethodImpl(AggressiveInlining)]
             public int Count() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: Count, World not initialized");
-                if (!ModuleMasks.MaskInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Count, Mask type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Count, Mask type not registered");
                 #endif
                 return count;
             }
@@ -42,16 +54,14 @@ namespace FFS.Libraries.StaticEcs {
             public void Set(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: Set, World not initialized");
-                if (!ModuleMasks.MaskInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Set, Mask type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Set, Mask type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Set, cannot access Entity ID - {id} from deleted entity");
                 #endif
                 _bitMask.Set(entity._id, id);
                 count++;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (ModuleMasks.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleMasks.Value._debugEventListeners) {
-                        listener.OnMaskSet<T>(entity);
-                    }
+                foreach (var listener in debugEventListeners) {
+                    listener.OnMaskSet<T>(entity);
                 }
                 #endif
             }
@@ -60,7 +70,7 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: Has, World not initialized");
-                if (!ModuleMasks.MaskInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Has, Mask type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Has, Mask type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Has, cannot access Entity ID - {id} from deleted entity");
                 #endif
                 return _bitMask.Has(entity._id, id);
@@ -70,16 +80,14 @@ namespace FFS.Libraries.StaticEcs {
             public void Delete(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: Delete, World not initialized");
-                if (!ModuleMasks.MaskInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Delete, Mask type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Delete, Mask type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Delete, cannot access Entity ID - {id} from deleted entity");
                 #endif
                 _bitMask.Del(entity._id, id);
                 count--;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (ModuleMasks.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleMasks.Value._debugEventListeners) {
-                        listener.OnMaskDelete<T>(entity);
-                    }
+                foreach (var listener in debugEventListeners) {
+                    listener.OnMaskDelete<T>(entity);
                 }
                 #endif
             }
@@ -88,7 +96,7 @@ namespace FFS.Libraries.StaticEcs {
             public string ToStringComponent(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: ToStringComponent, World not initialized");
-                if (!ModuleMasks.MaskInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: ToStringComponent, Mask type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: ToStringComponent, Mask type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: ToStringComponent, cannot access Entity ID - {id} from deleted entity");
                 #endif
                 return $" - [{id}] {typeof(T).Name}\n";
@@ -99,7 +107,7 @@ namespace FFS.Libraries.StaticEcs {
             internal MaskDynId DynamicId() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.Status < WorldStatus.Created) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: DynamicId, World not created");
-                if (!ModuleMasks.MaskInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: DynamicId, Mask type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: DynamicId, Mask type not registered");
                 #endif
                 return new MaskDynId(id);
             }
@@ -111,7 +119,13 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void Destroy() {
-                ModuleMasks.MaskInfo<T>.Reset();
+                _registered = false;
+                count = 0;
+                id = 0;
+                _bitMask = null;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                debugEventListeners = null;
+                #endif
             }
         }
     }

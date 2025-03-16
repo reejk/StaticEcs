@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.2.1-blue.svg?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.2.2-blue.svg?style=for-the-badge)
 
 ### ЯЗЫК
 [RU](./README_RU.md)
@@ -364,16 +364,12 @@ MyEcs.Initialize();
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterStandardComponentType<EnitiyType>();
+MyEcs.World.RegisterStandardComponentType<EnitiyType>(
+                autoInit: static (ref EnitiyType component) => component.Val = 1, // При создании сущности будет вызвана данная функция 
+                autoReset: static (ref EnitiyType component) => component.Val = -1, // При уничтожении сущности будет вызвана данная функция  
+                autoCopy: static (ref EnitiyType src, ref EnitiyType dst) => dst.Val = src.Val, // При копировании стандартных компонентов будет вызвана данная сущности вместо простого копирования
+            );
 
-// При создании сущности будет вызвана данная функция  
-MyEcs.StandardComponents<EnitiyType>.SetAutoInit((ref EnitiyType component) => component.Val = 1);
-
-// При уничтожении сущности будет вызвана данная функция  
-MyEcs.StandardComponents<EnitiyType>.SetAutoReset((ref EnitiyType component) => component.Val = -1);
-
-// При копировании стандартных компонентов будет вызвана данная сущности вместо простого копирования
-MyEcs.StandardComponents<EnitiyType>.SetAutoCopy((ref EnitiyType src, ref EnitiyType dst) => dst.Val = src.Val);
 //...
 MyEcs.Initialize();
 ```
@@ -1094,29 +1090,14 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 По умолчанию при добавлении или удалении компонента данные заполняются дефолтным значение, а при копировании компонент полностью копируется  
 Чтобы установить свою логику дефолтной инициализации и сброса компонента можно воспользоваться обработчиками
 
-**AutoInit** - заменяет поведение при создании компонента через метод Add
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
-//...
-MyEcs.Initialize();
-```
-
-**AutoReset** - заменяет поведение при удалении компонента через метод Delete
-```csharp
-MyEcs.Create(EcsConfig.Default());
-//...
-MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
-//...
-MyEcs.Initialize();
-```
-
-**AutoCopy** - заменяет поведение при копировании компонента
-```csharp
-MyEcs.Create(EcsConfig.Default());
-//...
-MyEcs.Components<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
+MyEcs.World.RegisterComponentType<Position>(
+                autoInit: static (ref Position position) => position.Val = Vector3.One, // заменяет поведение при создании компонента через метод Add
+                autoReset: static (ref Position position) => position.Val = Vector3.One, // заменяет поведение при удалении компонента через метод Delete
+                autoCopy: static (ref Position src, ref Position dst) => dst.Val = src.Val, // заменяет поведение при копировании компонента
+            );
 //...
 MyEcs.Initialize();
 ```

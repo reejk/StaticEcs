@@ -35,6 +35,9 @@ namespace FFS.Libraries.StaticEcs {
                 _pools = new ITagsWrapper[baseComponentsCapacity];
                 _poolIdxByType = new Dictionary<Type, int>();
                 BitMask = new BitMask();
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                _debugEventListeners ??= new List<ITagDebugEventListener>();
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -44,11 +47,15 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal TagDynId RegisterTagType<C>(uint capacity) where C : struct, ITag {
-                if (TagInfo<C>.IsRegistered()) {
+                if (Tags<C>.Value.IsRegistered()) {
                     return Tags<C>.Value.DynamicId();
                 }
 
                 Tags<C>.Value.Create(_poolsCount, BitMask, capacity);
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                Tags<C>.Value.debugEventListeners = _debugEventListeners;
+                #endif
                 
                 if (_poolsCount == _pools.Length) {
                     Array.Resize(ref _pools, _poolsCount << 1);
@@ -83,7 +90,7 @@ namespace FFS.Libraries.StaticEcs {
             internal TagsWrapper<T> GetPool<T>() where T : struct, ITag {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.ModuleTags, Method: GetPool<{typeof(T)}, World not initialized");
-                if (!TagInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.ModuleTags, Method: GetPool<{typeof(T)}>, Tag type not registered");
+                if (!Tags<T>.Value.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.ModuleTags, Method: GetPool<{typeof(T)}>, Tag type not registered");
                 #endif
                 return default;
             }
@@ -122,7 +129,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.ModuleTags, Method: GetPool<{typeof(T)}, World not initialized");
                 #endif
                 pool = default;
-                return TagInfo<T>.IsRegistered();
+                return Tags<T>.Value.IsRegistered();
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -218,22 +225,6 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 _debugEventListeners = default;
                 #endif
-            }
-
-            #if ENABLE_IL2CPP
-            [Il2CppEagerStaticClassConstruction]
-            #endif
-            public struct TagInfo<T> where T : struct, ITag {
-                private static bool Registered;
-
-                [MethodImpl(AggressiveInlining)]
-                internal static void Register() => Registered = true;
-
-                [MethodImpl(AggressiveInlining)]
-                internal static void Reset() => Registered = false;
-
-                [MethodImpl(AggressiveInlining)]
-                public static bool IsRegistered() => Registered;
             }
         }
         

@@ -21,9 +21,13 @@ namespace FFS.Libraries.StaticEcs {
             public static Components<T> Value;
             internal const int Empty = -1;
             
-            private static AutoInitHandler<T> AutoInitHandler;
-            private static AutoResetHandler<T> AutoResetHandler;
-            private static AutoCopyHandler<T> AutoCopyHandler;
+            private AutoInitHandler<T> AutoInitHandler;
+            private AutoResetHandler<T> AutoResetHandler;
+            private AutoCopyHandler<T> AutoCopyHandler;
+            
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+            internal List<IComponentsDebugEventListener> debugEventListeners;
+            #endif
             
             private int[] _entities;
             private T[] _data;
@@ -31,6 +35,7 @@ namespace FFS.Libraries.StaticEcs {
             private BitMask _bitMask;
             private int _componentsCount;
             internal ushort id;
+            private bool _registered;
 
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             private int _blockers;
@@ -41,16 +46,14 @@ namespace FFS.Libraries.StaticEcs {
             public ref T RefMut(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: RefMut, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, ID - {entity._id} is missing on an entity");
                 #endif
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 ref var val = ref _data[_dataIdxByEntityId[entity._id]];
-                if (ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                        listener.OnComponentRefMut(entity, ref val);
-                    }
+                foreach (var listener in debugEventListeners) {
+                    listener.OnComponentRefMut(entity, ref val);
                 }
                 return ref val;
                 #else
@@ -62,16 +65,14 @@ namespace FFS.Libraries.StaticEcs {
             public ref readonly T Ref(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Ref, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Ref, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Ref, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Ref, cannot access Entity ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Ref, ID - {entity._id} is missing on an entity");
                 #endif
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 ref var val = ref _data[_dataIdxByEntityId[entity._id]];
-                if (ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                        listener.OnComponentRef(entity, ref val);
-                    }
+                foreach (var listener in debugEventListeners) {
+                    listener.OnComponentRef(entity, ref val);
                 }
                 return ref val;
                 #else
@@ -83,7 +84,7 @@ namespace FFS.Libraries.StaticEcs {
             public ref T Add(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Add, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, cannot access Entity ID - {id} from deleted entity");
                 if (Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, ID - {entity._id} is already on an entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, component pool cannot be changed, it is in read-only mode due to multiple accesses");
@@ -105,10 +106,8 @@ namespace FFS.Libraries.StaticEcs {
                 _componentsCount++;
                 
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                        listener.OnComponentAdd(entity, ref data);
-                    }
+                foreach (var listener in debugEventListeners) {
+                    listener.OnComponentAdd(entity, ref data);
                 }
                 #endif
                 
@@ -119,7 +118,7 @@ namespace FFS.Libraries.StaticEcs {
             public void Put(Entity entity, T component) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Put, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Put, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Put, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Put, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Put, component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
@@ -128,10 +127,8 @@ namespace FFS.Libraries.StaticEcs {
                 if (dataId >= 0) {
                     _data[dataId] = component;
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                    if (ModuleComponents.Value._debugEventListeners != null) {
-                        foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                            listener.OnComponentPut(entity, ref _data[dataId]);
-                        }
+                    foreach (var listener in debugEventListeners) {
+                        listener.OnComponentPut(entity, ref _data[dataId]);
                     }
                     #endif
                     return;
@@ -150,10 +147,8 @@ namespace FFS.Libraries.StaticEcs {
                 _componentsCount++;
                 
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (ModuleComponents.Value._debugEventListeners != null) {
-                    foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                        listener.OnComponentPut(entity, ref _data[dataId]);
-                    }
+                foreach (var listener in debugEventListeners) {
+                    listener.OnComponentPut(entity, ref _data[dataId]);
                 }
                 #endif
             }
@@ -177,7 +172,7 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Has, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Has, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Has, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
                 return _dataIdxByEntityId[entity._id] >= 0;
@@ -187,7 +182,7 @@ namespace FFS.Libraries.StaticEcs {
             public bool Delete(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Delete, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
@@ -198,7 +193,7 @@ namespace FFS.Libraries.StaticEcs {
             public void Copy(Entity src, Entity dst) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Copy, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Copy, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Copy, Component type not registered");
                 if (!src.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (!dst.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Copy, cannot access ID - {id} from deleted entity");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Copy,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
@@ -232,45 +227,50 @@ namespace FFS.Libraries.StaticEcs {
             public int Count() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Count, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Count, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Count, Component type not registered");
                 #endif
                 return _componentsCount;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public bool IsRegistered() {
+                return _registered;
             }
             
             [MethodImpl(AggressiveInlining)]
             public T[] Data() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Data, World not initialized");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Data, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Data, Component type not registered");
                 #endif
                 return _data;
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static void SetAutoInit(AutoInitHandler<T> handler) {
+            public void SetAutoInit(AutoInitHandler<T> handler) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoInit, handler is null");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: SetAutoInit, Component type not registered");
+                if (!Value._registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: SetAutoInit, Component type not registered");
                 if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoInit, world status not `Created`");
                 #endif
                 AutoInitHandler = handler;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void SetAutoReset(AutoResetHandler<T> handler) {
+            public void SetAutoReset(AutoResetHandler<T> handler) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoReset, handler is null");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: SetAutoReset, Component type not registered");
+                if (!Value._registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: SetAutoReset, Component type not registered");
                 if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoReset, world status not `Created`");
                 #endif
                 AutoResetHandler = handler;
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void SetAutoCopy(AutoCopyHandler<T> handler) {
+            public void SetAutoCopy(AutoCopyHandler<T> handler) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoCopy, handler is null");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: SetAutoCopy, Component type not registered");
+                if (!Value._registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: SetAutoCopy, Component type not registered");
                 if (World.Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoCopy, world status not `Created`");
                 #endif
                 AutoCopyHandler = handler;
@@ -284,24 +284,27 @@ namespace FFS.Libraries.StaticEcs {
                 return ref _data[_dataIdxByEntityId[entity._id]];
             }
             
-            internal void Create(ushort componentId, BitMask bitMask, uint baseCapacity = 128) {
+            internal void Create(ushort componentId, BitMask bitMask, int entitiesCapacity, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = componentId;
                 _entities = new int[baseCapacity];
                 _data = new T[baseCapacity];
                 _componentsCount = 0;
-                _dataIdxByEntityId = new int[World.EntitiesCapacity()];
+                _dataIdxByEntityId = new int[entitiesCapacity];
                 for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
                     _dataIdxByEntityId[i] = Empty;
                 }
-                ModuleComponents.ComponentInfo<T>.Register();
+                AutoInitHandler = autoInit;
+                AutoResetHandler = autoReset;
+                AutoCopyHandler = autoCopy;
+                _registered = true;
             }
 
             [MethodImpl(AggressiveInlining)]
             internal ComponentDynId DynamicId() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (World.Status < WorldStatus.Created) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: DynamicId, World not created");
-                if (!ModuleComponents.ComponentInfo<T>.IsRegistered()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: DynamicId, Component type not registered");
+                if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: DynamicId, Component type not registered");
                 #endif
                 return new ComponentDynId(id);
             }
@@ -332,10 +335,8 @@ namespace FFS.Libraries.StaticEcs {
                     _componentsCount--;
                     
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                    if (ModuleComponents.Value._debugEventListeners != null) {
-                        foreach (var listener in ModuleComponents.Value._debugEventListeners) {
-                            listener.OnComponentDelete(entity, ref _data[idxRef]);
-                        }
+                    foreach (var listener in debugEventListeners) {
+                        listener.OnComponentDelete(entity, ref _data[idxRef]);
                     }
                     #endif
                     ResetComponent(idxRef);
@@ -403,7 +404,13 @@ namespace FFS.Libraries.StaticEcs {
                 _bitMask = null;
                 _componentsCount = 0;
                 id = 0;
-                ModuleComponents.ComponentInfo<T>.Reset();
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                debugEventListeners = null;
+                #endif
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                _blockers = 0;
+                #endif
+                _registered = false;
             }
 
             [MethodImpl(AggressiveInlining)]

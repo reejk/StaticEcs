@@ -141,7 +141,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         public void TryAddColumn(Ecs<WorldType>.Entity entity, StreamWriter writer) {
-            if (Ecs<WorldType>.ModuleComponents.ComponentInfo<T>.IsRegistered() && Ecs<WorldType>.Components<T>.Value.Has(entity)) {
+            if (Ecs<WorldType>.Components<T>.Value.IsRegistered() && Ecs<WorldType>.Components<T>.Value.Has(entity)) {
                 Ecs<WorldType>.Components<T>.Value.RefMutInternal(entity).WriteColumn(writer);
             }
 

@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.2.1-blue.svg?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.2.2-blue.svg?style=for-the-badge)
 
 ### LANGUAGE
 [RU](./README_RU.md)
@@ -364,16 +364,12 @@ Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.World.RegisterStandardComponentType<EnitiyType>();
 
-// This function will be called when the entity is created  
-MyEcs.StandardComponents<EnitiyType>.SetAutoInit((ref EnitiyType component) => component.Val = 1);
-
-// This function will be called when the entity is destroyed  
-MyEcs.StandardComponents<EnitiyType>.SetAutoReset((ref EnitiyType component) => component.Val = -1);
-
-// When copying standard components, this entity will be called instead of just copying it
-MyEcs.StandardComponents<EnitiyType>.SetAutoCopy((ref EnitiyType src, ref EnitiyType dst) => dst.Val = src.Val);
+MyEcs.World.RegisterStandardComponentType<EnitiyType>(
+                autoInit: static (ref EnitiyType component) => component.Val = 1, // This function will be called when the entity is created  
+                autoReset: static (ref EnitiyType component) => component.Val = -1, // This function will be called when the entity is destroyed  
+                autoCopy: static (ref EnitiyType src, ref EnitiyType dst) => dst.Val = src.Val, // When copying standard components, this entity will be called instead of just copying it
+            );
 //...
 MyEcs.Initialize();
 ```
@@ -1094,33 +1090,17 @@ foreach (var entity in MyWorld.QueryEntities.With(with)) {
 By default, when adding or deleting a component, the data is filled with the default value, and when copying, the component is completely copied  
 To set your own logic of default initialization and resetting of the component you can use handlers
 
-**AutoInit** - replaces the behavior when creating a component via the Add method
 ```csharp
 MyEcs.Create(EcsConfig.Default());
 //...
-MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
+MyEcs.World.RegisterComponentType<Position>(
+                autoInit: static (ref Position position) => position.Val = Vector3.One, // replaces the behavior when creating a component via the Add method
+                autoReset: static (ref Position position) => position.Val = Vector3.One, // replaces the behavior when deleting a component via the Delete method
+                autoCopy: static (ref Position src, ref Position dst) => dst.Val = src.Val, // replaces the behavior when copying a component
+            );
 //...
 MyEcs.Initialize();
 ```
-
-**AutoReset** - replaces the behavior when deleting a component via the Delete method
-```csharp
-MyEcs.Create(EcsConfig.Default());
-//...
-MyEcs.Components<Position>.SetAutoInit(static (ref Position position) => position.Val = Vector3.One);
-//...
-MyEcs.Initialize();
-```
-
-**AutoCopy** - replaces the behavior when copying a component
-```csharp
-MyEcs.Create(EcsConfig.Default());
-//...
-MyEcs.Components<Position>.SetAutoCopy(static (ref Position src, ref Position dst) => dst.Val = src.Val);
-//...
-MyEcs.Initialize();
-```
-
 > **Important!** Keep in mind that creating an entity with a value or adding a component via the Put method  
 > completely replace the data in the component, bypassing the auto handlers installed
 

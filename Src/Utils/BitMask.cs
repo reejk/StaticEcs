@@ -43,6 +43,10 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         internal byte BorrowBuf() {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            if (_tempBufferFreeCount == 0) throw new Exception("Bitmask buffer is empty");
+            #endif
+            
             var maskBufId = --_tempBufferFreeCount;
             var offset = maskBufId * _maskLen;
             for (var i = 0; i < _maskLen; i++) {

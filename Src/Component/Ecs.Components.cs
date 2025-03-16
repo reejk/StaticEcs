@@ -34,6 +34,9 @@ namespace FFS.Libraries.StaticEcs {
                 _pools = new IComponentsWrapper[baseComponentsCapacity];
                 _poolIdxByType = new Dictionary<Type, int>();
                 BitMask = new BitMask();
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                _debugEventListeners ??= new List<IComponentsDebugEventListener>();
+                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -42,8 +45,8 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal ComponentDynId RegisterComponentType<T>(uint capacity) where T : struct, IComponent {
-                if (ComponentInfo<T>.IsRegistered()) {
+            internal ComponentDynId RegisterComponentType<T>(uint capacity, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null) where T : struct, IComponent {
+                if (Components<T>.Value.IsRegistered()) {
                     return Components<T>.Value.DynamicId();
                 }
 
@@ -53,7 +56,10 @@ namespace FFS.Libraries.StaticEcs {
 
                 _pools[_poolsCount] = new ComponentsWrapper<T>();
                 _poolIdxByType[typeof(T)] = _poolsCount;
-                Components<T>.Value.Create(_poolsCount, BitMask, capacity);
+                Components<T>.Value.Create(_poolsCount, BitMask, World.EntitiesCapacity(), autoInit, autoReset, autoCopy, capacity);
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                Components<T>.Value.debugEventListeners = _debugEventListeners;
+                #endif
                 _poolsCount++;
                 
                 return Components<T>.Value.DynamicId();
@@ -81,7 +87,7 @@ namespace FFS.Libraries.StaticEcs {
             internal ComponentsWrapper<T> GetPool<T>() where T : struct, IComponent {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, World not initialized");
-                if (!ComponentInfo<T>.IsRegistered()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, Component type not registered");
+                if (!Components<T>.Value.IsRegistered()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, Component type not registered");
                 #endif
                 return default;
             }
@@ -120,7 +126,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool<{typeof(T)}>, World not initialized");
                 #endif
                 pool = default;
-                return ComponentInfo<T>.IsRegistered();
+                return Components<T>.Value.IsRegistered();
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -219,22 +225,6 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 _debugEventListeners = null;
                 #endif
-            }
-
-            #if ENABLE_IL2CPP
-            [Il2CppEagerStaticClassConstruction]
-            #endif
-            public struct ComponentInfo<T> where T : struct, IComponent {
-                private static bool Registered;
-
-                [MethodImpl(AggressiveInlining)]
-                internal static void Register() => Registered = true;
-
-                [MethodImpl(AggressiveInlining)]
-                internal static void Reset() => Registered = false;
-
-                [MethodImpl(AggressiveInlining)]
-                public static bool IsRegistered() => Registered;
             }
         }
         
