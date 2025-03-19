@@ -59,7 +59,7 @@ namespace FFS.Libraries.StaticEcs {
             public void Copy(Entity srcEntity, Entity dstEntity) => ModuleMasks.Value.CopyEntity(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => Masks<T>.Value.Count();
+            public uint Count() => Masks<T>.Value.Count();
 
             [MethodImpl(AggressiveInlining)]
             public string ToStringComponent(Entity entity) => Masks<T>.Value.ToStringComponent(entity);
@@ -75,39 +75,39 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            object IStandardRawPool.GetRaw(int entity) => default(T);
+            object IStandardRawPool.GetRaw(uint entity) => default(T);
 
             [MethodImpl(AggressiveInlining)]
-            void IStandardRawPool.PutRaw(int entity, object value) => Masks<T>.Value.Set(new Entity(entity));
+            void IStandardRawPool.PutRaw(uint entity, object value) => Masks<T>.Value.Set(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            bool IRawPool.Has(int entity) => Masks<T>.Value.Has(new Entity(entity));
+            bool IRawPool.Has(uint entity) => Masks<T>.Value.Has(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            void IRawPool.Add(int entity) => Masks<T>.Value.Set(new Entity(entity));
+            void IRawPool.Add(uint entity) => Masks<T>.Value.Set(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            bool IRawPool.Delete(int entity) {
+            bool IRawPool.Delete(uint entity) {
                 var has = Masks<T>.Value.Has(new Entity(entity));
                 Masks<T>.Value.Delete(new Entity(entity));
                 return has;
             }
 
             [MethodImpl(AggressiveInlining)]
-            void IStandardRawPool.Copy(int srcEntity, int dstEntity) {
+            void IStandardRawPool.Copy(uint srcEntity, uint dstEntity) {
                 if (Masks<T>.Value.Has(new Entity(srcEntity))) {
                     Masks<T>.Value.Set(new Entity(dstEntity));
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
-            void IRawPool.Move(int entity, int target) {
+            void IRawPool.Move(uint entity, uint target) {
                 Masks<T>.Value.Delete(new Entity(entity));
                 Masks<T>.Value.Set(new Entity(target));
             }
 
             [MethodImpl(AggressiveInlining)]
-            int IStandardRawPool.Capacity() => -1;
+            uint IStandardRawPool.Capacity() => 0;
 
             [MethodImpl(AggressiveInlining)]
             void IMasksWrapper.Clear() => Masks<T>.Value.Clear();

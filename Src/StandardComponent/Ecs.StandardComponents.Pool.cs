@@ -133,8 +133,8 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal void Resize(int cap) {
-                Array.Resize(ref _data, cap);
+            internal void Resize(uint cap) {
+                Array.Resize(ref _data, (int) cap);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -185,7 +185,9 @@ namespace FFS.Libraries.StaticEcs {
                 AutoInitHandler = null;
                 _data = null;
                 id = 0;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 debugEventListeners = null;
+                #endif
                 _registered = false;
             }
 

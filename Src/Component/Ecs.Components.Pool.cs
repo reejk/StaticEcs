@@ -19,7 +19,6 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public struct Components<T> where T : struct, IComponent {
             public static Components<T> Value;
-            internal const int Empty = -1;
             
             private AutoInitHandler<T> AutoInitHandler;
             private AutoResetHandler<T> AutoResetHandler;
@@ -29,11 +28,11 @@ namespace FFS.Libraries.StaticEcs {
             internal List<IComponentsDebugEventListener> debugEventListeners;
             #endif
             
-            private int[] _entities;
+            private uint[] _entities;
             private T[] _data;
-            private int[] _dataIdxByEntityId;
+            private uint[] _dataIdxByEntityId;
             private BitMask _bitMask;
-            private int _componentsCount;
+            private uint _componentsCount;
             internal ushort id;
             private bool _registered;
 
@@ -124,7 +123,7 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 var eid = entity._id;
                 ref var dataId = ref _dataIdxByEntityId[eid];
-                if (dataId >= 0) {
+                if (dataId != Utils.EmptyComponent) {
                     _data[dataId] = component;
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                     foreach (var listener in debugEventListeners) {
@@ -175,7 +174,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Has, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
-                return _dataIdxByEntityId[entity._id] >= 0;
+                return _dataIdxByEntityId[entity._id] != Utils.EmptyComponent;
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -224,7 +223,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() {
+            public uint Count() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Count, World not initialized");
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Count, Component type not registered");
@@ -284,15 +283,15 @@ namespace FFS.Libraries.StaticEcs {
                 return ref _data[_dataIdxByEntityId[entity._id]];
             }
             
-            internal void Create(ushort componentId, BitMask bitMask, int entitiesCapacity, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null, uint baseCapacity = 128) {
+            internal void Create(ushort componentId, BitMask bitMask, uint entitiesCapacity, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = componentId;
-                _entities = new int[baseCapacity];
+                _entities = new uint[baseCapacity];
                 _data = new T[baseCapacity];
                 _componentsCount = 0;
-                _dataIdxByEntityId = new int[entitiesCapacity];
-                for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
-                    _dataIdxByEntityId[i] = Empty;
+                _dataIdxByEntityId = new uint[entitiesCapacity];
+                for (uint i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Utils.EmptyComponent;
                 }
                 AutoInitHandler = autoInit;
                 AutoResetHandler = autoReset;
@@ -315,23 +314,23 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal int[] GetDataIdxByEntityId() {
+            internal uint[] GetDataIdxByEntityId() {
                 return _dataIdxByEntityId;
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal void Resize(int cap) {
-                var lastLength = _dataIdxByEntityId.Length;
-                Array.Resize(ref _dataIdxByEntityId, cap);
+            internal void Resize(uint cap) {
+                var lastLength = (uint) _dataIdxByEntityId.Length;
+                Array.Resize(ref _dataIdxByEntityId, (int) cap);
                 for (var i = lastLength; i < cap; i++) {
-                    _dataIdxByEntityId[i] = Empty;
+                    _dataIdxByEntityId[i] = Utils.EmptyComponent;
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
             private bool DelInternal(Entity entity, bool fromWorld) {
                 ref var idxRef = ref _dataIdxByEntityId[entity._id];
-                if (idxRef >= 0) {
+                if (idxRef != Utils.EmptyComponent) {
                     _componentsCount--;
                     
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
@@ -348,7 +347,7 @@ namespace FFS.Libraries.StaticEcs {
                         (_data[idxRef], _data[_componentsCount]) = (_data[_componentsCount], _data[idxRef]);
                     }
 
-                    idxRef = Empty;
+                    idxRef = Utils.EmptyComponent;
                     _bitMask.Del(entity._id, id);
                     if (!fromWorld && _bitMask.IsEmpty(entity._id)) {
                         World.DestroyEntity(entity);
@@ -359,7 +358,7 @@ namespace FFS.Libraries.StaticEcs {
                 return false;
             }
 
-            private void ResetComponent(int idx) {
+            private void ResetComponent(uint idx) {
                 if (AutoResetHandler != null) {
                     AutoResetHandler(ref _data[idx]);
                 } else {
@@ -368,23 +367,27 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal void SetDataIfCountLess(ref int count, ref int[] entities) {
+            internal void SetDataIfCountLess(ref uint count, ref uint[] entities, out ushort poolId) {
                 if (_componentsCount < count) {
                     count = _componentsCount;
                     entities = _entities;
                 }
+
+                poolId = id;
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal void SetDataIfCountMore(ref int count, ref int[] entities) {
+            internal void SetDataIfCountMore(ref uint count, ref uint[] entities, out ushort poolId) {
                 if (_componentsCount > count) {
                     count = _componentsCount;
                     entities = _entities;
                 }
+
+                poolId = id;
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal int[] EntitiesData() {
+            internal uint[] EntitiesData() {
                 return _entities;
             }
             
@@ -414,24 +417,24 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal void EnsureSize(int size) {
+            internal void EnsureSize(uint size) {
                 if (_componentsCount + size >= _entities.Length) {
                     ResizeData(Utils.CalculateSize(_componentsCount + size));
                 }
             }
 
             [MethodImpl(NoInlining)]
-            private void ResizeData(int newSize) {
-                Array.Resize(ref _entities, newSize);
-                Array.Resize(ref _data, newSize);
+            private void ResizeData(uint newSize) {
+                Array.Resize(ref _entities, (int) newSize);
+                Array.Resize(ref _data, (int) newSize);
             }
 
             [MethodImpl(AggressiveInlining)]
             internal void Clear() {
                 Array.Clear(_entities, 0, _entities.Length);
                 Array.Clear(_data, 0, _data.Length);
-                for (int i = 0; i < _dataIdxByEntityId.Length; i++) {
-                    _dataIdxByEntityId[i] = Empty;
+                for (uint i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Utils.EmptyComponent;
                 }
                 _componentsCount = 0;
             }

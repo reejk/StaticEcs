@@ -140,7 +140,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal void Resize(int cap) {
+            internal void Resize(uint cap) {
                 BitMask.ResizeBitMap(cap);
             }
 

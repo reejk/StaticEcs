@@ -8,13 +8,13 @@ namespace FFS.Libraries.StaticEcs {
     
     public interface IRawPool : IStandardRawPool {
             
-        internal bool Has(int entity);
+        internal bool Has(uint entity);
 
-        internal void Add(int entity);
+        internal void Add(uint entity);
 
-        internal bool Delete(int entity);
+        internal bool Delete(uint entity);
             
-        internal void Move(int entity, int target);
+        internal void Move(uint entity, uint target);
     }
     
     
@@ -48,23 +48,23 @@ namespace FFS.Libraries.StaticEcs {
 
             public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent;
             
-            internal int[] EntitiesData();
+            internal uint[] EntitiesData();
 
-            internal void Resize(int cap);
+            internal void Resize(uint cap);
             
             internal bool DeleteFromWorld(Entity entity);
 
             internal void Destroy();
 
-            internal void SetDataIfCountLess(ref int count, ref int[] entities);
+            internal void SetDataIfCountLess(ref uint count, ref uint[] entities);
             
-            internal void SetDataIfCountMore(ref int count, ref int[] entities);
+            internal void SetDataIfCountMore(ref uint count, ref uint[] entities);
 
             internal string ToStringComponent(Entity entity);
 
             internal void Clear();
 
-            internal void EnsureSize(int size);
+            internal void EnsureSize(uint size);
 
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             internal void AddBlocker(int val);
@@ -121,31 +121,31 @@ namespace FFS.Libraries.StaticEcs {
             public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Move(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
-            object IStandardRawPool.GetRaw(int entity) => Components<T>.Value.RefMutInternal(new Entity(entity));
+            object IStandardRawPool.GetRaw(uint entity) => Components<T>.Value.RefMutInternal(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            void IStandardRawPool.PutRaw(int entity, object value) => Components<T>.Value.Put(new Entity(entity), (T) value);
+            void IStandardRawPool.PutRaw(uint entity, object value) => Components<T>.Value.Put(new Entity(entity), (T) value);
 
             [MethodImpl(AggressiveInlining)]
-            bool IRawPool.Has(int entity) => Components<T>.Value.Has(new Entity(entity));
+            bool IRawPool.Has(uint entity) => Components<T>.Value.Has(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            void IRawPool.Add(int entity) => Components<T>.Value.Add(new Entity(entity));
+            void IRawPool.Add(uint entity) => Components<T>.Value.Add(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            bool IRawPool.Delete(int entity) => Components<T>.Value.Delete(new Entity(entity));
+            bool IRawPool.Delete(uint entity) => Components<T>.Value.Delete(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            void IStandardRawPool.Copy(int srcEntity, int dstEntity) => Components<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
+            void IStandardRawPool.Copy(uint srcEntity, uint dstEntity) => Components<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
 
             [MethodImpl(AggressiveInlining)]
-            void IRawPool.Move(int entity, int target) => Components<T>.Value.Move(new Entity(entity), new Entity(target));
+            void IRawPool.Move(uint entity, uint target) => Components<T>.Value.Move(new Entity(entity), new Entity(target));
 
             [MethodImpl(AggressiveInlining)]
-            int IStandardRawPool.Capacity() => Components<T>.Value.EntitiesData().Length;
+            uint IStandardRawPool.Capacity() => (uint) Components<T>.Value.EntitiesData().Length;
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => Components<T>.Value.Count();
+            public uint Count() => Components<T>.Value.Count();
 
             [MethodImpl(AggressiveInlining)]
             public bool Is<C>() where C : struct, IComponent => Components<C>.Value.id == Components<T>.Value.id;
@@ -154,19 +154,19 @@ namespace FFS.Libraries.StaticEcs {
             public bool TryCast<C>(out ComponentsWrapper<C> wrapper) where C : struct, IComponent => Components<C>.Value.id == Components<T>.Value.id;
 
             [MethodImpl(AggressiveInlining)]
-            int[] IComponentsWrapper.EntitiesData() => Components<T>.Value.EntitiesData();
+            uint[] IComponentsWrapper.EntitiesData() => Components<T>.Value.EntitiesData();
 
             [MethodImpl(AggressiveInlining)]
             string IComponentsWrapper.ToStringComponent(Entity entity) => Components<T>.Value.ToStringComponent(entity);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.SetDataIfCountLess(ref int count, ref int[] entities) => Components<T>.Value.SetDataIfCountLess(ref count, ref entities);
+            void IComponentsWrapper.SetDataIfCountLess(ref uint count, ref uint[] entities) => Components<T>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.SetDataIfCountMore(ref int count, ref int[] entities) => Components<T>.Value.SetDataIfCountMore(ref count, ref entities);
+            void IComponentsWrapper.SetDataIfCountMore(ref uint count, ref uint[] entities) => Components<T>.Value.SetDataIfCountMore(ref count, ref entities, out var _);
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.Resize(int cap) => Components<T>.Value.Resize(cap);
+            void IComponentsWrapper.Resize(uint cap) => Components<T>.Value.Resize(cap);
 
             [MethodImpl(AggressiveInlining)]
             bool IComponentsWrapper.DeleteFromWorld(Entity entity) => Components<T>.Value.DeleteFromWorld(entity);
@@ -175,7 +175,7 @@ namespace FFS.Libraries.StaticEcs {
             void IComponentsWrapper.Destroy() => Components<T>.Value.Destroy();
 
             [MethodImpl(AggressiveInlining)]
-            void IComponentsWrapper.EnsureSize(int size) => Components<T>.Value.EnsureSize(size);
+            void IComponentsWrapper.EnsureSize(uint size) => Components<T>.Value.EnsureSize(size);
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Clear() => Components<T>.Value.Clear();

@@ -196,8 +196,8 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal void Resize(int size) {
-                for (int i = 0, iMax = _poolsCount; i < iMax; i++) {
+            internal void Resize(uint size) {
+                for (uint i = 0, iMax = _poolsCount; i < iMax; i++) {
                     _pools[i].Resize(size);
                 }
                 BitMask.ResizeBitMap(size);

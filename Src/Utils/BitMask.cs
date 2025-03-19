@@ -27,7 +27,7 @@ namespace FFS.Libraries.StaticEcs {
         private byte _tempBufferCount;
 
         [MethodImpl(AggressiveInlining)]
-        internal void Create(int worldCapacity, byte tempBuffersCount, ushort maskLen) {
+        internal void Create(uint worldCapacity, byte tempBuffersCount, ushort maskLen) {
             _maskLen = maskLen;
             _tempBufferCount = tempBuffersCount;
             _bitMap = new ulong[worldCapacity * _maskLen];
@@ -37,8 +37,8 @@ namespace FFS.Libraries.StaticEcs {
         }
         
         [MethodImpl(AggressiveInlining)]
-        internal void ResizeBitMap(int size) {
-            Array.Resize(ref _bitMap, size * _maskLen);
+        internal void ResizeBitMap(uint size) {
+            Array.Resize(ref _bitMap, (int) (size * _maskLen));
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -76,7 +76,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void Set(int bitMapIdx, ushort bitPos) {
+        public void Set(uint bitMapIdx, ushort bitPos) {
             var div = (ushort) (bitPos >> 6);
             var rem = (ushort) (bitPos & 63);
             var index = bitMapIdx * _maskLen + div;
@@ -162,7 +162,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void Del(int bitMapIdx, ushort bitPos) {
+        public void Del(uint bitMapIdx, ushort bitPos) {
             var div = (ushort) (bitPos >> 6);
             var rem = (ushort) (bitPos & 63);
             var index = bitMapIdx * _maskLen + div;
@@ -178,7 +178,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool Has(int bitMapIdx, ushort bitPos) {
+        public bool Has(uint bitMapIdx, ushort bitPos) {
             var div = (ushort) (bitPos >> 6);
             var rem = (ushort) (bitPos & 63);
             var index = bitMapIdx * _maskLen + div;
@@ -194,8 +194,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool IsEmpty(int bitMapIdx) {
-            for (int i = bitMapIdx * _maskLen, iMax = (bitMapIdx + 1) * _maskLen; i < iMax; i++) {
+        public bool IsEmpty(uint bitMapIdx) {
+            for (uint i = bitMapIdx * _maskLen, iMax = (bitMapIdx + 1) * _maskLen; i < iMax; i++) {
                 if (_bitMap[i] != 0UL) {
                     return false;
                 }
@@ -216,7 +216,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public ushort Len(int bitMapIdx) {
+        public ushort Len(uint bitMapIdx) {
             ushort count = 0;
             var offset = bitMapIdx * _maskLen;
             var endOffset = offset + _maskLen;
@@ -246,7 +246,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public int GetMinIndex(int bitMapIdx) {
+        public int GetMinIndex(uint bitMapIdx) {
             var offset = bitMapIdx * _maskLen;
             for (var i = 0; i < _maskLen; i++, offset++) {
                 var v = _bitMap[offset];
@@ -290,7 +290,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool HasAll(int bitMapIdx, byte bufId) {
+        public bool HasAll(uint bitMapIdx, byte bufId) {
             if (_maskLen < 2) {
                 var rhs = _tempBuffer[bufId];
                 return (_bitMap[bitMapIdx] & rhs) == rhs;
@@ -299,10 +299,10 @@ namespace FFS.Libraries.StaticEcs {
             return HasAllArray(bitMapIdx, bufId);
         }
         
-        private bool HasAllArray(int bitMapIdx, byte bufId) {
+        private bool HasAllArray(uint bitMapIdx, byte bufId) {
             var srcOffset = bitMapIdx * _maskLen;
             var srcOffsetEnd = srcOffset + _maskLen;
-            var bufOffset = bufId * _maskLen;
+            var bufOffset = (uint) (bufId * _maskLen);
             for (; srcOffset < srcOffsetEnd; srcOffset++, bufOffset++) {
                 var rhs = _tempBuffer[bufOffset];
                 if ((_bitMap[srcOffset] & rhs) != rhs) {
@@ -314,7 +314,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool HasAny(int bitMapIdx, byte bufId) {
+        public bool HasAny(uint bitMapIdx, byte bufId) {
             if (_maskLen < 2) {
                 return (_bitMap[bitMapIdx] & _tempBuffer[bufId]) != 0UL;
             }
@@ -322,7 +322,7 @@ namespace FFS.Libraries.StaticEcs {
             return HasAnyArray(bitMapIdx, bufId);
         }
 
-        private bool HasAnyArray(int bitMapIdx, byte bufId) {
+        private bool HasAnyArray(uint bitMapIdx, byte bufId) {
             var srcOffset = bitMapIdx * _maskLen;
             var srcOffsetEnd = srcOffset + _maskLen;
             var bufOffset = bufId * _maskLen;
@@ -336,7 +336,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool HasAllAndExc(int bitMapIdx, byte bufIdAll, byte bufIdExc) {
+        public bool HasAllAndExc(uint bitMapIdx, byte bufIdAll, byte bufIdExc) {
             if (_maskLen < 2) {
                 var lhs = _bitMap[bitMapIdx];
                 var rhs = _tempBuffer[bufIdAll];
@@ -346,7 +346,7 @@ namespace FFS.Libraries.StaticEcs {
             return HasAllAndExcArray(bitMapIdx, bufIdAll, bufIdExc);
         }
         
-        private bool HasAllAndExcArray(int bitMapIdx, byte bufIdAll, byte bufIdExc) {
+        private bool HasAllAndExcArray(uint bitMapIdx, byte bufIdAll, byte bufIdExc) {
             var srcOffset = bitMapIdx * _maskLen;
             var srcOffsetEnd = srcOffset + _maskLen;
             var bufIdAllOffset = bufIdAll * _maskLen;
@@ -363,7 +363,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool NotHasAny(int bitMapIdx, byte bufId) {
+        public bool NotHasAny(uint bitMapIdx, byte bufId) {
             if (_maskLen < 2) {
                 return (_bitMap[bitMapIdx] & _tempBuffer[bufId]) == 0UL;
             }
@@ -371,7 +371,7 @@ namespace FFS.Libraries.StaticEcs {
             return NotHasAnyArray(bitMapIdx, bufId);
         }
         
-        private bool NotHasAnyArray(int bitMapIdx, byte bufId) {
+        private bool NotHasAnyArray(uint bitMapIdx, byte bufId) {
             var srcOffset = bitMapIdx * _maskLen;
             var srcOffsetEnd = srcOffset + _maskLen;
             var bufOffset = bufId * _maskLen;
@@ -385,12 +385,12 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void CopyToBuffer(int bitMapIdx, byte bufId) {
+        public void CopyToBuffer(uint bitMapIdx, byte bufId) {
             Array.Copy(_bitMap, bitMapIdx * _maskLen, _tempBuffer, bufId * _maskLen, _maskLen);
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void Copy(int bitMapIdx1, int bitMapIdx2) {
+        public void Copy(uint bitMapIdx1, uint bitMapIdx2) {
             Array.Copy(_bitMap, bitMapIdx1 * _maskLen, _bitMap, bitMapIdx2 * _maskLen, _maskLen);
         }
 

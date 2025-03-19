@@ -27,7 +27,7 @@ namespace FFS.Libraries.StaticEcs {
             
             private BitMask _bitMask;
             internal ushort id;
-            internal int count;
+            internal uint count;
             private bool _registered;
 
             internal void Create(ushort componentId, BitMask bitMask) {
@@ -42,7 +42,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() {
+            public uint Count() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: Count, World not initialized");
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Count, Mask type not registered");

@@ -20,16 +20,15 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         public struct Tags<T> where T : struct, ITag {
             public static Tags<T> Value;
-            private const int Empty = -1;
             
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
             internal List<ITagDebugEventListener> debugEventListeners;
             #endif
             
             private BitMask _bitMask;
-            private int[] _entities;
-            private int[] _dataIdxByEntityId;
-            private int _tagCount;
+            private uint[] _entities;
+            private uint[] _dataIdxByEntityId;
+            private uint _tagCount;
             internal ushort id;
             private bool _registered;
 
@@ -49,12 +48,12 @@ namespace FFS.Libraries.StaticEcs {
 
                 var eid = entity._id;
                 ref var idx = ref _dataIdxByEntityId[entity._id];
-                if (idx >= 0) {
+                if (idx != Utils.EmptyComponent) {
                     return;
                 }
                 
                 if (_entities.Length == _tagCount) {
-                    Array.Resize(ref _entities, _tagCount << 1);
+                    Array.Resize(ref _entities, (int) (_tagCount << 1));
                 }
 
                 _entities[_tagCount] = eid;
@@ -76,7 +75,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, Method: Has, Tag type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: Has, cannot access ID - {id} from deleted entity");
                 #endif
-                return _dataIdxByEntityId[entity._id] >= 0;
+                return _dataIdxByEntityId[entity._id] != Utils.EmptyComponent;
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -89,7 +88,7 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
 
                 ref var idx = ref _dataIdxByEntityId[entity._id];
-                if (idx >= 0) {
+                if (idx != Utils.EmptyComponent) {
                     _tagCount--;
 
                     #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
@@ -105,7 +104,7 @@ namespace FFS.Libraries.StaticEcs {
                     }
 
                     _bitMask.Del(entity._id, id);
-                    idx = Empty;
+                    idx = Utils.EmptyComponent;
                     return true;
                 }
 
@@ -134,7 +133,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public int Count() => _tagCount;
+            public uint Count() => _tagCount;
                        
             [MethodImpl(AggressiveInlining)]
             public bool IsRegistered() {
@@ -151,11 +150,11 @@ namespace FFS.Libraries.StaticEcs {
             internal void Create(ushort tagId, BitMask bitMask, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = tagId;
-                _entities = new int[baseCapacity];
+                _entities = new uint[baseCapacity];
                 _tagCount = 0;
-                _dataIdxByEntityId = new int[World.EntitiesCapacity()];
-                for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
-                    _dataIdxByEntityId[i] = Empty;
+                _dataIdxByEntityId = new uint[World.EntitiesCapacity()];
+                for (uint i = 0; i < _dataIdxByEntityId.Length; i++) {
+                    _dataIdxByEntityId[i] = Utils.EmptyComponent;
                 }
 
                 _registered = true;
@@ -172,35 +171,39 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal void SetDataIfCountLess(ref int count, ref int[] entities) {
+            internal void SetDataIfCountLess(ref uint count, ref uint[] entities, out ushort poolId) {
                 if (_tagCount < count) {
                     count = _tagCount;
                     entities = _entities;
                 }
+
+                poolId = id;
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal int[] EntitiesData() => _entities;
+            internal uint[] EntitiesData() => _entities;
 
             [MethodImpl(AggressiveInlining)]
-            internal void Resize(int cap) {
-                var lastLength = _dataIdxByEntityId.Length;
-                Array.Resize(ref _dataIdxByEntityId, cap);
+            internal void Resize(uint cap) {
+                var lastLength = (uint) _dataIdxByEntityId.Length;
+                Array.Resize(ref _dataIdxByEntityId, (int) cap);
                 for (var i = lastLength; i < cap; i++) {
-                    _dataIdxByEntityId[i] = Empty;
+                    _dataIdxByEntityId[i] = Utils.EmptyComponent;
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal void SetDataIfCountMore(ref int count, ref int[] entities) {
+            internal void SetDataIfCountMore(ref uint count, ref uint[] entities, out ushort poolId) {
                 if (_tagCount > count) {
                     count = _tagCount;
                     entities = _entities;
                 }
+
+                poolId = id;
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal int[] GetDataIdxByEntityId() {
+            internal uint[] GetDataIdxByEntityId() {
                 return _dataIdxByEntityId;
             }
 
@@ -224,7 +227,7 @@ namespace FFS.Libraries.StaticEcs {
             internal void Clear() {
                 Array.Clear(_entities, 0, _entities.Length);
                 for (var i = 0; i < _dataIdxByEntityId.Length; i++) {
-                    _dataIdxByEntityId[i] = Empty;
+                    _dataIdxByEntityId[i] = Utils.EmptyComponent;
                 }
                 _tagCount = 0;
             }
