@@ -82,6 +82,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}> Method: Delete, World not initialized");
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Delete, Mask type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Delete, cannot access Entity ID - {id} from deleted entity");
+                if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Masks<{typeof(T)}>, Method: Delete, cannot access Entity ID - {id} mask not added");
                 #endif
                 _bitMask.Del(entity._id, id);
                 count--;
@@ -90,6 +91,16 @@ namespace FFS.Libraries.StaticEcs {
                     listener.OnMaskDelete<T>(entity);
                 }
                 #endif
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public bool TryDelete(Entity entity) {
+                if (Has(entity)) {
+                    Delete(entity);
+                    return true;
+                }
+
+                return false;
             }
 
             [MethodImpl(AggressiveInlining)]

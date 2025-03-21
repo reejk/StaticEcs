@@ -79,32 +79,35 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public bool Delete(Entity entity) {
+            public void Delete(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, Method: Delete, World not initialized");
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, Method: Delete, Tag type not registered");
-                if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: DelInternal, cannot access ID - {id} from deleted entity");
-                if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: DelInternal,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
+                if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: Delete, cannot access ID - {id} from deleted entity");
+                if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: Delete, cannot access ID - {id} tag not added");
+                if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Tags<{typeof(T)}>, {typeof(T)}>, Method: Delete,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
 
                 ref var idx = ref _dataIdxByEntityId[entity._id];
-                if (idx != Utils.EmptyComponent) {
-                    _tagCount--;
+                _tagCount--;
 
-                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                    foreach (var listener in debugEventListeners) {
-                        listener.OnTagDelete<T>(entity);
-                    }
-                    #endif
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                foreach (var listener in debugEventListeners) {
+                    listener.OnTagDelete<T>(entity);
+                }
+                #endif
                     
-                    if (idx != _tagCount) {
-                        var lastEntity = _entities[_tagCount];
-                        _entities[idx] = lastEntity;
-                        _dataIdxByEntityId[lastEntity] = idx;
-                    }
-
-                    _bitMask.Del(entity._id, id);
-                    idx = Utils.EmptyComponent;
+                var lastEntity = _entities[_tagCount];
+                _entities[idx] = lastEntity;
+                _dataIdxByEntityId[lastEntity] = idx;
+                idx = Utils.EmptyComponent;
+                _bitMask.Del(entity._id, id);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public bool TryDelete(Entity entity) {
+                if (Has(entity)) {
+                    Delete(entity);
                     return true;
                 }
 

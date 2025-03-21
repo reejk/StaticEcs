@@ -12,7 +12,9 @@ namespace FFS.Libraries.StaticEcs {
 
         internal void Add(uint entity);
 
-        internal bool Delete(uint entity);
+        internal bool TryDelete(uint entity);
+
+        internal void Delete(uint entity);
             
         internal void Move(uint entity, uint target);
     }
@@ -38,7 +40,9 @@ namespace FFS.Libraries.StaticEcs {
 
             public void TryAdd(Entity entity, out bool added);
 
-            public bool Delete(Entity entity);
+            public bool TryDelete(Entity entity);
+            
+            public void Delete(Entity entity);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
             
@@ -52,7 +56,7 @@ namespace FFS.Libraries.StaticEcs {
 
             internal void Resize(uint cap);
             
-            internal bool DeleteFromWorld(Entity entity);
+            internal void DeleteInternal(Entity entity);
 
             internal void Destroy();
 
@@ -109,7 +113,10 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) => Components<T>.Value.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Delete(Entity entity) => Components<T>.Value.Delete(entity);
+            public bool TryDelete(Entity entity) => Components<T>.Value.TryDelete(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Delete(Entity entity) => Components<T>.Value.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
             public T[] Data() => Components<T>.Value.Data();
@@ -133,7 +140,10 @@ namespace FFS.Libraries.StaticEcs {
             void IRawPool.Add(uint entity) => Components<T>.Value.Add(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            bool IRawPool.Delete(uint entity) => Components<T>.Value.Delete(new Entity(entity));
+            bool IRawPool.TryDelete(uint entity) => Components<T>.Value.TryDelete(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Delete(uint entity) => Components<T>.Value.Delete(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
             void IStandardRawPool.Copy(uint srcEntity, uint dstEntity) => Components<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
@@ -169,7 +179,7 @@ namespace FFS.Libraries.StaticEcs {
             void IComponentsWrapper.Resize(uint cap) => Components<T>.Value.Resize(cap);
 
             [MethodImpl(AggressiveInlining)]
-            bool IComponentsWrapper.DeleteFromWorld(Entity entity) => Components<T>.Value.DeleteFromWorld(entity);
+            void IComponentsWrapper.DeleteInternal(Entity entity) => Components<T>.Value.DeleteInternal(entity);
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Destroy() => Components<T>.Value.Destroy();

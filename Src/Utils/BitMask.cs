@@ -195,19 +195,23 @@ namespace FFS.Libraries.StaticEcs {
 
         [MethodImpl(AggressiveInlining)]
         public bool IsEmpty(uint bitMapIdx) {
-            for (uint i = bitMapIdx * _maskLen, iMax = (bitMapIdx + 1) * _maskLen; i < iMax; i++) {
-                if (_bitMap[i] != 0UL) {
+            var offset = bitMapIdx * _maskLen;
+            var endOffset = offset + _maskLen;
+            for (; offset < endOffset; offset++) {
+                if (_bitMap[offset] != 0UL) {
                     return false;
                 }
             }
 
             return true;
         }
-
+        
         [MethodImpl(AggressiveInlining)]
-        public bool IsEmptyBuffer(byte bufId) {
-            for (int i = bufId * _maskLen, iMax = (bufId + 1) * _maskLen; i < iMax; i++) {
-                if (_tempBuffer[i] != 0UL) {
+        public bool IsEmptyBuffer(byte bitMapIdx) {
+            var offset = bitMapIdx * _maskLen;
+            var endOffset = offset + _maskLen;
+            for (; offset < endOffset; offset++) {
+                if (_tempBuffer[offset] != 0UL) {
                     return false;
                 }
             }
@@ -246,29 +250,33 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public int GetMinIndex(uint bitMapIdx) {
+        public bool GetMinIndex(uint bitMapIdx, out int idx) {
             var offset = bitMapIdx * _maskLen;
             for (var i = 0; i < _maskLen; i++, offset++) {
                 var v = _bitMap[offset];
                 if (v != 0UL) {
-                    return (i << 6) + BitsLut[((ulong) ((long) v & -(long) v) * 0x37E84A99DAE458F) >> 58];
+                    idx = (i << 6) + BitsLut[((ulong) ((long) v & -(long) v) * 0x37E84A99DAE458F) >> 58];
+                    return true;
                 }
             }
 
-            return -1;
+            idx = -1;
+            return false;
         }
 
         [MethodImpl(AggressiveInlining)]
-        public int GetMinIndexBuffer(byte BufId) {
+        public bool GetMinIndexBuffer(byte BufId, out int idx) {
             var offset = BufId * _maskLen;
             for (var i = 0; i < _maskLen; i++, offset++) {
                 var v = _tempBuffer[offset];
                 if (v != 0UL) {
-                    return (i << 6) + BitsLut[((ulong) ((long) v & -(long) v) * 0x37E84A99DAE458F) >> 58];
+                    idx = (i << 6) + BitsLut[((ulong) ((long) v & -(long) v) * 0x37E84A99DAE458F) >> 58];
+                    return true;
                 }
             }
 
-            return -1;
+            idx = -1;
+            return false;
         }
 
         [MethodImpl(AggressiveInlining)]

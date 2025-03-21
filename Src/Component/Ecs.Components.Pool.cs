@@ -178,16 +178,32 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public bool Delete(Entity entity) {
+            public void Delete(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Delete, World not initialized");
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, cannot access ID - {id} from deleted entity");
+                if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, cannot access ID - {id} component not added");
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 #endif
-                return DelInternal(entity, false);
+                DeleteInternal(entity);
+                #if FFS_ECS_LIFECYCLE_ENTITY
+                if (_bitMask.IsEmpty(entity._id)) {
+                    World.DestroyEntity(entity);
+                }
+                #endif
             }
             
+            [MethodImpl(AggressiveInlining)]
+            public bool TryDelete(Entity entity) {
+                if (Has(entity)) {
+                    Delete(entity);
+                    return true;
+                }
+
+                return false;
+            }
+
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity src, Entity dst) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -307,10 +323,32 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 return new ComponentDynId(id);
             }
-
+            
             [MethodImpl(AggressiveInlining)]
-            internal bool DeleteFromWorld(Entity entity) {
-                return DelInternal(entity, true);
+            internal void DeleteInternal(Entity entity) {
+                _componentsCount--;
+                ref var idxRef = ref _dataIdxByEntityId[entity._id];
+                ref var data = ref _data[idxRef];
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                foreach (var listener in debugEventListeners) {
+                    listener.OnComponentDelete(entity, ref data);
+                }
+                #endif
+                    
+                if (AutoResetHandler == null) {
+                    data = default;
+                } else {
+                    AutoResetHandler(ref data);
+                }
+
+                var lastEntity = _entities[_componentsCount];
+                _entities[idxRef] = lastEntity;
+                _dataIdxByEntityId[lastEntity] = idxRef;
+                idxRef = Utils.EmptyComponent;
+                    
+                (_data[_componentsCount], data) = (data, _data[_componentsCount]);
+
+                _bitMask.Del(entity._id, id);
             }
             
             [MethodImpl(AggressiveInlining)]
@@ -324,45 +362,6 @@ namespace FFS.Libraries.StaticEcs {
                 Array.Resize(ref _dataIdxByEntityId, (int) cap);
                 for (var i = lastLength; i < cap; i++) {
                     _dataIdxByEntityId[i] = Utils.EmptyComponent;
-                }
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            private bool DelInternal(Entity entity, bool fromWorld) {
-                ref var idxRef = ref _dataIdxByEntityId[entity._id];
-                if (idxRef != Utils.EmptyComponent) {
-                    _componentsCount--;
-                    
-                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                    foreach (var listener in debugEventListeners) {
-                        listener.OnComponentDelete(entity, ref _data[idxRef]);
-                    }
-                    #endif
-                    ResetComponent(idxRef);
-
-                    if (idxRef != _componentsCount) {
-                        var lastEntity = _entities[_componentsCount];
-                        _entities[idxRef] = lastEntity;
-                        _dataIdxByEntityId[lastEntity] = idxRef;
-                        (_data[idxRef], _data[_componentsCount]) = (_data[_componentsCount], _data[idxRef]);
-                    }
-
-                    idxRef = Utils.EmptyComponent;
-                    _bitMask.Del(entity._id, id);
-                    if (!fromWorld && _bitMask.IsEmpty(entity._id)) {
-                        World.DestroyEntity(entity);
-                    }
-                    return true;
-                }
-
-                return false;
-            }
-
-            private void ResetComponent(uint idx) {
-                if (AutoResetHandler != null) {
-                    AutoResetHandler(ref _data[idx]);
-                } else {
-                    _data[idx] = default;
                 }
             }
 

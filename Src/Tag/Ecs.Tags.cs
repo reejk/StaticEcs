@@ -142,10 +142,8 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void DestroyEntity(Entity entity) {
-                var id = BitMask.GetMinIndex(entity._id);
-                while (id >= 0) {
-                    _pools[id].Del(entity);
-                    id = BitMask.GetMinIndex(entity._id);
+                while (BitMask.GetMinIndex(entity._id, out var id)) {
+                    _pools[id].Delete(entity);
                 }
             }
             
@@ -154,11 +152,9 @@ namespace FFS.Libraries.StaticEcs {
                 var str = "Tags:\n";
                 var bufId = BitMask.BorrowBuf();
                 BitMask.CopyToBuffer(entity._id, bufId);
-                var id = BitMask.GetMinIndexBuffer(bufId);
-                while (id >= 0) {
+                while (BitMask.GetMinIndexBuffer(bufId, out var id)) {
                     str += _pools[id].ToStringComponent(entity);
                     BitMask.DelInBuffer(bufId, (ushort) id);
-                    id = BitMask.GetMinIndexBuffer(bufId);
                 }
                 BitMask.DropBuf();
                 return str;
@@ -172,11 +168,9 @@ namespace FFS.Libraries.StaticEcs {
                 result.Clear();
                 var bufId = BitMask.BorrowBuf();
                 BitMask.CopyToBuffer(entity._id, bufId);
-                var id = BitMask.GetMinIndexBuffer(bufId);
-                while (id >= 0) {
+                while (BitMask.GetMinIndexBuffer(bufId, out var id)) {
                     result.Add(_pools[id].GetRaw());
                     BitMask.DelInBuffer(bufId, (ushort) id);
-                    id = BitMask.GetMinIndexBuffer(bufId);
                 }
                 BitMask.DropBuf();
             }
@@ -185,11 +179,9 @@ namespace FFS.Libraries.StaticEcs {
             internal void CopyEntity(Entity srcEntity, Entity dstEntity) {
                 var bufId = BitMask.BorrowBuf();
                 BitMask.CopyToBuffer(srcEntity._id, bufId);
-                var id = BitMask.GetMinIndexBuffer(bufId);
-                while (id >= 0) {
+                while (BitMask.GetMinIndexBuffer(bufId, out var id)) {
                     _pools[id].Copy(srcEntity, dstEntity);
                     BitMask.DelInBuffer(bufId, (ushort) id);
-                    id = BitMask.GetMinIndexBuffer(bufId);
                 }
 
                 BitMask.DropBuf();

@@ -68,7 +68,7 @@ namespace FFS.Libraries.StaticEcs {
 
             #region NEW_BY_TYPE_SINGLE
 
-            #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_EMPTY_ENTITY
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG || !FFS_ECS_LIFECYCLE_ENTITY
             [MethodImpl(AggressiveInlining)]
             public static Entity New() {
                 return World.CreateEntityInternal();

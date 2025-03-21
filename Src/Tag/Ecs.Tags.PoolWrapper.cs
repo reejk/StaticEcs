@@ -20,7 +20,9 @@ namespace FFS.Libraries.StaticEcs {
 
             public bool Has(Entity entity);
 
-            public bool Del(Entity entity);
+            public bool TryDelete(Entity entity);
+
+            public void Delete(Entity entity);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
             
@@ -67,7 +69,10 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) => Tags<T>.Value.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
-            public bool Del(Entity entity) => Tags<T>.Value.Delete(entity);
+            public bool TryDelete(Entity entity) => Tags<T>.Value.TryDelete(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Delete(Entity entity) => Tags<T>.Value.Delete(entity);
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => Tags<T>.Value.Copy(srcEntity, dstEntity);
@@ -104,7 +109,10 @@ namespace FFS.Libraries.StaticEcs {
             void IRawPool.Add(uint entity) => Tags<T>.Value.Set(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
-            bool IRawPool.Delete(uint entity) => Tags<T>.Value.Delete(new Entity(entity));
+            bool IRawPool.TryDelete(uint entity) => Tags<T>.Value.TryDelete(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawPool.Delete(uint entity) => Tags<T>.Value.Delete(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
             void IStandardRawPool.Copy(uint srcEntity, uint dstEntity) => Tags<T>.Value.Copy(new Entity(srcEntity), new Entity(dstEntity));
