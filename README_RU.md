@@ -1304,11 +1304,17 @@ public static class $COMPONENT$Extension {
     }
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool Delete$COMPONENT$(this $ECS$.Entity entity) {
-        return $ECS$.Components<$COMPONENT$>.Value.Del(entity);
+    public static void Delete$COMPONENT$(this $ECS$.Entity entity) {
+        $ECS$.Components<$COMPONENT$>.Value.Delete(entity);
+    }
+    
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool TryDelete$COMPONENT$(this $ECS$.Entity entity) {
+        return $ECS$.Components<$COMPONENT$>.Value.TryDelete(entity);
     }
 }
 ```
+
 
 Standard component live template
 ```csharp
@@ -1345,8 +1351,13 @@ public static class $TAG$Extension {
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool Delete$TAG$(this $Ecs$.Entity entity) {
-        return $Ecs$.Tags<$TAG$>.Value.Del(entity);
+    public static void Delete$TAG$(this $Ecs$.Entity entity) {
+        $Ecs$.Tags<$TAG$>.Value.Delete(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool TryDelete$TAG$(this $Ecs$.Entity entity) {
+        return $Ecs$.Tags<$TAG$>.Value.TryDelete(entity);
     }
 }
 ```
@@ -1366,7 +1377,12 @@ public static class $MASK$Extension {
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Delete$MASK$(this $Ecs$.Entity entity) {
-        $Ecs$.Masks<$MASK$>.Value.Del(entity);
+        $Ecs$.Masks<$MASK$>.Value.Delete(entity);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool TryDelete$MASK$(this $Ecs$.Entity entity) {
+        return $Ecs$.Masks<$MASK$>.Value.TryDelete(entity);
     }
 }
 ```
