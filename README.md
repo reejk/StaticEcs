@@ -141,7 +141,7 @@ public class Program {
 Entity - serves to identify an object in the game world and access attached components
  - Represented as a 4 byte structure
 
-**ВАЖНО** ❗️  
+**IMPORTANT** ❗️  
 By default an entity can be created and exist without components, also when the last component is deleted it is not deleted  
 If you want to override this behavior, you must specify the compiler directive `FFS_ECS_LIFECYCLE_ENTITY`  
 More info: [Compiler directives](#compiler-directives)
