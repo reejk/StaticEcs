@@ -68,6 +68,7 @@ namespace FFS.Libraries.StaticEcs {
         where QW : struct, IQueryMethod
         where WorldType : struct, IWorldType {
         private readonly C[] _data;        //8
+        private readonly uint[] _indexes;  //8
         private readonly uint[] _entities; //8
         private uint _count;               //4
         private QW _with;                  //???
@@ -76,11 +77,10 @@ namespace FFS.Libraries.StaticEcs {
         public QueryComponentsIterator(QW with) {
             _with = with;
             _data = Ecs<WorldType>.Components<C>.Value.Data();
+            _indexes = Ecs<WorldType>.Components<C>.Value.GetDataIdxByEntityId();
             _count = Ecs<WorldType>.Components<C>.Value.Count();
             _entities = Ecs<WorldType>.Components<C>.Value.EntitiesData();
-            var count = uint.MaxValue;
-            uint[] entities = null;
-            with.SetData<WorldType>(ref count, ref entities);
+            with.SetData<WorldType>(ref _count, ref _entities);
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C>.Value.AddBlocker(1);
             #endif
@@ -111,8 +111,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
 
                 _count--;
-
-                if (_with.CheckEntity(_entities[_count])) {
+                var entity = _entities[_count];
+                if (_indexes[entity] != Utils.EmptyComponent && _with.CheckEntity(entity)) {
                     return true;
                 }
             }
