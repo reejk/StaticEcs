@@ -170,7 +170,7 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 var i1 = di1[entity];
                 if (i1 != Utils.EmptyComponent && with.CheckEntity(entity)) {
-                    runner.Run(new Ecs<WorldType>.Entity(entity), ref dataC1[count]);
+                    runner.Run(new Ecs<WorldType>.Entity(entity), ref dataC1[i1]);
                 }
             }
 
@@ -196,7 +196,7 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 var i1 = di1[entity];
                 if (i1 != Utils.EmptyComponent && with.CheckEntity(entity)) {
-                    runner(new Ecs<WorldType>.Entity(entity), ref dataC1[count]);
+                    runner(new Ecs<WorldType>.Entity(entity), ref dataC1[i1]);
                 }
             }
 
