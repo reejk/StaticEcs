@@ -1198,6 +1198,14 @@ foreach (var weatherEvent in weatherChangedEventReceiver) {
     Console.WriteLine("Weather is " + weatherEvent.Value.WeatherType);
 }
 
+
+foreach (var weatherEvent in weatherChangedEventReceiver) {
+    // True if this listener is the last listener to read this event (means that the event will be deleted after reading).
+    bool last = weatherEvent.IsLastReading();
+    // Returns the number of unread listeners other than the given listener at the moment
+    int unreadCount = weatherEvent.UnreadCount();
+}
+
 foreach (var weatherEvent in weatherChangedEventReceiver) {
     // Event suppression - the event will be deleted and other receivers will no longer be able to read it
     weatherEvent.Suppress();

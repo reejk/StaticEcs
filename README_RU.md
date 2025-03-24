@@ -1200,6 +1200,13 @@ foreach (var weatherEvent in weatherChangedEventReceiver) {
 }
 
 foreach (var weatherEvent in weatherChangedEventReceiver) {
+    // True если данный слушатель последний из всех слушателей читавших это событий (значит что событие будет удалено после прочтения)
+    bool last = weatherEvent.IsLastReading();
+    // Возвращает число непрочитавших слушателей не считая данного в данный момент
+    int unreadCount = weatherEvent.UnreadCount();
+}
+
+foreach (var weatherEvent in weatherChangedEventReceiver) {
     // Подвление события - событие будет удалено и другие слушатели больше не смогут его прочитать
     weatherEvent.Suppress();
 }
