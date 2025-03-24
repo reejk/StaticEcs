@@ -912,10 +912,10 @@ foreach (var entity in MyWorld.QueryEntities.For(all3, allAndNone3, none3)) {
 
 
 // Also, all filtering methods can be grouped into a With type
-// which can be applied to the World.QueryEntities.With() method, for example:
+// which can be applied to the World.QueryEntities.For() method, for example:
 
 // Method 1 via generic
-foreach (var entity in MyWorld.QueryEntities.With<With<
+foreach (var entity in MyWorld.QueryEntities.For<With<
              All<Position, Velocity, Name>,
              AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
              None<Name>,
@@ -931,7 +931,7 @@ With<
     None<Name>,
     Any<Position, Direction, Velocity>
 > with = default;
-foreach (var entity in MyWorld.QueryEntities.With(with)) {
+foreach (var entity in MyWorld.QueryEntities.For(with)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
@@ -942,7 +942,7 @@ var with2 = With.Create(
     default(None<Name>),
     default(Any<Position, Direction, Velocity>)
 );
-foreach (var entity in MyWorld.QueryEntities.With(with2)) {
+foreach (var entity in MyWorld.QueryEntities.For(with2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
@@ -953,7 +953,7 @@ var with3 = With.Create(
     Types<Name>.None(),
     Types<Position, Direction, Velocity>.Any()
 );
-foreach (var entity in MyWorld.QueryEntities.With(with3)) {
+foreach (var entity in MyWorld.QueryEntities.For(with3)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 ```
@@ -1111,7 +1111,7 @@ var with = With.Create(
     new Tag2(playerTagId, unitTagId).Any(),
     new Mask1(frozenMaskId).AllAndNone(new Mask1(flammableMaskId))
 );
-foreach (var entity in MyWorld.QueryEntities.With(with)) {
+foreach (var entity in MyWorld.QueryEntities.For(with)) {
     //..
 }
 
