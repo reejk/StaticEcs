@@ -44,4 +44,12 @@ namespace FFS.Libraries.StaticEcs {
     internal struct EntityVersion : IStandardComponent {
         internal short Value;
     }
+
+    #if ENABLE_IL2CPP
+    [Il2CppSetOption(Option.NullChecks, false)]
+    [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
+    #endif
+    internal struct EntityStatus : IStandardComponent {
+        internal bool Disabled;
+    }
 }

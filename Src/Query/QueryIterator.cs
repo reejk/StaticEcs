@@ -14,9 +14,11 @@ namespace FFS.Libraries.StaticEcs {
         private uint _current;             //4
         private uint _count;               //4
         private QM _queryMethod;          //???
+        private bool _withDisabled;
 
         [MethodImpl(AggressiveInlining)]
-        public QueryEntitiesIterator(QM queryMethod) {
+        public QueryEntitiesIterator(QM queryMethod, bool withDisabled = false) {
+            _withDisabled = withDisabled;
             _queryMethod = queryMethod;
             _current = default;
             _entities = default;
@@ -37,7 +39,8 @@ namespace FFS.Libraries.StaticEcs {
 
                 _count--;
                 _current = _entities[_count];
-                if (_queryMethod.CheckEntity(_current)) {
+                
+                if ((_withDisabled || !Ecs<WorldType>.StandardComponents<EntityStatus>.Value.RefMutInternal(_current).Disabled) && _queryMethod.CheckEntity(_current)) {
                     return true;
                 }
             }

@@ -43,7 +43,8 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             internal static void Initialize() {
-                ModuleStandardComponents.Value.RegisterComponentType<EntityVersion>();
+                ModuleStandardComponents.Value.RegisterComponentType<EntityVersion>(false);
+                ModuleStandardComponents.Value.RegisterComponentType<EntityStatus>(false, autoReset: static (ref EntityStatus status) => status.Disabled = false);
                 
                 ModuleComponents.Value.Initialize();
                 ModuleStandardComponents.Value.Initialize();
@@ -155,7 +156,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (Status != WorldStatus.Created) {
                     throw new Exception($"World<{typeof(WorldType)}>, Method: RegisterStandardComponentType<{typeof(T)}>, World not created");
                 }
-                return ModuleStandardComponents.Value.RegisterComponentType(autoInit, autoReset, autoCopy);
+                return ModuleStandardComponents.Value.RegisterComponentType(true, autoInit, autoReset, autoCopy);
             }
             
             [MethodImpl(AggressiveInlining)]

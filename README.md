@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.40-blue.svg?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.41-blue.svg?style=for-the-badge)
 
 ### LANGUAGE
 [RU](./README_RU.md)
@@ -197,6 +197,12 @@ var entity = MyEcs.Entity.New(
             new Velocity { Val = 1f },
             new Position { Val = Vector3.One }
 );
+
+entity.Disable();                        // Disable entity (a disabled entity is not found by default in queries (see Query))
+entity.Enable();                         // Enable entity
+
+bool enabled = entity.IsEnabled();       // Check if the entity is enabled in the world
+bool disabled = entity.IsDisabled();     // Check if the entity is disabled in the world
 
 bool actual = entity.IsActual();         // Check if an entity has been deleted in the world
 short version = entity.Version();        // Get entity version
@@ -1112,14 +1118,7 @@ Look at additional ways to search for entities in the world:
 ```c#
 // World.QueryComponents.For()\With() returns an iterator of entities matching the condition immediately with components 
 
-
-// Option 1 when you want to go through all components of the same type
-// (very fast, can be used for very simple operations for which no entity or other components are needed)
-foreach (ref var position in MyWorld.QueryComponents.For<Position>()) {
-    position.Val += Vector3.UnitX;
-}
-
-// Option 2 with specifying a delegate and getting the required components at once, from 1 to 8 component types can be specified
+// Option 1 with specifying a delegate and getting the required components at once, from 1 to 8 component types can be specified
 MyWorld.QueryComponents.For<Position, Velocity, Name>((Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });

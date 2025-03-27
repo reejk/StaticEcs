@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.40-blue.svg?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.41-blue.svg?style=for-the-badge)
 
 ### ЯЗЫК
 [RU](./README_RU.md)
@@ -197,6 +197,12 @@ var entity = MyEcs.Entity.New(
             new Velocity { Val = 1f },
             new Position { Val = Vector3.One }
 );
+
+entity.Disable();                        // Отключить сущность (отключенная сущность по умолчанию не находится при запросах (смотри Query))
+entity.Enable();                         // Включить сущность
+
+bool enabled = entity.IsEnabled();       // Проверить включена ли сущность в мире
+bool disabled = entity.IsDisabled();     // Проверить выключена ли сущность в мире
 
 bool actual = entity.IsActual();         // Проверить не удалена ли сущность в мире
 short version = entity.Version();        // Получить версию сущности
@@ -1112,14 +1118,7 @@ Look at additional ways to search for entities in the world:
 ```c#
 // World.QueryComponents.For()\With() возвращает итератор сущностей подходящих под условие cразу с компонентами 
 
-
-// Вариант 1 когда нужно пройтись по всем компонентам одного типа
-// (очень быстрый, может использоваться для очень простых операций для которых не нужная сущность или другие компоненты)
-foreach (ref var position in MyWorld.QueryComponents.For<Position>()) {
-    position.Val += Vector3.UnitX;
-}
-
-// Вариант 2 с указанием делегата и сразу получением нужных компонентов, может быть указано от 1 до 8 типов компонентов
+// Вариант 1 с указанием делегата и сразу получением нужных компонентов, может быть указано от 1 до 8 типов компонентов
 MyWorld.QueryComponents.For<Position, Velocity, Name>((Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
