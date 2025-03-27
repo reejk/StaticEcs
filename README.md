@@ -560,7 +560,7 @@ items.Clear();                                                         // Clear 
 items.ResetCount();                                                    // Reset quantity without clearing
 
 // Search
-ushort idx = items.IndexOf(new Item("a"));                             // Get item index or -1
+short idx = items.IndexOf(new Item("a"));                              // Get item index or -1
 bool contains = items.Contains(new Item("a"));                         // Check if an element exists with default IEqualityComparer
 bool contains = items.Contains(new Item("a"), comparer);               // Check for an element with a custom IEqualityComparer
 

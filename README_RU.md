@@ -560,7 +560,7 @@ items.Clear();                                                         // Очи
 items.ResetCount();                                                    // Сброс количества без очистки
 
 // Поиск
-ushort idx = items.IndexOf(new Item("a"));                             // Получить индекс элемента или -1
+short idx = items.IndexOf(new Item("a"));                              // Получить индекс элемента или -1
 bool contains = items.Contains(new Item("a"));                         // Проверить наличие элемента с дефолтным IEqualityComparer
 bool contains = items.Contains(new Item("a"), comparer);               // Проверить наличие элемента с кастомным IEqualityComparer
 
