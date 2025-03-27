@@ -438,7 +438,7 @@ Multi-components - allow to give an entity many identical properties (components
   - or as a custom structure with the `IMultiComponent<T>` interface
 - Based on multicomponents, [Relations](#relations) of entities are implemented, for example, the `Children` component is a multicomponent
 
-**ВАЖНО** ❗️  
+**IMPORTANT** ❗️  
 Requires registration in the world between creation and initialization
 
 Example:  
