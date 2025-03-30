@@ -7,6 +7,7 @@ nav_order: 2
 ### Auto handlers
 By default, when adding or deleting a component, the data is filled with the default value, and when copying, the component is completely copied  
 To set your own logic of default initialization and resetting of the component you can use handlers
+
 ___
 
 #### Example:

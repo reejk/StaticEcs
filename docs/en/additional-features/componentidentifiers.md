@@ -8,6 +8,7 @@ nav_order: 1
 In case when the project is very large or on the contrary small and the size of compiled code is important:  
 Things like - typed Query, and sugar methods of entity handling, can increase the compiled code size due to monomorphization of generic types in structures and methods.
 To avoid this, a dynamic identifier mechanism for components, tags, and masks is implemented - which allow you to use them instead of type parameters  
+
 ___
 
 #### How it works:
