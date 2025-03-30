@@ -6,7 +6,7 @@ callouts:
     color: yellow
   note:
     title: Note
-    color: gray
+    color: blue
   warning:
     title: Warning
     color: red
