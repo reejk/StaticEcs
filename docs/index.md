@@ -4,5 +4,6 @@ nav_order: 1
 ---
 
 # Static ECS Documentation:
+___
 
-[![Русский](https://flagcdn.com/72x54/ru.png)](ru/index.md)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![English](https://flagcdn.com/72x54/gb.png)](en/index.md)
+[![Русский](https://flagcdn.com/72x54/ru.png)](ru/)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![English](https://flagcdn.com/72x54/gb.png)](en/)
