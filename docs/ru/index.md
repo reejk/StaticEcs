@@ -1,6 +1,6 @@
 ---
 title: RU
-nav_order: 200
+parent: Main page
 ---
 
 ![Version](https://img.shields.io/badge/version-0.9.60-blue.svg?style=for-the-badge)  

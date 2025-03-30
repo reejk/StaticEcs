@@ -1,6 +1,7 @@
 ---
 title: Live templates
-nav_order: 391
+parent: EN
+nav_order: 4
 ---
 
 # Live templates

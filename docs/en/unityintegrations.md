@@ -1,6 +1,7 @@
 ---
 title: Unity integration
-nav_order: 393
+parent: EN
+nav_order: 5
 ---
 
 ### ⚙️ **[Unity editor module](https://github.com/Felid-Force-Studios/StaticEcs-Unity)** ⚙️

@@ -1,5 +1,5 @@
 ---
-title: Start
+title: Main page
 nav_order: 1
 ---
 

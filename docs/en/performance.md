@@ -1,6 +1,7 @@
 ---
 title: Performance
-nav_order: 390
+parent: EN
+nav_order: 3
 ---
 
 # Perfomance

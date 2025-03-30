@@ -1,6 +1,7 @@
 ---
 title: FAQ
-nav_order: 392
+parent: EN
+nav_order: 6
 ---
 
 # Faq
