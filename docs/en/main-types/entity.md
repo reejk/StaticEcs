@@ -56,6 +56,7 @@ int count = 100;
 MyEcs.Entity.NewOnes(count, new Position(x: 1, y: 1, z: 2), static entity => {
     // some init logic for each entity
 });
+
 ```
 ___
 
@@ -87,4 +88,5 @@ entity2.MoveTo(entity3);                 // Move all components to the specified
 PackedEntity packed = entity3.Pack();  // Pack an entity with meta information about the version to be transmitted
 
 var str = entity3.ToPrettyString();      // Get a string with all information about the entity
+
 ```
