@@ -5,7 +5,7 @@ nav_order: 200
 
 ![Version](https://img.shields.io/badge/version-0.9.60-blue.svg?style=for-the-badge)  
 ___
-### 🚀 **[Benchmarks](./Benchmark.md)** 🚀
+### 🚀 **[Benchmarks](../Benchmark.md)** 🚀
 ### ⚙️ **[Unity module](https://github.com/Felid-Force-Studios/StaticEcs-Unity)** ⚙️
 
 # Static ECS - C# Entity component system framework

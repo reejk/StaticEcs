@@ -4,7 +4,7 @@
 [RU](./README_RU.md)
 [EN](./README.md)
 ___
-### 🚀 **[Benchmarks](./Benchmark.md)** 🚀
+### 🚀 **[Benchmarks](./docs/Benchmark.md)** 🚀
 ### ⚙️ **[Unity module](https://github.com/Felid-Force-Studios/StaticEcs-Unity)** ⚙️
  
 # Static ECS - C# Entity component system framework
