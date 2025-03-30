@@ -7,13 +7,16 @@ nav_order: 1
 ### Entity
 Entity - serves to identify an object in the game world and access attached components
 - Represented as a 4 byte structure
+___
 
-**IMPORTANT** ❗️  
-By default an entity can be created and exist without components, also when the last component is deleted it is not deleted  
-If you want to override this behavior, you must specify the compiler directive `FFS_ECS_LIFECYCLE_ENTITY`  
-More info: [Compiler directives](../additional-features/compilerdirectives.md)
+{: .important }
+> By default an entity can be created and exist without components, also when the last component is deleted it is not deleted  
+> If you want to override this behavior, you must specify the compiler directive `FFS_ECS_LIFECYCLE_ENTITY`  
+> More info: [Compiler directives](../additional-features/compilerdirectives.md)
 
-- Creation:
+___
+
+#### Creation:
 ```csharp
 // Creating a single entity
 
@@ -53,8 +56,9 @@ MyEcs.Entity.NewOnes(count, new Position(x: 1, y: 1, z: 2), static entity => {
     // some init logic for each entity
 });
 ```
+___
 
-- Basic operations:
+#### Basic operations:
 ```csharp
 var entity = MyEcs.Entity.New(
             new Name { Val = "SomeName" },

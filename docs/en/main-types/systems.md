@@ -8,7 +8,7 @@ nav_order: 10
 Type-tag system identifier, used to isolate static data when creating groups of systems in the same process
 - Represented as a user structure without data with a marker interface `ISystemsType`
 
-Example:
+#### Example:
 ```c#
 public struct BaseSystemsType : ISystemsType { }
 public struct FixedSystemsType : ISystemsType { }
@@ -55,7 +55,7 @@ public struct SomeDestroySystem : IDestroySystem {
  }
 ```
 
-- Creation and operations:
+#### Creation and operations:
 ```c#
 // Define system identifier
 public struct MySystemsType : ISystemsType { }

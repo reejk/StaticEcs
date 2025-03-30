@@ -19,10 +19,12 @@ Multi-components - allow to give an entity many identical properties (components
     - or as a custom structure with the `IMultiComponent<T>` interface
 - Based on multicomponents, [Relations](#relations) of entities are implemented, for example, the `Children` component is a multicomponent
 
-**IMPORTANT** ❗️  
+___
+
+{: .important }️  
 Requires registration in the world between creation and initialization
 
-Example:  
+#### Example:  
 There are two ways to define a multicomponent:
 1. Use the default `Multi<T>`
 ```c#
@@ -67,8 +69,9 @@ MyEcs.World.RegisterMultiComponentType<Inventory, Item>(defaultComponentCapacity
 //...
 MyEcs.Initialize();
 ```
+___
 
-- Basic operations:
+#### Basic operations:
 ```c#
 MyEcs.World.RegisterMultiComponentType<Multi<Item>, Item>(defaultComponentCapacity: 4); 
 

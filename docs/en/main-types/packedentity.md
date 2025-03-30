@@ -10,13 +10,17 @@ Packed entity - stores meta information of the entity, serves for secure transfe
 > just by id it is impossible to determine whether this entity that is now in the world under this identifier or not, you can only together with the version, for this purpose packaged version
 - Represented as an 8 byte structure
 
+___
 
-- Creation:
+#### Creation:
 ```csharp
 // Creation is only possible through an unpackaged entity
 PackedEntity packedEntity = entity.Pack();
 ```
-- Basic operations:
+
+___
+
+#### Basic operations:
 ```csharp
 PackedEntity packedEntity = entity.Pack();
 // Attempt to unpack an entity in the world whose identifier is specified via the type parameter, returns true if the entity is successfully unpacked, in out unpacked entity

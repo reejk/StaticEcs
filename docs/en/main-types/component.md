@@ -9,17 +9,18 @@ Component - provides properties to an entity
 - Gives the ability to build search queries by component only
 - Presented as a custom structure with a marker interface `IComponent`
 - Presented as struct solely for performance reasons
-  Example:
+
+#### Example:
 ```c#
 public struct Position : IComponent {
     public Vector3 Value;
 }
 ```
+___
 
-**IMPORTANT** ❗️  
+{: .important }
 Requires registration in the world between creation and initialization
 
-Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
@@ -27,9 +28,9 @@ MyEcs.World.RegisterComponentType<Position>();
 //...
 MyEcs.Initialize();
 ```
+___
 
-
-- Creation:
+#### Creation:
 ```c#
 // Method 1 - when creating an entity (similar to the Add() method)
 var entity = MyEcs.Entity.New<Position>();
@@ -55,7 +56,10 @@ entity.TryAdd<Position, Velocity>(out bool added); // overloading where added = 
 // Be careful with AutoInit and AutoReset (see additional features).
 entity.Put(new Position(x: 1, y: 1, z: 2));
 ```
-- Basic operations:
+
+___
+
+#### Basic operations:
 ```c#
 var entity = MyEcs.Entity.New(
             new Name { Val = "Player" },

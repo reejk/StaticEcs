@@ -8,17 +8,18 @@ nav_order: 8
 World identifier type-tag, used to isolate static data when creating different worlds in the same process
 - Represented as a user structure without data with a marker interface `IWorldType`
 
-Example:
+#### Example:
 ```c#
 public struct MainWorldType : IWorldType { }
 public struct MiniGameWorldType : IWorldType { }
 ```
-
+___
 ### Ecs
 Library entry point responsible for accessing, creating, initializing, operating, and destroying world data
 - Represented as a static class `Ecs<T>` parameterized by `IWorldType`
 > IMPORTANT: Since the type-identifier `IWorldType` defines access to a specific world   
 > There are three ways to work with the framework:
+___
 
 The first way is as is via full address (very inconvenient):
 ```c#

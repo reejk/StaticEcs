@@ -9,7 +9,7 @@ Context is an alternative to DI, a simple mechanism for storing and transferring
 - Represented as a static class `Ecs<IWorldType>.Context<T>`
 
 ___
-Basic operations:
+#### Basic operations:
 ```csharp
 // User classes and services
 public class UserService1 { }

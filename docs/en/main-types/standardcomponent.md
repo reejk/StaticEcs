@@ -18,17 +18,17 @@ Default Component - standard entity properties, present on every entity created 
 - Not included in queries, as it is present on all entities
 - Represented as a custom structure with a `IStandardComponent` marker interface
 
-Example:
+#### Example:
 ```c#
 public struct EnitiyType : IStandardComponent {
     public int Val;
 }
 ```
+___
 
-**IMPORTANT** ❗️  
+{: .important }
 Requires registration in the world between creation and initialization
 
-Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
@@ -36,12 +36,13 @@ MyEcs.World.RegisterStandardComponentType<EnitiyType>();
 //...
 MyEcs.Initialize();
 ```
+___
 
-**IMPORTANT** ❗️  
+{: .important } 
 If automatic initialization when creating an entity or automatic reset when deleting an entity is required  
 handlers must be explicitly registered
 
-Example:
+#### Example:
 ```c#
 public struct EnitiyType : IStandardComponent {
     public int Val;
@@ -70,8 +71,9 @@ MyEcs.World.RegisterStandardComponentType<EnitiyType>(
 //...
 MyEcs.Initialize();
 ```
+___
 
-- Basic operations:
+#### Basic operations:
 ```c#
 // Get the number of standard components per entity
 int standardComponentsCount = entity.StandardComponentsCount();

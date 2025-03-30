@@ -6,9 +6,9 @@ nav_order: 12
 
 ### Query
 Queries - a mechanism that allows you to search for entities and their components in the world
+___
 
-
-Let's look at the basic capabilities of searching for entities in the world:
+#### Let's look at the basic capabilities of searching for entities in the world:
 ```c#
 // There are many available query options
 // World.QueryEntities.For()\With() returns an iterator of entities matching the condition
@@ -157,7 +157,7 @@ foreach (var entity in MyWorld.QueryEntities.For(with3)) {
 }
 ```
 
-Look at additional ways to search for entities in the world:
+#### Look at additional ways to search for entities in the world:
 ```c#
 // World.QueryComponents.For()\With() returns an iterator of entities matching the condition immediately with components 
 
@@ -199,7 +199,7 @@ MyWorld.QueryComponents.With<WithAdds<
 });
 ```
 
-Look at the special possibilities for finding entities in the world:
+#### Look at the special possibilities for finding entities in the world:
 ```c#
 // Queries with structure-function passing 
 // can be used to optimize or pass a state to a stratct or to pass logic.

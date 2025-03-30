@@ -10,15 +10,16 @@ Tag - similar to a component, but does not contain any data, serves to label an 
 - Gives the option to build search queries based on tags only
 - Represented as a user structure without data with a marker interface `ITag`
 
-Example:
+#### Example:
 ```c#
 public struct Unit : ITag { }
 ```
 
-**IMPORTANT** ❗️  
+___
+
+{: .important } 
 Requires registration in the world between creation and initialization
 
-Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
@@ -27,12 +28,17 @@ MyEcs.World.RegisterTagType<Unit>();
 MyEcs.Initialize();
 ```
 
-- Creation:
+___
+
+#### Creation:
 ```c#
 // Adding a tag to an entity (in DEBUG mode there will be an error if it already exists on the entity) (overload methods from 1-5 tags)
 entity.SetTag<Unit, Player>();
 ```
-- Basic operations:
+
+___
+
+#### Basic operations:
 ```c#
 // Get the count of tags on an entity
 int tagsCount = entity.TagsCount();

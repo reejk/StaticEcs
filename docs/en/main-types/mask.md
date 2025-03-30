@@ -9,15 +9,15 @@ Mask - similar to a tag, but uses only 1 bit of memory
 - NOT Gives the option to build queries by masks only, can only be used as an additional search criterion
 - Represented as a user structure without data with a marker interface `IMask`
 
-Example:
+#### Example:
 ```c#
 public struct Visible : IMask { }
 ```
+___
 
-**IMPORTANT** ❗️  
+{: .important }
 Requires registration in the world between creation and initialization
 
-Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
@@ -25,13 +25,16 @@ MyEcs.World.RegisterMaskType<Visible>();
 //...
 MyEcs.Initialize();
 ```
+___
 
-- Creation:
+#### Creation:
 ```c#
 // Adding a mask to an entity (overload methods from 1-5 masks)
 entity.SetMask<Flammable, Frozen, Visible>();
 ```
-- Basic operations:
+___
+
+#### Basic operations:
 ```c#
 // Get the count of masks on an entity
 int masksCount = entity.MasksCount();

@@ -7,18 +7,19 @@ nav_order: 3
 ### Events
 Event - used to exchange information between systems or user services
 - Presented as a custom structure with data
+___
 
-Example:
+#### Example:
 ```c#
 public struct WeatherChanged : IEvent { 
     public WeatherType WeatherType;
 }
 ```
+___
 
-**IMPORTANT** ❗️  
+{: .important }
 Requires registration in the world between creation and initialization
 
-Example:
 ```c#
 MyEcs.Create(EcsConfig.Default());
 //...
@@ -26,9 +27,8 @@ MyEcs.Events.RegisterEventType<WeatherChanged>()
 //...
 MyEcs.Initialize();
 ```
-
-
-- Creation and basic operations:
+___
+#### Creation and basic operations:
 ```c#
 // The event system will be created when MyEcs.Create is called and destroyed when MyEcs.Destroy is called
 MyEcs.Create(EcsConfig.Default());

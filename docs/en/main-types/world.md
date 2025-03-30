@@ -8,7 +8,9 @@ nav_order: 9
 World, contains meta information of entities, controls and manages creation and deletion of entities
 - Represented as a static class `Ecs<IWorldType>.World`
 
-- Creation:
+___
+
+#### Creation:
 ```c#
 // It is created only when called
 MyEcs.Create(config);
@@ -16,7 +18,9 @@ MyEcs.Create(config);
 // Initialized only when called
 MyEcs.Initialize();
 ```
-- Basic operations:
+___ 
+
+#### Basic operations:
 ```c#
 // When registering a component, it is possible to specify the base size of the data array of components of this type
 // The dynamic identifier of the component type is also returned (section Additional Features)
