@@ -1,10 +1,8 @@
 ---
-title: Main
+title: Start
 nav_order: 1
 ---
 
-# Welcome!
-![Version](https://img.shields.io/badge/version-0.9.60-blue.svg?style=for-the-badge).
+# Static ECS Documentation:
 
-[Page 1](page1.md)  
-[Page 1](page2.md)
+[![Русский](https://flagcdn.com/72x54/ru.png)](ru/index.md)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![English](https://flagcdn.com/72x54/gb.png)](en/index.md)
