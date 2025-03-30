@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 9
 ---
 
-### World
+## World
 World, contains meta information of entities, controls and manages creation and deletion of entities
 - Represented as a static class `Ecs<IWorldType>.World`
 

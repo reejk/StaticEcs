@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 11
 ---
 
-### Context
+## Context
 Context is an alternative to DI, a simple mechanism for storing and transferring user data and services to systems and other methods
 - Represented as a static class `Ecs<IWorldType>.Context<T>`
 

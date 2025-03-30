@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 6
 ---
 
-### Tag
+## Tag
 Tag - similar to a component, but does not contain any data, serves to label an entity
 - Optimized storage, doesn't store massive amounts of data, doesn't slow down component searches, allows you to create multiple tags
 - Gives the option to build search queries based on tags only
@@ -17,7 +17,7 @@ public struct Unit : ITag { }
 
 ___
 
-{: .important } 
+{: .important }
 Requires registration in the world between creation and initialization
 
 ```c#

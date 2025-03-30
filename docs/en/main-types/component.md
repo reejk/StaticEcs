@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 3
 ---
 
-### Component
+## Component
 Component - provides properties to an entity
 - Gives the ability to build search queries by component only
 - Presented as a custom structure with a marker interface `IComponent`

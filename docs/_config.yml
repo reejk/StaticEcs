@@ -4,3 +4,9 @@ callouts:
   important:
     title: Important
     color: yellow
+  note:
+    title: Note
+    color: gray
+  warning:
+    title: Warning
+    color: red

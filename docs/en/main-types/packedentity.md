@@ -4,11 +4,13 @@ parent: Main types
 nav_order: 2
 ---
 
-### PackedEntity
+## PackedEntity
 Packed entity - stores meta information of the entity, serves for secure transfer of the entity (e.g. in events, components, etc.).
-> an entity is just an id, a packaged entity is id + version  
-> just by id it is impossible to determine whether this entity that is now in the world under this identifier or not, you can only together with the version, for this purpose packaged version
 - Represented as an 8 byte structure
+
+{: .note }
+> An entity is just an id, a packaged entity is id + version  
+> Just by id it is impossible to determine whether this entity that is now in the world under this identifier or not, you can only together with the version, for this purpose packaged version
 
 ___
 

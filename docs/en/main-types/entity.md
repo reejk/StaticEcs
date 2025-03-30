@@ -4,14 +4,15 @@ parent: Main types
 nav_order: 1
 ---
 
-### Entity
+## Entity
 Entity - serves to identify an object in the game world and access attached components
 - Represented as a 4 byte structure
+
 ___
 
 {: .important }
 > By default an entity can be created and exist without components, also when the last component is deleted it is not deleted  
-> If you want to override this behavior, you must specify the compiler directive `FFS_ECS_LIFECYCLE_ENTITY`  
+> If you want to override this, you must use the compiler directive `FFS_ECS_LIFECYCLE_ENTITY`  
 > More info: [Compiler directives](../additional-features/compilerdirectives.md)
 
 ___

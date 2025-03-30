@@ -4,8 +4,9 @@ parent: Main types
 nav_order: 12
 ---
 
-### Query
+## Query
 Queries - a mechanism that allows you to search for entities and their components in the world
+
 ___
 
 #### Let's look at the basic capabilities of searching for entities in the world:
@@ -156,7 +157,7 @@ foreach (var entity in MyWorld.QueryEntities.For(with3)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 ```
-
+  
 #### Look at additional ways to search for entities in the world:
 ```c#
 // World.QueryComponents.For()\With() returns an iterator of entities matching the condition immediately with components 
@@ -198,7 +199,7 @@ MyWorld.QueryComponents.With<WithAdds<
     position.Val *= velocity.Val;
 });
 ```
-
+  
 #### Look at the special possibilities for finding entities in the world:
 ```c#
 // Queries with structure-function passing 

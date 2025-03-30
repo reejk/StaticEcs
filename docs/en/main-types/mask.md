@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 7
 ---
 
-### Mask
+## Mask
 Mask - similar to a tag, but uses only 1 bit of memory
 - NOT Gives the option to build queries by masks only, can only be used as an additional search criterion
 - Represented as a user structure without data with a marker interface `IMask`

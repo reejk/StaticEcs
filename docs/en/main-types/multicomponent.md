@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 5
 ---
 
-### MultiComponent
+## MultiComponent
 Multi-components - allow to give an entity many identical properties (components)
 - Represent optimized component-lists containing N values
 - All elements, of all multicomponents with the same type for all entities in the world are stored in a single repository, this provides:
@@ -13,20 +13,21 @@ Multi-components - allow to give an entity many identical properties (components
     - quick and easy access to data
     - quick creation, addition and extension
     - no need to create reference types of arrays or lists inside the component and keep track of them being cleared or returned to the pool, etc.
-- Is the implementation [Component](#component), all the basic rules and methods of work are similar
+- Is the implementation [Component](component.md), all the basic rules and methods of work are similar
 - Presented as:
     - standard structure `Multi<T>`, where T is the element type
     - or as a custom structure with the `IMultiComponent<T>` interface
-- Based on multicomponents, [Relations](#relations) of entities are implemented, for example, the `Children` component is a multicomponent
+- Based on multicomponents, [Relations](../additional-features/relations.md) of entities are implemented, for example, the `Children` component is a multicomponent
 
 ___
 
-{: .important }️  
+{: .important }️
 Requires registration in the world between creation and initialization
 
 #### Example:  
 There are two ways to define a multicomponent:
 1. Use the default `Multi<T>`
+
 ```c#
 // Define the type of the multicomponent value
 public struct Item {
@@ -42,6 +43,7 @@ MyEcs.Initialize();
 ```
 
 2. Use a custom implementation `IMultiComponent<T>`
+
 ```c#
 // Define the type of the multicomponent value 
 public struct Item {

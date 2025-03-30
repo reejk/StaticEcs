@@ -4,7 +4,7 @@ parent: Main types
 nav_order: 10
 ---
 
-### SystemsType
+## SystemsType
 Type-tag system identifier, used to isolate static data when creating groups of systems in the same process
 - Represented as a user structure without data with a marker interface `ISystemsType`
 
@@ -15,7 +15,9 @@ public struct FixedSystemsType : ISystemsType { }
 public struct LateSystemsType : ISystemsType { }
 ```
 
-### Systems
+___
+
+## Systems
 Systems, controls and manages the creation and run of systems
 - Represented as a static class `Systems<ISystemsType>`
 
@@ -54,6 +56,8 @@ public struct SomeDestroySystem : IDestroySystem {
      public void Destroy() { }
  }
 ```
+
+___
 
 #### Creation and operations:
 ```c#

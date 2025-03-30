@@ -4,8 +4,14 @@ parent: Main types
 nav_order: 4
 ---
 
-### StandardComponent
+## StandardComponent
 Default Component - standard entity properties, present on every entity created by default
+- Optimized storage and direct access to data by entity ID
+- Cannot be deleted, only modified
+- Not included in queries, as it is present on all entities
+- Represented as a custom structure with a `IStandardComponent` marker interface
+
+{: .note }
 > Should be used when ALL entities in the world must contain components of some type  
 > for example, if the position component must be on every entity without exception, you should use the standard component  
 > as the access times are faster, and there will be no additional memory overhead
@@ -13,10 +19,6 @@ Default Component - standard entity properties, present on every entity created 
 > Can also be used for small components 1-8 bytes in size, if no logic is required based on the presence or absence of a component
 >
 > For example, the internal version of an entity `entity.Version()` is a standard component
-- Optimized storage and direct access to data by entity ID
-- Cannot be deleted, only modified
-- Not included in queries, as it is present on all entities
-- Represented as a custom structure with a `IStandardComponent` marker interface
 
 #### Example:
 ```c#
