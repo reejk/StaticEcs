@@ -1,6 +1,7 @@
 ---
 title: EN
 parent: Main page
+has_toc: false
 ---
 
 ![Version](https://img.shields.io/badge/version-0.9.60-blue.svg?style=for-the-badge)  

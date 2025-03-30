@@ -26,8 +26,8 @@ Requires registration in the world between creation and initialization
 
 
 #### Example:  
-There are two ways to define a multicomponent:
-1. Use the default `Multi<T>`
+There are two ways to define a multicomponent:  
+First - Use the default `Multi<T>`
 
 ```c#
 // Define the type of the multicomponent value
@@ -43,7 +43,7 @@ MyEcs.World.RegisterMultiComponentType<Multi<Item>, Item>(defaultComponentCapaci
 MyEcs.Initialize();
 ```
 
-2. Use a custom implementation `IMultiComponent<T>`
+Second - Use a custom implementation `IMultiComponent<T>`
 
 ```c#
 // Define the type of the multicomponent value 
