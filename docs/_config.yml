@@ -2,20 +2,20 @@ remote_theme: just-the-docs/just-the-docs
 color_scheme: dark
 callouts:
   important:
-    title: Important!
+    title: !
     color: yellow
   note:
-    title: Note
+    title: #
     color: blue
   warning:
-    title: Warning!
+    title: !
     color: red
   importantru:
-    title: Важно!
+    title: !
     color: yellow
   noteru:
-    title: На заметку
+    title: Заметка
     color: blue
   warningru:
-    title: Внимание!
+    title: !
     color: red
