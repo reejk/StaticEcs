@@ -1,7 +1,7 @@
 ---
 title: RU
-parent: Main page
 has_toc: false
+parent: Main page
 ---
 
 ![Version](https://img.shields.io/badge/version-0.9.60-blue.svg?style=for-the-badge)  
@@ -22,7 +22,8 @@ ___
 - Минимум болерплейта
 - Совместимость с Unity и другими C# движками
 
-### Ограничения и особенности:
+{: .note-title }
+> Ограничения и особенности:
 > - Не потокобезопасен
 > - Могут быть незначительные изменения API
 

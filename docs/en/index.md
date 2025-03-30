@@ -1,7 +1,7 @@
 ---
 title: EN
-parent: Main page
 has_toc: false
+parent: Main page
 ---
 
 ![Version](https://img.shields.io/badge/version-0.9.60-blue.svg?style=for-the-badge)  
@@ -22,7 +22,8 @@ ___
 - No boilerplate
 - Compatible with Unity and other C# engines
 
-#### Limitations and Features:
+{: .note-title }
+> Limitations and Features:
 > - Not thread safe
 > - There may be minor API changes
 

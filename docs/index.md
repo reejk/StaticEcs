@@ -1,5 +1,6 @@
 ---
 title: Main page
+has_toc: false
 nav_order: 1
 ---
 
