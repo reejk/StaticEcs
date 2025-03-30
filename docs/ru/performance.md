@@ -5,22 +5,22 @@ nav_order: 3
 ---
 
 # Perfomance
-Current benchmarks : [BENCHMARKS](../Benchmark.md)
+Производительность : [BENCHMARKS](../Benchmark.md)
 
-When using il2Cpp in Unity, it's worth noting that direct calls to get components are a little bit faster:  
-For example:
+При использовании il2Cpp в Unity стоит отметить что прямые вызовы для получения компонентов чуть чуть быстрее:  
+Например:
 ```csharp
-// Performance in il2Cpp (there is no difference in Mono) can be better in the second option by 10-40%
-// The same applies to tags and masks and all other methods HasAllOf<>, Delete<>, etc.
-ref var position = ref entity.RefMut<Position>(); // sugar method via the entity
-ref var position = ref Ecs.Components<Position>.Value.RefMut(entity); // direct call
+// производительность в il2Cpp (в Mono нет разницы) может быть лучше во втором варианте на 10-40%
+// это же касается тегов и масок и всех остальных методов HasAllOf<>, Delete<> и тд
+ref var position = ref entity.RefMut<Position>(); // сахарный метод через сущность
+ref var position = ref Ecs.Components<Position>.Value.RefMut(entity); // прямой вызов
 ```
 ```csharp
-// It is also possible to use extension methods that are practically close in performance to the direct call
-// To create them, you can use the live template for rider (read below) or codegenerate (WIP)
+// так же можно использовать методы расширения которые практически приближены по производительности к прямому вызову
+// Для их создания можно воспользоваться шаблоном live template для rider (читать далее) или кодогенерацией (WIP)
 public static class PositionExtension {
     [MethodImpl(AggressiveInlining)]
-    public static ref Position RefMutPosition(this Ecs.Entity entity) {
+    public static ref Position MutPosition(this Ecs.Entity entity) {
         return ref Ecs.Components<Position>.Value.RefMut(entity);
     }
 }

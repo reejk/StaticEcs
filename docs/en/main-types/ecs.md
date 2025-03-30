@@ -20,7 +20,7 @@ Library entry point responsible for accessing, creating, initializing, operating
 - Represented as a static class `Ecs<T>` parameterized by `IWorldType`
 
 {: .important }
-> IMPORTANT: Since the type-identifier `IWorldType` defines access to a specific world   
+> Since the type-identifier `IWorldType` defines access to a specific world   
 > There are three ways to work with the framework:
 
 ___

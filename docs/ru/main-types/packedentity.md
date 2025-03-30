@@ -5,31 +5,31 @@ nav_order: 2
 ---
 
 ## PackedEntity
-Packed entity - stores meta information of the entity, serves for secure transfer of the entity (e.g. in events, components, etc.).
-- Represented as an 8 byte structure
+Упакованная сущность - хранит мета информацию сущности, служит для безопасной передачи сущности (например в событиях, компонентах и тд)
+- Представлена в виде структуры размером 8 байт
 
 {: .note }
-> An entity is just an id, a packaged entity is id + version  
-> Just by id it is impossible to determine whether this entity that is now in the world under this identifier or not, you can only together with the version, for this purpose packaged version
+> Сущность это просто id, упакованая сущность это id + version  
+> По id невозможно определить та самая эта сущность что сейчас в мире под этим идентификатором или нет, можно только вместе с версией, для этого упакованая версия
 
 ___
 
-#### Creation:
+#### Создание:
 ```csharp
-// Creation is only possible through an unpackaged entity
+// Создание возможно только через незапакованную сущность
 PackedEntity packedEntity = entity.Pack();
 ```
 
 ___
 
-#### Basic operations:
+#### Основные операции:
 ```csharp
 PackedEntity packedEntity = entity.Pack();
-// Attempt to unpack an entity in the world whose identifier is specified via the type parameter, returns true if the entity is successfully unpacked, in out unpacked entity
+// Попытаться распаковать сущность в мире идентификатор которого указан через параметр типа, возвращает true если сущность успешно распакована, в out распакованя сущность
 if (packedEntity.TryUnpack<WorldType>(out var unpackedEntity)) {
     // ...
 }
 
 PackedEntity packedEntity2 = entity.Pack();
-bool equals = packedEntity.Equals(packedEntity2);     // Verify the identity of the packaged entities
+bool equals = packedEntity.Equals(packedEntity2);     // Проверить идентичность упавкованных сущностей
 ```

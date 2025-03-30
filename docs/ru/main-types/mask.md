@@ -5,18 +5,18 @@ nav_order: 7
 ---
 
 ## Mask
-Mask - similar to a tag, but uses only 1 bit of memory
-- NOT Gives the option to build queries by masks only, can only be used as an additional search criterion
-- Represented as a user structure without data with a marker interface `IMask`
+Маска - аналогична тегу, но занимает лишь 1 бит памяти
+- НЕ Дает возможность строить запросы только по маскам, может использоваться только как дополнительный критерий поиска
+- Представлен в виде пользовательской структуры без данных с маркер интерфейсом `IMask`
 
-#### Example:
+#### Пример:
 ```c#
 public struct Visible : IMask { }
 ```
 ___
 
 {: .important }
-Requires registration in the world between creation and initialization
+Требуется регистрация в мире между созданием и инициализацией
 
 ```c#
 MyEcs.Create(EcsConfig.Default());
@@ -27,29 +27,29 @@ MyEcs.Initialize();
 ```
 ___
 
-#### Creation:
+#### Создание:
 ```c#
-// Adding a mask to an entity (overload methods from 1-5 masks)
+// Добавление маски на сущность (методы перегрузки от 1-5 масок)
 entity.SetMask<Flammable, Frozen, Visible>();
 ```
 ___
 
-#### Basic operations:
+#### Основные операции:
 ```c#
-// Get the count of masks on an entity
+// Получить количество масок на сущности
 int masksCount = entity.MasksCount();
 
-// Check for the presence of ALL specified masks (overload methods from 1-3 masks)
+// Проверить наличие ВСЕХ масок (методы перегрузки от 1-3 масок)
 entity.HasAllOfMasks<Flammable>();
 entity.HasAllOfMasks<Flammable, Frozen, Visible>();
 
-// Check for the presence of at least one specified mask (overload methods from 2-3 masks)
+// Проверить наличие хотя бы одной маски (методы перегрузки от 2-3 масок)
 entity.HasAnyOfMasks<Flammable, Frozen, Visible>();
 
-// Remove mask from entity (In DEBUG mode there will be an error if the entity is not present, 
-// in release you cannot use if there is no guarantee that the mask is present) (overload methods from 1-5 masks)
+// Удалить маску у сущности (В DEBUG режиме будет ошибка если сущности нет, 
+// в релизе нельзя использовать если нет гарантии что маска присутствует) (методы перегрузки от 1-5 масок)
 entity.DeleteMask<Frozen>();
 
-// Remove a mask from an entity if it exists (overload methods from 1-5 masks)
+// Удалить маску у сущности если она существует (методы перегрузки от 1-5 масок)
 var deleted = entity.TryDeleteMask<Frozen>();
 ```

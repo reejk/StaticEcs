@@ -5,22 +5,22 @@ nav_order: 4
 ---
 
 ## StandardComponent
-Default Component - standard entity properties, present on every entity created by default
-- Optimized storage and direct access to data by entity ID
-- Cannot be deleted, only modified
-- Not included in queries, as it is present on all entities
-- Represented as a custom structure with a `IStandardComponent` marker interface
+Стандартный компонент - стандартные свойства сущности, присутствует на каждой создаваемой сущности по умолчанию
+- Оптимизированное хранилище и прямой доступ к данным по идентификатору сущности
+- Не может быть удален, только изменен
+- Не учавствует в запросах, так как присутствует на всех сущностях
+- Представлен в виде пользовательской структуры с маркер интерфейсом `IStandardComponent`
 
 {: .note }
-> Should be used when ALL entities in the world must contain components of some type  
-> for example, if the position component must be on every entity without exception, you should use the standard component  
-> as the access times are faster, and there will be no additional memory overhead
+> Следует использовать в случаях когда ВСЕ сущности в мире должны содержать компоненты какого либо типа  
+> например если компонент позиции должен быть на каждой сущности без исключения, стоит использовать стандартный компонент  
+> так как скорость доступа выше, и не будет дополнительных затрат по памяти
 >
-> Can also be used for small components 1-8 bytes in size, if no logic is required based on the presence or absence of a component
+> Также может быть использован для небольших компонентов размером 1-8 байт, если не требуется строить логику на базе наличия или отсутсвия компонента
 >
-> For example, the internal version of an entity `entity.Version()` is a standard component
+> Например внутреняя версия сущности `entity.Version()` является стандартным компонентом
 
-#### Example:
+#### Пример:
 ```c#
 public struct EnitiyType : IStandardComponent {
     public int Val;
@@ -29,7 +29,7 @@ public struct EnitiyType : IStandardComponent {
 ___
 
 {: .important }
-Requires registration in the world between creation and initialization
+Требуется регистрация в мире между созданием и инициализацией
 
 ```c#
 MyEcs.Create(EcsConfig.Default());
@@ -40,9 +40,9 @@ MyEcs.Initialize();
 ```
 ___
 
-{: .important } 
-If automatic initialization when creating an entity or automatic reset when deleting an entity is required  
-handlers must be explicitly registered
+{: .important }
+Если требуется автоматическая инициализация при создании сущности или автоматический сброс при удалении сущности  
+необходимо явно зарегестрировать обработчики
 
 #### Example:
 ```c#
@@ -66,29 +66,29 @@ MyEcs.Create(EcsConfig.Default());
 //...
 
 MyEcs.World.RegisterStandardComponentType<EnitiyType>(
-                autoInit: static (ref EnitiyType component) => component.Init(), // This function will be called when the entity is created  
-                autoReset: static (ref EnitiyType component) => component.Reset(), // This function will be called when the entity is destroyed  
-                autoCopy: static (ref EnitiyType src, ref EnitiyType dst) => src.CopyTo(ref dst), // When copying standard components, this entity will be called instead of just copying it
+                autoInit: static (ref EnitiyType component) => component.Init(), // При создании сущности будет вызвана данная функция 
+                autoReset: static (ref EnitiyType component) => component.Reset(), // При уничтожении сущности будет вызвана данная функция  
+                autoCopy: static (ref EnitiyType src, ref EnitiyType dst) => src.CopyTo(ref dst), // При копировании стандартных компонентов будет вызвана данная сущности вместо простого копирования
             );
 //...
 MyEcs.Initialize();
 ```
 ___
 
-#### Basic operations:
+#### Основные операции:
 ```c#
-// Get the number of standard components per entity
+ // Получить количество стандартных компонентов на сущности
 int standardComponentsCount = entity.StandardComponentsCount();
 
-// Get ref reference to a standard read/write component
+// Получить ref ссылку на стандартный компонент на чтение\запись
 ref var enitiyType = ref entity.RefMutStandard<EnitiyType>();
 enitiyType.Val = 123;
 
-// Get ref reference to a standard read-only component
+// Получить ref ссылку на стандартный компонент только на чтение
 ref readonly var readOnlyEnitiyType = ref entity.RefStandard<EnitiyType>();
 //readOnlyEnitiyType.Val = 123;  -   ERROR
 
 var entity2 = MyEcs.Entity.New<SomeComponent>();
-// Copy the specified standard components to another entity (overload methods from 1-5 components)
+// Скопировать указанные стандартные компоненты на другую сущность (методы перегрузки от 1-5 компонентов)
 entity.CopyStandardComponentsTo<EnitiyType>(entity2);
 ```

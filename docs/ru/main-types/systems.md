@@ -5,10 +5,10 @@ nav_order: 10
 ---
 
 ## SystemsType
-Type-tag system identifier, used to isolate static data when creating groups of systems in the same process
-- Represented as a user structure without data with a marker interface `ISystemsType`
+Тип-тег-идентификатор систем, служит для изоляции статических данных при создании групп систем в одном процессе
+- Представлен в виде пользовательской структуры без данных с маркер интерфейсом `ISystemsType`
 
-#### Example:
+#### Пример:
 ```c#
 public struct BaseSystemsType : ISystemsType { }
 public struct FixedSystemsType : ISystemsType { }
@@ -18,38 +18,38 @@ public struct LateSystemsType : ISystemsType { }
 ___
 
 ## Systems
-Systems, controls and manages the creation and run of systems
-- Represented as a static class `Systems<ISystemsType>`
+Системы, контролирует и менеджируют создание и запуск систем
+- Представлен в виде статического класса `Systems<ISystemsType>`
 
 
 ```c#
-// The systems are of 3 types and can be used in all combinations together or separately
+// Системы существуют 3 видов и могут использоваться во всех комбинациях вместе или отдельно
 
-// IInitSystem - Init() method is run once when MySystems.Initialize() is called
-// Example:
+// Система IInitSystem - метод Init() запускается один раз при инициализации MySystems.Initialize()
+// Пример:
 public struct SomeInitSystem : IInitSystem {
     public void Init() { }
 }
 
-// IUpdateSystem - the Update() method runs every time MySystems.Update() is called
-// Example:
+// Система IUpdateSystem  - метод Update() запускается каждый раз при вызове MySystems.Update();
+// Пример:
 public struct SomeUpdateSystem : IUpdateSystem {
     public void Update() { }
 }
 
-// IDestroySystem - the Destroy() method runs once when MySystems.Destroy() is called;
-// Example:
+// Система IDestroySystem - метод Destroy() запускается один раз при вызове MySystems.Destroy();
+// Пример:
 public struct SomeDestroySystem : IDestroySystem {
     public void Destroy() { }
 }
 
- // Combined system
+ // Комбинированная система
  public struct SomeInitDestroySystem : IInitSystem, IDestroySystem {
      public void Init() { }
      public void Destroy() { }
  }
 
- // Combined system
+ // Комбинированная система
  public struct SomeComboSystem : IInitSystem, IUpdateSystem, IDestroySystem {
      public void Init() { }
      public void Update() { }
@@ -59,37 +59,37 @@ public struct SomeDestroySystem : IDestroySystem {
 
 ___
 
-#### Creation and operations:
+#### Создание и операции:
 ```c#
-// Define system identifier
+// Определяем идентификатор систем
 public struct MySystemsType : ISystemsType { }
 
-// Define type-alias for easy access to systems
+// Определяем тип-алиас для удобного доступа к системам
 public abstract class MySystems : MyEcs.Systems<MySystemsType> { }
 
-// The structures for the systems will be created here
+// Здесь будет созданны структуры для систем
 MySystems.Create();
 
-// Adding a system NOT implementing IUpdateSystem, i.e. Init and / or Destroy system
+// Добавление системы НЕ реализующей IUpdateSystem, то есть Init и\или Destroy системы
 MySystems.AddCallOnce(new SomeInitSystem());
 MySystems.AddCallOnce(new SomeDestroySystem>());
 MySystems.AddCallOnce(new SomeInitDestroySystem>());
 
-// Adding a system implementing IUpdateSystem, with any implementations such as Init or Destroy.
+// Добавление системы реализующей IUpdateSystem, с наличием любых имплементаций таких как Init или Destroy
 MySystems.AddUpdate(new SomeComboSystem());
 
-// Important! The systems are started in the order passed by the second argument (default order 0)
+// Важно! Системы запускаются в порядке перeданным вторым аргументом (по умолчанию order 0)
 MySystems.AddUpdate(new SomeComboSystem(), order: 3);
 
-// this means that first all Init systems will be started in the order in which they were added.
-// then in the game loop all Update systems will be executed in order.
-// then all Destroy type systems will be called in order when the world is destroyed.
+// это значит что сначала будут запущены все Init системы в том порядке в котором добавлены
+// затем в игровом цикле будут выполняться по порядку все Update системы
+// затем по порядку вызовутся все системы типа Destroy при уничтожении мира
 
-// Important! Systems can be structures or classes
-// (using structures can significantly increase perfomance for small systems)
+// Важно! Системы могут быть структурами или классами
+// (использование структур может существенно увеличить производительность для небольших систем)
 
-// It is possible to connect systems in batches, which can significantly increase performance
-// Adding a batches of systems, each system can implement any types of systems but must have IUpdateSystem implementation.
+// Есть возможность подключать системы батчами что может существенно увеличить производительность
+// Добавление батча систем, каждая система может реализовывать любые типы систем но обязана иметь реализацию IUpdateSystem
 MySystems.AddUpdate(
     new SomeUpdateSystem1(),
     new SomeComboSystem1(),
@@ -100,12 +100,12 @@ MySystems.AddUpdate(
     new SomeComboSystem()
 );
 
-// All Init systems will be called here
+// Здесь будут вызваны все Init системы
 MySystems.Initialize();
 
-// All Update systems will be called here
+// Здесь будут вызваны все Update системы
 MySystems.Update();
 
-// All Destroy systems will be called here
+// Здесь будут вызваны все Destroy системы
 MySystems.Destroy();
 ```

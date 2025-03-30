@@ -4,13 +4,13 @@ parent: Дополнительны возможности
 nav_order: 3
 ---
 
-### Events
-Event - used to exchange information between systems or user services
-- Presented as a custom structure with data
+### События
+Событие - cлужит для обмена информацией между системами или пользовательскими сервисами
+- Представлено в виде пользовательской структуры с данными
 
 ___
 
-#### Example:
+#### Пример:
 ```c#
 public struct WeatherChanged : IEvent { 
     public WeatherType WeatherType;
@@ -20,7 +20,7 @@ public struct WeatherChanged : IEvent {
 ___
 
 {: .important }
-Requires registration in the world between creation and initialization
+Требуется регистрация в мире между созданием и инициализацией
 
 ```c#
 MyEcs.Create(EcsConfig.Default());
@@ -32,58 +32,57 @@ MyEcs.Initialize();
 
 ___
 
-#### Creation and basic operations:
+#### Создание и базовые операции:
 ```c#
-// The event system will be created when MyEcs.Create is called and destroyed when MyEcs.Destroy is called
+// Система событий будет создана при вызове MyEcs.Create и уничтожена при MyEcs.Destroy
 MyEcs.Create(EcsConfig.Default());
 MyEcs.Initialize();
 //...
 
-// Before sending an event, the receiver of the event must be registered, otherwise the event will not be sent.
-// Receiver can be registered after calling Ecs.Create (e.g. in the Init method of the system).
+// Прежде чем отправлять событие следует зарегестрировать слушателя данного события, иначе событие не будет отправлено
+// Слушатель может быть зарегестрирован после выозова Ecs.Create (например в Init методе системы)
 var weatherChangedEventReceiver = MyEcs.Events.RegisterEventReceiver<WeatherChanged>();
 
-// Deleting an event receiver
+// Удаление слушателя событий
 MyEcs.Events.DeleteEventReceiver(ref weatherChangedEventReceiver);
 
-// Important! The lifecycle of an event: the event will be deleted in two cases:
-// 1) when it's been read by all registered receivers.
-// 2) when it will be suppressed on reading (by calling Suppress or SuppressAll method (information below) ) )
-// So it is important that all registered listeners read the events or the event is suppressed by any listener so that there is no accumulation of them
+// Важно! Жизненый цикл события: событие будет удалено в двух случаях:
+// 1) когда оно будет прочитано всеми зарегестрированными слушателями
+// 2) когда оно будет подавленно при прочтении (при вызове Suppress или SuppressAll метода (информация ниже) )
+// Таким образом важно чтобы все зарегестрированные слушатели читали события или событие подавлялось каким либо слушателем, чтобы не было их накопления
 
-// Sending an event
+// Отправка события
 MyEcs.Events.Send(new WeatherChanged { WeatherType = WeatherType.Sunny });
 
-// Sending default event value
+// Отправка дефолтного значения события
 MyEcs.Events.Send<WeatherChanged>();
 
-// Get a dynamic identifier of event type (see “Component Identifiers”)
+// Получение динамического идентификатора типа события (смотри "Идентификаторы компонентов")
 var weatherChangedDynId = MyEcs.Events.DynamicId<WeatherChanged>();
-// Send default event value (Suitable for marker events without data)
+// Отправка дефолтного значения события (Подходит для маркерных событий без данных)
 MyEcs.Events.SendDefault(weatherChangedDynId);
 
-// Receiving events
+// Получение событий
 foreach (var weatherEvent in weatherChangedEventReceiver) {
     Console.WriteLine("Weather is " + weatherEvent.Value.WeatherType);
 }
 
-
 foreach (var weatherEvent in weatherChangedEventReceiver) {
-    // True if this listener is the last listener to read this event (means that the event will be deleted after reading).
+    // True если данный слушатель последний из всех слушателей читавших это событий (значит что событие будет удалено после прочтения)
     bool last = weatherEvent.IsLastReading();
-    // Returns the number of unread listeners other than the given listener at the moment
+    // Возвращает число непрочитавших слушателей не считая данного в данный момент
     int unreadCount = weatherEvent.UnreadCount();
 }
 
 foreach (var weatherEvent in weatherChangedEventReceiver) {
-    // Event suppression - the event will be deleted and other receivers will no longer be able to read it
+    // Подвление события - событие будет удалено и другие слушатели больше не смогут его прочитать
     weatherEvent.Suppress();
 }
 
-// Suppress all events for a given receiver
+// Подавление всех событий для данного слушателя
 weatherChangedEventReceiver.SuppressAll();
 
-// Marks the reading of all events for this receiver
+// Пометка о прочтении всех событий для данного слушателя
 weatherChangedEventReceiver.MarkAsReadAll();
 
 ```

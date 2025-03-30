@@ -7,9 +7,9 @@ nav_order: 5
 ### ⚙️ **[Unity editor module](https://github.com/Felid-Force-Studios/StaticEcs-Unity)** ⚙️
 
 
-# Unity integration
+# Unity интеграция
 
-Example startup:
+Пример:
 ```csharp
 using System;
 using UnityEngine;

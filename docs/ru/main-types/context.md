@@ -5,30 +5,30 @@ nav_order: 11
 ---
 
 ## Context
-Context is an alternative to DI, a simple mechanism for storing and transferring user data and services to systems and other methods
-- Represented as a static class `Ecs<IWorldType>.Context<T>`
+Контекст - альтернатива DI, простой механизм хранения и передачи пользовательских данных и сервисов в системы и другие методы
+- Представлен в виде статического класса `Ecs<IWorldType>.Context<T>`
 
 ___
-#### Basic operations:
+#### Основные операции:
 ```csharp
-// User classes and services
+// Пользовательские классы и сервисы
 public class UserService1 { }
 public class UserService2 { }
 
-// Adding necessary objects to the context, it is not necessary to add objects to the context before initialization, new data can also be added in the process of systems operation
-// It is important to remember that if the context is used in Init systems, the data should be passed there before Ecs.Initialize() or before the call in the call chain of a particular Init system. 
-// Important! The context can store strictly 1 object of 1 type - an error will occur if the Set method is set repeatedly of the same type.
+// Добавление в контекст нужных обьектов, не обязательно добавлять в контекст обьекты до инициализации, в процессе работы систем также могут добавляться новые данные
+// Важно помнить что если контекст используется в Init системах то данные туда должны быть переданы до Ecs.Initialize() или до вызова в цепочке вызовов конкретной Init системы 
+// Важно! в контексте может храниться строго 1 обьект 1 типа - при установке чере метод Set повторно одного типа будет ошибка
 MyEcs.Context<UserService1>.Set(new UserService1(), clearOnDestroy: true);
 MyEcs.Context<UserService2>.Set(new UserService2());
 
-// If Replace is called, the specified type will be set or replaced without error
+// При вызове Replace указаный тип установится или заменится без ошибки 
 MyEcs.Context<UserService2>.Replace(new UserService2());
 
-// Check if there is a value of this type in the context
+// Проверить есть в контексте значение данного типа
 bool has = MyEcs.Context<UserService2>.Has();
 
-// Remove the value from the context
+// Удалить значение из контекста
 MyEcs.Context<UserService2>.Remove();
 
-// Important! context will be cleared when MyEcs.Destroy() is called; if clearOnDestroy true was specified when set to
-```
+// Важно! контекст очистится при вызове MyEcs.Destroy(); если были указаны clearOnDestroy true при установке значения
+````

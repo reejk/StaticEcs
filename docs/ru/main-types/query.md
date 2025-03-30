@@ -5,88 +5,88 @@ nav_order: 12
 ---
 
 ## Query
-Queries - a mechanism that allows you to search for entities and their components in the world
+Запросы - механизм позволяющий осуществлять поиск сущностей и их компонентов в мире
 
 ___
 
-#### Let's look at the basic capabilities of searching for entities in the world:
+#### Рассмотрим базовые возможности поиска сущностей в мире:
 ```c#
-// There are many available query options
-// World.QueryEntities.For()\With() returns an iterator of entities matching the condition
-// The following types are available for applying component filtering conditions:
+// Существует множество доступных вариантов запросов
+// World.QueryEntities.For()\With() возвращает итератор сущностей подходящих под условие
+// Для применение условий фильтрации компонентов доступны следующие типы:
 
-// All - filters entities for the presence of all specified components (overload from 1 to 8)
+// All - фильтрует сущности на наличие всех указанных компонентов (перегрузка от 1 до 8)
 AllTypes<Types<Position, Direction, Velocity>> _all = default;
-// or
+// или так
 All<Position, Direction, Velocity> _all2 = default;
 
-// AllAndNone - filters entities for the presence of all specified components in the first group and the absence of all components in the second group (overload from 1 to 8).
+// AllAndNone - фильтрует сущности на наличие всех указанных компонентов первой группы и отсутсвие всех во второй (перегрузка от 1 до 8)
 AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>> _allAndNone = default;
 
-// None - filters entities for the absence of all specified components (can be used only as part of other methods) (overloading from 1 to 8)
+// None - фильтрует сущности на отсутсвие всех указанных компонентов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 NoneTypes<Types<Name>> _none = default;
-// or
+// или так
 None<Name> _none2 = default;
 
-// Any - filters entities for the presence of any of the specified components (can only be used as part of other methods) (overloading from 1 to 8)
+// Any - фильтрует сущности на наличие любого из указанных компонентов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 AnyTypes<Types<Position, Direction, Velocity>> _any = default;
-// or
+// или так
 Any<Position, Direction, Velocity> _any2 = default;
 
-// Analogs for tags
-// TagAll - filters entities for the presence of all specified tags (overload from 1 to 8)
+// Аналоги для тегов
+// TagAll - фильтрует сущности на наличие всех указанных тегов (перегрузка от 1 до 8)
 TagAllTypes<Tag<Unit, Player>> _all = default;
-// or
+// или так
 TagAll<Unit, Player> _all2 = default;
 
-// AllAndNone - filters entities for the presence of all specified tags in the first group and the absence of all tags in the second group (overloading from 1 to 8).
+// AllAndNone - фильтрует сущности на наличие всех указанных тегов первой группы и отсутсвие всех во второй (перегрузка от 1 до 8)
 TagAllAndNoneTypes<Tag<Unit>, Tag<Player>> _allAndNone = default;
 
-// None - filters entities for the absence of all specified tags (can only be used as part of other methods) (overloading from 1 to 8).
+// None - фильтрует сущности на отсутсвие всех указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 TagNoneTypes<Tag<Unit>> _none = default;
-// or
+// или так
 TagNone<Unit> _none2 = default;
 
-// Any - filters entities for the presence of any of the specified tags (can only be used as part of other methods) (overloading from 1 to 8)
+// Any - фильтрует сущности на наличие любого из указанных тегов (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 TagAnyTypes<Tag<Unit, Player>> _any = default;
-// or
+// или так
 TagAny<Unit, Player> _any2 = default;
 
-// Mask analogs
-// MaskAll - filters entities for the presence of all specified tags (can only be used as part of other methods) (overloading from 1 to 8)
+// Аналоги для масок
+// MaskAll - фильтрует сущности на наличие всех указанных масок (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 MaskAllTypes<Mask<Flammable, Frozen, Visible>> _all = default;
-// or
+// или так
 MaskAll<Flammable, Frozen, Visible> _all2 = default;
 
-// AllAndNone - filters entities for the presence of all specified tags in the first group and the absence of all tags in the second group (can only be used as part of other methods).
+// AllAndNone - фильтрует сущности на наличие всех указанных масок первой группы и отсутсвие всех во второй (перегрузка от 1 до 8)
 MaskAllAndNoneTypes<Mask<Flammable, Frozen>, Mask<Visible>> _allAndNone = default;
 
-// None - filters entities for the absence of all specified tags (can only be used as part of other methods) (overloading from 1 to 8).
+// None - фильтрует сущности на отсутсвие всех указанных масок (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 MaskNoneTypes<Mask<Frozen>> _none = default;
-// or
+// или так
 MaskNone<Frozen> _none2 = default;
 
-// Any - filters entities for the presence of any of the specified tags (can only be used as part of other methods) (overloading from 1 to 8)
+// Any - фильтрует сущности на наличие любой из указанных масок (может использоваться только в составе других методов) (перегрузка от 1 до 8)
 MaskAnyTypes<Mask<Flammable, Frozen, Visible>> _any = default;
-// or
+// или так
 MaskAny<Flammable, Frozen, Visible> _any2 = default;
 
-// All types above do not require explicit initialization, do not require caching, each of them takes no more than 1-2 bytes and can be used on the fly
+// Все типы выше не требуют явной инициализации, не требуют кеширования, каждый из них занимает не больше 1-2 байт и может использоваться "на лету"
 
 
-// Different sets of filtering methods can be applied to the World.QueryEntities.For() method for example:
-// Option 1 method through generic
+// Различные наборы методов фильтрации могут быть применины к методу World.QueryEntities.For() например:
+// Вариант с 1 методом через дженерик
 foreach (var entity in MyWorld.QueryEntities.For<All<Position, Direction, Velocity>>()) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Variant with 1 method via value
+// Вариант с 1 методом через значение
 var all = default(All<Position, Direction, Velocity>);
 foreach (var entity in MyWorld.QueryEntities.For(all)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Option with 3 methods via generic
+// Вариант с 3 методами  через дженерик
 foreach (var entity in MyWorld.QueryEntities.For<
              All<Position, Velocity, Name>,
              AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
@@ -94,7 +94,7 @@ foreach (var entity in MyWorld.QueryEntities.For<
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Variant with 3 methods via value
+// Вариант с 3 методами  через значение
 All<Position, Direction, Velocity> all2 = default;
 AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>> allAndNone2 = default;
 None<Name> none2 = default;
@@ -102,7 +102,7 @@ foreach (var entity in MyWorld.QueryEntities.For(all2, allAndNone2, none2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Alternative with 3 methods via value
+// Альтернативный вариант с 3 методами  через значение
 var all3 = Types<Position, Direction, Velocity>.All();
 var allAndNone3 = Types<Position, Direction, Velocity>.AllAndNone(default(Types<Name>));
 var none3 = Types<Name>.None();
@@ -111,8 +111,8 @@ foreach (var entity in MyWorld.QueryEntities.For(all3, allAndNone3, none3)) {
 }
 
 
-// Also, all filtering methods can be grouped into a With type
-// which can be applied to the World.QueryEntities.For() method, for example:
+// Также все методы фильтрации могут быть сгруппированны в тип With
+// который может применяться к методу World.QueryEntities.For() например:
 
 // Method 1 via generic
 foreach (var entity in MyWorld.QueryEntities.For<With<
@@ -124,7 +124,7 @@ foreach (var entity in MyWorld.QueryEntities.For<With<
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Method 2 through values
+// Способ 2 через значения
 With<
     All<Position, Velocity, Name>,
     AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>,
@@ -135,7 +135,7 @@ foreach (var entity in MyWorld.QueryEntities.For(with)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Method 3 through values alternative
+// Способ 3 через значения альтернативный
 var with2 = With.Create(
     default(All<Position, Velocity, Name>),
     default(AllAndNoneTypes<Types<Position, Direction, Velocity>, Types<Name>>),
@@ -146,7 +146,7 @@ foreach (var entity in MyWorld.QueryEntities.For(with2)) {
     entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
-// Method 4 through values alternative
+// Способ 4 через значения альтернативный
 var with3 = With.Create(
     Types<Position, Velocity, Name>.All(),
     Types<Position, Direction, Velocity>.AllAndNone(default(Types<Name>)),
@@ -158,29 +158,29 @@ foreach (var entity in MyWorld.QueryEntities.For(with3)) {
 }
 ```
   
-#### Look at additional ways to search for entities in the world:
+#### Посмотрим на дополнительные способы поиска сущностей в мире:
 ```c#
-// World.QueryComponents.For()\With() returns an iterator of entities matching the condition immediately with components 
+// World.QueryComponents.For()\With() возвращает итератор сущностей подходящих под условие cразу с компонентами 
 
-// Option 1 with specifying a delegate and getting the required components at once, from 1 to 8 component types can be specified
+// Вариант 1 с указанием делегата и сразу получением нужных компонентов, может быть указано от 1 до 8 типов компонентов
 MyWorld.QueryComponents.For<Position, Velocity, Name>((Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
-// you can remove generics, since they are derived from the passed function type
+// можно убрать дженерики, так как они выводятся из типа переданной функции
 MyWorld.QueryComponents.For((Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
-// you can add a static constraint to the delegate to ensure that this delegate will not be allocated every time.
-// in combination with Ecs.Context allows for convenient and productive code without creating closures in the delegate
+// можно добавить ограничение static для делегата для того чтобы гарантировать что данный делегат не будет аллоцироваться каждый раз
+// в совокупности с Ecs.Context дает возможность удобного и производительного кода без создания замыканий в делегате
 MyWorld.QueryComponents.For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
-// You can also use WithAdds similar to With from the previous example, but allowing only secondary filtering methods (such as None, Any) for additional filtering of entities
-// It should be noted that the components that are specified in the delegate are treated as All filter.
-// i.e. WithAdds is just an addition to filtering and does not require specifying the components used.
+// Также можно использовать WithAdds аналогичный With из прошлого примера но разрешающий указания только вторичных методов фильтрации (такиех как None, Any) для дополнительной фильтрации сущностей
+// Стоит заметить что компоненты которые указаны в делегате расцениваются как фильтр All
+// то есть WithAdds лишь дополнят фильтрации и не требует указания используемых компонентов
 
 WithAdds<
     None<Direction>,
@@ -191,7 +191,7 @@ MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position p
     position.Val *= velocity.Val;
 });
 
-// or
+// или так
 MyWorld.QueryComponents.With<WithAdds<
     None<Direction>,
     Any<Position, Direction, Velocity>
@@ -200,40 +200,40 @@ MyWorld.QueryComponents.With<WithAdds<
 });
 ```
   
-#### Look at the special possibilities for finding entities in the world:
+#### Посмотрим на особые возможности поиска сущностей в мире:
 ```c#
-// Queries with structure-function passing 
-// can be used to optimize or pass a state to a stratct or to pass logic.
+/ Запросы с передачей структуры-функции 
+// может использоваться для оптимизации или передачи состояния в стракт или для вынесения логики
 
-// Let's define a structure-function that we can replace the delegate with.
-// It must implement the IQueryFunction interface, specifying from 1-8 components.
+// Определим структуру-функцию которой можем заменить делегат
+// Она должна реализовывать интерфейс IQueryFunction с указанием от 1-8 компонентов
 readonly struct StructFunction : Ecs.IQueryFunction<Position, Velocity, Name> {
     public void Run(Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) {
         position.Val *= velocity.Val;
     }
 }
 
-// Option 1 with generic transmission
+// Вариант 1 с передачей через дженерик
 MyWorld.QueryComponents.For<Position, Velocity, Name, StructFunction>();
 
-// Variant 1 with value transfer
+// Вариант 1 с передачей через значение
 MyWorld.QueryComponents.For<Position, Velocity, Name, StructFunction>(new StructFunction());
 
-// Option 2 with With through generic
+// Вариант 2 с With через дженерик
 MyWorld.QueryComponents.With<WithAdds<
     None<Direction>,
     Any<Position, Direction, Velocity>
 >>().For<Position, Velocity, Name, StructFunction>();
 
-// Variant 2 with With through value
+// Вариант 2 с With через значение
 WithAdds<
     None<Direction>,
     Any<Position, Direction, Velocity>
 > with = default;
 MyWorld.QueryComponents.With(with).For<Position, Velocity, Name, StructFunction>();
 
-// It is also possible to combine system and IQueryFunction, for example:
-// this can improve code readability and increase perfomance + it allows accessing non-static members of the system
+// Также возможно комбинировать систему и IQueryFunction, например:
+// это может улучшить восприятия кода и увеличить производительность + это позволяет обращаться в нестатическим членам системы
 public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, Ecs.IQueryFunction<Position, Velocity, Name> {
     private UserService1 _userService1;
     

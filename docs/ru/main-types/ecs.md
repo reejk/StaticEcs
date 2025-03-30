@@ -5,10 +5,10 @@ nav_order: 8
 ---
 
 ## WorldType
-World identifier type-tag, used to isolate static data when creating different worlds in the same process
-- Represented as a user structure without data with a marker interface `IWorldType`
+Тип-тег-идентификатор мира, служит для изоляции статических данных при создании разных миров в одном процессе
+- Представлен в виде пользовательской структуры без данных с маркер интерфейсом `IWorldType`
 
-#### Example:
+#### Пример:
 ```c#
 public struct MainWorldType : IWorldType { }
 public struct MiniGameWorldType : IWorldType { }
@@ -16,16 +16,16 @@ public struct MiniGameWorldType : IWorldType { }
 ___
 
 ## Ecs
-Library entry point responsible for accessing, creating, initializing, operating, and destroying world data
-- Represented as a static class `Ecs<T>` parameterized by `IWorldType`
+Точка входа в библиотеку, отвечающая за доступ, создание, инициализацию, работу и уничтожение данных мира
+- Представлен в виде статического класса `Ecs<T>` параметризованного `IWorldType`
 
 {: .important }
-> IMPORTANT: Since the type-identifier `IWorldType` defines access to a specific world   
-> There are three ways to work with the framework:
+> Так как тип- идентификатор `IWorldType` определяет доступ к конкретному миру  
+> Есть три способа работы с библиотекой:
 
 ___
 
-#### The first way is as is via full address (very inconvenient):
+#### Первый способ - как есть через полное обращение (очень неудобно):
 ```c#
 public struct MainWorldType : IWorldType { }
 
@@ -35,7 +35,7 @@ Ecs<MainWorldType>.World.EntitiesCount();
 var entity = Ecs<MainWorldType>.Entity.New<Position>();
 ```
 
-#### The second way is a little more convenient, use static imports or static aliases (you'll have to write in each file)
+#### Второй способ - чуть более удобный, использовать статические импорты или статические алиасы (придется писать в каждом файле)
 ```c#
 using static FFS.Libraries.StaticEcs.Ecs<MainWorldType>;
 
@@ -47,8 +47,8 @@ World.EntitiesCount();
 var entity = Entity.New<Position>();
 ```
 
-#### The third way is the most convenient, use type-aliases in the root namespace (no need to write in every file)  
-This is the method that will be used everywhere in the examples
+#### Трейтий способ - самый удобный, использовать типы-алиасы в корневом неймспейсе (не требуется писать в каждом файле)
+Везде в примерах будет использован именно этот способ
 ```c#
 public struct MainWorldType : IWorldType { }
 
@@ -63,39 +63,39 @@ var entity = MyEcs.Entity.New<Position>();
 
 ___
 
-#### Basic operations:
+#### Основные операции:
 ```c#
-// Defining the world ID
+// Определяем ID мира
 public struct MainWorldType : IWorldType { }
 
-// Register types - aliases
+// Регестрируем типы - алиасы
 public abstract class MyEcs : Ecs<MainWorldType> { }
-public abstract class MyWorld : Ecs<MainWorldType>.World { }
+public abstract class MyWorld : MyEcs.World { }
 
-// Creating a world with a default configuration
+// Создание мира с дефолтной конфигурацие
 MyEcs.Create(EcsConfig.Default());
-// Or a custom one
+// Или кастомной
 MyEcs.Create(new() {
-            BaseEntitiesCount = 256,        // Base size of the entity array when creating a world
-            BaseDeletedEntitiesCount = 256, // Base size of the deleted entity array when creating a world
-            BaseComponentTypesCount = 64    // Base size of all variants of component types (number of pools for each type)
-            BaseMaskTypesCount = 64,        // Base size of all variants of mask types (number of pools for each type)
-            BaseTagTypesCount = 64,         // Base size of all variants of tags types (number of pools for each type)
-            BaseComponentPoolCount = 128,   // Base size of the data array of components of a certain type (can be overridden for a specific type by explicit registration)
-            BaseTagPoolCount = 128,         // Base size of the data array of tags of a certain type (can be overridden for a specific type by explicit registration)
+            BaseEntitiesCount = 256,        // Базовый размер массива сущностей при создания мира
+            BaseDeletedEntitiesCount = 256, // Базовый размер массива удаленных сущностей при создания мира
+            BaseComponentTypesCount = 64    // Базовый размер всех разновидностей типов компонентов (количество пулов под каждый тип)
+            BaseMaskTypesCount = 64,        // Базовый размер всех разновидностей типов масок (количество пулов под каждый тип)
+            BaseTagTypesCount = 64,         // Базовый размер всех разновидностей типов тегов (количество пулов под каждый тип)
+            BaseComponentPoolCount = 128,   // Базовый размер массива данных компонентов определнного типа (может быть переопределнно для конкретного типа при явной регистрации)
+            BaseTagPoolCount = 128,         // Базовый размер массива тегов определнного типа (может быть переопределнно для конкретного типа при явной регистрации)
         });
 
-MyWorld.         // World access for MainWorldType (world ID)
-MyEcs.Entity.    // Entity access for MainWorldType (world ID)
-MyEcs.Context.   // Access to context for MainWorldType (world ID)
-MyEcs.Components.// Access to components for MainWorldType (world ID)
-MyEcs.Tags.      // Access to tags for MainWorldType (world ID)
-MyEcs.Masks.     // Access to masks for MainWorldType (world ID)
+MyWorld.         // Доступ к миру для MainWorldType (ID мира)
+MyEcs.Entity.    // Доступ к сущности для MainWorldType (ID мира)
+MyEcs.Context.   // Доступ к контексту для MainWorldType (ID мира)
+MyEcs.Components.// Доступ к компонентам для MainWorldType (ID мира)
+MyEcs.Tags.      // Доступ к тегам для MainWorldType (ID мира)
+MyEcs.Masks.     // Доступ к маскам для MainWorldType (ID мира)
 
-// Initialization of the world
+// Инициализация мира
 MyEcs.Initialize();
 
-// Destroying and deleting the world's data
+// Уничтожение и очистка данных мира
 MyEcs.Destroy();
 
 ```

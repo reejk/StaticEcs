@@ -5,12 +5,12 @@ nav_order: 9
 ---
 
 ## World
-World, contains meta information of entities, controls and manages creation and deletion of entities
-- Represented as a static class `Ecs<IWorldType>.World`
+Мир, содержит мета информацию сущностей, контролирует и менеджируют создание и удаление сущностей
+- Представлен в виде статического класса `Ecs<IWorldType>.World`
 
 ___
 
-#### Creation:
+#### Создание:
 ```c#
 // It is created only when called
 MyEcs.Create(config);
@@ -20,40 +20,40 @@ MyEcs.Initialize();
 ```
 ___ 
 
-#### Basic operations:
+#### Основные операции:
 ```c#
-// When registering a component, it is possible to specify the base size of the data array of components of this type
-// The dynamic identifier of the component type is also returned (section Additional Features)
+// При регистрации компонента возможно указать базовой размер массива даных компонентов этого типа
+// Также возвращается динамическй идентификатор типа компонента (раздел дополнительные возможности)
 var positionComponentId = MyWorld.RegisterComponentType<Position>(256);
 
-// similar to RegisterComponentType, but for tags
+// аналогично RegisterComponentType, но для тегов
 var unitTagId = MyWorld.RegisterTagType<Unit>(256);
 
-// similar to RegisterComponentType, but for masks
+// аналогично RegisterComponentType, но для масок
 var visibleMaskId = MyWorld.RegisterMaskType<Visible>();
 
-// true if the world is initialized
+// true если мир инициализирован
 bool initialized = MyWorld.IsInitialized();
 
-// the number of active entities in the world
+// количество активных сущностей в мире
 int entitiesCount = MyWorld.EntitiesCount();
 
-// current capacity of the entity array
+// текущая емкость массива для сущностей
 int entitiesCapacity = MyWorld.EntitiesCapacity();
 
-// entity version
+// версия сущности
 short entityVersion = MyWorld.EntityVersion(entity);
 
-// Delete an entity and all its components - similar to entity.Destroy();
+// Удалить сущность и все ее компоненты - аналогично entity.Destroy();
 MyWorld.DestroyEntity(entity);
 
-// Copy all component tags and masks from one entity to another - similar to entitySrc.CopyTo(entityTarget);
+// Копировать все компоненты теги и маски с одной сущности на другую - аналогично entitySrc.CopyTo(entityTarget);
 MyWorld.CopyEntityData(entitySrc, entityTarget);
 
-// Clone the entity and all component tags and masks - similar to entity.Clone();
+// Клонировать сущность и все компоненты теги и маски - аналогично entity.Clone();
 var clone = MyWorld.CloneEntity(entity);
 
-// Get a string with all the information about the entity - similar to entity.ToPrettyStringEntity();
+// Получить строку со всей информацией о сущности - аналогично entity.ToPrettyStringEntity();
 var str = MyWorld.ToPrettyStringEntity(entity);
 
 ```

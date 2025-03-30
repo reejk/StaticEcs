@@ -4,4 +4,4 @@ parent: RU
 nav_order: 1
 ---
 
-# Main types
+# Основные типы
