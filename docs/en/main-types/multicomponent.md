@@ -1,6 +1,7 @@
 ---
 title: Multi component
-nav_order: 305
+parent: Main types
+nav_order: 5
 ---
 
 ### MultiComponent

@@ -1,6 +1,7 @@
 ---
 title: Compiler directives
-nav_order: 364
+parent: Additional features
+nav_order: 5
 ---
 
 ### Compiler directives

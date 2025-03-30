@@ -1,6 +1,7 @@
 ---
 title: Events
-nav_order: 362
+parent: Additional features
+nav_order: 3
 ---
 
 ### Events

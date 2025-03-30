@@ -1,6 +1,7 @@
 ---
 title: World
-nav_order: 309
+parent: Main types
+nav_order: 9
 ---
 
 ### World

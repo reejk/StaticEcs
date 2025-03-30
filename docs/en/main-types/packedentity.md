@@ -1,6 +1,7 @@
 ---
 title: Packed entity
-nav_order: 302
+parent: Main types
+nav_order: 2
 ---
 
 ### PackedEntity

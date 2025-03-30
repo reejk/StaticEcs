@@ -1,6 +1,7 @@
 ---
 title: Component identifiers
-nav_order: 360
+parent: Additional features
+nav_order: 1
 ---
 
 ### Component identifiers

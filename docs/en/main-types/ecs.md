@@ -1,6 +1,7 @@
 ---
 title: Ecs
-nav_order: 308
+parent: Main types
+nav_order: 8
 ---
 
 ### WorldType

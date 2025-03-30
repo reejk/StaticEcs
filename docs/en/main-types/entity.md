@@ -1,6 +1,7 @@
 ---
 title: Entity
-nav_order: 301
+parent: Main types
+nav_order: 1
 ---
 
 ### Entity

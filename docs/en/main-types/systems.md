@@ -1,6 +1,7 @@
 ---
 title: System
-nav_order: 310
+parent: Main types
+nav_order: 10
 ---
 
 ### SystemsType

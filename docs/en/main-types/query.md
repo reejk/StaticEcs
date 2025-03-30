@@ -1,6 +1,7 @@
 ---
 title: Query
-nav_order: 312
+parent: Main types
+nav_order: 12
 ---
 
 ### Query

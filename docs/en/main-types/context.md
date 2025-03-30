@@ -1,15 +1,16 @@
 ---
 title: Context
-nav_order: 311
+parent: Main types
+nav_order: 11
 ---
 
 ### Context
 Context is an alternative to DI, a simple mechanism for storing and transferring user data and services to systems and other methods
 - Represented as a static class `Ecs<IWorldType>.Context<T>`
 
-
-- Basic operations:
-```c#
+___
+Basic operations:
+```csharp
 // User classes and services
 public class UserService1 { }
 public class UserService2 { }

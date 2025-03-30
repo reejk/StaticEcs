@@ -1,6 +1,7 @@
 ---
 title: Tag
-nav_order: 306
+parent: Main types
+nav_order: 6
 ---
 
 ### Tag

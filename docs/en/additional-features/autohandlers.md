@@ -1,6 +1,7 @@
 ---
 title: Auto handlers
-nav_order: 361
+parent: Additional features
+nav_order: 2
 ---
 
 ### Auto handlers

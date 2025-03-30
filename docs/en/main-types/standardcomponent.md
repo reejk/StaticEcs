@@ -1,6 +1,7 @@
 ---
 title: Standard component
-nav_order: 304
+parent: Main types
+nav_order: 4
 ---
 
 ### StandardComponent

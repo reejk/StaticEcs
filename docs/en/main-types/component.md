@@ -1,6 +1,7 @@
 ---
 title: Component
-nav_order: 303
+parent: Main types
+nav_order: 3
 ---
 
 ### Component

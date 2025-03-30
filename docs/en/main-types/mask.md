@@ -1,6 +1,7 @@
 ---
 title: Mask
-nav_order: 307
+parent: Main types
+nav_order: 7
 ---
 
 ### Mask
