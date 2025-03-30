@@ -15,7 +15,7 @@ public struct Visible : IMask { }
 ```
 ___
 
-{: .important }
+{: .importantru }
 Требуется регистрация в мире между созданием и инициализацией
 
 ```c#
