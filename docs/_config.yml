@@ -19,3 +19,12 @@ callouts:
   warningru:
     title: Внимание
     color: red
+nav_external_links:
+  - title: Static ECS - GitHub
+    url: https://github.com/Felid-Force-Studios/StaticEcs
+    hide_icon: false
+    opens_in_new_tab: false
+  - title: Static ECS Unity - GitHub
+    url: https://github.com/Felid-Force-Studios/StaticEcs-Unity
+    hide_icon: false
+    opens_in_new_tab: false
