@@ -155,7 +155,7 @@ namespace FFS.Libraries.StaticEcs {
         where C1 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1> {
+        public void Run<R>(ref R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) where R : struct, Ecs<WorldType>.IQueryFunction<C1> {
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -170,8 +170,8 @@ namespace FFS.Libraries.StaticEcs {
                 count--;
                 var entity = entities[count];
                 var i1 = di1[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && with.CheckEntity(entity)) {
-                    runner.Run(new Ecs<WorldType>.Entity(entity), ref dataC1[i1]);
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && with.CheckEntity(entity)) {
+                    runner.Run(new Ecs<WorldType>.Entity(entity), ref dataC1[i1 & Const.DisabledComponentMaskInv]);
                 }
             }
 
@@ -182,7 +182,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public void Run(DelegateQueryFunction<WorldType, C1> runner, P with, bool withDisabled) {
+        public void Run(DelegateQueryFunction<WorldType, C1> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -197,8 +197,8 @@ namespace FFS.Libraries.StaticEcs {
                 count--;
                 var entity = entities[count];
                 var i1 = di1[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && with.CheckEntity(entity)) {
-                    runner(new Ecs<WorldType>.Entity(entity), ref dataC1[i1]);
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && with.CheckEntity(entity)) {
+                    runner(new Ecs<WorldType>.Entity(entity), ref dataC1[i1 & Const.DisabledComponentMaskInv]);
                 }
             }
 
@@ -219,7 +219,7 @@ namespace FFS.Libraries.StaticEcs {
         where C2 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2> {
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2> {
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(1);
@@ -242,10 +242,10 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 var i1 = di1[entity];
                 var i2 = di2[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && i2 != Utils.EmptyComponent && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1],
-                               ref data2[i2]
+                               ref data1[i1 & Const.DisabledComponentMaskInv],
+                               ref data2[i2 & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -258,7 +258,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, bool withDisabled) {
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(1);
@@ -281,10 +281,10 @@ namespace FFS.Libraries.StaticEcs {
                 var entity = entities[count];
                 var i1 = di1[entity];
                 var i2 = di2[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && i2 != Utils.EmptyComponent && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1],
-                               ref data2[i2]
+                               ref data1[i1 & Const.DisabledComponentMaskInv],
+                               ref data2[i2 & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -308,7 +308,7 @@ namespace FFS.Libraries.StaticEcs {
         where C3 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3> {
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3> {
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(1);
@@ -336,11 +336,11 @@ namespace FFS.Libraries.StaticEcs {
                 var i1 = di1[entity];
                 var i2 = di2[entity];
                 var i3 = di3[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && i2 != Utils.EmptyComponent && i3 != Utils.EmptyComponent && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight && (i3 & maskLeft) == maskRight && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1],
-                               ref data2[i2],
-                               ref data3[i3]
+                               ref data1[i1 & Const.DisabledComponentMaskInv],
+                               ref data2[i2 & Const.DisabledComponentMaskInv],
+                               ref data3[i3 & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -354,7 +354,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, bool withDisabled) {
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(1);
@@ -382,11 +382,11 @@ namespace FFS.Libraries.StaticEcs {
                 var i1 = di1[entity];
                 var i2 = di2[entity];
                 var i3 = di3[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && i2 != Utils.EmptyComponent && i3 != Utils.EmptyComponent && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight && (i3 & maskLeft) == maskRight && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1],
-                               ref data2[i2],
-                               ref data3[i3]
+                               ref data1[i1 & Const.DisabledComponentMaskInv],
+                               ref data2[i2 & Const.DisabledComponentMaskInv],
+                               ref data3[i3 & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -412,7 +412,7 @@ namespace FFS.Libraries.StaticEcs {
         where C4 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4> {
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4> {
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(1);
@@ -445,12 +445,13 @@ namespace FFS.Libraries.StaticEcs {
                 var i2 = di2[entity];
                 var i3 = di3[entity];
                 var i4 = di4[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && i2 != Utils.EmptyComponent && i3 != Utils.EmptyComponent && i4 != Utils.EmptyComponent && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight 
+                    && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1],
-                               ref data2[i2],
-                               ref data3[i3],
-                               ref data4[i4]
+                               ref data1[i1 & Const.DisabledComponentMaskInv],
+                               ref data2[i2 & Const.DisabledComponentMaskInv],
+                               ref data3[i3 & Const.DisabledComponentMaskInv],
+                               ref data4[i4 & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -465,7 +466,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, bool withDisabled) {
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(1);
@@ -498,12 +499,13 @@ namespace FFS.Libraries.StaticEcs {
                 var i2 = di2[entity];
                 var i3 = di3[entity];
                 var i4 = di4[entity];
-                if ((withDisabled || !status[entity].Disabled) && i1 != Utils.EmptyComponent && i2 != Utils.EmptyComponent && i3 != Utils.EmptyComponent && i4 != Utils.EmptyComponent && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight 
+                    && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1],
-                               ref data2[i2],
-                               ref data3[i3],
-                               ref data4[i4]
+                               ref data1[i1 & Const.DisabledComponentMaskInv],
+                               ref data2[i2 & Const.DisabledComponentMaskInv],
+                               ref data3[i3 & Const.DisabledComponentMaskInv],
+                               ref data4[i4 & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -522,8 +524,9 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public readonly ref struct QueryFunctionRunner<WorldType, C1, C2, C3, C4, C5, P>
+    public readonly ref struct QueryFunctionRunner<WorldType, QM, C1, C2, C3, C4, C5, P>
         where P : struct, IQueryMethod
+        where QM : struct, IPrimaryQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
         where C3 : struct, IComponent
@@ -531,8 +534,8 @@ namespace FFS.Libraries.StaticEcs {
         where C5 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5> {
-            var all = default(All<C1, C2, C3, C4, C5>);
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5> {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -555,13 +558,13 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[di1[entity]],
-                               ref data2[di2[entity]],
-                               ref data3[di3[entity]],
-                               ref data4[di4[entity]],
-                               ref data5[di5[entity]]
+                               ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                               ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                               ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                               ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                               ref data5[di5[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -571,8 +574,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, bool withDisabled) {
-            var all = default(All<C1, C2, C3, C4, C5>);
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, EntityStatusType entitiesParam) {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -595,13 +598,13 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                           ref data1[di1[entity]],
-                           ref data2[di2[entity]],
-                           ref data3[di3[entity]],
-                           ref data4[di4[entity]],
-                           ref data5[di5[entity]]
+                           ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                           ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                           ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                           ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                           ref data5[di5[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -615,8 +618,9 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public readonly ref struct QueryFunctionRunner<WorldType, C1, C2, C3, C4, C5, C6, P>
+    public readonly ref struct QueryFunctionRunner<WorldType, QM, C1, C2, C3, C4, C5, C6, P>
         where P : struct, IQueryMethod
+        where QM : struct, IPrimaryQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
         where C3 : struct, IComponent
@@ -625,8 +629,8 @@ namespace FFS.Libraries.StaticEcs {
         where C6 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
-            var all = default(All<C1, C2, C3, C4, C5, C6>);
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -651,14 +655,14 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[di1[entity]],
-                               ref data2[di2[entity]],
-                               ref data3[di3[entity]],
-                               ref data4[di4[entity]],
-                               ref data5[di5[entity]],
-                               ref data6[di6[entity]]
+                               ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                               ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                               ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                               ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                               ref data5[di5[entity] & Const.DisabledComponentMaskInv],
+                               ref data6[di6[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -668,8 +672,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, bool withDisabled) {
-            var all = default(All<C1, C2, C3, C4, C5, C6>);
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, EntityStatusType entitiesParam) {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -694,14 +698,14 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                           ref data1[di1[entity]],
-                           ref data2[di2[entity]],
-                           ref data3[di3[entity]],
-                           ref data4[di4[entity]],
-                           ref data5[di5[entity]],
-                           ref data6[di6[entity]]
+                           ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                           ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                           ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                           ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                           ref data5[di5[entity] & Const.DisabledComponentMaskInv],
+                           ref data6[di6[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -716,8 +720,9 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public readonly ref struct QueryFunctionRunner<WorldType, C1, C2, C3, C4, C5, C6, C7, P>
+    public readonly ref struct QueryFunctionRunner<WorldType, QM, C1, C2, C3, C4, C5, C6, C7, P>
         where P : struct, IQueryMethod
+        where QM : struct, IPrimaryQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
         where C3 : struct, IComponent
@@ -727,8 +732,8 @@ namespace FFS.Libraries.StaticEcs {
         where C7 : struct, IComponent
         where WorldType : struct, IWorldType {
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-            var all = default(All<C1, C2, C3, C4, C5, C6, C7>);
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -755,15 +760,15 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[di1[entity]],
-                               ref data2[di2[entity]],
-                               ref data3[di3[entity]],
-                               ref data4[di4[entity]],
-                               ref data5[di5[entity]],
-                               ref data6[di6[entity]],
-                               ref data7[di7[entity]]
+                               ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                               ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                               ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                               ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                               ref data5[di5[entity] & Const.DisabledComponentMaskInv],
+                               ref data6[di6[entity] & Const.DisabledComponentMaskInv],
+                               ref data7[di7[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -773,8 +778,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, bool withDisabled) {
-            var all = default(All<C1, C2, C3, C4, C5, C6, C7>);
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, EntityStatusType entitiesParam) {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -801,15 +806,15 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                           ref data1[di1[entity]],
-                           ref data2[di2[entity]],
-                           ref data3[di3[entity]],
-                           ref data4[di4[entity]],
-                           ref data5[di5[entity]],
-                           ref data6[di6[entity]],
-                           ref data7[di7[entity]]
+                           ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                           ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                           ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                           ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                           ref data5[di5[entity] & Const.DisabledComponentMaskInv],
+                           ref data6[di6[entity] & Const.DisabledComponentMaskInv],
+                           ref data7[di7[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -823,8 +828,9 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
-    public readonly ref struct QueryFunctionRunner<WorldType, C1, C2, C3, C4, C5, C6, C7, C8, P>
+    public readonly ref struct QueryFunctionRunner<WorldType, QM, C1, C2, C3, C4, C5, C6, C7, C8, P>
         where P : struct, IQueryMethod
+        where QM : struct, IPrimaryQueryMethod
         where C1 : struct, IComponent
         where C2 : struct, IComponent
         where C3 : struct, IComponent
@@ -836,8 +842,8 @@ namespace FFS.Libraries.StaticEcs {
         where WorldType : struct, IWorldType {
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run<R>(ref R runner, P with, bool withDisabled) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-            var all = default(All<C1, C2, C3, C4, C5, C6, C7, C8>);
+        public static void Run<R>(ref R runner, P with, EntityStatusType entitiesParam) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -866,16 +872,16 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner.Run(new Ecs<WorldType>.Entity(entity),
-                               ref data1[di1[entity]],
-                               ref data2[di2[entity]],
-                               ref data3[di3[entity]],
-                               ref data4[di4[entity]],
-                               ref data5[di5[entity]],
-                               ref data6[di6[entity]],
-                               ref data7[di7[entity]],
-                               ref data8[di8[entity]]
+                               ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                               ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                               ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                               ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                               ref data5[di5[entity] & Const.DisabledComponentMaskInv],
+                               ref data6[di6[entity] & Const.DisabledComponentMaskInv],
+                               ref data7[di7[entity] & Const.DisabledComponentMaskInv],
+                               ref data8[di8[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }
@@ -885,8 +891,8 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, bool withDisabled) {
-            var all = default(All<C1, C2, C3, C4, C5, C6, C7, C8>);
+        public static void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, EntityStatusType entitiesParam) {
+            var all = default(QM);
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
             all.SetData<WorldType>(ref count, ref entities);
@@ -915,16 +921,16 @@ namespace FFS.Libraries.StaticEcs {
             while (count > 0) {
                 count--;
                 var entity = entities[count];
-                if ((withDisabled || !status[entity].Disabled) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
+                if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value) && all.CheckEntity(entity) && with.CheckEntity(entity)) {
                     runner(new Ecs<WorldType>.Entity(entity),
-                           ref data1[di1[entity]],
-                           ref data2[di2[entity]],
-                           ref data3[di3[entity]],
-                           ref data4[di4[entity]],
-                           ref data5[di5[entity]],
-                           ref data6[di6[entity]],
-                           ref data7[di7[entity]],
-                           ref data8[di8[entity]]
+                           ref data1[di1[entity] & Const.DisabledComponentMaskInv],
+                           ref data2[di2[entity] & Const.DisabledComponentMaskInv],
+                           ref data3[di3[entity] & Const.DisabledComponentMaskInv],
+                           ref data4[di4[entity] & Const.DisabledComponentMaskInv],
+                           ref data5[di5[entity] & Const.DisabledComponentMaskInv],
+                           ref data6[di6[entity] & Const.DisabledComponentMaskInv],
+                           ref data7[di7[entity] & Const.DisabledComponentMaskInv],
+                           ref data8[di8[entity] & Const.DisabledComponentMaskInv]
                     );
                 }
             }

@@ -44,7 +44,7 @@ namespace FFS.Libraries.StaticEcs {
 
             internal static void Initialize() {
                 ModuleStandardComponents.Value.RegisterComponentType<EntityVersion>(false);
-                ModuleStandardComponents.Value.RegisterComponentType<EntityStatus>(false, autoReset: static (ref EntityStatus status) => status.Disabled = false);
+                ModuleStandardComponents.Value.RegisterComponentType<EntityStatus>(false);
                 
                 ModuleComponents.Value.Initialize();
                 ModuleStandardComponents.Value.Initialize();
@@ -431,6 +431,7 @@ namespace FFS.Libraries.StaticEcs {
                 ModuleComponents.Value.DestroyEntity(entity);
                 ModuleStandardComponents.Value.DestroyEntity(entity);
                 version = version == short.MaxValue ? (short) -1 : (short) -(version + 1);
+                StandardComponents<EntityStatus>.Value.RefMutInternal(entity).Value = EntityStatusType.Enabled;
                 if (_deletedEntitiesCount == _deletedEntities.Length) {
                     Array.Resize(ref _deletedEntities, (int) (_deletedEntitiesCount << 1));
                 }
@@ -446,12 +447,12 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static void CopyEntityData(Entity srcEntity, Entity dstEntity) {
+            public static void CopyEntityData(Entity srcEntity, Entity dstEntity, bool withDisabled) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: CopyEntityData, World not initialized");
                 #endif
                 
-                ModuleComponents.Value.CopyEntity(srcEntity, dstEntity);
+                ModuleComponents.Value.CopyEntity(srcEntity, dstEntity, withDisabled);
                 ModuleStandardComponents.Value.CopyEntity(srcEntity, dstEntity);
                 #if !FFS_ECS_DISABLE_TAGS
                 ModuleTags.Value.CopyEntity(srcEntity, dstEntity);
@@ -462,22 +463,22 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public static Entity CloneEntity(Entity srcEntity) {
+            public static Entity CloneEntity(Entity srcEntity, bool withDisabled) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: CloneEntity, World not initialized");
                 #endif
                 
                 var dstEntity = CreateEntityInternal();
-                CopyEntityData(srcEntity, dstEntity);
+                CopyEntityData(srcEntity, dstEntity, withDisabled);
 
                 return dstEntity;
             }
             
             [MethodImpl(AggressiveInlining)]
-            public static string ToPrettyStringEntity(Entity entity) {
+            public static string ToPrettyStringEntity(Entity entity, bool withDisabled) {
                 var result = $"Entity ID: {entity._id}\n";
                 result += ModuleStandardComponents.Value.ToPrettyStringEntity(entity);
-                result += ModuleComponents.Value.ToPrettyStringEntity(entity);
+                result += ModuleComponents.Value.ToPrettyStringEntity(entity, withDisabled);
                 #if !FFS_ECS_DISABLE_TAGS
                 result += ModuleTags.Value.ToPrettyStringEntity(entity);
                 #endif

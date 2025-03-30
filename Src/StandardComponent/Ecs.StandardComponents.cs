@@ -178,7 +178,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: ToPrettyStringEntity, World not initialized");
                 #endif
-                var str = "Components:\n";
+                var str = "Standard components:\n";
                 for (var i = 0; i < _poolsCount; i++) {
                     str += _pools[i].ToStringComponent(entity);
                 }

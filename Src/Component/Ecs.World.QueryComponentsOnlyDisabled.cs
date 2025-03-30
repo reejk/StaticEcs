@@ -15,108 +15,102 @@ namespace FFS.Libraries.StaticEcs {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         #endif
         public readonly ref partial struct WithComponents<W> where W : struct, IQueryMethod {
-            private readonly W With;
-
-            [MethodImpl(AggressiveInlining)]
-            public WithComponents(W with) {
-                With = with;
-            }
 
             #region BY_STRUCT
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where R : struct, IQueryFunction<C1> {
                 var iterator = default(QueryFunctionRunner<WorldType, C1, W>);
-                iterator.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                iterator.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where R : struct, IQueryFunction<C1> {
                 var iterator = default(QueryFunctionRunner<WorldType, C1, W>);
-                iterator.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                iterator.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2> {
-                QueryFunctionRunner<WorldType, C1, C2, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2> {
-                QueryFunctionRunner<WorldType, C1, C2, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3> {
-                QueryFunctionRunner<WorldType, C1, C2, C3, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, C3, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3> {
-                QueryFunctionRunner<WorldType, C1, C2, C3, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, C3, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4> {
-                QueryFunctionRunner<WorldType, C1, C2, C3, C4, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, C3, C4, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4> {
-                QueryFunctionRunner<WorldType, C1, C2, C3, C4, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, C3, C4, W>.Run(ref runner, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, W>.Run(ref runner, With, entities);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, W>.Run(ref runner, With, entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -124,11 +118,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C5 : struct, IComponent
                 where C6 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, W>.Run(ref runner, With, entities);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -136,11 +130,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C5 : struct, IComponent
                 where C6 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, W>.Run(ref runner, With, entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, C7, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -149,11 +143,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C6 : struct, IComponent
                 where C7 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, W>.Run(ref runner, With, entities);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, C7, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -162,11 +156,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C6 : struct, IComponent
                 where C7 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, W>.Run(ref runner, With, entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, C7, C8, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -176,11 +170,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C7 : struct, IComponent
                 where C8 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, W>.Run(ref runner, With, entities);
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, C7, C8, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -190,65 +184,65 @@ namespace FFS.Libraries.StaticEcs {
                 where C7 : struct, IComponent
                 where C8 : struct, IComponent
                 where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, W>.Run(ref runner, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, W>.Run(ref runner, With, entities);
             }
             #endregion
 
             #region BY_DELEGATE
             [MethodImpl(AggressiveInlining)]
-            public void For<C1>(DelegateQueryFunction<WorldType, C1> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1>(DelegateQueryFunction<WorldType, C1> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent {
                 var iterator = default(QueryFunctionRunner<WorldType, C1, W>);
-                iterator.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                iterator.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2>(DelegateQueryFunction<WorldType, C1, C2> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2>(DelegateQueryFunction<WorldType, C1, C2> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                QueryFunctionRunner<WorldType, C1, C2, W>.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, W>.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3>(DelegateQueryFunction<WorldType, C1, C2, C3> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3>(DelegateQueryFunction<WorldType, C1, C2, C3> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                QueryFunctionRunner<WorldType, C1, C2, C3, W>.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, C3, W>.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4>(DelegateQueryFunction<WorldType, C1, C2, C3, C4> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4>(DelegateQueryFunction<WorldType, C1, C2, C3, C4> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                QueryFunctionRunner<WorldType, C1, C2, C3, C4, W>.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, 0);
+                QueryFunctionRunner<WorldType, C1, C2, C3, C4, W>.Run(function, With, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, W>.Run(function, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, W>.Run(function, With, entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent
                 where C6 : struct, IComponent {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, W>.Run(function, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, W>.Run(function, With, entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, C7>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -256,11 +250,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C5 : struct, IComponent
                 where C6 : struct, IComponent
                 where C7 : struct, IComponent {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, W>.Run(function, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, W>.Run(function, With, entities);
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void For<C1, C2, C3, C4, C5, C6, C7, C8>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> function, EntityStatusType entities = EntityStatusType.Enabled)
+            public void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> function, EntityStatusType entities = EntityStatusType.Enabled)
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
@@ -269,7 +263,7 @@ namespace FFS.Libraries.StaticEcs {
                 where C6 : struct, IComponent
                 where C7 : struct, IComponent
                 where C8 : struct, IComponent {
-                QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, W>.Run(function, With, entities);
+                QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, W>.Run(function, With, entities);
             }
             #endregion
         }
@@ -284,106 +278,102 @@ namespace FFS.Libraries.StaticEcs {
             [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
             #endif
             public partial struct QueryComponents {
-                public static WithComponents<W> With<W>(W with = default)
-                    where W : struct, IQueryMethod {
-                    return new WithComponents<W>(with);
-                }
 
                 #region BY_RUNNER
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where R : struct, IQueryFunction<C1> {
                     var iterator = default(QueryFunctionRunner<WorldType, C1, WithNothing>);
-                    iterator.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    iterator.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where R : struct, IQueryFunction<C1> {
                     var iterator = default(QueryFunctionRunner<WorldType, C1, WithNothing>);
-                    iterator.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    iterator.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2> {
-                    QueryFunctionRunner<WorldType, C1, C2, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2> {
-                    QueryFunctionRunner<WorldType, C1, C2, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3> {
-                    QueryFunctionRunner<WorldType, C1, C2, C3, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, C3, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3> {
-                    QueryFunctionRunner<WorldType, C1, C2, C3, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, C3, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4> {
-                    QueryFunctionRunner<WorldType, C1, C2, C3, C4, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, C3, C4, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4> {
-                    QueryFunctionRunner<WorldType, C1, C2, C3, C4, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, C3, C4, WithNothing>.Run(ref runner, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent
                     where C5 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, WithNothing>.Run(ref runner, default, entities);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent
                     where C5 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, WithNothing>.Run(ref runner, default, entities);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -391,11 +381,11 @@ namespace FFS.Libraries.StaticEcs {
                     where C5 : struct, IComponent
                     where C6 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, WithNothing>.Run(ref runner, default, entities);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -403,11 +393,11 @@ namespace FFS.Libraries.StaticEcs {
                     where C5 : struct, IComponent
                     where C6 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, WithNothing>.Run(ref runner, default, entities);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, C7, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -416,11 +406,11 @@ namespace FFS.Libraries.StaticEcs {
                     where C6 : struct, IComponent
                     where C7 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, WithNothing>.Run(ref runner, default, entities);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, C7, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -429,11 +419,11 @@ namespace FFS.Libraries.StaticEcs {
                     where C6 : struct, IComponent
                     where C7 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, WithNothing>.Run(ref runner, default, entities);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, C7, C8, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8, R>(R runner = default, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -443,11 +433,11 @@ namespace FFS.Libraries.StaticEcs {
                     where C7 : struct, IComponent
                     where C8 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, WithNothing>.Run(ref runner, default, entities);
                 }
                 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, C7, C8, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8, R>(ref R runner, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -457,65 +447,65 @@ namespace FFS.Libraries.StaticEcs {
                     where C7 : struct, IComponent
                     where C8 : struct, IComponent
                     where R : struct, IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, WithNothing>.Run(ref runner, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, WithNothing>.Run(ref runner, default, entities);
                 }
                 #endregion
 
                 #region BY_DELEGATE
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1>(DelegateQueryFunction<WorldType, C1> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1>(DelegateQueryFunction<WorldType, C1> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent {
                     var iterator = default(QueryFunctionRunner<WorldType, C1, WithNothing>);
-                    iterator.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    iterator.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2>(DelegateQueryFunction<WorldType, C1, C2> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2>(DelegateQueryFunction<WorldType, C1, C2> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, C1, C2, WithNothing>.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, WithNothing>.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3>(DelegateQueryFunction<WorldType, C1, C2, C3> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3>(DelegateQueryFunction<WorldType, C1, C2, C3> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, C1, C2, C3, WithNothing>.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, C3, WithNothing>.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4>(DelegateQueryFunction<WorldType, C1, C2, C3, C4> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4>(DelegateQueryFunction<WorldType, C1, C2, C3, C4> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, C1, C2, C3, C4, WithNothing>.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, 0);
+                    QueryFunctionRunner<WorldType, C1, C2, C3, C4, WithNothing>.Run(function, default, entities, Const.EmptyAndDisabledComponentMask, Const.DisabledComponentMask);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent
                     where C5 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, WithNothing>.Run(function, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5>, C1, C2, C3, C4, C5, WithNothing>.Run(function, default, entities);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
                     where C4 : struct, IComponent
                     where C5 : struct, IComponent
                     where C6 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, WithNothing>.Run(function, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6>, C1, C2, C3, C4, C5, C6, WithNothing>.Run(function, default, entities);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, C7>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -523,11 +513,11 @@ namespace FFS.Libraries.StaticEcs {
                     where C5 : struct, IComponent
                     where C6 : struct, IComponent
                     where C7 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, WithNothing>.Run(function, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7>, C1, C2, C3, C4, C5, C6, C7, WithNothing>.Run(function, default, entities);
                 }
 
                 [MethodImpl(AggressiveInlining)]
-                public static void For<C1, C2, C3, C4, C5, C6, C7, C8>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> function, EntityStatusType entities = EntityStatusType.Enabled)
+                public static void ForOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> function, EntityStatusType entities = EntityStatusType.Enabled)
                     where C1 : struct, IComponent
                     where C2 : struct, IComponent
                     where C3 : struct, IComponent
@@ -536,7 +526,7 @@ namespace FFS.Libraries.StaticEcs {
                     where C6 : struct, IComponent
                     where C7 : struct, IComponent
                     where C8 : struct, IComponent {
-                    QueryFunctionRunner<WorldType, All<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, WithNothing>.Run(function, default, entities);
+                    QueryFunctionRunner<WorldType, AllOnlyDisabled<C1, C2, C3, C4, C5, C6, C7, C8>, C1, C2, C3, C4, C5, C6, C7, C8, WithNothing>.Run(function, default, entities);
                 }
                 #endregion
             }

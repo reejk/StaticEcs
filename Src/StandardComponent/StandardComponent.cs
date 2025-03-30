@@ -43,6 +43,11 @@ namespace FFS.Libraries.StaticEcs {
     #endif
     internal struct EntityVersion : IStandardComponent {
         internal short Value;
+
+        [MethodImpl(AggressiveInlining)]
+        public override string ToString() {
+            return $"{Value}";
+        }
     }
 
     #if ENABLE_IL2CPP
@@ -50,6 +55,11 @@ namespace FFS.Libraries.StaticEcs {
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     internal struct EntityStatus : IStandardComponent {
-        internal bool Disabled;
+        internal EntityStatusType Value;
+
+        [MethodImpl(AggressiveInlining)]
+        public override string ToString() {
+            return Value == EntityStatusType.Disabled ? "Disabled" : "Enabled";
+        }
     }
 }

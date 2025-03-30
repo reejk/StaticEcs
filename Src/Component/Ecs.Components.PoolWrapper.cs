@@ -34,6 +34,14 @@ namespace FFS.Libraries.StaticEcs {
             
             public bool Has(Entity entity);
 
+            public bool HasDisabled(Entity entity);
+
+            public bool HasEnabled(Entity entity);
+
+            public void Enable(Entity entity);
+
+            public void Disable(Entity entity);
+
             public void Add(Entity entity);
 
             public void TryAdd(Entity entity);
@@ -45,8 +53,12 @@ namespace FFS.Libraries.StaticEcs {
             public void Delete(Entity entity);
 
             public void Copy(Entity srcEntity, Entity dstEntity);
+
+            public bool TryCopy(Entity srcEntity, Entity dstEntity);
             
             public void Move(Entity entity, Entity target);
+            
+            public bool TryMove(Entity entity, Entity target);
             
             public bool Is<C>() where C : struct, IComponent;
 
@@ -113,6 +125,18 @@ namespace FFS.Libraries.StaticEcs {
             public bool Has(Entity entity) => Components<T>.Value.Has(entity);
 
             [MethodImpl(AggressiveInlining)]
+            public bool HasEnabled(Entity entity) => Components<T>.Value.HasEnabled(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public bool HasDisabled(Entity entity) => Components<T>.Value.HasDisabled(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Enable(Entity entity) => Components<T>.Value.Enable(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void Disable(Entity entity) => Components<T>.Value.Disable(entity);
+
+            [MethodImpl(AggressiveInlining)]
             public bool TryDelete(Entity entity) => Components<T>.Value.TryDelete(entity);
 
             [MethodImpl(AggressiveInlining)]
@@ -123,9 +147,15 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Copy(srcEntity, dstEntity);
+
+            [MethodImpl(AggressiveInlining)]
+            public bool TryCopy(Entity srcEntity, Entity dstEntity) => Components<T>.Value.TryCopy(srcEntity, dstEntity);
             
             [MethodImpl(AggressiveInlining)]
             public void Move(Entity srcEntity, Entity dstEntity) => Components<T>.Value.Move(srcEntity, dstEntity);
+            
+            [MethodImpl(AggressiveInlining)]
+            public bool TryMove(Entity srcEntity, Entity dstEntity) => Components<T>.Value.TryMove(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
             object IStandardRawPool.GetRaw(uint entity) => Components<T>.Value.RefMutInternal(new Entity(entity));

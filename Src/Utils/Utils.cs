@@ -12,14 +12,21 @@ using Unity.IL2CPP.CompilerServices;
 [assembly: InternalsVisibleTo("FFS.StaticEcs.Unity.Editor")]
 
 namespace FFS.Libraries.StaticEcs {
+    
+    public static class Const {
+        internal const uint EmptyComponentMask = 1u << 31;
+        internal const uint EmptyComponentMaskInv = ~EmptyComponentMask;
+        internal const uint DisabledComponentMask = 1u << 30;
+        internal const uint DisabledComponentMaskInv = ~DisabledComponentMask;
+        internal const uint EmptyAndDisabledComponentMask = EmptyComponentMask | DisabledComponentMask;
+        internal const uint EmptyAndDisabledComponentMaskInv = ~EmptyAndDisabledComponentMask;
+    }
+
     #if ENABLE_IL2CPP
     [Il2CppSetOption (Option.NullChecks, false)]
     [Il2CppSetOption (Option.ArrayBoundsChecks, false)]
     #endif
     public static class Utils {
-
-        internal const uint EmptyComponent = uint.MaxValue;
-        
         internal static ushort CalculateMaskLen(ushort count) {
             var len = (ushort) (count >> 6);
             if (count - (len << 6) != 0) {
