@@ -21,8 +21,9 @@ Multi-components - allow to give an entity many identical properties (components
 
 ___
 
-{: .important }️
+{: .important }
 Requires registration in the world between creation and initialization
+
 
 #### Example:  
 There are two ways to define a multicomponent:
