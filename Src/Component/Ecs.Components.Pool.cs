@@ -57,7 +57,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 return ref val;
                 #else
-                return ref _data[_dataIdxByEntityId[entity._id] & Utils.DisabledComponentMaskInv];
+                return ref _data[_dataIdxByEntityId[entity._id] & Const.DisabledComponentMaskInv];
                 #endif
             }
 
@@ -76,7 +76,7 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 return ref val;
                 #else
-                return ref _data[_dataIdxByEntityId[entity._id] & Utils.DisabledComponentMaskInv];
+                return ref _data[_dataIdxByEntityId[entity._id] & Const.DisabledComponentMaskInv];
                 #endif
             }
 
