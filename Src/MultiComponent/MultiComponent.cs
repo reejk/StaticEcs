@@ -362,7 +362,7 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public MultiComponentsIterator<T> GetEnumerator() => new(ref this);
+        public MultiComponentsIterator<T> GetEnumerator() => new(this);
 
         [MethodImpl(AggressiveInlining)]
         public void Access<A>(A access) where A : struct, AccessMulti<T> => access.For(ref this);
@@ -379,7 +379,7 @@ namespace FFS.Libraries.StaticEcs {
         internal ushort to;
 
         [MethodImpl(AggressiveInlining)]
-        public MultiComponentsIterator(ref Multi<C> multi) {
+        public MultiComponentsIterator(Multi<C> multi) {
             data = multi.data;
             offset = multi.offset;
             from = -1;
