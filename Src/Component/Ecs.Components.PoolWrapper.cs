@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
 #if ENABLE_IL2CPP
 using Unity.IL2CPP.CompilerServices;
@@ -19,13 +20,24 @@ namespace FFS.Libraries.StaticEcs {
         internal void Move(uint entity, uint target);
     }
     
+    public interface IRawComponentPool : IRawPool {
+            
+        internal bool HasDisabled(uint entity);
+
+        internal bool HasEnabled(uint entity);
+
+        internal void Enable(uint entity);
+
+        internal void Disable(uint entity);
+    }
+    
     
     #if ENABLE_IL2CPP
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     #endif
     public abstract partial class Ecs<WorldType> {
-        public interface IComponentsWrapper: IRawPool {
+        public interface IComponentsWrapper: IRawComponentPool {
             public ComponentDynId DynamicId();
             
             public IComponent GetRaw(Entity entity);
@@ -158,6 +170,9 @@ namespace FFS.Libraries.StaticEcs {
             public bool TryMove(Entity srcEntity, Entity dstEntity) => Components<T>.Value.TryMove(srcEntity, dstEntity);
 
             [MethodImpl(AggressiveInlining)]
+            Type IStandardRawPool.GetElementType() => typeof(T);
+
+            [MethodImpl(AggressiveInlining)]
             object IStandardRawPool.GetRaw(uint entity) => Components<T>.Value.RefMutInternal(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
@@ -224,6 +239,18 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.AddBlocker(int val) => Components<T>.Value.AddBlocker(val);
             #endif
+            
+            [MethodImpl(AggressiveInlining)]
+            bool IRawComponentPool.HasDisabled(uint entity) => Components<T>.Value.HasDisabled(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            bool IRawComponentPool.HasEnabled(uint entity) => Components<T>.Value.HasEnabled(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawComponentPool.Enable(uint entity) => Components<T>.Value.Enable(new Entity(entity));
+
+            [MethodImpl(AggressiveInlining)]
+            void IRawComponentPool.Disable(uint entity) => Components<T>.Value.Disable(new Entity(entity));
         }
     }
 }

@@ -61,6 +61,18 @@ namespace FFS.Libraries.StaticEcs {
                 Array.Copy(src, srcIdx, dst, dstIdx, len);
                 return;
             }
+ 
+            for (var i = 0; i < len; i++) {
+                dst[dstIdx + i] = src[srcIdx + i];
+            }
+        }
+        
+        [MethodImpl(AggressiveInlining)]
+        public static void LoopFallbackCopyReverse<T>(T[] src, uint srcIdx, T[] dst, uint dstIdx, uint len) {
+            if (len > 4) {
+                Array.Copy(src, srcIdx, dst, dstIdx, len);
+                return;
+            }
             
             for (var i = (int) (len - 1); i >= 0; i--) {
                 dst[dstIdx + i] = src[srcIdx + i];

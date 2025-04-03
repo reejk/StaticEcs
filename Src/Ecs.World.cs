@@ -649,18 +649,28 @@ namespace FFS.Libraries.StaticEcs {
         
         #if !FFS_ECS_DISABLE_EVENTS
         public IEvents Events();
+        public List<IEventPoolWrapper> GetAllEventPools();
         #endif
 
         internal bool TryGetStandardComponentsRawPool(Type type, out IStandardRawPool pool);
         
-        internal bool TryGetComponentsRawPool(Type type, out IRawPool pool);
+        internal List<IStandardRawPool> GetAllStandardComponentsRawPools();
+        
+        internal bool TryGetComponentsRawPool(Type type, out IRawComponentPool pool);
+        
+        internal List<IRawPool> GetAllComponentsRawPools();
+
         
         #if !FFS_ECS_DISABLE_TAGS
         internal bool TryGetTagsRawPool(Type type, out IRawPool pool);
+        
+        internal List<IRawPool> GetAllTagsRawPools();
         #endif
         
         #if !FFS_ECS_DISABLE_MASKS
         internal bool TryGetMasksRawPool(Type type, out IRawPool pool);
+        
+        internal List<IRawPool> GetAllMasksRawPools();
         #endif
         
     }
@@ -701,6 +711,10 @@ namespace FFS.Libraries.StaticEcs {
         #if !FFS_ECS_DISABLE_EVENTS
         [MethodImpl(AggressiveInlining)]
         public IEvents Events() => new EventsWrapper<WorldType>();
+
+        public List<IEventPoolWrapper> GetAllEventPools() {
+            return Ecs<WorldType>.Events.GetAllRawsPools();
+        }
         #endif
         
         bool IWorld.TryGetStandardComponentsRawPool(Type type, out IStandardRawPool pool) {
@@ -713,7 +727,11 @@ namespace FFS.Libraries.StaticEcs {
             return false;
         }
 
-        bool IWorld.TryGetComponentsRawPool(Type type, out IRawPool pool) {
+        List<IStandardRawPool> IWorld.GetAllStandardComponentsRawPools() {
+            return Ecs<WorldType>.ModuleStandardComponents.Value.GetAllRawsPools();
+        }
+
+        bool IWorld.TryGetComponentsRawPool(Type type, out IRawComponentPool pool) {
             if (Ecs<WorldType>.World.TryGetComponentsPool(type, out var p)) {
                 pool = p;
                 return true;
@@ -721,6 +739,10 @@ namespace FFS.Libraries.StaticEcs {
             
             pool = default;
             return false;
+        }
+
+        List<IRawPool> IWorld.GetAllComponentsRawPools() {
+            return Ecs<WorldType>.ModuleComponents.Value.GetAllRawsPools();
         }
 
         #if !FFS_ECS_DISABLE_TAGS
@@ -733,6 +755,10 @@ namespace FFS.Libraries.StaticEcs {
             pool = default;
             return false;
         }
+
+        List<IRawPool> IWorld.GetAllTagsRawPools() {
+            return Ecs<WorldType>.ModuleTags.Value.GetAllRawsPools();
+        }
         #endif
 
         #if !FFS_ECS_DISABLE_MASKS
@@ -744,6 +770,10 @@ namespace FFS.Libraries.StaticEcs {
             
             pool = default;
             return false;
+        }
+
+        List<IRawPool> IWorld.GetAllMasksRawPools() {
+            return Ecs<WorldType>.ModuleMasks.Value.GetAllRawsPools();
         }
         #endif
     }

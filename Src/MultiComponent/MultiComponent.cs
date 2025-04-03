@@ -177,7 +177,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             if (idx < count) {
-                Utils.LoopFallbackCopy(data.values, offset + idx, data.values, offset + (uint) (idx + 1), (uint) (count - idx));
+                Utils.LoopFallbackCopyReverse(data.values, offset + idx, data.values, offset + (uint) (idx + 1), (uint) (count - idx));
             }
 
             data.values[offset + idx] = value;

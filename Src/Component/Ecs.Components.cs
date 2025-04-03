@@ -66,6 +66,18 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
+            internal List<IRawPool> GetAllRawsPools() {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetAllRawsPools, World not initialized");
+                #endif
+                var pools = new List<IRawPool>();
+                for (int i = 0; i < _poolsCount; i++) {
+                    pools.Add(_pools[i]);
+                }
+                return pools;
+            }
+            
+            [MethodImpl(AggressiveInlining)]
             internal IComponentsWrapper GetPool(ComponentDynId id) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!World.IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: GetPool, World not initialized");
