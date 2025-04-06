@@ -175,8 +175,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             #endif
         }
@@ -202,8 +202,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             #endif
         }
@@ -226,7 +226,7 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
-            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
+            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
             with.SetData<WorldType>(ref count, ref entities);
 
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -250,8 +250,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(-1);
             #endif
@@ -265,7 +265,7 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
-            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
+            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
             with.SetData<WorldType>(ref count, ref entities);
 
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -289,8 +289,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(-1);
             #endif
@@ -316,8 +316,8 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
-            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
-            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
+            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
             with.SetData<WorldType>(ref count, ref entities);
 
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -345,8 +345,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C3>.Value.AddBlocker(-1);
@@ -362,8 +362,8 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
-            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
-            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
+            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
             with.SetData<WorldType>(ref count, ref entities);
 
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -390,9 +390,9 @@ namespace FFS.Libraries.StaticEcs {
                     );
                 }
             }
-
-            with.Dispose<WorldType>();
+            
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C3>.Value.AddBlocker(-1);
@@ -421,9 +421,9 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
-            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
-            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
-            Ecs<WorldType>.Components<C4>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
+            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldType>.Components<C4>.Value.SetDataIfCountLess(ref count, ref entities);
             with.SetData<WorldType>(ref count, ref entities);
 
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -456,8 +456,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C3>.Value.AddBlocker(-1);
@@ -475,9 +475,9 @@ namespace FFS.Libraries.StaticEcs {
             #endif
             var count = Ecs<WorldType>.Components<C1>.Value.Count();
             var entities = Ecs<WorldType>.Components<C1>.Value.EntitiesData();
-            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
-            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
-            Ecs<WorldType>.Components<C4>.Value.SetDataIfCountLess(ref count, ref entities, out var _);
+            Ecs<WorldType>.Components<C2>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldType>.Components<C3>.Value.SetDataIfCountLess(ref count, ref entities);
+            Ecs<WorldType>.Components<C4>.Value.SetDataIfCountLess(ref count, ref entities);
             with.SetData<WorldType>(ref count, ref entities);
 
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -510,8 +510,8 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
-            with.Dispose<WorldType>();
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
+             with.Dispose<WorldType>();
             Ecs<WorldType>.Components<C1>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C2>.Value.AddBlocker(-1);
             Ecs<WorldType>.Components<C3>.Value.AddBlocker(-1);
@@ -569,8 +569,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -609,8 +611,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
     }
 
@@ -667,8 +671,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -710,8 +716,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
     }
 
@@ -773,8 +781,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -819,8 +829,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
     }
 
@@ -886,8 +898,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
@@ -935,8 +949,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
 
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             all.Dispose<WorldType>();
             with.Dispose<WorldType>();
+            #endif
         }
     }
     #endregion

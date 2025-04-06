@@ -50,8 +50,12 @@ namespace FFS.Libraries.StaticEcs {
         public readonly QueryEntitiesIterator<WorldType, QM> GetEnumerator() => this;
 
         [MethodImpl(AggressiveInlining)]
-        public void Dispose() => _queryMethod.Dispose<WorldType>();
-        
+        public void Dispose() {
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
+            _queryMethod.Dispose<WorldType>();
+            #endif
+        }
+
         [MethodImpl(AggressiveInlining)]
         public void DestroyAllEntities() {
             while (MoveNext()) {
