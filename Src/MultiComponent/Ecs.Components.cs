@@ -13,7 +13,6 @@ namespace FFS.Libraries.StaticEcs {
         #if ENABLE_IL2CPP
         [Il2CppSetOption(Option.NullChecks, false)]
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
-        [Il2CppEagerStaticClassConstruction]
         #endif
         internal partial struct ModuleComponents {
             [MethodImpl(AggressiveInlining)]
