@@ -4,7 +4,7 @@ has_toc: false
 parent: Main page
 ---
 
-![Version](https://img.shields.io/badge/version-0.9.70-blue.svg?style=for-the-badge)  
+![Version](https://img.shields.io/badge/version-0.9.71-blue.svg?style=for-the-badge)  
 
 ___
 
@@ -16,7 +16,7 @@ ___
 - Performance
 - No allocations
 - No dependencies
-- No Unsafe
+- No Unsafe in core
 - Based on statics and structures
 - Type-safe
 - Free abstractions

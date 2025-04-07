@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.70-blue.svg?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.9.71-blue.svg?style=for-the-badge)
 
 ### ЯЗЫК
 [RU](./README_RU.md)
@@ -13,7 +13,7 @@ ___
 - Производительность
 - Отсутсвие аллокаций
 - Отсутствие зависимостей
-- Без Unsafe
+- Без Unsafe в ядре
 - Основан на статике и структурах
 - Типобезопасность
 - Бесплатные абстракции

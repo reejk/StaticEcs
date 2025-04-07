@@ -4,7 +4,7 @@ has_toc: false
 parent: Main page
 ---
 
-![Version](https://img.shields.io/badge/version-0.9.70-blue.svg?style=for-the-badge)  
+![Version](https://img.shields.io/badge/version-0.9.71-blue.svg?style=for-the-badge)  
 
 ___
 
@@ -16,7 +16,7 @@ ___
 - Производительность
 - Отсутсвие аллокаций
 - Отсутствие зависимостей
-- Без Unsafe
+- Без Unsafe в ядре
 - Основан на статике и структурах
 - Типобезопасность
 - Бесплатные абстракции

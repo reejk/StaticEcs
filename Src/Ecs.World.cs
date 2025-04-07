@@ -418,32 +418,30 @@ namespace FFS.Libraries.StaticEcs {
                 if(!IsInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, World not initialized");
                 #endif
                 ref var version = ref StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value;
-                if (version < 0) {
-                    return;
-                }
-
-                #if !FFS_ECS_DISABLE_TAGS
-                ModuleTags.Value.DestroyEntity(entity);
-                #endif
-                #if !FFS_ECS_DISABLE_MASKS
-                ModuleMasks.Value.DestroyEntity(entity);
-                #endif
-                ModuleComponents.Value.DestroyEntity(entity);
-                ModuleStandardComponents.Value.DestroyEntity(entity);
-                version = version == short.MaxValue ? (short) -1 : (short) -(version + 1);
-                StandardComponents<EntityStatus>.Value.RefMutInternal(entity).Value = EntityStatusType.Enabled;
-                if (_deletedEntitiesCount == _deletedEntities.Length) {
-                    Array.Resize(ref _deletedEntities, (int) (_deletedEntitiesCount << 1));
-                }
-
-                _deletedEntities[_deletedEntitiesCount++] = entity;
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                if (_debugEventListeners != null) {
-                    foreach (var listener in _debugEventListeners) {
-                        listener.OnEntityDestroyed(entity);
+                if (version > 0) {
+                    #if !FFS_ECS_DISABLE_TAGS
+                    ModuleTags.Value.DestroyEntity(entity);
+                    #endif
+                    #if !FFS_ECS_DISABLE_MASKS
+                    ModuleMasks.Value.DestroyEntity(entity);
+                    #endif
+                    ModuleComponents.Value.DestroyEntity(entity);
+                    ModuleStandardComponents.Value.DestroyEntity(entity);
+                    version = version == short.MaxValue ? (short) -1 : (short) -(version + 1);
+                    StandardComponents<EntityStatus>.Value.RefMutInternal(entity).Value = EntityStatusType.Enabled;
+                    if (_deletedEntitiesCount == _deletedEntities.Length) {
+                        Array.Resize(ref _deletedEntities, (int) (_deletedEntitiesCount << 1));
                     }
+
+                    _deletedEntities[_deletedEntitiesCount++] = entity;
+                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                    if (_debugEventListeners != null) {
+                        foreach (var listener in _debugEventListeners) {
+                            listener.OnEntityDestroyed(entity);
+                        }
+                    }
+                    #endif
                 }
-                #endif
             }
 
             [MethodImpl(AggressiveInlining)]
