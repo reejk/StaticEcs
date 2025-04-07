@@ -174,7 +174,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -198,7 +198,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -241,7 +241,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
 
@@ -264,7 +264,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -322,7 +322,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -350,7 +350,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -400,7 +400,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -427,7 +427,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -493,7 +493,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -526,7 +526,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -584,7 +584,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -616,7 +616,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -691,7 +691,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -728,7 +728,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -793,7 +793,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -829,7 +829,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -912,7 +912,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -953,7 +953,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1025,7 +1025,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1065,7 +1065,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1156,7 +1156,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -1202,7 +1202,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1282,7 +1282,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1327,7 +1327,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1428,7 +1428,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -1478,7 +1478,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1565,7 +1565,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1614,7 +1614,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1722,7 +1722,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -1776,7 +1776,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
@@ -1870,7 +1870,7 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_DISABLE_UNSAFE
+        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1923,7 +1923,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         #endif
 
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && !FFS_ECS_DISABLE_UNSAFE
+        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
         private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             #pragma warning disable CS8500
             fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
