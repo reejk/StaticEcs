@@ -174,7 +174,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -196,32 +195,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -241,7 +214,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
 
@@ -262,32 +234,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
     #if ENABLE_IL2CPP
@@ -322,7 +268,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -348,36 +293,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -400,7 +315,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -425,36 +339,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
     #if ENABLE_IL2CPP
@@ -493,7 +377,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -524,41 +407,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv],
-                                   ref data3[i3 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -584,7 +432,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -614,41 +461,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv],
-                               ref data3[i3 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
     #if ENABLE_IL2CPP
@@ -691,7 +503,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -726,45 +537,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv],
-                                   ref data3[i3 & Const.DisabledComponentMaskInv],
-                                   ref data4[i4 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -793,7 +565,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -827,45 +598,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv],
-                               ref data3[i3 & Const.DisabledComponentMaskInv],
-                               ref data4[i4 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
     #if ENABLE_IL2CPP
@@ -912,7 +644,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -951,49 +682,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv],
-                                   ref data3[i3 & Const.DisabledComponentMaskInv],
-                                   ref data4[i4 & Const.DisabledComponentMaskInv],
-                                   ref data5[i5 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -1025,7 +713,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1063,49 +750,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv],
-                               ref data3[i3 & Const.DisabledComponentMaskInv],
-                               ref data4[i4 & Const.DisabledComponentMaskInv],
-                               ref data5[i5 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
     #if ENABLE_IL2CPP
@@ -1156,7 +800,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -1200,54 +843,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (uint* di6 = Ecs<WorldType>.Components<C6>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (C6* data6 = Ecs<WorldType>.Components<C6>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    var i6 = di6[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && (i6 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv],
-                                   ref data3[i3 & Const.DisabledComponentMaskInv],
-                                   ref data4[i4 & Const.DisabledComponentMaskInv],
-                                   ref data5[i5 & Const.DisabledComponentMaskInv],
-                                   ref data6[i6 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -1282,7 +877,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1325,54 +919,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (uint* di6 = Ecs<WorldType>.Components<C6>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (C6* data6 = Ecs<WorldType>.Components<C6>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    var i6 = di6[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && (i6 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv],
-                               ref data3[i3 & Const.DisabledComponentMaskInv],
-                               ref data4[i4 & Const.DisabledComponentMaskInv],
-                               ref data5[i5 & Const.DisabledComponentMaskInv],
-                               ref data6[i6 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
 
@@ -1428,7 +974,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -1476,58 +1021,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (uint* di6 = Ecs<WorldType>.Components<C6>.Value.GetDataIdxByEntityId())
-            fixed (uint* di7 = Ecs<WorldType>.Components<C7>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (C6* data6 = Ecs<WorldType>.Components<C6>.Value.Data())
-            fixed (C7* data7 = Ecs<WorldType>.Components<C7>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    var i6 = di6[entity];
-                    var i7 = di7[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && (i6 & maskLeft) == maskRight && (i7 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv],
-                                   ref data3[i3 & Const.DisabledComponentMaskInv],
-                                   ref data4[i4 & Const.DisabledComponentMaskInv],
-                                   ref data5[i5 & Const.DisabledComponentMaskInv],
-                                   ref data6[i6 & Const.DisabledComponentMaskInv],
-                                   ref data7[i7 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -1565,7 +1058,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1612,58 +1104,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (uint* di6 = Ecs<WorldType>.Components<C6>.Value.GetDataIdxByEntityId())
-            fixed (uint* di7 = Ecs<WorldType>.Components<C7>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (C6* data6 = Ecs<WorldType>.Components<C6>.Value.Data())
-            fixed (C7* data7 = Ecs<WorldType>.Components<C7>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    var i6 = di6[entity];
-                    var i7 = di7[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && (i6 & maskLeft) == maskRight && (i7 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv],
-                               ref data3[i3 & Const.DisabledComponentMaskInv],
-                               ref data4[i4 & Const.DisabledComponentMaskInv],
-                               ref data5[i5 & Const.DisabledComponentMaskInv],
-                               ref data6[i6 & Const.DisabledComponentMaskInv],
-                               ref data7[i7 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
 
     #if ENABLE_IL2CPP
@@ -1722,7 +1162,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
         
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count)
             where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
@@ -1774,62 +1213,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run<R>(R runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) where R : struct, Ecs<WorldType>.IQueryFunction<C1, C2, C3, C4, C5, C6, C7, C8> {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (uint* di6 = Ecs<WorldType>.Components<C6>.Value.GetDataIdxByEntityId())
-            fixed (uint* di7 = Ecs<WorldType>.Components<C7>.Value.GetDataIdxByEntityId())
-            fixed (uint* di8 = Ecs<WorldType>.Components<C8>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (C6* data6 = Ecs<WorldType>.Components<C6>.Value.Data())
-            fixed (C7* data7 = Ecs<WorldType>.Components<C7>.Value.Data())
-            fixed (C8* data8 = Ecs<WorldType>.Components<C8>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    var i6 = di6[entity];
-                    var i7 = di7[entity];
-                    var i8 = di8[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && (i6 & maskLeft) == maskRight && (i7 & maskLeft) == maskRight && (i8 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner.Run(new Ecs<WorldType>.Entity(entity),
-                                   ref data1[i1 & Const.DisabledComponentMaskInv],
-                                   ref data2[i2 & Const.DisabledComponentMaskInv],
-                                   ref data3[i3 & Const.DisabledComponentMaskInv],
-                                   ref data4[i4 & Const.DisabledComponentMaskInv],
-                                   ref data5[i5 & Const.DisabledComponentMaskInv],
-                                   ref data6[i6 & Const.DisabledComponentMaskInv],
-                                   ref data7[i7 & Const.DisabledComponentMaskInv],
-                                   ref data8[i8 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight) {
@@ -1870,7 +1253,6 @@ namespace FFS.Libraries.StaticEcs {
             }
         }
 
-        #if !FFS_ECS_ENABLE_UNSAFE
         private void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
             var di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId();
             var di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId();
@@ -1921,62 +1303,6 @@ namespace FFS.Libraries.StaticEcs {
                 }
             }
         }
-        #endif
-
-        #if !DEBUG && !FFS_ECS_ENABLE_DEBUG && FFS_ECS_ENABLE_UNSAFE
-        private unsafe void Run(DelegateQueryFunction<WorldType, C1, C2, C3, C4, C5, C6, C7, C8> runner, P with, EntityStatusType entitiesParam, uint maskLeft, uint maskRight, uint[] entities, uint count) {
-            #pragma warning disable CS8500
-            fixed (uint* di1 = Ecs<WorldType>.Components<C1>.Value.GetDataIdxByEntityId())
-            fixed (uint* di2 = Ecs<WorldType>.Components<C2>.Value.GetDataIdxByEntityId())
-            fixed (uint* di3 = Ecs<WorldType>.Components<C3>.Value.GetDataIdxByEntityId())
-            fixed (uint* di4 = Ecs<WorldType>.Components<C4>.Value.GetDataIdxByEntityId())
-            fixed (uint* di5 = Ecs<WorldType>.Components<C5>.Value.GetDataIdxByEntityId())
-            fixed (uint* di6 = Ecs<WorldType>.Components<C6>.Value.GetDataIdxByEntityId())
-            fixed (uint* di7 = Ecs<WorldType>.Components<C7>.Value.GetDataIdxByEntityId())
-            fixed (uint* di8 = Ecs<WorldType>.Components<C8>.Value.GetDataIdxByEntityId())
-            fixed (C1* data1 = Ecs<WorldType>.Components<C1>.Value.Data())
-            fixed (C2* data2 = Ecs<WorldType>.Components<C2>.Value.Data())
-            fixed (C3* data3 = Ecs<WorldType>.Components<C3>.Value.Data())
-            fixed (C4* data4 = Ecs<WorldType>.Components<C4>.Value.Data())
-            fixed (C5* data5 = Ecs<WorldType>.Components<C5>.Value.Data())
-            fixed (C6* data6 = Ecs<WorldType>.Components<C6>.Value.Data())
-            fixed (C7* data7 = Ecs<WorldType>.Components<C7>.Value.Data())
-            fixed (C8* data8 = Ecs<WorldType>.Components<C8>.Value.Data())
-            fixed (uint* en = entities)
-            fixed (EntityStatus* status = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data())
-            #pragma warning restore CS8500
-            {
-                while (count > 0) {
-                    count--;
-                    var entity = en[count];
-                    var i1 = di1[entity];
-                    var i2 = di2[entity];
-                    var i3 = di3[entity];
-                    var i4 = di4[entity];
-                    var i5 = di5[entity];
-                    var i6 = di6[entity];
-                    var i7 = di7[entity];
-                    var i8 = di8[entity];
-                    if ((entitiesParam == EntityStatusType.Any || entitiesParam == status[entity].Value)
-                        && (i1 & maskLeft) == maskRight && (i2 & maskLeft) == maskRight
-                        && (i3 & maskLeft) == maskRight && (i4 & maskLeft) == maskRight && (i5 & maskLeft) == maskRight
-                        && (i6 & maskLeft) == maskRight && (i7 & maskLeft) == maskRight && (i8 & maskLeft) == maskRight
-                        && with.CheckEntity(entity)) {
-                        runner(new Ecs<WorldType>.Entity(entity),
-                               ref data1[i1 & Const.DisabledComponentMaskInv],
-                               ref data2[i2 & Const.DisabledComponentMaskInv],
-                               ref data3[i3 & Const.DisabledComponentMaskInv],
-                               ref data4[i4 & Const.DisabledComponentMaskInv],
-                               ref data5[i5 & Const.DisabledComponentMaskInv],
-                               ref data6[i6 & Const.DisabledComponentMaskInv],
-                               ref data7[i7 & Const.DisabledComponentMaskInv],
-                               ref data8[i8 & Const.DisabledComponentMaskInv]
-                        );
-                    }
-                }
-            }
-        }
-        #endif
     }
     #endregion
 }
