@@ -182,6 +182,36 @@ MyWorld.QueryComponents.With<WithAdds<
 >>().For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
+
+
+Also similarly, there are variants for searching by disabled or together with disabled components:
+It is important that the filter is applied only to components specified in the function, not to With components 
+If you need to set a filter for disabled components in With, use the constructs AllOnlyDisabled, AllWithDisabled, etc.
+
+MyWorld.QueryComponents.With(with).ForOnlyDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.With(with).ForWithDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+
+// There is also a possibility of multithreaded processing:
+// Important! A special entity type is introduced which prohibits all operations except Ref, RefMut, Has etc.
+// You cannot create, delete entities or components in multithreaded processing, only read and modify existing ones.
+
+MyWorld.QueryComponents.Parallel.With(with).For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.Parallel.With(with).ForOnlyDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
 ```
   
 #### Look at the special possibilities for finding entities in the world:

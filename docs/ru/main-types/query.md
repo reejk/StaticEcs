@@ -182,6 +182,35 @@ MyWorld.QueryComponents.With<WithAdds<
 >>().For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
+
+// Также по аналогии существуют разновидности для поиска по отключенным или вместе с отключенными компонентами:
+// Важно фильтр применяется только к компонентам указаным в функции, а не к With 
+// если нужно установить фильтр отключенных компонентов в With то используйте конструкции AllOnlyDisabled, AllWithDisabled и тд
+
+MyWorld.QueryComponents.With(with).ForOnlyDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.With(with).ForWithDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+
+// Также существует возможноть многопоточной обработки:
+// Важно! Вовзращается специальный тип сущности который запрещает все операции кроме Ref, RefMut, Has
+// Нельзя в мнопоточной обработке создавать, удалять сущности или компоненты, только читать и изменять существующие
+
+MyWorld.QueryComponents.Parallel.With(with).For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.Parallel.With(with).ForOnlyDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+    position.Val *= velocity.Val;
+});
 ```
   
 #### Посмотрим на особые возможности поиска сущностей в мире:
