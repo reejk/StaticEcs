@@ -81,12 +81,8 @@ ___
 int standardComponentsCount = entity.StandardComponentsCount();
 
 // Get ref reference to a standard read/write component
-ref var entityType = ref entity.RefMutStandard<EntityType>();
+ref var entityType = ref entity.RefStandard<EntityType>();
 entityType.Val = 123;
-
-// Get ref reference to a standard read-only component
-ref readonly var readOnlyEntityType = ref entity.RefStandard<EntityType>();
-//readOnlyEntityType.Val = 123;  -   ERROR
 
 var entity2 = World.Entity.New<SomeComponent>();
 // Copy the specified standard components to another entity (overload methods from 1-5 components)

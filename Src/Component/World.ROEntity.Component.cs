@@ -24,13 +24,7 @@ namespace FFS.Libraries.StaticEcs {
             #region BY_TYPE
             #region REF
             [MethodImpl(AggressiveInlining)]
-            public ref C RefMut<C>()
-                where C : struct, IComponent {
-                return ref Components<C>.Value.RefMut(_entity);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public ref readonly C Ref<C>()
+            public ref C Ref<C>()
                 where C : struct, IComponent {
                 return ref Components<C>.Value.Ref(_entity);
             }

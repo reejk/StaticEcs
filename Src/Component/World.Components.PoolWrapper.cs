@@ -108,10 +108,7 @@ namespace FFS.Libraries.StaticEcs {
             public ushort DynamicId() => Components<T>.Value.DynamicId();
             
             [MethodImpl(AggressiveInlining)]
-            internal ref T RefMut(Entity entity) => ref Components<T>.Value.RefMut(entity);
-
-            [MethodImpl(AggressiveInlining)]
-            internal ref readonly T Ref(Entity entity) => ref Components<T>.Value.Ref(entity);
+            internal ref T Ref(Entity entity) => ref Components<T>.Value.Ref(entity);
             
             [MethodImpl(AggressiveInlining)]
             public IComponent GetRaw(Entity entity) => Components<T>.Value.Ref(entity);
@@ -171,7 +168,7 @@ namespace FFS.Libraries.StaticEcs {
             Type IStandardRawPool.GetElementType() => typeof(T);
 
             [MethodImpl(AggressiveInlining)]
-            object IStandardRawPool.GetRaw(uint entity) => Components<T>.Value.RefMutInternal(new Entity(entity));
+            object IStandardRawPool.GetRaw(uint entity) => Components<T>.Value.RefInternal(new Entity(entity));
 
             [MethodImpl(AggressiveInlining)]
             void IStandardRawPool.PutRaw(uint entity, object value) => Components<T>.Value.Put(new Entity(entity), (T) value);

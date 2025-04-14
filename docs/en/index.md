@@ -99,7 +99,7 @@ public struct Velocity : IComponent { public float Value; }
 public readonly struct VelocitySystem : IUpdateSystem {
     public void Update() {
         foreach (var entity in W.QueryEntities.For<All<Position, Velocity>>()) {
-            entity.RefMut<Position>().Value *= entity.Ref<Velocity>().Value;
+            entity.Ref<Position>().Value *= entity.Ref<Velocity>().Value;
         }
     }
 }

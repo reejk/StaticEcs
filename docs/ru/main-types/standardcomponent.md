@@ -81,12 +81,8 @@ ___
 int standardComponentsCount = entity.StandardComponentsCount();
 
 // Получить ref ссылку на стандартный компонент на чтение\запись
-ref var entityType = ref entity.RefMutStandard<EntityType>();
+ref var entityType = ref entity.RefStandard<EntityType>();
 entityType.Val = 123;
-
-// Получить ref ссылку на стандартный компонент только на чтение
-ref readonly var readOnlyEntityType = ref entity.RefStandard<EntityType>();
-//readOnlyEntityType.Val = 123;  -   ERROR
 
 var entity2 = World.Entity.New<SomeComponent>();
 // Скопировать указанные стандартные компоненты на другую сущность (методы перегрузки от 1-5 компонентов)

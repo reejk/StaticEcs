@@ -70,7 +70,7 @@ var entity = World.Entity.New(
 int componentsCount = entity.ComponentsCount();
 
 // Получить ref ссылку на компонент на чтение\запись
-ref var velocity = ref entity.RefMut<Velocity>();
+ref var velocity = ref entity.Ref<Velocity>();
 velocity.Val++;
 
 // Получить ref ссылку на компонент только на чтение

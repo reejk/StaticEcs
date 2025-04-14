@@ -434,7 +434,7 @@ namespace FFS.Libraries.StaticEcs {
             result.Clear();
             for (uint i = 0, iMax = Entity.entityVersionsCount; i < iMax; i++) {
                 var entity = Entity.FromIdx(i);
-                if (StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value > 0) {
+                if (StandardComponents<EntityVersion>.Value.RefInternal(entity).Value > 0) {
                     result.Add(entity);
                 }
             }

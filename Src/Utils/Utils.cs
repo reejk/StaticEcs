@@ -143,7 +143,6 @@ namespace FFS.Libraries.StaticEcs {
         EntityCreate,
         EntityDestroy,
         ComponentRef,
-        ComponentRefMut,
         ComponentAdd,
         ComponentPut,
         ComponentDelete,
@@ -186,7 +185,7 @@ namespace FFS.Libraries.StaticEcs {
 
         public void TryAddColumn(World<WorldType>.Entity entity, StreamWriter writer) {
             if (World<WorldType>.Components<T>.Value.IsRegistered() && World<WorldType>.Components<T>.Value.Has(entity)) {
-                World<WorldType>.Components<T>.Value.RefMutInternal(entity).WriteColumn(writer);
+                World<WorldType>.Components<T>.Value.RefInternal(entity).WriteColumn(writer);
             }
 
             writer.Write(";");
@@ -198,7 +197,6 @@ namespace FFS.Libraries.StaticEcs {
             "CREATE",
             "DESTROY",
             "REF",
-            "REF_MUT",
             "ADD",
             "PUT",
             "DEL",
@@ -391,10 +389,6 @@ namespace FFS.Libraries.StaticEcs {
 
         public void OnComponentRef<T>(World<WorldType>.Entity entity, ref T component) where T : struct, IComponent {
             Write(entity, OperationType.ComponentRef, TypeData<T>.Name);
-        }
-
-        public void OnComponentRefMut<T>(World<WorldType>.Entity entity, ref T component) where T : struct, IComponent {
-            Write(entity, OperationType.ComponentRefMut, TypeData<T>.Name);
         }
 
         public void OnComponentAdd<T>(World<WorldType>.Entity entity, ref T component) where T : struct, IComponent {

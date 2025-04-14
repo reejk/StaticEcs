@@ -32,7 +32,7 @@ namespace FFS.Libraries.StaticEcs {
             public static Entity FromIdx(uint idx) => new(idx);
 
             [MethodImpl(AggressiveInlining)]
-            public short Version() => StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value;
+            public short Version() => StandardComponents<EntityVersion>.Value.RefInternal(this).Value;
 
             uint IEntity.GetId() => _id;
 
@@ -43,7 +43,7 @@ namespace FFS.Libraries.StaticEcs {
             IWorld IEntity.World() => Worlds.Get(typeof(WorldType));
 
             [MethodImpl(AggressiveInlining)]
-            public bool IsActual() => StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value > 0;
+            public bool IsActual() => StandardComponents<EntityVersion>.Value.RefInternal(this).Value > 0;
 
             [MethodImpl(AggressiveInlining)]
             public Entity Clone(bool withDisabled = true) {
@@ -90,13 +90,13 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public PackedEntity Pack() => new() { _entity = _id, _version = StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value };
+            public PackedEntity Pack() => new() { _entity = _id, _version = StandardComponents<EntityVersion>.Value.RefInternal(this).Value };
 
             [MethodImpl(AggressiveInlining)]
             public void Destroy() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, World not initialized");
-                if (StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value <= 0) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, Entity already destroyed");
+                if (StandardComponents<EntityVersion>.Value.RefInternal(this).Value <= 0) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, Entity already destroyed");
                 #endif
                 #if !FFS_ECS_DISABLE_TAGS
                 ModuleTags.Value.DestroyEntity(this);
@@ -106,8 +106,8 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
                 ModuleComponents.Value.DestroyEntity(this);
                 ModuleStandardComponents.Value.DestroyEntity(this);
-                StandardComponents<EntityVersion>.Value.RefMutInternal(this).SetInactive();
-                StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value = EntityStatusType.Enabled;
+                StandardComponents<EntityVersion>.Value.RefInternal(this).SetInactive();
+                StandardComponents<EntityStatus>.Value.RefInternal(this).Value = EntityStatusType.Enabled;
                 if (deletedEntitiesCount == deletedEntities.Length) {
                     Array.Resize(ref deletedEntities, (int) (deletedEntitiesCount << 1));
                 }
@@ -127,7 +127,7 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, World not initialized");
                 #endif
-                if (StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value > 0) {
+                if (StandardComponents<EntityVersion>.Value.RefInternal(this).Value > 0) {
                     Destroy();
                 }
             }
@@ -146,7 +146,7 @@ namespace FFS.Libraries.StaticEcs {
                 Entity entity;
                 if (deletedEntitiesCount > 0) {
                     entity = deletedEntities[--deletedEntitiesCount];
-                    StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value *= -1;
+                    StandardComponents<EntityVersion>.Value.RefInternal(entity).Value *= -1;
                 } else {
                     entity = new Entity(entityVersionsCount);
 
@@ -170,7 +170,7 @@ namespace FFS.Libraries.StaticEcs {
                         #endif
                     }
 
-                    StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value = 1;
+                    StandardComponents<EntityVersion>.Value.RefInternal(entity).Value = 1;
                     entityVersionsCount++;
                 }
 
@@ -642,7 +642,7 @@ namespace FFS.Libraries.StaticEcs {
             internal static void DestroyEntities() {
                 for (var i = entityVersionsCount; i > 0; i--) {
                     var entity = FromIdx(i - 1);
-                    if (StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value > 0) {
+                    if (StandardComponents<EntityVersion>.Value.RefInternal(entity).Value > 0) {
                         entity.Destroy();
                     }
                 }
@@ -759,7 +759,7 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public readonly bool TryUnpack<WorldType>(out World<WorldType>.Entity entity) where WorldType : struct, IWorldType {
             entity = World<WorldType>.Entity.FromIdx(_entity);
-            return World<WorldType>.StandardComponents<EntityVersion>.Value.RefMutInternal(entity).Value == _version;
+            return World<WorldType>.StandardComponents<EntityVersion>.Value.RefInternal(entity).Value == _version;
         }
 
         [MethodImpl(AggressiveInlining)]

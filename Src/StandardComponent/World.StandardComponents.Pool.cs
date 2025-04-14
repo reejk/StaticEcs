@@ -37,29 +37,9 @@ namespace FFS.Libraries.StaticEcs {
             public bool IsRegistered() {
                 return _registered;
             }
-            
-            [MethodImpl(AggressiveInlining)]
-            public ref T RefMut(Entity entity) {
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}> Method: RefMut, World not initialized");
-                if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, Component type not registered");
-                if (!entity.IsActual()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, cannot access Entity ID - {id} from deleted entity");
-                #endif
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                ref var val = ref _data[entity._id];
-                if (debugEventListeners != null) {
-                    foreach (var listener in debugEventListeners) {
-                        listener.OnComponentRefMut(entity, ref val);
-                    }
-                }
-                return ref val;
-                #else
-                return ref _data[entity._id];
-                #endif
-            }
 
             [MethodImpl(AggressiveInlining)]
-            public ref readonly T Ref(Entity entity) {
+            public ref T Ref(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Ref, World not initialized");
                 if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Ref, Component type not registered");
@@ -89,9 +69,9 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
 
                 if (AutoCopyHandler == null) {
-                    RefMut(dst) = RefMut(src);
+                    Ref(dst) = Ref(src);
                 } else {
-                    AutoCopyHandler(ref RefMut(src), ref RefMut(dst));
+                    AutoCopyHandler(ref Ref(src), ref Ref(dst));
                 }
             }
             #endregion
@@ -99,12 +79,12 @@ namespace FFS.Libraries.StaticEcs {
             #region INTERNAL
             
             [MethodImpl(AggressiveInlining)]
-            internal ref T RefMutInternal(Entity entity) {
+            internal ref T RefInternal(Entity entity) {
                 return ref _data[entity._id];
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal ref T RefMutInternal(uint entityId) {
+            internal ref T RefInternal(uint entityId) {
                 return ref _data[entityId];
             }
             

@@ -68,34 +68,34 @@ MaskAny<Flammable, Frozen, Visible> _any2 = default;
 // Different sets of filtering methods can be applied to the World.QueryEntities.For() method for example:
 // Option 1 method through generic
 foreach (var entity in MyWorld.QueryEntities.For<All<Position, Direction, Velocity>>()) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Variant with 1 method via value
 var all = default(All<Position, Direction, Velocity>);
 foreach (var entity in MyWorld.QueryEntities.For(all)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Option with 2 methods via generic
 foreach (var entity in MyWorld.QueryEntities.For<
              All<Position, Velocity, Name>,
              None<Name>>()) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Variant with 2 methods via value
 All<Position, Direction, Velocity> all2 = default;
 None<Name> none2 = default;
 foreach (var entity in MyWorld.QueryEntities.For(all2, none2)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Alternative with 2 methods via value
 var all3 = Types<Position, Direction, Velocity>.All();
 var none3 = Types<Name>.None();
 foreach (var entity in MyWorld.QueryEntities.For(all3, none3)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 
@@ -108,7 +108,7 @@ foreach (var entity in MyWorld.QueryEntities.For<With<
              None<Name>,
              Any<Position, Direction, Velocity>
          >>()) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Method 2 through values
@@ -118,7 +118,7 @@ With<
     Any<Position, Direction, Velocity>
 > with = default;
 foreach (var entity in MyWorld.QueryEntities.For(with)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Method 3 through values alternative
@@ -128,7 +128,7 @@ var with2 = With.Create(
     default(Any<Position, Direction, Velocity>)
 );
 foreach (var entity in MyWorld.QueryEntities.For(with2)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Method 4 through values alternative
@@ -138,7 +138,7 @@ var with3 = With.Create(
     Types<Position, Direction, Velocity>.Any()
 );
 foreach (var entity in MyWorld.QueryEntities.For(with3)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 ```
   
@@ -198,7 +198,7 @@ MyWorld.QueryComponents.With(with).ForWithDiabled(static (World.Entity entity, r
 
 
 // There is also a possibility of multithreaded processing:
-// Important! A special entity type is introduced which prohibits all operations except Ref, RefMut, Has etc.
+// Important! A special entity type is introduced which prohibits all operations except Ref, Has etc.
 // You cannot create, delete entities or components in multithreaded processing, only read and modify existing ones.
 
 MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {

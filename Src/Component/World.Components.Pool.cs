@@ -43,26 +43,7 @@ namespace FFS.Libraries.StaticEcs {
 
             #region PUBLIC
             [MethodImpl(AggressiveInlining)]
-            public ref T RefMut(Entity entity) {
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG
-                if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}> Method: RefMut, World not initialized");
-                if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, Component type not registered");
-                if (!entity.IsActual()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, cannot access Entity ID - {id} from deleted entity");
-                if (!Has(entity)) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: RefMut, ID - {entity._id} is missing on an entity");
-                #endif
-                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                ref var val = ref _data[_dataIdxByEntityId[entity._id] & Const.DisabledComponentMaskInv];
-                foreach (var listener in debugEventListeners) {
-                    listener.OnComponentRefMut(entity, ref val);
-                }
-                return ref val;
-                #else
-                return ref _data[_dataIdxByEntityId[entity._id] & Const.DisabledComponentMaskInv];
-                #endif
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public ref readonly T Ref(Entity entity) {
+            public ref T Ref(Entity entity) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Ref, World not initialized");
                 if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Ref, Component type not registered");
@@ -191,7 +172,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             public ref T TryAdd(Entity entity) {
                 return ref Has(entity)
-                    ? ref RefMut(entity)
+                    ? ref Ref(entity)
                     : ref Add(entity);
             }
 
@@ -207,7 +188,7 @@ namespace FFS.Libraries.StaticEcs {
                 added = !Has(entity);
                 return ref added
                     ? ref Add(entity)
-                    : ref RefMut(entity);
+                    : ref Ref(entity);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -247,7 +228,7 @@ namespace FFS.Libraries.StaticEcs {
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Disable, Component type not registered");
                 if (!entity.IsActual()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Disable, cannot access ID - {id} from deleted entity");
                 if (!Has(entity)) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Disable, ID - {entity._id} is missing on an entity");
-                if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Disable: RefMut, this operation is not supported in multithreaded mode");
+                if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Disable: Disable, this operation is not supported in multithreaded mode");
                 #endif
                 _dataIdxByEntityId[entity._id] |= Const.DisabledComponentMask;
                 _bitMask.MoveToDisabled(entity._id, id);
@@ -307,9 +288,9 @@ namespace FFS.Libraries.StaticEcs {
                 #endif
 
                 if (AutoCopyHandler == null) {
-                    TryAdd(dst) = RefMut(src);
+                    TryAdd(dst) = Ref(src);
                 } else {
-                    AutoCopyHandler(ref RefMut(src), ref TryAdd(dst));
+                    AutoCopyHandler(ref Ref(src), ref TryAdd(dst));
                 }
 
                 if (HasDisabled(src)) {
@@ -374,7 +355,7 @@ namespace FFS.Libraries.StaticEcs {
 
             #region INTERNAL
             [MethodImpl(AggressiveInlining)]
-            internal ref T RefMutInternal(Entity entity) {
+            internal ref T RefInternal(Entity entity) {
                 return ref _data[_dataIdxByEntityId[entity._id] & Const.DisabledComponentMaskInv];
             }
             

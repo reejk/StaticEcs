@@ -27,13 +27,7 @@ namespace FFS.Libraries.StaticEcs {
             #region BY_TYPE
             #region REF
             [MethodImpl(AggressiveInlining)]
-            public ref C RefMut<C>()
-                where C : struct, IComponent {
-                return ref Components<C>.Value.RefMut(this);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public ref readonly C Ref<C>()
+            public ref C Ref<C>()
                 where C : struct, IComponent {
                 return ref Components<C>.Value.Ref(this);
             }
@@ -836,10 +830,8 @@ namespace FFS.Libraries.StaticEcs {
         public int ComponentsCount(bool withDisabled = true);
 
         public void GetAllComponents(List<IComponent> result, bool withDisabled = true);
-        
-        public ref C RefMut<C>() where C : struct, IComponent;
 
-        public ref readonly C Ref<C>() where C : struct, IComponent;
+        public ref C Ref<C>() where C : struct, IComponent;
         
         public bool HasAllOf<C>() where C : struct, IComponent;
         

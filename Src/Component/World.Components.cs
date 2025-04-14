@@ -295,7 +295,6 @@ namespace FFS.Libraries.StaticEcs {
         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
         public interface IComponentsDebugEventListener {
             void OnComponentRef<T>(Entity entity, ref T component) where T : struct, IComponent;
-            void OnComponentRefMut<T>(Entity entity, ref T component) where T : struct, IComponent;
             void OnComponentAdd<T>(Entity entity, ref T component) where T : struct, IComponent;
             void OnComponentPut<T>(Entity entity, ref T component) where T : struct, IComponent;
             void OnComponentDelete<T>(Entity entity, ref T component) where T : struct, IComponent;

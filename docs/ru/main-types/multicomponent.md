@@ -129,8 +129,8 @@ items.Add(new Item());                                                 // Доб
 items.Add(new Item("a"), new Item("b"), new Item("c"), new Item("d")); // Добавить элементы (1 - 4)
 items.Add(new[] { new Item("f"), new Item("g") });                     // Добавить элементы из массива
 items.Add(new[] { new Item("f"), new Item("g") }, 1, 1);               // Добавить элементы из массива c указанием старта и количества
-items.Add(ref entity2.RefMut<Multi<Item>>());                          // Добавить элементы из другого компонента
-items.Add(ref entity2.RefMut<Multi<Item>>(), 1, 1);                    // Добавить элементы из другого компонента c указанием старта и количества
+items.Add(ref entity2.Ref<Multi<Item>>());                             // Добавить элементы из другого компонента
+items.Add(ref entity2.Ref<Multi<Item>>(), 1, 1);                       // Добавить элементы из другого компонента c указанием старта и количества
 items.InsertAt(idx: 1, new Item("e"));                                 // Вставить элемент в указанный индекс, остальные элементы будут сдвинуты
 items.EnsureSize(10);                                                  // Обеспечить вместимость еще на N элементов если требуется
 items.Resize(16);                                                      // Расширить вместимость до N если требуется

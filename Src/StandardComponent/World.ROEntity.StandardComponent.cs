@@ -22,21 +22,15 @@ namespace FFS.Libraries.StaticEcs {
             public int StandardComponentsCount() => ModuleStandardComponents.Value.ComponentsCount();
             
             [MethodImpl(AggressiveInlining)]
-            public bool IsDisabled() => StandardComponents<EntityStatus>.Value.RefMutInternal(_entity).Value == EntityStatusType.Disabled;
+            public bool IsDisabled() => StandardComponents<EntityStatus>.Value.RefInternal(_entity).Value == EntityStatusType.Disabled;
             
             [MethodImpl(AggressiveInlining)]
-            public bool IsEnabled() => StandardComponents<EntityStatus>.Value.RefMutInternal(_entity).Value == EntityStatusType.Enabled;
+            public bool IsEnabled() => StandardComponents<EntityStatus>.Value.RefInternal(_entity).Value == EntityStatusType.Enabled;
 
             #region BY_TYPE
             #region REF
             [MethodImpl(AggressiveInlining)]
-            public ref C RefMutStandard<C>()
-                where C : struct, IStandardComponent {
-                return ref StandardComponents<C>.Value.RefMut(_entity);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public ref readonly C RefStandard<C>()
+            public ref C RefStandard<C>()
                 where C : struct, IStandardComponent {
                 return ref StandardComponents<C>.Value.Ref(_entity);
             }

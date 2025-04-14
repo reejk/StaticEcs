@@ -25,27 +25,21 @@ namespace FFS.Libraries.StaticEcs {
             public void GetAllStandardComponents(List<IStandardComponent> result) => ModuleStandardComponents.Value.GetAllComponents(this, result);
             
             [MethodImpl(AggressiveInlining)]
-            public bool IsDisabled() => StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value == EntityStatusType.Disabled;
+            public bool IsDisabled() => StandardComponents<EntityStatus>.Value.RefInternal(this).Value == EntityStatusType.Disabled;
             
             [MethodImpl(AggressiveInlining)]
-            public bool IsEnabled() => StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value == EntityStatusType.Enabled;
+            public bool IsEnabled() => StandardComponents<EntityStatus>.Value.RefInternal(this).Value == EntityStatusType.Enabled;
             
             [MethodImpl(AggressiveInlining)]
-            public void Disable() => StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value = EntityStatusType.Disabled;
+            public void Disable() => StandardComponents<EntityStatus>.Value.RefInternal(this).Value = EntityStatusType.Disabled;
             
             [MethodImpl(AggressiveInlining)]
-            public void Enable() => StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value = EntityStatusType.Enabled;
+            public void Enable() => StandardComponents<EntityStatus>.Value.RefInternal(this).Value = EntityStatusType.Enabled;
 
             #region BY_TYPE
             #region REF
             [MethodImpl(AggressiveInlining)]
-            public ref C RefMutStandard<C>()
-                where C : struct, IStandardComponent {
-                return ref StandardComponents<C>.Value.RefMut(this);
-            }
-
-            [MethodImpl(AggressiveInlining)]
-            public ref readonly C RefStandard<C>()
+            public ref C RefStandard<C>()
                 where C : struct, IStandardComponent {
                 return ref StandardComponents<C>.Value.Ref(this);
             }
@@ -166,10 +160,8 @@ namespace FFS.Libraries.StaticEcs {
         public int StandardComponentsCount();
 
         public void GetAllStandardComponents(List<IStandardComponent> result);
-        
-        public ref C RefMutStandard<C>() where C : struct, IStandardComponent;
 
-        public ref readonly C RefStandard<C>() where C : struct, IStandardComponent;
+        public ref C RefStandard<C>() where C : struct, IStandardComponent;
 
         public IStandardComponent GetRawStandard(Type componentType);
 

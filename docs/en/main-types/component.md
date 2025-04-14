@@ -70,12 +70,8 @@ var entity = World.Entity.New(
 int componentsCount = entity.ComponentsCount();
 
 // Get ref reference to read/write component
-ref var velocity = ref entity.RefMut<Velocity>();
+ref var velocity = ref entity.Ref<Velocity>();
 velocity.Val++;
-
-// Get ref reference to a read-only component
-ref readonly var readOnlyVelocity = ref entity.Ref<Velocity>();
-//readOnlyVelocity.Value++;  -   ERROR
 
 // Check for the presence of ALL specified components (overload methods from 1-3 components)
 entity.HasAllOf<Position>();

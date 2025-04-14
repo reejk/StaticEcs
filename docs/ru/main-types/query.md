@@ -68,34 +68,34 @@ MaskAny<Flammable, Frozen, Visible> _any2 = default;
 // Различные наборы методов фильтрации могут быть применины к методу World.QueryEntities.For() например:
 // Вариант с 1 методом через дженерик
 foreach (var entity in MyWorld.QueryEntities.For<All<Position, Direction, Velocity>>()) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Вариант с 1 методом через значение
 var all = default(All<Position, Direction, Velocity>);
 foreach (var entity in MyWorld.QueryEntities.For(all)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Вариант с 2 методами  через дженерик
 foreach (var entity in MyWorld.QueryEntities.For<
              All<Position, Velocity, Name>,
              None<Name>>()) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Вариант с 2 методами  через значение
 All<Position, Direction, Velocity> all2 = default;
 None<Name> none2 = default;
 foreach (var entity in MyWorld.QueryEntities.For(all2, none2)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Альтернативный вариант с 2 методами  через значение
 var all3 = Types<Position, Direction, Velocity>.All();
 var none3 = Types<Name>.None();
 foreach (var entity in MyWorld.QueryEntities.For(all3, none3)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 
@@ -108,7 +108,7 @@ foreach (var entity in MyWorld.QueryEntities.For<With<
              None<Name>,
              Any<Position, Direction, Velocity>
          >>()) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Способ 2 через значения
@@ -118,7 +118,7 @@ With<
     Any<Position, Direction, Velocity>
 > with = default;
 foreach (var entity in MyWorld.QueryEntities.For(with)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Способ 3 через значения альтернативный
@@ -128,7 +128,7 @@ var with2 = With.Create(
     default(Any<Position, Direction, Velocity>)
 );
 foreach (var entity in MyWorld.QueryEntities.For(with2)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 
 // Способ 4 через значения альтернативный
@@ -138,7 +138,7 @@ var with3 = With.Create(
     Types<Position, Direction, Velocity>.Any()
 );
 foreach (var entity in MyWorld.QueryEntities.For(with3)) {
-    entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+    entity.Ref<Position>().Val *= entity.Ref<Velocity>().Val;
 }
 ```
   
@@ -197,7 +197,7 @@ MyWorld.QueryComponents.With(with).ForWithDiabled(static (World.Entity entity, r
 
 
 // Также существует возможноть многопоточной обработки:
-// Важно! Вовзращается специальный тип сущности который запрещает все операции кроме Ref, RefMut, Has
+// Важно! Вовзращается специальный тип сущности который запрещает все операции кроме Ref, Has
 // Нельзя в мнопоточной обработке создавать, удалять сущности или компоненты, только читать и изменять существующие
 
 MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {

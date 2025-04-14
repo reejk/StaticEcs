@@ -283,7 +283,6 @@ namespace FFS.Libraries.StaticEcs {
         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
         public interface IStandardComponentsDebugEventListener {
             void OnComponentRef<T>(Entity entity, ref T component) where T : struct, IStandardComponent;
-            void OnComponentRefMut<T>(Entity entity, ref T component) where T : struct, IStandardComponent;
         }
         #endif
     }

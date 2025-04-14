@@ -128,8 +128,8 @@ items.Add(new Item());                                                 // Add el
 items.Add(new Item("a"), new Item("b"), new Item("c"), new Item("d")); // Add elements (1 - 4)
 items.Add(new[] { new Item("f"), new Item("g") });                     // Add elements from an array
 items.Add(new[] { new Item("f"), new Item("g") }, 1, 1);               // Add elements from an array with the start and number specified
-items.Add(ref entity2.RefMut<Multi<Item>>());                          // Add elements from another component
-items.Add(ref entity2.RefMut<Multi<Item>>(), 1, 1);                    // Add elements from another component specifying start and quantity
+items.Add(ref entity2.Ref<Multi<Item>>());                             // Add elements from another component
+items.Add(ref entity2.Ref<Multi<Item>>(), 1, 1);                       // Add elements from another component specifying start and quantity
 items.InsertAt(idx: 1, new Item("e"));                                 // Insert an element in the specified index, the other elements will be shifted
 items.EnsureSize(10);                                                  // Ensure capacity for N more elements if required
 items.Resize(16);                                                      // Extend capacity to N if required

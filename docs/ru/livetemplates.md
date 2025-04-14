@@ -10,12 +10,7 @@ Component live template
 ```csharp
 public static class $COMPONENT$Extension {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static ref $COMPONENT$ Mut$COMPONENT$(this $WORLD$.Entity entity) {
-        return ref $WORLD$.Components<$COMPONENT$>.Value.RefMut(entity);
-    }
-    
-    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static ref readonly $COMPONENT$ $COMPONENT$(this $WORLD$.Entity entity) {
+    public static ref $COMPONENT$ $COMPONENT$(this $WORLD$.Entity entity) {
         return ref $WORLD$.Components<$COMPONENT$>.Value.Ref(entity);
     }
     
@@ -67,18 +62,13 @@ Standard component live template
 public static class $COMPONENT$Extension {
     
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static ref readonly $COMPONENT$ $COMPONENT$(this $WORLD$.Entity entity) {
+    public static ref $COMPONENT$ $COMPONENT$(this $WORLD$.Entity entity) {
         return ref $WORLD$.StandardComponents<$COMPONENT$>.Value.Ref(entity);
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static ref $COMPONENT$ Mut$COMPONENT$(this $WORLD$.Entity entity) {
-        return ref $WORLD$.StandardComponents<$COMPONENT$>.Value.RefMut(entity);
-    }
-
-    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public static void Set$COMPONENT$(this $WORLD$.Entity entity, $COMPONENT$ value) {
-        $WORLD$.StandardComponents<$COMPONENT$>.Value.RefMut(entity) = value;
+        $WORLD$.StandardComponents<$COMPONENT$>.Value.Ref(entity) = value;
     }
 }
 ```

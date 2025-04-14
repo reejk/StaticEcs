@@ -27,10 +27,10 @@ namespace FFS.Libraries.StaticEcs {
             public static ROEntity FromIdx(uint idx) => new(idx);
 
             [MethodImpl(AggressiveInlining)]
-            public short Version() => StandardComponents<EntityVersion>.Value.RefMutInternal(_entity).Value;
+            public short Version() => StandardComponents<EntityVersion>.Value.RefInternal(_entity).Value;
 
             [MethodImpl(AggressiveInlining)]
-            public bool IsActual() => StandardComponents<EntityVersion>.Value.RefMutInternal(_entity).Value > 0;
+            public bool IsActual() => StandardComponents<EntityVersion>.Value.RefInternal(_entity).Value > 0;
 
             [MethodImpl(AggressiveInlining)]
             public static bool operator ==(ROEntity left, ROEntity right) {
@@ -43,7 +43,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            public PackedEntity Pack() => new() { _entity = _entity._id, _version = StandardComponents<EntityVersion>.Value.RefMutInternal(_entity).Value };
+            public PackedEntity Pack() => new() { _entity = _entity._id, _version = StandardComponents<EntityVersion>.Value.RefInternal(_entity).Value };
 
             [MethodImpl(AggressiveInlining)]
             public bool Equals(Entity entity) => _entity == entity;
