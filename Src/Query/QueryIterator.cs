@@ -25,10 +25,10 @@ namespace FFS.Libraries.StaticEcs {
             _entities = default;
             _count = int.MaxValue;
             _queryMethod.SetData<WorldType>(ref _count, ref _entities);
-            _entitiesStatus = Ecs<WorldType>.StandardComponents<EntityStatus>.Value.Data();
+            _entitiesStatus = World<WorldType>.StandardComponents<EntityStatus>.Value.Data();
         }
 
-        public readonly Ecs<WorldType>.Entity Current {
+        public readonly World<WorldType>.Entity Current {
             [MethodImpl(AggressiveInlining)] get => new (_current);
         }
 
@@ -63,16 +63,16 @@ namespace FFS.Libraries.StaticEcs {
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    new Ecs<WorldType>.Entity(_current).Destroy();
+                    World<WorldType>.DestroyEntity(new(_current));
                 }
             }
             Dispose();
         }
 
         [MethodImpl(AggressiveInlining)]
-        public bool First(out Ecs<WorldType>.Entity entity) {
+        public bool First(out World<WorldType>.Entity entity) {
             var moveNext = MoveNext();
-            entity = new Ecs<WorldType>.Entity(_current);
+            entity = new World<WorldType>.Entity(_current);
             Dispose();
             return moveNext;
         }
@@ -93,11 +93,11 @@ namespace FFS.Libraries.StaticEcs {
         #region COMPONENTS
         [MethodImpl(AggressiveInlining)]
         public void AddForAll<T1>() where T1 : struct, IComponent {
-            ref var components = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var components = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    components.Add(new Ecs<WorldType>.Entity(_current));
+                    components.Add(new World<WorldType>.Entity(_current));
                 }
             }
             Dispose();
@@ -107,12 +107,12 @@ namespace FFS.Libraries.StaticEcs {
         public void AddForAll<T1, T2>() 
             where T1 : struct, IComponent
             where T2 : struct, IComponent{
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity);
                     container2.Add(entity);
                 }
@@ -125,13 +125,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity);
                     container2.Add(entity);
                     container3.Add(entity);
@@ -146,14 +146,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity);
                     container2.Add(entity);
                     container3.Add(entity);
@@ -170,15 +170,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity);
                     container2.Add(entity);
                     container3.Add(entity);
@@ -191,11 +191,11 @@ namespace FFS.Libraries.StaticEcs {
         
                 [MethodImpl(AggressiveInlining)]
         public void TryAddForAll<T1>() where T1 : struct, IComponent {
-            ref var components = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var components = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     components.TryAdd(entity);
                 }
             }
@@ -206,12 +206,12 @@ namespace FFS.Libraries.StaticEcs {
         public void TryAddForAll<T1, T2>() 
             where T1 : struct, IComponent
             where T2 : struct, IComponent{
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity);
                     container2.TryAdd(entity);
                 }
@@ -224,13 +224,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity);
                     container2.TryAdd(entity);
                     container3.TryAdd(entity);
@@ -245,14 +245,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity);
                     container2.TryAdd(entity);
                     container3.TryAdd(entity);
@@ -269,15 +269,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity);
                     container2.TryAdd(entity);
                     container3.TryAdd(entity);
@@ -291,11 +291,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void AddForAll<T1>(T1 t1) 
             where T1 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity) = t1;
                 }
             }
@@ -306,12 +306,12 @@ namespace FFS.Libraries.StaticEcs {
         public void AddForAll<T1, T2>(T1 t1, T2 t2) 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity) = t1;
                     container2.Add(entity) = t2;
                 }
@@ -324,13 +324,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity) = t1;
                     container2.Add(entity) = t2;
                     container3.Add(entity) = t3;
@@ -345,14 +345,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity) = t1;
                     container2.Add(entity) = t2;
                     container3.Add(entity) = t3;
@@ -369,15 +369,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Add(entity) = t1;
                     container2.Add(entity) = t2;
                     container3.Add(entity) = t3;
@@ -391,11 +391,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void TryAddForAll<T1>(T1 t1) 
             where T1 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity) = t1;
                 }
             }
@@ -406,12 +406,12 @@ namespace FFS.Libraries.StaticEcs {
         public void TryAddForAll<T1, T2>(T1 t1, T2 t2) 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity) = t1;
                     container2.TryAdd(entity) = t2;
                 }
@@ -424,13 +424,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity) = t1;
                     container2.TryAdd(entity) = t2;
                     container3.TryAdd(entity) = t3;
@@ -445,14 +445,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity) = t1;
                     container2.TryAdd(entity) = t2;
                     container3.TryAdd(entity) = t3;
@@ -469,15 +469,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryAdd(entity) = t1;
                     container2.TryAdd(entity) = t2;
                     container3.TryAdd(entity) = t3;
@@ -491,11 +491,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void PutForAll<T1>(T1 t1) 
             where T1 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Put(entity, t1);
                 }
             }
@@ -506,12 +506,12 @@ namespace FFS.Libraries.StaticEcs {
         public void PutForAll<T1, T2>(T1 t1, T2 t2) 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Put(entity, t1);
                     container2.Put(entity, t2);
                 }
@@ -524,13 +524,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Put(entity, t1);
                     container2.Put(entity, t2);
                     container3.Put(entity, t3);
@@ -545,14 +545,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Put(entity, t1);
                     container2.Put(entity, t2);
                     container3.Put(entity, t3);
@@ -569,15 +569,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Put(entity, t1);
                     container2.Put(entity, t2);
                     container3.Put(entity, t3);
@@ -591,11 +591,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void DeleteForAll<T1>() 
             where T1 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                 }
             }
@@ -606,12 +606,12 @@ namespace FFS.Libraries.StaticEcs {
         public void DeleteForAll<T1, T2>() 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                 }
@@ -624,13 +624,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -645,14 +645,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -669,15 +669,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -691,11 +691,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void TryDeleteForAll<T1>() 
             where T1 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                 }
             }
@@ -706,12 +706,12 @@ namespace FFS.Libraries.StaticEcs {
         public void TryDeleteForAll<T1, T2>() 
             where T1 : struct, IComponent
             where T2 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                 }
@@ -724,13 +724,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -745,14 +745,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
             where T4 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -769,15 +769,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
             where T5 : struct, IComponent {
-            ref var container1 = ref Ecs<WorldType>.Components<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Components<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Components<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Components<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Components<T5>.Value;
+            ref var container1 = ref World<WorldType>.Components<T1>.Value;
+            ref var container2 = ref World<WorldType>.Components<T2>.Value;
+            ref var container3 = ref World<WorldType>.Components<T3>.Value;
+            ref var container4 = ref World<WorldType>.Components<T4>.Value;
+            ref var container5 = ref World<WorldType>.Components<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -793,11 +793,11 @@ namespace FFS.Libraries.StaticEcs {
         #if !FFS_ECS_DISABLE_TAGS
         [MethodImpl(AggressiveInlining)]
         public void SetTagForAll<T1>() where T1 : struct, ITag {
-            ref var container = ref Ecs<WorldType>.Tags<T1>.Value;
+            ref var container = ref World<WorldType>.Tags<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container.Set(entity);
                 }
             }
@@ -808,12 +808,12 @@ namespace FFS.Libraries.StaticEcs {
         public void SetTagForAll<T1, T2>() 
             where T1 : struct, ITag
             where T2 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                 }
@@ -826,13 +826,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, ITag
             where T2 : struct, ITag
             where T3 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                     container3.Set(entity);
@@ -847,14 +847,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, ITag
             where T3 : struct, ITag
             where T4 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Tags<T4>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
+            ref var container4 = ref World<WorldType>.Tags<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                     container3.Set(entity);
@@ -871,15 +871,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, ITag
             where T4 : struct, ITag
             where T5 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Tags<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Tags<T5>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
+            ref var container4 = ref World<WorldType>.Tags<T4>.Value;
+            ref var container5 = ref World<WorldType>.Tags<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                     container3.Set(entity);
@@ -893,11 +893,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void DeleteTagForAll<T1>() 
             where T1 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                 }
             }
@@ -908,12 +908,12 @@ namespace FFS.Libraries.StaticEcs {
         public void DeleteTagForAll<T1, T2>() 
             where T1 : struct, ITag
             where T2 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                 }
@@ -926,13 +926,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, ITag
             where T2 : struct, ITag
             where T3 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -947,14 +947,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, ITag
             where T3 : struct, ITag
             where T4 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Tags<T4>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
+            ref var container4 = ref World<WorldType>.Tags<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -971,15 +971,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, ITag
             where T4 : struct, ITag
             where T5 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Tags<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Tags<T5>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
+            ref var container4 = ref World<WorldType>.Tags<T4>.Value;
+            ref var container5 = ref World<WorldType>.Tags<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -993,11 +993,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void TryDeleteTagForAll<T1>() 
             where T1 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                 }
             }
@@ -1008,12 +1008,12 @@ namespace FFS.Libraries.StaticEcs {
         public void TryDeleteTagForAll<T1, T2>() 
             where T1 : struct, ITag
             where T2 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                 }
@@ -1026,13 +1026,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, ITag
             where T2 : struct, ITag
             where T3 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -1047,14 +1047,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, ITag
             where T3 : struct, ITag
             where T4 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Tags<T4>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
+            ref var container4 = ref World<WorldType>.Tags<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -1071,15 +1071,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, ITag
             where T4 : struct, ITag
             where T5 : struct, ITag {
-            ref var container1 = ref Ecs<WorldType>.Tags<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Tags<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Tags<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Tags<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Tags<T5>.Value;
+            ref var container1 = ref World<WorldType>.Tags<T1>.Value;
+            ref var container2 = ref World<WorldType>.Tags<T2>.Value;
+            ref var container3 = ref World<WorldType>.Tags<T3>.Value;
+            ref var container4 = ref World<WorldType>.Tags<T4>.Value;
+            ref var container5 = ref World<WorldType>.Tags<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -1096,11 +1096,11 @@ namespace FFS.Libraries.StaticEcs {
         #if !FFS_ECS_DISABLE_MASKS
         [MethodImpl(AggressiveInlining)]
         public void SetMaskForAll<T1>() where T1 : struct, IMask {
-            ref var container = ref Ecs<WorldType>.Masks<T1>.Value;
+            ref var container = ref World<WorldType>.Masks<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container.Set(entity);
                 }
             }
@@ -1111,12 +1111,12 @@ namespace FFS.Libraries.StaticEcs {
         public void SetMaskForAll<T1, T2>() 
             where T1 : struct, IMask
             where T2 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                 }
@@ -1129,13 +1129,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IMask
             where T2 : struct, IMask
             where T3 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                     container3.Set(entity);
@@ -1150,14 +1150,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IMask
             where T3 : struct, IMask
             where T4 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Masks<T4>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
+            ref var container4 = ref World<WorldType>.Masks<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                     container3.Set(entity);
@@ -1174,15 +1174,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IMask
             where T4 : struct, IMask
             where T5 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Masks<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Masks<T5>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
+            ref var container4 = ref World<WorldType>.Masks<T4>.Value;
+            ref var container5 = ref World<WorldType>.Masks<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Set(entity);
                     container2.Set(entity);
                     container3.Set(entity);
@@ -1196,11 +1196,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void DeleteMaskForAll<T1>() 
             where T1 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                 }
             }
@@ -1211,12 +1211,12 @@ namespace FFS.Libraries.StaticEcs {
         public void DeleteMaskForAll<T1, T2>() 
             where T1 : struct, IMask
             where T2 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                 }
@@ -1229,13 +1229,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IMask
             where T2 : struct, IMask
             where T3 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -1250,14 +1250,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IMask
             where T3 : struct, IMask
             where T4 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Masks<T4>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
+            ref var container4 = ref World<WorldType>.Masks<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -1274,15 +1274,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IMask
             where T4 : struct, IMask
             where T5 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Masks<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Masks<T5>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
+            ref var container4 = ref World<WorldType>.Masks<T4>.Value;
+            ref var container5 = ref World<WorldType>.Masks<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.Delete(entity);
                     container2.Delete(entity);
                     container3.Delete(entity);
@@ -1296,11 +1296,11 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public void TryDeleteMaskForAll<T1>() 
             where T1 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                 }
             }
@@ -1311,12 +1311,12 @@ namespace FFS.Libraries.StaticEcs {
         public void TryDeleteMaskForAll<T1, T2>() 
             where T1 : struct, IMask
             where T2 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                 }
@@ -1329,13 +1329,13 @@ namespace FFS.Libraries.StaticEcs {
             where T1 : struct, IMask
             where T2 : struct, IMask
             where T3 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -1350,14 +1350,14 @@ namespace FFS.Libraries.StaticEcs {
             where T2 : struct, IMask
             where T3 : struct, IMask
             where T4 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Masks<T4>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
+            ref var container4 = ref World<WorldType>.Masks<T4>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
@@ -1374,15 +1374,15 @@ namespace FFS.Libraries.StaticEcs {
             where T3 : struct, IMask
             where T4 : struct, IMask
             where T5 : struct, IMask {
-            ref var container1 = ref Ecs<WorldType>.Masks<T1>.Value;
-            ref var container2 = ref Ecs<WorldType>.Masks<T2>.Value;
-            ref var container3 = ref Ecs<WorldType>.Masks<T3>.Value;
-            ref var container4 = ref Ecs<WorldType>.Masks<T4>.Value;
-            ref var container5 = ref Ecs<WorldType>.Masks<T5>.Value;
+            ref var container1 = ref World<WorldType>.Masks<T1>.Value;
+            ref var container2 = ref World<WorldType>.Masks<T2>.Value;
+            ref var container3 = ref World<WorldType>.Masks<T3>.Value;
+            ref var container4 = ref World<WorldType>.Masks<T4>.Value;
+            ref var container5 = ref World<WorldType>.Masks<T5>.Value;
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    var entity = new Ecs<WorldType>.Entity(_current);
+                    var entity = new World<WorldType>.Entity(_current);
                     container1.TryDelete(entity);
                     container2.TryDelete(entity);
                     container3.TryDelete(entity);
