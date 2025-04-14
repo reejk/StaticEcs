@@ -366,6 +366,12 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal void DeleteInternal(Entity entity) {
+                DeleteInternalWithoutMask(entity);
+                _bitMask.DelWithDisabled(entity._id, id);
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            internal void DeleteInternalWithoutMask(Entity entity) {
                 _componentsCount--;
                 ref var idxRef = ref _dataIdxByEntityId[entity._id];
                 ref var data = ref _data[idxRef & Const.DisabledComponentMaskInv];
@@ -381,14 +387,13 @@ namespace FFS.Libraries.StaticEcs {
                     AutoResetHandler(ref data);
                 }
 
-                var lastEntity = _entities[_componentsCount];
-                _entities[idxRef & Const.DisabledComponentMaskInv] = lastEntity;
-                _dataIdxByEntityId[lastEntity] = idxRef;
+                if (idxRef < _componentsCount) {
+                    var lastEntity = _entities[_componentsCount];
+                    _entities[idxRef & Const.DisabledComponentMaskInv] = lastEntity;
+                    _dataIdxByEntityId[lastEntity] = idxRef;
+                    (_data[_componentsCount], data) = (data, _data[_componentsCount]);
+                }
                 idxRef = Const.EmptyComponentMask;
-                    
-                (_data[_componentsCount], data) = (data, _data[_componentsCount]);
-
-                _bitMask.DelWithDisabled(entity._id, id);
             }
             
             [MethodImpl(AggressiveInlining)]

@@ -353,6 +353,24 @@ namespace FFS.Libraries.StaticEcs {
             idx = -1;
             return false;
         }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void GetAllMinIndexesWithDisabled(uint bitMapIdx, int[] indexes, out int count) {
+            count = 0;
+            var offset = bitMapIdx * _maskLen;
+            for (var i = 0; i < _maskLen; i++, offset++) {
+                ref var bits1 = ref _bitMap[offset];
+                ref var bits2 = ref _bitMapDisabled[offset];
+                var v = bits1 | bits2;
+                bits1 = 0UL;
+                bits2 = 0UL;
+                while (v != 0UL) {
+                    var rem = BitsLut[((ulong) ((long) v & -(long) v) * 0x37E84A99DAE458F) >> 58];
+                    indexes[count++] = (i << 6) + rem;
+                    v &= ~(1UL << rem);
+                }
+            }
+        }
 
         [MethodImpl(AggressiveInlining)]
         public bool GetMinIndexBuffer(byte BufId, out int idx) {

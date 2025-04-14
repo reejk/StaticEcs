@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !FFS_ECS_DISABLE_TAGS
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static System.Runtime.CompilerServices.MethodImplOptions;
@@ -69,3 +70,4 @@ namespace FFS.Libraries.StaticEcs {
         }
     }
 }
+#endif

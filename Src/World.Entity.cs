@@ -96,31 +96,39 @@ namespace FFS.Libraries.StaticEcs {
             public void Destroy() {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, World not initialized");
+                if (StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value <= 0) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, Entity already destroyed");
                 #endif
-                ref var version = ref StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value;
-                if (version > 0) {
-                    #if !FFS_ECS_DISABLE_TAGS
-                    ModuleTags.Value.DestroyEntity(this);
-                    #endif
-                    #if !FFS_ECS_DISABLE_MASKS
-                    ModuleMasks.Value.DestroyEntity(this);
-                    #endif
-                    ModuleComponents.Value.DestroyEntity(this);
-                    ModuleStandardComponents.Value.DestroyEntity(this);
-                    version = version == short.MaxValue ? (short) -1 : (short) -(version + 1);
-                    StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value = EntityStatusType.Enabled;
-                    if (deletedEntitiesCount == deletedEntities.Length) {
-                        Array.Resize(ref deletedEntities, (int) (deletedEntitiesCount << 1));
-                    }
+                #if !FFS_ECS_DISABLE_TAGS
+                ModuleTags.Value.DestroyEntity(this);
+                #endif
+                #if !FFS_ECS_DISABLE_MASKS
+                ModuleMasks.Value.DestroyEntity(this);
+                #endif
+                ModuleComponents.Value.DestroyEntity(this);
+                ModuleStandardComponents.Value.DestroyEntity(this);
+                StandardComponents<EntityVersion>.Value.RefMutInternal(this).SetInactive();
+                StandardComponents<EntityStatus>.Value.RefMutInternal(this).Value = EntityStatusType.Enabled;
+                if (deletedEntitiesCount == deletedEntities.Length) {
+                    Array.Resize(ref deletedEntities, (int) (deletedEntitiesCount << 1));
+                }
 
-                    deletedEntities[deletedEntitiesCount++] = this;
-                    #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
-                    if (_debugEventListeners != null) {
-                        foreach (var listener in _debugEventListeners) {
-                            listener.OnEntityDestroyed(this);
-                        }
+                deletedEntities[deletedEntitiesCount++] = this;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                if (_debugEventListeners != null) {
+                    foreach (var listener in _debugEventListeners) {
+                        listener.OnEntityDestroyed(this);
                     }
-                    #endif
+                }
+                #endif
+            }
+            
+            [MethodImpl(AggressiveInlining)]
+            public void TryDestroy() {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: DestroyEntity, World not initialized");
+                #endif
+                if (StandardComponents<EntityVersion>.Value.RefMutInternal(this).Value > 0) {
+                    Destroy();
                 }
             }
 
@@ -656,9 +664,9 @@ namespace FFS.Libraries.StaticEcs {
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>, Method: CreateEntities, World not initialized");
                 if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>, Method: CreateEntities, this operation is not supported in multithreaded mode");
                 #endif
-                var newEntitiesCount = count + 1 - (entitiesCapacity - entityVersionsCount + deletedEntitiesCount);
+                int newEntitiesCount = (int) (count + 1 - (entitiesCapacity - entityVersionsCount + deletedEntitiesCount));
                 if (newEntitiesCount > 0) {
-                    entitiesCapacity = Utils.CalculateSize(entitiesCapacity + newEntitiesCount);
+                    entitiesCapacity = Utils.CalculateSize((uint) (entitiesCapacity + newEntitiesCount));
                     ModuleComponents.Value.Resize(entitiesCapacity);
                     ModuleStandardComponents.Value.Resize(entitiesCapacity);
                     #if !FFS_ECS_DISABLE_TAGS
@@ -700,13 +708,13 @@ namespace FFS.Libraries.StaticEcs {
                 public bool MoveNext() {
                     if (count > 0) {
                         count--;
-                        if (deletedEntitiesCount > 0) {
-                            entity = deletedEntities[--deletedEntitiesCount];
-                            entityVersions[entity._id].Value *= -1;
-                        } else {
+                        if (deletedEntitiesCount <= 0) {
                             entity = new Entity(entityVersionsCount);
                             entityVersions[entity._id].Value = 1;
                             entityVersionsCount++;
+                        } else {
+                            entity = deletedEntities[--deletedEntitiesCount];
+                            entityVersions[entity._id].Value *= -1;
                         }
                         #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                         if (_debugEventListeners != null) {

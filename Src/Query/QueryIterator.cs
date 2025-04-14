@@ -51,29 +51,33 @@ namespace FFS.Libraries.StaticEcs {
         [MethodImpl(AggressiveInlining)]
         public readonly QueryEntitiesIterator<WorldType, QM> GetEnumerator() => this;
 
+        #if DEBUG || FFS_ECS_ENABLE_DEBUG
         [MethodImpl(AggressiveInlining)]
         public void Dispose() {
-            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             _queryMethod.Dispose<WorldType>();
-            #endif
         }
+        #endif
 
         [MethodImpl(AggressiveInlining)]
         public void DestroyAllEntities() {
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    World<WorldType>.DestroyEntity(new(_current));
+                    new World<WorldType>.Entity(_current).Destroy();
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
 
         [MethodImpl(AggressiveInlining)]
         public bool First(out World<WorldType>.Entity entity) {
             var moveNext = MoveNext();
             entity = new World<WorldType>.Entity(_current);
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
             return moveNext;
         }
         
@@ -86,7 +90,9 @@ namespace FFS.Libraries.StaticEcs {
                     count++;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
             return count;
         }
 
@@ -100,7 +106,9 @@ namespace FFS.Libraries.StaticEcs {
                     components.Add(new World<WorldType>.Entity(_current));
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -117,7 +125,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Add(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -137,7 +147,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Add(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -160,7 +172,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Add(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -186,10 +200,12 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Add(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
-                [MethodImpl(AggressiveInlining)]
+        [MethodImpl(AggressiveInlining)]
         public void TryAddForAll<T1>() where T1 : struct, IComponent {
             ref var components = ref World<WorldType>.Components<T1>.Value;
             while (_count > 0) {
@@ -199,7 +215,9 @@ namespace FFS.Libraries.StaticEcs {
                     components.TryAdd(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -216,7 +234,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.TryAdd(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -236,7 +256,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.TryAdd(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -259,7 +281,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.TryAdd(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -285,7 +309,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.TryAdd(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -299,7 +325,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.Add(entity) = t1;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -316,7 +344,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Add(entity) = t2;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -336,7 +366,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Add(entity) = t3;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -359,7 +391,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Add(entity) = t4;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -385,7 +419,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Add(entity) = t5;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -399,7 +435,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.TryAdd(entity) = t1;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -416,7 +454,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.TryAdd(entity) = t2;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -436,7 +476,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.TryAdd(entity) = t3;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -459,7 +501,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.TryAdd(entity) = t4;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -485,7 +529,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.TryAdd(entity) = t5;
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -499,7 +545,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.Put(entity, t1);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -516,7 +564,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Put(entity, t2);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -536,7 +586,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Put(entity, t3);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -559,7 +611,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Put(entity, t4);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -585,7 +639,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Put(entity, t5);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -599,7 +655,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -616,7 +674,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -636,7 +696,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -659,7 +721,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -685,7 +749,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -699,7 +765,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -716,7 +784,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -736,7 +806,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -759,7 +831,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -785,7 +859,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         #endregion
 
@@ -801,7 +877,9 @@ namespace FFS.Libraries.StaticEcs {
                     container.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -818,7 +896,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -838,7 +918,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -861,7 +943,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -887,7 +971,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -901,7 +987,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -918,7 +1006,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -938,7 +1028,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -961,7 +1053,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -987,7 +1081,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1001,7 +1097,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1018,7 +1116,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1038,7 +1138,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1061,7 +1163,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1087,7 +1191,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         #endif
         #endregion
@@ -1104,7 +1210,9 @@ namespace FFS.Libraries.StaticEcs {
                     container.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1121,7 +1229,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1141,7 +1251,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1164,7 +1276,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1190,7 +1304,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Set(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1204,7 +1320,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1221,7 +1339,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1241,7 +1361,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1264,7 +1386,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1290,7 +1414,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.Delete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1304,7 +1430,9 @@ namespace FFS.Libraries.StaticEcs {
                     container1.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1321,7 +1449,9 @@ namespace FFS.Libraries.StaticEcs {
                     container2.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1341,7 +1471,9 @@ namespace FFS.Libraries.StaticEcs {
                     container3.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1364,7 +1496,9 @@ namespace FFS.Libraries.StaticEcs {
                     container4.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         
         [MethodImpl(AggressiveInlining)]
@@ -1390,7 +1524,9 @@ namespace FFS.Libraries.StaticEcs {
                     container5.TryDelete(entity);
                 }
             }
+            #if DEBUG || FFS_ECS_ENABLE_DEBUG
             Dispose();
+            #endif
         }
         #endif
         #endregion

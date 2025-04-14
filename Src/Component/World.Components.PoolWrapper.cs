@@ -81,6 +81,8 @@ namespace FFS.Libraries.StaticEcs {
             internal void Resize(uint cap);
             
             internal void DeleteInternal(Entity entity);
+            
+            internal void DeleteInternalWithoutMask(Entity entity);
 
             internal void Destroy();
 
@@ -220,6 +222,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.DeleteInternal(Entity entity) => Components<T>.Value.DeleteInternal(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            void IComponentsWrapper.DeleteInternalWithoutMask(Entity entity) => Components<T>.Value.DeleteInternalWithoutMask(entity);
 
             [MethodImpl(AggressiveInlining)]
             void IComponentsWrapper.Destroy() => Components<T>.Value.Destroy();
