@@ -253,9 +253,9 @@ namespace FFS.Libraries.StaticEcs {
         }
 
         [MethodImpl(AggressiveInlining)]
-        public short IndexOf(T item) {
+        public int IndexOf(T item) {
             var indexOf = Array.IndexOf(data.values, item, (int)offset, count);
-            return (short) (indexOf > 0 ? indexOf - offset : -1);
+            return (int) (indexOf > 0 ? indexOf - offset : -1);
         }
 
         [MethodImpl(AggressiveInlining)]

@@ -4,7 +4,7 @@ has_toc: false
 parent: Main page
 ---
 
-![Version](https://img.shields.io/badge/version-0.9.73-blue.svg?style=for-the-badge)  
+![Version](https://img.shields.io/badge/version-0.9.80-blue.svg?style=for-the-badge)  
 
 ___
 
@@ -42,7 +42,6 @@ ___
   * [Мульти-компонент](main-types/multicomponent.md)
   * [Тег](main-types/tag.md)
   * [Маска](main-types/mask.md)
-  * [Ecs](main-types/ecs.md)
   * [Мир](main-types/world.md)
   * [Системы](main-types/systems.md)
   * [Контекст](main-types/context.md)
@@ -78,28 +77,28 @@ ___
 # Быстрый старт
 ```csharp
 using FFS.Libraries.StaticEcs;
-// Определяем компоненты
-public struct Position : IComponent { public Vector3 Val; }
-public struct Velocity : IComponent { public float Val; }
 
 // Определяем тип мира
-public struct MyWorldType : IWorldType { }
+public struct WT : IWorldType { }
 
 // Определяем типы-алиасы для удобного доступа к типам библиотеки
-public abstract class MyEcs : Ecs<MyWorldType> { }
-public abstract class MyWorld : MyEcs.World { }
+public abstract class W : World<WT> { }
 
 // Определяем тип систем
-public struct MySystemsType : ISystemsType { }
+public struct SystemsType : ISystemsType { }
 
 // Определяем тип-алиас для удобного доступа к системам
-public abstract class MySystems : MyEcs.Systems<MySystemsType> { }
+public abstract class Systems : W.Systems<SystemsType> { }
 
-// Определояем системы
+// Определяем компоненты
+public struct Position : IComponent { public Vector3 Value; }
+public struct Velocity : IComponent { public float Value; }
+
+// Определяем системы
 public readonly struct VelocitySystem : IUpdateSystem {
     public void Update() {
-        foreach (var entity in MyWorld.QueryEntities.For<All<Position, Velocity>>()) {
-            entity.RefMut<Position>().Val *= entity.Ref<Velocity>().Val;
+        foreach (var entity in W.QueryEntities.For<All<Position, Velocity>>()) {
+            entity.RefMut<Position>().Value *= entity.Ref<Velocity>().Value;
         }
     }
 }
@@ -107,33 +106,33 @@ public readonly struct VelocitySystem : IUpdateSystem {
 public class Program {
     public static void Main() {
         // Создаем данные мира
-        MyEcs.Create(EcsConfig.Default());
+        W.Create(WorldConfig.Default());
         
         // Регестрируем компоненты
-        MyWorld.RegisterComponentType<Position>();
-        MyWorld.RegisterComponentType<Velocity>();
+        W.RegisterComponentType<Position>();
+        W.RegisterComponentType<Velocity>();
         
         // Инициализацируем мир
-        MyEcs.Initialize();
+        W.Initialize();
         
         // Создаем системы
-        MySystems.Create();
-        MySystems.AddUpdate(new VelocitySystem());
+        Systems.Create();
+        Systems.AddUpdate(new VelocitySystem());
 
         // Инициализацируем системы
-        MySystems.Initialize();
+        Systems.Initialize();
 
         // Создание сущности
-        var entity = MyEcs.Entity.New(
-            new Velocity { Val = 1f },
-            new Position { Val = Vector3.One }
+        var entity = W.Entity.New(
+            new Velocity { Value = 1f },
+            new Position { Value = Vector3.One }
         );
         // Обновление всех систем - вызывается в каждом кадре
-        MySystems.Update();
+        Systems.Update();
         // Уничтожение систем
-        MySystems.Destroy();
+        Systems.Destroy();
         // Уничтожение мира и очистка всех данных
-        MyEcs.Destroy();
+        W.Destroy();
     }
 }
 ```

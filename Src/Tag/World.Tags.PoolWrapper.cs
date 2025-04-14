@@ -25,6 +25,8 @@ namespace FFS.Libraries.StaticEcs {
 
             public void Delete(Entity entity);
 
+            public void DeleteWithoutMask(Entity entity);
+
             public void Copy(Entity srcEntity, Entity dstEntity);
             
             public void Move(Entity entity, Entity target);
@@ -72,6 +74,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             public void Delete(Entity entity) => Tags<T>.Value.Delete(entity);
+
+            [MethodImpl(AggressiveInlining)]
+            public void DeleteWithoutMask(Entity entity) => Tags<T>.Value.DeleteWithoutMask(entity);
 
             [MethodImpl(AggressiveInlining)]
             public void Copy(Entity srcEntity, Entity dstEntity) => Tags<T>.Value.Copy(srcEntity, dstEntity);

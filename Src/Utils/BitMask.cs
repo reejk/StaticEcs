@@ -323,6 +323,20 @@ namespace FFS.Libraries.StaticEcs {
 
             return count;
         }
+        
+        [MethodImpl(AggressiveInlining)]
+        public void GetAndDelAllIndexes(uint bitMapIdx, int[] indexes, out int count) {
+            count = 0;
+            var offset = bitMapIdx * _maskLen;
+            for (var i = 0; i < _maskLen; i++, offset++) {
+                ref var v = ref _bitMap[offset];
+                while (v != 0UL) {
+                    var rem = BitsLut[((ulong) ((long) v & -(long) v) * 0x37E84A99DAE458F) >> 58];
+                    indexes[count++] = (i << 6) + rem;
+                    v &= ~(1UL << rem);
+                }
+            }
+        }
 
         [MethodImpl(AggressiveInlining)]
         public bool GetMinIndex(uint bitMapIdx, out int idx) {
@@ -355,7 +369,7 @@ namespace FFS.Libraries.StaticEcs {
         }
         
         [MethodImpl(AggressiveInlining)]
-        public void GetAllMinIndexesWithDisabled(uint bitMapIdx, int[] indexes, out int count) {
+        public void GetAndDelAllIndexesWithDisabled(uint bitMapIdx, int[] indexes, out int count) {
             count = 0;
             var offset = bitMapIdx * _maskLen;
             for (var i = 0; i < _maskLen; i++, offset++) {

@@ -25,6 +25,7 @@ namespace FFS.Libraries.StaticEcs {
             #endif
 
             internal BitMask BitMask;
+            private int[] TempIndexes;
 
             private IMasksWrapper[] _pools;
             private Dictionary<Type, int> _poolIdxByType;
@@ -43,6 +44,7 @@ namespace FFS.Libraries.StaticEcs {
             [MethodImpl(AggressiveInlining)]
             internal void Initialize() {
                 BitMask.Create(EntitiesCapacity(), 32, Utils.CalculateMaskLen(_poolsCount), false);
+                TempIndexes = new int[_poolsCount];
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -158,8 +160,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void DestroyEntity(Entity entity) {
-                while (BitMask.GetMinIndex(entity._id, out var id)) {
-                    _pools[id].Delete(entity);
+                BitMask.GetAndDelAllIndexes(entity._id, TempIndexes, out var count);
+                for (var i = 0; i < count; i++) {
+                    _pools[TempIndexes[i]].DeleteWithoutMask(entity);
                 }
             }
 
@@ -211,6 +214,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 BitMask.Destroy();
                 BitMask = default;
+                TempIndexes = default;
                 _pools = default;
                 _poolIdxByType = default;
                 _poolsCount = default;

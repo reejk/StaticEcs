@@ -103,7 +103,7 @@ namespace FFS.Libraries.StaticEcs {
             while (_count > 0) {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
-                    components.Add(new World<WorldType>.Entity(_current));
+                    components.AddDefault(new World<WorldType>.Entity(_current));
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -121,8 +121,8 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.Add(entity);
-                    container2.Add(entity);
+                    container1.AddDefault(entity);
+                    container2.AddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -142,9 +142,9 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.Add(entity);
-                    container2.Add(entity);
-                    container3.Add(entity);
+                    container1.AddDefault(entity);
+                    container2.AddDefault(entity);
+                    container3.AddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -166,10 +166,10 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.Add(entity);
-                    container2.Add(entity);
-                    container3.Add(entity);
-                    container4.Add(entity);
+                    container1.AddDefault(entity);
+                    container2.AddDefault(entity);
+                    container3.AddDefault(entity);
+                    container4.AddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -193,11 +193,11 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.Add(entity);
-                    container2.Add(entity);
-                    container3.Add(entity);
-                    container4.Add(entity);
-                    container5.Add(entity);
+                    container1.AddDefault(entity);
+                    container2.AddDefault(entity);
+                    container3.AddDefault(entity);
+                    container4.AddDefault(entity);
+                    container5.AddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -212,7 +212,7 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    components.TryAdd(entity);
+                    components.TryAddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -230,8 +230,8 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.TryAdd(entity);
-                    container2.TryAdd(entity);
+                    container1.TryAddDefault(entity);
+                    container2.TryAddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -251,9 +251,9 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.TryAdd(entity);
-                    container2.TryAdd(entity);
-                    container3.TryAdd(entity);
+                    container1.TryAddDefault(entity);
+                    container2.TryAddDefault(entity);
+                    container3.TryAddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -275,10 +275,10 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.TryAdd(entity);
-                    container2.TryAdd(entity);
-                    container3.TryAdd(entity);
-                    container4.TryAdd(entity);
+                    container1.TryAddDefault(entity);
+                    container2.TryAddDefault(entity);
+                    container3.TryAddDefault(entity);
+                    container4.TryAddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG
@@ -302,11 +302,11 @@ namespace FFS.Libraries.StaticEcs {
                 _current = _entities[--_count];
                 if ((_entitiesParam == EntityStatusType.Any || _entitiesParam == _entitiesStatus[_current].Value) && _queryMethod.CheckEntity(_current)) {
                     var entity = new World<WorldType>.Entity(_current);
-                    container1.TryAdd(entity);
-                    container2.TryAdd(entity);
-                    container3.TryAdd(entity);
-                    container4.TryAdd(entity);
-                    container5.TryAdd(entity);
+                    container1.TryAddDefault(entity);
+                    container2.TryAddDefault(entity);
+                    container3.TryAddDefault(entity);
+                    container4.TryAddDefault(entity);
+                    container5.TryAddDefault(entity);
                 }
             }
             #if DEBUG || FFS_ECS_ENABLE_DEBUG

@@ -22,22 +22,22 @@ ___
 Требуется регистрация в мире между созданием и инициализацией
 
 ```c#
-MyEcs.Create(EcsConfig.Default());
+World.Create(WorldConfig.Default());
 //...
-MyEcs.World.RegisterComponentType<Position>();
+World.RegisterComponentType<Position>();
 //...
-MyEcs.Initialize();
+World.Initialize();
 ```
 ___
 
 #### Создание:
 ```c#
 // Способ 1 - при создании сущности (аналогично методу Add())
-var entity = MyEcs.Entity.New<Position>();
+var entity = World.Entity.New<Position>();
 
 // Или через значение  (аналогично методу Put())
 // Нужно быть осторожным с AutoInit и AutoReset (смотри дополнительные возможности)
-var entity = MyEcs.Entity.New(new Position(x: 1, y: 1, z: 2));
+var entity = World.Entity.New(new Position(x: 1, y: 1, z: 2));
 
 // Добавление компонента на сущность и возврат ref значения на компонент (в DEBUG режиме будет ошибка если он уже существует на сущности)
 ref var position = ref entity.Add<Position>();
@@ -61,7 +61,7 @@ ___
 
 #### Основные операции:
 ```c#
-var entity = MyEcs.Entity.New(
+var entity = World.Entity.New(
             new Name { Val = "Player" },
             new Velocity { Val = 1f },
             new Position { Val = Vector3.One }
@@ -94,7 +94,7 @@ entity.Delete<Position, Velocity, Name>();
 bool deleted = entity.TryDelete<Position>();  // deleted = true если компонент был удален, false если компонента не было изначально
 bool deleted = entity.TryDelete<Position, Velocity, Name>();  // deleted = true если ВСЕ компоненты был удалены, false если хотя бы 1 компонента не было изначально
 
-var entity2 = MyEcs.Entity.New<Name>();
+var entity2 = World.Entity.New<Name>();
 // Скопировать указанные компоненты на другую сущность (методы перегрузки от 1-5 компонентов)
 entity.CopyComponentsTo<Position, Velocity>(entity2);
 ```

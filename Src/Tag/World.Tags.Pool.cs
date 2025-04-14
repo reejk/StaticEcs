@@ -90,6 +90,12 @@ namespace FFS.Libraries.StaticEcs {
                 if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.Tags<{typeof(T)}>, Method: Delete, this operation is not supported in multithreaded mode");
                 #endif
 
+                DeleteWithoutMask(entity);
+                _bitMask.Del(entity._id, id);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            internal void DeleteWithoutMask(Entity entity) {
                 ref var idx = ref _dataIdxByEntityId[entity._id];
                 _tagCount--;
 
@@ -98,12 +104,14 @@ namespace FFS.Libraries.StaticEcs {
                     listener.OnTagDelete<T>(entity);
                 }
                 #endif
-                    
-                var lastEntity = _entities[_tagCount];
-                _entities[idx] = lastEntity;
-                _dataIdxByEntityId[lastEntity] = idx;
+
+                if (idx < _tagCount) {
+                    var lastEntity = _entities[_tagCount];
+                    _entities[idx] = lastEntity;
+                    _dataIdxByEntityId[lastEntity] = idx;
+                }
+      
                 idx = Const.EmptyComponentMask;
-                _bitMask.Del(entity._id, id);
             }
             
             [MethodImpl(AggressiveInlining)]

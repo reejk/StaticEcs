@@ -192,7 +192,7 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal void DestroyEntity(Entity entity) {
-                BitMask.GetAllMinIndexesWithDisabled(entity._id, TempIndexes, out var count);
+                BitMask.GetAndDelAllIndexesWithDisabled(entity._id, TempIndexes, out var count);
                 for (var i = 0; i < count; i++) {
                     _pools[TempIndexes[i]].DeleteInternalWithoutMask(entity);
                 }

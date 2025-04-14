@@ -318,7 +318,7 @@ namespace FFS.Libraries.StaticEcs {
                 ref var components1 = ref Components<C1>.Value;
                 components1.EnsureSize(count);
                 foreach (var entity in CreateEntitiesInternal(count)) {
-                    components1.Add(entity);
+                    components1.AddDefault(entity);
                     onCreate?.Invoke(entity);
                 }
             }
@@ -332,8 +332,8 @@ namespace FFS.Libraries.StaticEcs {
                 components1.EnsureSize(count);
                 components2.EnsureSize(count);
                 foreach (var entity in CreateEntitiesInternal(count)) {
-                    components1.Add(entity);
-                    components2.Add(entity);
+                    components1.AddDefault(entity);
+                    components2.AddDefault(entity);
                     onCreate?.Invoke(entity);
                 }
             }
@@ -350,9 +350,9 @@ namespace FFS.Libraries.StaticEcs {
                 components2.EnsureSize(count);
                 components3.EnsureSize(count);
                 foreach (var entity in CreateEntitiesInternal(count)) {
-                    components1.Add(entity);
-                    components2.Add(entity);
-                    components3.Add(entity);
+                    components1.AddDefault(entity);
+                    components2.AddDefault(entity);
+                    components3.AddDefault(entity);
                     onCreate?.Invoke(entity);
                 }
             }
@@ -372,10 +372,10 @@ namespace FFS.Libraries.StaticEcs {
                 components3.EnsureSize(count);
                 components4.EnsureSize(count);
                 foreach (var entity in CreateEntitiesInternal(count)) {
-                    components1.Add(entity);
-                    components2.Add(entity);
-                    components3.Add(entity);
-                    components4.Add(entity);
+                    components1.AddDefault(entity);
+                    components2.AddDefault(entity);
+                    components3.AddDefault(entity);
+                    components4.AddDefault(entity);
                     onCreate?.Invoke(entity);
                 }
             }
@@ -398,11 +398,11 @@ namespace FFS.Libraries.StaticEcs {
                 components4.EnsureSize(count);
                 components5.EnsureSize(count);
                 foreach (var entity in CreateEntitiesInternal(count)) {
-                    components1.Add(entity);
-                    components2.Add(entity);
-                    components3.Add(entity);
-                    components4.Add(entity);
-                    components5.Add(entity);
+                    components1.AddDefault(entity);
+                    components2.AddDefault(entity);
+                    components3.AddDefault(entity);
+                    components4.AddDefault(entity);
+                    components5.AddDefault(entity);
                     onCreate?.Invoke(entity);
                 }
             }

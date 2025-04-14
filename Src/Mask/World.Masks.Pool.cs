@@ -94,6 +94,16 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 #endif
             }
+
+            [MethodImpl(AggressiveInlining)]
+            internal void DeleteWithoutMask(Entity entity) {
+                count--;
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                foreach (var listener in debugEventListeners) {
+                    listener.OnMaskDelete<T>(entity);
+                }
+                #endif
+            }
             
             [MethodImpl(AggressiveInlining)]
             public bool TryDelete(Entity entity) {

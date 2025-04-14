@@ -211,8 +211,8 @@ namespace FFS.Libraries.StaticEcs {
             public void Add<C1, C2>()
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent {
-                Components<C1>.Value.Add(this);
-                Components<C2>.Value.Add(this);
+                Components<C1>.Value.AddDefault(this);
+                Components<C2>.Value.AddDefault(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -220,9 +220,9 @@ namespace FFS.Libraries.StaticEcs {
                 where C1 : struct, IComponent
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent {
-                Components<C1>.Value.Add(this);
-                Components<C2>.Value.Add(this);
-                Components<C3>.Value.Add(this);
+                Components<C1>.Value.AddDefault(this);
+                Components<C2>.Value.AddDefault(this);
+                Components<C3>.Value.AddDefault(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -231,10 +231,10 @@ namespace FFS.Libraries.StaticEcs {
                 where C2 : struct, IComponent
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent {
-                Components<C1>.Value.Add(this);
-                Components<C2>.Value.Add(this);
-                Components<C3>.Value.Add(this);
-                Components<C4>.Value.Add(this);
+                Components<C1>.Value.AddDefault(this);
+                Components<C2>.Value.AddDefault(this);
+                Components<C3>.Value.AddDefault(this);
+                Components<C4>.Value.AddDefault(this);
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -244,11 +244,11 @@ namespace FFS.Libraries.StaticEcs {
                 where C3 : struct, IComponent
                 where C4 : struct, IComponent
                 where C5 : struct, IComponent {
-                Components<C1>.Value.Add(this);
-                Components<C2>.Value.Add(this);
-                Components<C3>.Value.Add(this);
-                Components<C4>.Value.Add(this);
-                Components<C5>.Value.Add(this);
+                Components<C1>.Value.AddDefault(this);
+                Components<C2>.Value.AddDefault(this);
+                Components<C3>.Value.AddDefault(this);
+                Components<C4>.Value.AddDefault(this);
+                Components<C5>.Value.AddDefault(this);
             }
             
             [MethodImpl(AggressiveInlining)]

@@ -116,6 +116,38 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
+            public void AddDefault(Entity entity) {
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG
+                if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Add, World not initialized");
+                if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, Component type not registered");
+                if (!entity.IsActual()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, cannot access Entity ID - {id} from deleted entity");
+                if (Has(entity)) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, ID - {entity._id} is already on an entity");
+                if (IsBlocked()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, component pool cannot be changed, it is in read-only mode due to multiple accesses");
+                if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Add, this operation is not supported in multithreaded mode");
+                #endif
+
+                if (_entities.Length == _componentsCount) {
+                    ResizeData(_componentsCount << 1);
+                }
+
+                var eid = entity._id;
+                _entities[_componentsCount] = eid;
+                _dataIdxByEntityId[eid] = _componentsCount;
+
+                _bitMask.Set(eid, id);
+                
+                AutoInitHandler?.Invoke(ref _data[_componentsCount]);
+
+                _componentsCount++;
+                
+                #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
+                foreach (var listener in debugEventListeners) {
+                    listener.OnComponentAdd(entity, ref _data[_componentsCount]);
+                }
+                #endif
+            }
+
+            [MethodImpl(AggressiveInlining)]
             public void Put(Entity entity, T component) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (!IsWorldInitialized()) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}> Method: Put, World not initialized");
@@ -161,6 +193,13 @@ namespace FFS.Libraries.StaticEcs {
                 return ref Has(entity)
                     ? ref RefMut(entity)
                     : ref Add(entity);
+            }
+
+            [MethodImpl(AggressiveInlining)]
+            public void TryAddDefault(Entity entity) {
+                if (!Has(entity)) {
+                    AddDefault(entity);
+                }
             }
 
             [MethodImpl(AggressiveInlining)]
@@ -237,7 +276,8 @@ namespace FFS.Libraries.StaticEcs {
                 if (IsBlocked()) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete,  component pool cannot be changed, it is in read-only mode due to multiple accesses");
                 if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Delete, this operation is not supported in multithreaded mode");
                 #endif
-                DeleteInternal(entity);
+                DeleteInternalWithoutMask(entity);
+                _bitMask.DelWithDisabled(entity._id, id);
                 #if FFS_ECS_LIFECYCLE_ENTITY
                 if (_bitMask.IsEmptyWithDisabled(entity._id)) {
                     World.DestroyEntity(entity);
@@ -362,12 +402,6 @@ namespace FFS.Libraries.StaticEcs {
                 if (!_registered) throw new Exception($"Ecs<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: DynamicId, Component type not registered");
                 #endif
                 return id;
-            }
-            
-            [MethodImpl(AggressiveInlining)]
-            internal void DeleteInternal(Entity entity) {
-                DeleteInternalWithoutMask(entity);
-                _bitMask.DelWithDisabled(entity._id, id);
             }
             
             [MethodImpl(AggressiveInlining)]
