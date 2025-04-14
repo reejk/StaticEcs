@@ -40,7 +40,7 @@ World.Initialize();
 //...
 
 // Before sending an event, the receiver of the event must be registered, otherwise the event will not be sent.
-// Receiver can be registered after calling Ecs.Create (e.g. in the Init method of the system).
+// Receiver can be registered after calling World.Create (e.g. in the Init method of the system).
 var weatherChangedEventReceiver = World.Events.RegisterEventReceiver<WeatherChanged>();
 
 // Deleting an event receiver

@@ -43,7 +43,7 @@ World.Entity.NewOnes<Position>(count);
 
 // Method 2 - specifying component type (overload methods from 1-5 components) + delegate initialization of each entity
 int count = 100;
-Ecs.Entity.NewOnes<Position>(count, static entity => {
+World.Entity.NewOnes<Position>(count, static entity => {
     // some init logic for each entity
 });
 

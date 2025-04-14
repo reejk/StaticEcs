@@ -37,7 +37,7 @@ var entity = Ecs<WT>.Entity.New<Position>();
 
 #### Второй способ - чуть более удобный, использовать статические импорты или статические алиасы (придется писать в каждом файле)
 ```c#
-using static FFS.Libraries.StaticEcs.Ecs<WT>;
+using static FFS.Libraries.StaticEcs.World<WT>;
 
 public struct WT : IWorldType { }
 

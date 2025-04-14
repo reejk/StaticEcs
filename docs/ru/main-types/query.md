@@ -147,18 +147,18 @@ foreach (var entity in MyWorld.QueryEntities.For(with3)) {
 // World.QueryComponents.For()\With() возвращает итератор сущностей подходящих под условие cразу с компонентами 
 
 // Вариант 1 с указанием делегата и сразу получением нужных компонентов, может быть указано от 1 до 8 типов компонентов
-MyWorld.QueryComponents.For<Position, Velocity, Name>((Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.For<Position, Velocity, Name>((World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
 // можно убрать дженерики, так как они выводятся из типа переданной функции
-MyWorld.QueryComponents.For((Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.For((World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
 // можно добавить ограничение static для делегата для того чтобы гарантировать что данный делегат не будет аллоцироваться каждый раз
-// в совокупности с Ecs.Context дает возможность удобного и производительного кода без создания замыканий в делегате
-MyWorld.QueryComponents.For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+// в совокупности с World.Context дает возможность удобного и производительного кода без создания замыканий в делегате
+MyWorld.QueryComponents.For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
@@ -171,7 +171,7 @@ WithAdds<
     Any<Position, Direction, Velocity>
 > with = default;
 
-MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
@@ -179,7 +179,7 @@ MyWorld.QueryComponents.With(with).For(static (Ecs.Entity entity, ref Position p
 MyWorld.QueryComponents.With<WithAdds<
     None<Direction>,
     Any<Position, Direction, Velocity>
->>().For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+>>().For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
@@ -187,11 +187,11 @@ MyWorld.QueryComponents.With<WithAdds<
 // Важно фильтр применяется только к компонентам указаным в функции, а не к With 
 // если нужно установить фильтр отключенных компонентов в With то используйте конструкции AllOnlyDisabled, AllWithDisabled и тд
 
-MyWorld.QueryComponents.With(with).ForOnlyDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.With(with).ForOnlyDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.With(with).ForWithDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.With(with).ForWithDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
@@ -200,15 +200,15 @@ MyWorld.QueryComponents.With(with).ForWithDiabled(static (Ecs.Entity entity, ref
 // Важно! Вовзращается специальный тип сущности который запрещает все операции кроме Ref, RefMut, Has
 // Нельзя в мнопоточной обработке создавать, удалять сущности или компоненты, только читать и изменять существующие
 
-MyWorld.QueryComponents.Parallel.With(with).For(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.Parallel.With(with).ForOnlyDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.With(with).ForOnlyDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
     position.Val *= velocity.Val;
 });
 ```
@@ -220,8 +220,8 @@ MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (Ecs.Entity en
 
 // Определим структуру-функцию которой можем заменить делегат
 // Она должна реализовывать интерфейс IQueryFunction с указанием от 1-8 компонентов
-readonly struct StructFunction : Ecs.IQueryFunction<Position, Velocity, Name> {
-    public void Run(Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) {
+readonly struct StructFunction : World.IQueryFunction<Position, Velocity, Name> {
+    public void Run(World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) {
         position.Val *= velocity.Val;
     }
 }
@@ -247,7 +247,7 @@ MyWorld.QueryComponents.With(with).For<Position, Velocity, Name, StructFunction>
 
 // Также возможно комбинировать систему и IQueryFunction, например:
 // это может улучшить восприятия кода и увеличить производительность + это позволяет обращаться в нестатическим членам системы
-public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, Ecs.IQueryFunction<Position, Velocity, Name> {
+public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, World.IQueryFunction<Position, Velocity, Name> {
     private UserService1 _userService1;
     
     WithAdds<
@@ -256,7 +256,7 @@ public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, Ecs.IQueryFunctio
     > with;
     
     public void Init() {
-        _userService1 = Ecs.Context<UserService1>.Get();
+        _userService1 = World.Context<UserService1>.Get();
     }
     
    public void Update() {
@@ -265,7 +265,7 @@ public struct SomeFunctionSystem : IInitSystem, IUpdateSystem, Ecs.IQueryFunctio
             .For<Position, Velocity, Name, SomeFunctionSystem>(ref this);
    }
     
-    public void Run(Ecs.Entity entity, ref Position position, ref Velocity velocity, ref Name name) {
+    public void Run(World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) {
         position.Val *= velocity.Val;
         _userService1.CallSomeMethod(name.Val);
     }
