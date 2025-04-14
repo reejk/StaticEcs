@@ -65,7 +65,8 @@ ___
 * ### В виде исходников
   Со страцины релизов или как архив из нужной ветки. В ветке `master` стабильная проверенная версия
 * ### Установка для Unity
-  Как git модуль `https://github.com/Felid-Force-Studios/StaticEcs.git` в Unity PackageManager или добавления в `Packages/manifest.json`:
+  Как git модуль `https://github.com/Felid-Force-Studios/StaticEcs.git` в Unity PackageManager  
+  или добавление в манифест `Packages/manifest.json` `"com.felid-force-studios.static-ecs": "https://github.com/Felid-Force-Studios/StaticEcs.git"`
 
 # Концепция
 > - Основная идея данной реализации в статике, все данные о мире и компонентах находятся в статических классах, что дает вохможность избегать дорогостоящих виртуальных вызовов, иметь удобный API со множеством сахара
