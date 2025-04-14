@@ -73,10 +73,6 @@ int componentsCount = entity.ComponentsCount();
 ref var velocity = ref entity.Ref<Velocity>();
 velocity.Val++;
 
-// Получить ref ссылку на компонент только на чтение
-ref readonly var readOnlyVelocity = ref entity.Ref<Velocity>();
-//readOnlyVelocity.Value++;  -   ERROR
-
 // Проверить наличие ВСЕХ указанных компонентов (методы перегрузки от 1-3 компонентов)
 entity.HasAllOf<Position>();
 entity.HasAllOf<Position, Velocity, Name>();
