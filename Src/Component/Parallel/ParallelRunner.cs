@@ -46,7 +46,7 @@ namespace FFS.Libraries.StaticEcs {
                     worker.HasWork.Set();
                     worker.WorkDone.WaitOne(10000);
                     worker.WorkDone.Dispose();
-                    worker.WorkDone.Dispose();
+                    worker.HasWork.Dispose();
                 }
 
                 _workers = null;
