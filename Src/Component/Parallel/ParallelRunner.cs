@@ -42,11 +42,10 @@ namespace FFS.Libraries.StaticEcs {
                 _disposing = true;
                 for (var i = 0; i < _workers.Length; i++) {
                     ref var worker = ref _workers[i];
-                    worker.WorkDone.Reset();
                     worker.HasWork.Set();
-                    worker.WorkDone.WaitOne(10000);
                     worker.WorkDone.Dispose();
                     worker.HasWork.Dispose();
+                    worker.Thread.Join(10000);
                 }
 
                 _workers = null;
@@ -109,14 +108,12 @@ namespace FFS.Libraries.StaticEcs {
         static void ThreadFunction(object raw) {
             try {
                 ref var worker = ref _workers[(int) raw];
-                while (true) {
+                while (!_disposing) {
                     worker.HasWork.WaitOne();
-                    worker.HasWork.Reset();
                     if (_disposing) {
-                        worker.WorkDone.Set();
                         break;
                     }
-
+                    worker.HasWork.Reset();
                     _task.Run(worker.FromIndex, worker.BeforeIndex);
                     worker.WorkDone.Set();
                 }
