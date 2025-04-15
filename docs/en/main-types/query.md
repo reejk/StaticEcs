@@ -201,15 +201,19 @@ MyWorld.QueryComponents.With(with).ForWithDiabled(static (World.Entity entity, r
 // Important! A special entity type is introduced which prohibits all operations except Ref, Has etc.
 // You cannot create, delete entities or components in multithreaded processing, only read and modify existing ones.
 
-MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.For(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.Parallel.With(with).ForOnlyDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.ForOnlyDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.Parallel.ForWithDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
     position.Val *= velocity.Val;
 });
 ```

@@ -15,9 +15,9 @@ ___
 World.Create(WorldConfig.Default());
 //...
 World.RegisterComponentType<Position>(
-                autoInit: static (ref Position position) => position.Val = Vector3.One, // заменяет поведение при создании компонента через метод Add
-                autoReset: static (ref Position position) => position.Val = Vector3.One, // заменяет поведение при удалении компонента через метод Delete
-                autoCopy: static (ref Position src, ref Position dst) => dst.Val = src.Val, // заменяет поведение при копировании компонента
+                onAdd: static (ref Position position) => position.Val = Vector3.One, // заменяет поведение при создании компонента через метод Add
+                onDelete: static (ref Position position) => position.Val = Vector3.One, // заменяет поведение при удалении компонента через метод Delete
+                onCopy: static (ref Position src, ref Position dst) => dst.Val = src.Val, // заменяет поведение при копировании компонента
             );
 //...
 World.Initialize();

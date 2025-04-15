@@ -66,9 +66,9 @@ World.Create(WorldConfig.Default());
 //...
 
 World.RegisterStandardComponentType<EntityType>(
-                autoInit: static (ref EntityType component) => component.Init(), // При создании сущности будет вызвана данная функция 
-                autoReset: static (ref EntityType component) => component.Reset(), // При уничтожении сущности будет вызвана данная функция  
-                autoCopy: static (ref EntityType src, ref EntityType dst) => src.CopyTo(ref dst), // При копировании стандартных компонентов будет вызвана данная сущности вместо простого копирования
+                onAdd: static (ref EntityType component) => component.Init(), // При создании сущности будет вызвана данная функция 
+                onDelete: static (ref EntityType component) => component.Reset(), // При уничтожении сущности будет вызвана данная функция  
+                onCopy: static (ref EntityType src, ref EntityType dst) => src.CopyTo(ref dst), // При копировании стандартных компонентов будет вызвана данная сущности вместо простого копирования
             );
 //...
 World.Initialize();

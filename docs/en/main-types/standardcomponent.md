@@ -66,9 +66,9 @@ World.Create(WorldConfig.Default());
 //...
 
 World.RegisterStandardComponentType<EntityType>(
-                autoInit: static (ref EntityType component) => component.Init(), // This function will be called when the entity is created  
-                autoReset: static (ref EntityType component) => component.Reset(), // This function will be called when the entity is destroyed  
-                autoCopy: static (ref EntityType src, ref EntityType dst) => src.CopyTo(ref dst), // When copying standard components, this entity will be called instead of just copying it
+                onAdd: static (ref EntityType component) => component.Init(), // This function will be called when the entity is created  
+                onDelete: static (ref EntityType component) => component.Reset(), // This function will be called when the entity is destroyed  
+                onCopy: static (ref EntityType src, ref EntityType dst) => src.CopyTo(ref dst), // When copying standard components, this entity will be called instead of just copying it
             );
 //...
 World.Initialize();

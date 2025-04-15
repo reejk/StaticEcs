@@ -16,7 +16,7 @@ namespace FFS.Libraries.StaticEcs {
         #endif
         internal partial struct ModuleComponents {
             [MethodImpl(AggressiveInlining)]
-            internal ushort RegisterMultiComponentType<T, V>(ushort defaultComponentCapacity, uint capacity, AutoInitHandler<T> autoInit = null) where T : struct, IMultiComponent<V> where V : struct {
+            internal ushort RegisterMultiComponentType<T, V>(ushort defaultComponentCapacity, uint capacity, OnAddHandler<T> onAdd = null) where T : struct, IMultiComponent<V> where V : struct {
                 if (Components<T>.Value.IsRegistered()) {
                     return Components<T>.Value.DynamicId();
                 }
@@ -29,11 +29,11 @@ namespace FFS.Libraries.StaticEcs {
                     #endif
                 }
 
-                AutoInitHandler<T> initHandler;
-                if (autoInit != null) {
+                OnAddHandler<T> initHandler;
+                if (onAdd != null) {
                     initHandler = (ref T component) => {
                         component.Access<AutoInit<V>>(default);
-                        autoInit(ref component);
+                        onAdd(ref component);
                     };
                 } else {
                     initHandler = static (ref T component) => component.Access<AutoInit<V>>(default);
@@ -41,10 +41,10 @@ namespace FFS.Libraries.StaticEcs {
 
                 return RegisterComponentType(
                     capacity: capacity,
-                    autoInit: initHandler,
-                    autoPutInit: static (ref T component) => component.Access<AutoInit<V>>(default),
-                    autoReset: static (ref T component) => component.Access<AutoReset<V>>(default),
-                    autoCopy: static (ref T src, ref T dst) => {
+                    onAdd: initHandler,
+                    onPut: static (ref T component) => component.Access<AutoInit<V>>(default),
+                    onDelete: static (ref T component) => component.Access<AutoReset<V>>(default),
+                    onCopy: static (ref T src, ref T dst) => {
                         var copy = default(CopyToAccess<T, V>);
                         copy.Copy(ref src, ref dst);
                     }

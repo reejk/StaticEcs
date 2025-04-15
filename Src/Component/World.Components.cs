@@ -47,7 +47,7 @@ namespace FFS.Libraries.StaticEcs {
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal ushort RegisterComponentType<T>(uint capacity, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null, AutoInitHandler<T> autoPutInit = null) where T : struct, IComponent {
+            internal ushort RegisterComponentType<T>(uint capacity, OnAddHandler<T> onAdd = null, OnDeleteHandler<T> onDelete = null, OnCopyHandler<T> onCopy = null, OnAddHandler<T> onPut = null) where T : struct, IComponent {
                 if (Components<T>.Value.IsRegistered()) {
                     return Components<T>.Value.DynamicId();
                 }
@@ -58,7 +58,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 _pools[_poolsCount] = new ComponentsWrapper<T>();
                 _poolIdxByType[typeof(T)] = _poolsCount;
-                Components<T>.Value.Create(_poolsCount, BitMask, EntitiesCapacity(), autoInit, autoReset, autoCopy, autoPutInit, capacity);
+                Components<T>.Value.Create(_poolsCount, BitMask, EntitiesCapacity(), onAdd, onDelete, onCopy, onPut, capacity);
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 Components<T>.Value.debugEventListeners = _debugEventListeners;
                 #endif

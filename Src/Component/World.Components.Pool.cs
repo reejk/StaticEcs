@@ -20,10 +20,10 @@ namespace FFS.Libraries.StaticEcs {
         public struct Components<T> where T : struct, IComponent {
             public static Components<T> Value;
             
-            private AutoInitHandler<T> AutoInitHandler;
-            private AutoInitHandler<T> AutoPutInitHandler;
-            private AutoResetHandler<T> AutoResetHandler;
-            private AutoCopyHandler<T> AutoCopyHandler;
+            private OnAddHandler<T> _onAddHandler;
+            private OnAddHandler<T> _onPutHandler;
+            private OnDeleteHandler<T> _onDeleteHandler;
+            private OnCopyHandler<T> _onCopyHandler;
             
             #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
             internal List<IComponentsDebugEventListener> debugEventListeners;
@@ -83,7 +83,7 @@ namespace FFS.Libraries.StaticEcs {
                 _bitMask.Set(eid, id);
                 
                 ref var data = ref _data[_componentsCount];
-                AutoInitHandler?.Invoke(ref data);
+                _onAddHandler?.Invoke(ref data);
 
                 _componentsCount++;
                 
@@ -117,7 +117,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 _bitMask.Set(eid, id);
                 
-                AutoInitHandler?.Invoke(ref _data[_componentsCount]);
+                _onAddHandler?.Invoke(ref _data[_componentsCount]);
 
                 _componentsCount++;
                 
@@ -158,7 +158,7 @@ namespace FFS.Libraries.StaticEcs {
 
                 _bitMask.Set(eid, id);
 
-                AutoPutInitHandler?.Invoke(ref component);
+                _onPutHandler?.Invoke(ref component);
                 _data[_componentsCount] = component;
                 _componentsCount++;
                 
@@ -287,10 +287,10 @@ namespace FFS.Libraries.StaticEcs {
                 if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.Components<{typeof(T)}>, Method: Copy, this operation is not supported in multithreaded mode");
                 #endif
 
-                if (AutoCopyHandler == null) {
+                if (_onCopyHandler == null) {
                     TryAdd(dst) = Ref(src);
                 } else {
-                    AutoCopyHandler(ref Ref(src), ref TryAdd(dst));
+                    _onCopyHandler(ref Ref(src), ref TryAdd(dst));
                 }
 
                 if (HasDisabled(src)) {
@@ -359,7 +359,7 @@ namespace FFS.Libraries.StaticEcs {
                 return ref _data[_dataIdxByEntityId[entity._id] & Const.DisabledComponentMaskInv];
             }
             
-            internal void Create(ushort componentId, BitMask bitMask, uint entitiesCapacity, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null, AutoInitHandler<T> autoPutInit = null, uint baseCapacity = 128) {
+            internal void Create(ushort componentId, BitMask bitMask, uint entitiesCapacity, OnAddHandler<T> onAdd = null, OnDeleteHandler<T> onDelete = null, OnCopyHandler<T> onCopy = null, OnAddHandler<T> autoPutInit = null, uint baseCapacity = 128) {
                 _bitMask = bitMask;
                 id = componentId;
                 _entities = new uint[baseCapacity];
@@ -369,10 +369,10 @@ namespace FFS.Libraries.StaticEcs {
                 for (uint i = 0; i < _dataIdxByEntityId.Length; i++) {
                     _dataIdxByEntityId[i] = Const.EmptyComponentMask;
                 }
-                AutoInitHandler = autoInit;
-                AutoResetHandler = autoReset;
-                AutoCopyHandler = autoCopy;
-                AutoPutInitHandler = autoPutInit;
+                _onAddHandler = onAdd;
+                _onDeleteHandler = onDelete;
+                _onCopyHandler = onCopy;
+                _onPutHandler = autoPutInit;
                 _registered = true;
             }
 
@@ -396,10 +396,10 @@ namespace FFS.Libraries.StaticEcs {
                 }
                 #endif
                     
-                if (AutoResetHandler == null) {
+                if (_onDeleteHandler == null) {
                     data = default;
                 } else {
-                    AutoResetHandler(ref data);
+                    _onDeleteHandler(ref data);
                 }
 
                 if (idxRef < _componentsCount) {
@@ -447,10 +447,10 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void Destroy() {
-                AutoInitHandler = null;
-                AutoResetHandler = null;
-                AutoCopyHandler = null;
-                AutoPutInitHandler = null;
+                _onAddHandler = null;
+                _onDeleteHandler = null;
+                _onCopyHandler = null;
+                _onPutHandler = null;
                 _entities = null;
                 _data = null;
                 _dataIdxByEntityId = null;
@@ -511,9 +511,9 @@ namespace FFS.Libraries.StaticEcs {
         }
     }
 
-    public delegate void AutoInitHandler<T>(ref T component) where T : struct;
+    public delegate void OnAddHandler<T>(ref T component) where T : struct;
 
-    public delegate void AutoResetHandler<T>(ref T component) where T : struct;
+    public delegate void OnDeleteHandler<T>(ref T component) where T : struct;
 
-    public delegate void AutoCopyHandler<T>(ref T src, ref T dst) where T : struct;
+    public delegate void OnCopyHandler<T>(ref T src, ref T dst) where T : struct;
 }

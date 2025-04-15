@@ -200,15 +200,19 @@ MyWorld.QueryComponents.With(with).ForWithDiabled(static (World.Entity entity, r
 // Важно! Вовзращается специальный тип сущности который запрещает все операции кроме Ref, Has
 // Нельзя в мнопоточной обработке создавать, удалять сущности или компоненты, только читать и изменять существующие
 
-MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.For(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.Parallel.With(with).ForOnlyDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.With(with).For(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
     position.Val *= velocity.Val;
 });
 
-MyWorld.QueryComponents.Parallel.With(with).ForWithDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity, ref Name name) => {
+MyWorld.QueryComponents.Parallel.ForOnlyDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
+    position.Val *= velocity.Val;
+});
+
+MyWorld.QueryComponents.Parallel.ForWithDiabled(static (World.Entity entity, ref Position position, ref Velocity velocity) => {
     position.Val *= velocity.Val;
 });
 ```

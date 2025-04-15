@@ -50,7 +50,7 @@ namespace FFS.Libraries.StaticEcs {
             internal void Initialize() { }
 
             [MethodImpl(AggressiveInlining)]
-            internal StandardComponentDynId RegisterComponentType<T>(bool publicPool, AutoInitHandler<T> autoInit = null, AutoResetHandler<T> autoReset = null, AutoCopyHandler<T> autoCopy = null) where T : struct, IStandardComponent {
+            internal StandardComponentDynId RegisterComponentType<T>(bool publicPool, OnAddHandler<T> onAdd = null, OnDeleteHandler<T> onDelete = null, OnCopyHandler<T> onCopy = null) where T : struct, IStandardComponent {
                 if (StandardComponents<T>.Value.IsRegistered()) {
                     return StandardComponents<T>.Value.DynamicId();
                 }
@@ -65,9 +65,9 @@ namespace FFS.Libraries.StaticEcs {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
                 StandardComponents<T>.Value.debugEventListeners = _debugEventListeners;
                 #endif
-                SetAutoInit(autoInit);
-                SetAutoReset(autoReset);
-                SetAutoCopy(autoCopy);
+                SetOnAddHandler(onAdd);
+                SetOnDeleteHandler(onDelete);
+                SetOnCopyHandler(onCopy);
 
                 if (publicPool) {
                     if (_publicPoolsCount == _publicPools.Length) {
@@ -81,23 +81,23 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            public void SetAutoInit<T>(AutoInitHandler<T> handler) where T : struct, IStandardComponent {
+            internal void SetOnAddHandler<T>(OnAddHandler<T> handler) where T : struct, IStandardComponent {
                 if (handler != null && StandardComponents<T>.Value.SetAutoInit(handler)) {
                     AddAutoInitPool(StandardComponents<T>.Value.id);
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void SetAutoReset<T>(AutoResetHandler<T> handler) where T : struct, IStandardComponent {
+            internal void SetOnDeleteHandler<T>(OnDeleteHandler<T> handler) where T : struct, IStandardComponent {
                 if (handler != null && StandardComponents<T>.Value.SetAutoReset(handler)) {
                     AddAutoResetPool(StandardComponents<T>.Value.id);
                 }
             }
 
             [MethodImpl(AggressiveInlining)]
-            public void SetAutoCopy<T>(AutoCopyHandler<T> handler) where T : struct, IStandardComponent {
-                if (handler != null && StandardComponents<T>.Value.SetAutoCopy(handler)) {
-                    
+            internal void SetOnCopyHandler<T>(OnCopyHandler<T> handler) where T : struct, IStandardComponent {
+                if (handler != null) {
+                    StandardComponents<T>.Value.SetAutoCopy(handler);
                 }
             }
             

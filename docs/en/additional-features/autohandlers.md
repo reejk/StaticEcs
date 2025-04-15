@@ -15,9 +15,9 @@ ___
 World.Create(WorldConfig.Default());
 //...
 World.RegisterComponentType<Position>(
-                autoInit: static (ref Position position) => position.Val = Vector3.One, // replaces the behavior when creating a component via the Add method
-                autoReset: static (ref Position position) => position.Val = Vector3.One, // replaces the behavior when deleting a component via the Delete method
-                autoCopy: static (ref Position src, ref Position dst) => dst.Val = src.Val, // replaces the behavior when copying a component
+                onAdd: static (ref Position position) => position.Val = Vector3.One, // replaces the behavior when creating a component via the Add method
+                onDelete: static (ref Position position) => position.Val = Vector3.One, // replaces the behavior when deleting a component via the Delete method
+                onCopy: static (ref Position src, ref Position dst) => dst.Val = src.Val, // replaces the behavior when copying a component
             );
 //...
 World.Initialize();

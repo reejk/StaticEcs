@@ -24,9 +24,9 @@ namespace FFS.Libraries.StaticEcs {
             internal List<IStandardComponentsDebugEventListener> debugEventListeners;
             #endif
             
-            private AutoInitHandler<T> AutoInitHandler;
-            private AutoResetHandler<T> AutoResetHandler;
-            private AutoCopyHandler<T> AutoCopyHandler;
+            private OnAddHandler<T> _onAddHandler;
+            private OnDeleteHandler<T> _onDeleteHandler;
+            private OnCopyHandler<T> _onCopyHandler;
             
             private T[] _data;
             internal ushort id;
@@ -68,10 +68,10 @@ namespace FFS.Libraries.StaticEcs {
                 if (MultiThreadActive) throw new Exception($"World<{typeof(WorldType)}>.StandardComponents<{typeof(T)}>, Method: Copy, this operation is not supported in multithreaded mode");
                 #endif
 
-                if (AutoCopyHandler == null) {
+                if (_onCopyHandler == null) {
                     Ref(dst) = Ref(src);
                 } else {
-                    AutoCopyHandler(ref Ref(src), ref Ref(dst));
+                    _onCopyHandler(ref Ref(src), ref Ref(dst));
                 }
             }
             #endregion
@@ -90,12 +90,12 @@ namespace FFS.Libraries.StaticEcs {
             
             [MethodImpl(AggressiveInlining)]
             internal void AutoInit(Entity entity) {
-                AutoInitHandler(ref _data[entity._id]);
+                _onAddHandler(ref _data[entity._id]);
             }
             
             [MethodImpl(AggressiveInlining)]
             internal void AutoReset(Entity entity) {
-                AutoResetHandler(ref _data[entity._id]);
+                _onDeleteHandler(ref _data[entity._id]);
             }
             
             internal void Create(ushort componentId) {
@@ -129,46 +129,46 @@ namespace FFS.Libraries.StaticEcs {
             }
             
             [MethodImpl(AggressiveInlining)]
-            internal bool SetAutoInit(AutoInitHandler<T> handler) {
+            internal bool SetAutoInit(OnAddHandler<T> handler) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoInit, handler is null");
                 if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.StandardComponents<{typeof(T)}>, Method: SetAutoInit, Component type not registered");
                 if (Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoInit, world status not `Created`");
                 #endif
-                var added = AutoInitHandler == null;
-                AutoInitHandler = handler;
+                var added = _onAddHandler == null;
+                _onAddHandler = handler;
                 return added;
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal bool SetAutoReset(AutoResetHandler<T> handler) {
+            internal bool SetAutoReset(OnDeleteHandler<T> handler) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoReset, handler is null");
                 if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.StandardComponents<{typeof(T)}>, Method: SetAutoReset, Component type not registered");
                 if (Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoReset, world status not `Created`");
                 #endif
-                var added = AutoResetHandler == null;
-                AutoResetHandler = handler;
+                var added = _onDeleteHandler == null;
+                _onDeleteHandler = handler;
                 return added;
             }
 
             [MethodImpl(AggressiveInlining)]
-            internal bool SetAutoCopy(AutoCopyHandler<T> handler) {
+            internal bool SetAutoCopy(OnCopyHandler<T> handler) {
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG
                 if (handler == null) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoCopy, handler is null");
                 if (!_registered) throw new Exception($"World<{typeof(WorldType)}>.StandardComponents<{typeof(T)}>, Method: SetAutoCopy, Component type not registered");
                 if (Status != WorldStatus.Created) throw new Exception($"Components.AutoHandlers<{typeof(WorldType)}, {typeof(T)}>, Method: SetAutoCopy, world status not `Created`");
                 #endif
-                var added = AutoCopyHandler == null;
-                AutoCopyHandler = handler;
+                var added = _onCopyHandler == null;
+                _onCopyHandler = handler;
                 return added;
             }
 
             [MethodImpl(AggressiveInlining)]
             internal void Destroy() {
-                AutoResetHandler = null;
-                AutoCopyHandler = null;
-                AutoInitHandler = null;
+                _onDeleteHandler = null;
+                _onCopyHandler = null;
+                _onAddHandler = null;
                 _data = null;
                 id = 0;
                 #if DEBUG || FFS_ECS_ENABLE_DEBUG || FFS_ECS_ENABLE_DEBUG_EVENTS
@@ -179,9 +179,9 @@ namespace FFS.Libraries.StaticEcs {
 
             [MethodImpl(AggressiveInlining)]
             internal void Clear() {
-                if (AutoResetHandler != null) {
+                if (_onDeleteHandler != null) {
                     for (var i = 0; i < EntitiesCount(); i++) {
-                        AutoResetHandler(ref _data[i]);
+                        _onDeleteHandler(ref _data[i]);
                     }
                     return;
                 } 
